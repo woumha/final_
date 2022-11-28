@@ -5,6 +5,6 @@
 	<title>MAIN</title>
 </head>
 <body align="center">
-MAINㅇㅇㅇㅇ~~~!!
+MAINㅇㅇㅇㅇ~~~!! test용
 </body>
 </html>
