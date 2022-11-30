@@ -5,7 +5,7 @@
 	<title>MAIN</title>
 </head>
 <body align="center">
-MAINㅇㅇㅇㅇ~~~!! test용
+브랜치 생성용 커밋입니다.
 
 <video src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls>
 </video>
