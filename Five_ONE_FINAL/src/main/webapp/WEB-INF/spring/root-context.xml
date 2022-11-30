@@ -19,24 +19,25 @@
 	<!-- 1. 외부 properties 파일을 읽어드릴 수 있게 설정 작업 -->
 	<!-- 외부의 프로퍼티 파일에 저장된 정보를 스프링 설정 파일에서 사용할 수 있게 하는 태그 -->
 	<context:property-placeholder location="classpath:config/*.properties" />
-	
-	<!-- 2. DataSource 정보 설정 -->
-	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-	   <property name="driverClassName" value="${cloud.jdbc.driver}" />
-	   <property name="url" value="${cloud.jdbc.url}" />
-	   <property name="username" value="${cloud.jdbc.username}" />
-	   <property name="password" value="${cloud.jdbc.password}" />
+		<!-- 2. DataSource 정보 설정 -->
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${cloud.jdbc.driver}" />
+		<property name="url" value="${cloud.jdbc.url}" />
+		<property name="username" value="${cloud.jdbc.username}" />
+		<property name="password" value="${cloud.jdbc.password}" />
 	</bean>
 	
-	<!-- 2. SqlSessionFactoryBean 클래스 설정 -->
-	<bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+	<!-- 2. SqlSessionFactoryBean 클래스 설정-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"	>
+		<property name="dataSource" ref="dataSource"></property>
 		<property name="mapperLocations" value="classpath:/mapper/*.xml"></property>
-		<property name="configLocation" value="classpath:/youtube-config.xml"></property>
+		<property name="configLocation" value="classpath:/vidividi-config.xml"></property>
 	</bean>
 	
 	<!-- 3. SqlSessionTemplate 클래스 설정 -->
-	<bean name="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg ref="sqlSessionFactory"></constructor-arg>
-	</bean>	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
 </beans>

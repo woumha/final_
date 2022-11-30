@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- typeAlias를 통해 type을 alias로 간단하게 사용할 수 있다. -->
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.vidividi.model.VidividiDAO" alias="VidividiDAO"/>
+		<typeAlias type="com.vidividi.variable.TestDTO" alias="TestDTO" />
+	</typeAliases>
+</configuration>
