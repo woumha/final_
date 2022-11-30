@@ -15,5 +15,7 @@
 	<input type="submit" value="전송">
 </form>
 
+<a href="<%=request.getContextPath() %>/DBtest.do">[DB테스트 페이지]</a>
+
 </body>
 </html>
