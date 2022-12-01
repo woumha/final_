@@ -20,6 +20,7 @@ public class Upload {
 		String dateFolder = "";
 
 		String uploadPath = "/var/lib/tomcat9/webapps/upload/";
+		
 		Calendar cal = Calendar.getInstance();
 		
 		int year = cal.get(Calendar.YEAR);
