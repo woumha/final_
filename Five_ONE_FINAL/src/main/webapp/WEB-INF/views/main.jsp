@@ -36,6 +36,7 @@
 
 <a href="<%=request.getContextPath() %>/DBtest.do">[DB테스트 페이지]</a>
 
+<a href="<%=request.getContextPath() %>/channel.do">채널</a>
 
 </body>
 </html>

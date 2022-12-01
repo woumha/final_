@@ -22,10 +22,10 @@
 		<!-- 2. DataSource 정보 설정 -->
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${cloud.jdbc.driver}" />
-		<property name="url" value="${cloud.jdbc.url}" />
-		<property name="username" value="${cloud.jdbc.username}" />
-		<property name="password" value="${cloud.jdbc.password}" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
 	</bean>
 	
 	<!-- 2. SqlSessionFactoryBean 클래스 설정-->
