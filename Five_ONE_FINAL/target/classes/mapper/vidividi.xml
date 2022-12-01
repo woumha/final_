@@ -8,4 +8,10 @@
 	<select id="test" parameterType="String" resultType="TestDTO">
 		select * from test1130
 	</select>
+	
+	<!-- main video list 출력 -->
+	<select id="video_list" parameterType="String" resultType="VideoPlayDTO">
+		select video_title, video_cont, video_view_cnt, video_regdate from video_play order by video_good
+	</select>
+	
 </mapper>
