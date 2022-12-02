@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.TestDTO;
+import com.vidividi.variable.VideoPlayDTO;
 
 @Repository
 public class VidividiDAOImpl implements VidividiDAO {
@@ -18,5 +19,10 @@ public class VidividiDAOImpl implements VidividiDAO {
 	@Override
 	public List<TestDTO> test() {
 		return this.sqlSession.selectList("test");
+	}
+
+	@Override
+	public List<VideoPlayDTO> video() {
+		return this.sqlSession.selectList("video_list");
 	}
 }
