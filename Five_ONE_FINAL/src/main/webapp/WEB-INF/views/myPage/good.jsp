@@ -146,7 +146,7 @@ margin-bottom: 30px;
 }
 
 /* ======================= 미디어 쿼리 스타일 영역 ======================= */
-@media screen and (max-width: 1088px) {
+@media screen and (max-width: 1105px) {
 	#chanel_area {
 		display: none;
 	}
@@ -179,6 +179,64 @@ margin-bottom: 30px;
 
 	<!-- 왼쪽 사이드 서브 메뉴 영역 -->
 	<div id="sub_menu_area" class="area_style">
+		<!-- <nav class="nav">
+            <div>
+                <div class="nav__brand">
+                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                    <a href="#" class="nav__logo">Bedimcode</a>
+                </div>
+                <div class="nav__list">
+                    <a href="#" class="nav__link active">
+                        <ion-icon name="home-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">Dashboard</span>
+                    </a>
+                    <a href="#" class="nav__link">
+                        <ion-icon name="chatbubbles-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">Messenger</span>
+                    </a>
+
+                    <div href="#" class="nav__link collapse">
+                        <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">Projects</span>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <a href="#" class="collapse__sublink">Data</a>
+                            <a href="#" class="collapse__sublink">Group</a>
+                            <a href="#" class="collapse__sublink">Members</a>
+                        </ul>
+                    </div>
+
+                    <a href="#" class="nav__link">
+                        <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">Analytics</span>
+                    </a>
+
+                    <div href="#" class="nav__link collapse">
+                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">Team</span>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <a href="#" class="collapse__sublink">Data</a>
+                            <a href="#" class="collapse__sublink">Group</a>
+                            <a href="#" class="collapse__sublink">Members</a>
+                        </ul>
+                    </div>
+
+                    <a href="#" class="nav__link">
+                        <ion-icon name="settings-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">Settings</span>
+                    </a>
+                </div>
+                <a href="#" class="nav__link">
+                    <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">Log out</span>
+                </a>
+            </div>
+        </nav> -->
 	</div>
 	
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
@@ -188,8 +246,8 @@ margin-bottom: 30px;
 				<img src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"> 
 			</div>
 			<div id="profile_name">
-				채널 이름
-			</div>
+			채널 이름
+		</div>
 		</div>
 		
 		<div id="profile_info">
@@ -229,8 +287,8 @@ margin-bottom: 30px;
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do">기록</a></p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="#">기록</a></p>
+				<p class="content_title2"><a href="#">모두보기</a></p>
 			</div>
 			
 			<div class="video_box">
@@ -301,8 +359,8 @@ margin-bottom: 30px;
 		<!-- [재생목록] 박스 -->
 		<div id="playlist_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do">재생목록</a></p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="#">재생목록</a></p>
+				<p class="content_title2"><a href="#">모두보기</a></p>
 			</div>
 			<div>
 				<div class="video_box">
@@ -337,8 +395,8 @@ margin-bottom: 30px;
 		<!-- [작성한 댓글 리스트] 박스 -->
 		<div id="reply_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/reply_list.do">작성한 댓글</a> [갯수]</p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/reply_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="#">작성한 댓글</a> [갯수]</p>
+				<p class="content_title2"><a href="#">모두보기</a></p>
 			</div>
 			<div></div>
 		</div>
@@ -348,8 +406,8 @@ margin-bottom: 30px;
 		<!-- [좋아요 표시한 동영상] 박스 -->
 		<div id="good_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/good_list.do">좋아요 표시한 동영상</a> [갯수]</p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/good_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="#">좋아요 표시한 동영상</a> [갯수]</p>
+				<p class="content_title2"><a href="#">모두보기</a></p>
 			</div>
 			<div>
 				<div class="video_box">
