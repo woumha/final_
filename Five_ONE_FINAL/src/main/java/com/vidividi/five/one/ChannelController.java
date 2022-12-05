@@ -18,4 +18,9 @@ public class ChannelController {
 		
 		return "channel/channel_main";
 	}
+	
+	@RequestMapping("movie_upload.do")
+	public String upload() {
+		return "channel/movie_upload";
+	}
 }
