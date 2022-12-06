@@ -53,7 +53,7 @@ public class myPageController {
 			List<SubscribeDTO> channel_sub = this.dao.getChannel_sub(channel_code);
 			model.addAttribute("channel_sub", channel_sub);
 		} else {
-			System.out.println("member_code 없음");
+			
 		}
 
 		return "myPage/myPage";
