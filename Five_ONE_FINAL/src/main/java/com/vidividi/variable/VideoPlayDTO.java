@@ -7,6 +7,7 @@ public class VideoPlayDTO {
 
 	private int video_code;
 	private int channel_code;
+	private String channel_name;
 	private String video_title;
 	private String video_cont;
 	private String video_img;

@@ -8,12 +8,14 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.vidividi.model.VidividiDAO" alias="VidividiDAO"/>
-		<typeAlias type="com.vidividi.variable.TestDTO" alias="TestDTO" />
-		
+		<typeAlias type="com.vidividi.variable.TestDTO" alias="TestDTO" />		
 		
 		<typeAlias type="com.vidividi.model.WatchDAO" alias="watchDAO" />
 		<typeAlias type="com.vidividi.variable.VideoPlayDTO" alias="videoplayDTO" />
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
-
+		
+		<!-- myPage 관련 -->
+		<typeAlias type="com.vidividi.variable.User_channelDTO" alias="user_channelDTO" />
+		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
 	</typeAliases>
 </configuration>
