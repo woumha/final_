@@ -9,7 +9,8 @@ public class ReplyDTO {
 	private int reply_no;
 	private int reply_comment;
 	private String reply_cont;
-	private String member_code;
+	private int member_code;
+	private String member_name;
 	private String reply_regdate;
 	private String reply_update;
 	
