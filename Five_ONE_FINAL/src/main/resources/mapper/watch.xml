@@ -9,4 +9,18 @@
 		select * from video_play where video_code = #{video_code}
 	</select>
 	
+	
+	<select id="getChannel" parameterType="int" resultType="user_channelDTO">
+		select * from user_channel where channel_code = #{channel_code}
+	</select>
+	
+	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
+		select r.*, (r.reply_good - r.reply_bad) most from reply r where video_code = #{video_code} and reply_comment = 0 order by ${video_option} desc
+	</select>
+
+	<select id="getComment" parameterType="String" resultType="replyDTO">
+		select * from reply where video_code = #{video_code} and reply_group = #{reply_group} and reply_comment = 1 order by reply_regdate desc
+	</select>
+	
+	
 </mapper>
