@@ -15,4 +15,6 @@ $(function() {
        	 	href: "movie_upload.jsp"
    	 	});
 	});
+	
+	
 });

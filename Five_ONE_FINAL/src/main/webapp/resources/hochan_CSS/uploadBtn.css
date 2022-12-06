@@ -1,0 +1,89 @@
+@charset "UTF-8";
+
+/*
+	업로드 css 시작
+*/
+.out-side {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 50vh;
+	background: #ff7f00;
+	border-radius: 15px;
+}
+
+.drag-area {
+	border: 2px dashed #fff;
+	width: 500px;
+	height: 330px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	flex-direction: column;
+}
+
+.drag-area.active {
+	border: 2px solid red;
+}
+
+.drag-area .icon {
+	font-size: 100px;
+	color: #fff;
+}
+
+.drag-area header {
+	font-size: 30px;
+	font-weight: 500;
+	color: #fff;
+}
+
+.drag-area span {
+	font-size: 25px;
+	font-weight: 500;
+	color: #fff;
+	margin: 10px 0 15px 0;
+}
+
+.drag-area button {
+	padding: 10px 25px;
+	font-size: 20px;
+	font-weight: 500;
+	border: none;
+	outline: none;
+	background: #fff;
+	color: #ff7f00;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.drag-area video {
+	height: 80%;
+	width: 80%;
+	object-fit: cover;
+	border-radius: 5px;
+	
+}
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+/*
+	업로드 css 끝
+*/
+
+/*
+	설명 css
+*/
+#floatingTextarea2 {
+	display: flex;
+	height: 165px;
+	width: 623px;
+	resize: none;
+}
+
+.modal-footer {
+	display: flex;
+}

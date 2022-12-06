@@ -1,5 +1,8 @@
 @charset "UTF-8";
 
+body {
+	
+}
 
 
 #chennelprofil {
@@ -49,9 +52,12 @@
 .form-floating {
 	display: inline-block;
 }
+
 .fontsearch {
 	font-size: 12px;
 }
+
+/* 검색 박스 */
 .search-control {
 	font-size: 12px;
 	border: none;
