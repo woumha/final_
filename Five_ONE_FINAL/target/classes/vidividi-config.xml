@@ -8,8 +8,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.vidividi.model.VidividiDAO" alias="VidividiDAO"/>
-		<typeAlias type="com.vidividi.variable.TestDTO" alias="TestDTO" />
-		
+		<typeAlias type="com.vidividi.variable.TestDTO" alias="TestDTO" />		
 		
 		<typeAlias type="com.vidividi.model.WatchDAO" alias="watchDAO" />
 		<typeAlias type="com.vidividi.variable.VideoPlayDTO" alias="videoplayDTO" />

@@ -542,6 +542,10 @@
 	                    <span class="nav_name"> &nbsp; 고객센터 </span>
                		 </a>
                		 
+               		 <a href="<%=request.getContextPath() %>/channel.do" class="nav__link">
+	                    <i class="fa-solid fa-circle-user"></i>
+	                    <span class="nav_name"> &nbsp; 내 채널</span>
+               		 </a>
                 </div>
             </div>
         </nav>

@@ -19,7 +19,11 @@
 <title>채널입니다.</title>
 </head>
 <body>
+	<%-- 검색 필드 include 영역 --%>
+	<jsp:include page="../include/top_include.jsp"/>
+	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel.js"></script>
 	
 	<img src="${path }/resources/hochan_img/vidi.png" class="col-lg-12 img-fluid mb-3" style="width: 1546px; height: 423px; border: 1px solid" alt="...">
 	<div class="container text-center mb-3">
@@ -40,6 +44,7 @@
 	    </div> <!-- 중간 -->
 	    <div class="col-lg-4 align-self-center">
 	     	<button type="button" class="btn btn-primary btn-dark">구독</button>
+	     	<button id="video_upload_btn" class="btn btn-primary btn-blue">동영상 업로드</button>
 	    </div>
 	  </div>
 	  <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
@@ -53,9 +58,25 @@
 		    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">재생목록</button>
 		  </li>
 		  <li class="nav-item" role="presentation">
-		    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">커뮤니티</button>
+		    <button class="nav-link" id="comm-tab" data-bs-toggle="tab" data-bs-target="#comm-tab-pane" type="button" role="tab" aria-controls="comm-tab-pane" aria-selected="false">커뮤니티</button>
 		  </li>
-		</ul>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="infor-tab" data-bs-toggle="tab" data-bs-target="#infor-tab-pane" type="button" role="tab" aria-controls="infor-tab-pane" aria-selected="false">정보</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <yt-icon icon="yt-icons:search" class="style-scope ytd-expandable-tab-renderer">
+		    	<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;">
+		    		<g class="style-scope yt-icon">
+		    			<path d="M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z" class="style-scope yt-icon">
+		    				</path></g></svg><!--css-build:shady--></yt-icon>
+		    <div class="form-floating">
+		    	<form action="">
+				  <input type="text" class="search-control" name="search_text" placeholder="검색">		    	
+		    	</form>
+			</div>
+		  </li>
+		</ul> <%--id, data-bs-target, aria-controls --%>
+		<%-- 영상이 없을때 영상을 업로드 하는 버튼 생성 --%>
 	  <div class="tab-content" id="myTabContent">
 	  	<div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 		  	<div>
@@ -73,25 +94,126 @@
 				    <div class="col mb-1" style="font-size: 14px;">영상 설명</div>
 				  </div>
 			  </div>
-			</div>
+			</div><!-- 메인 배너 영상 -->
+			<%-- 다음 재생목록 영상 --%>
 			<hr width="100%" color="gary">
-			<div class="container text-center">
-			  <div class="row row-lg-2">
-			    <div class="col">Column</div>
-			    <div class="col">Column</div>
-			    <div class="col">Column</div>
-			    <div class="col">Column</div>
-			    <div class="col">Column</div>
-			    <div class="col">Column</div>
+			<div class="play_list_title">재생목록 제목</div>
+			<div class="play_list_title">▶모두재생</div>
+			<div class="container text-center"> <!-- 그리드 시작 -->
+			  <div class="row">
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
 			  </div>
+			</div><!-- 그리드 -->
+			
+			<%-- 다음 재생목록 영상 --%>
+			<hr width="100%" color="gary">
+			<div class="play_list_title">재생목록 제목</div>
+			<div class="play_list_title">▶모두재생</div>
+			<div class="container text-center"> <!-- 그리드 시작 -->
+			  <div class="row">
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one" loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one" loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one" loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
+			    <div class="col-12 col-sm-6 col-lg-3">
+			    	<div class="m-1 ratio ratio-4x3">
+				      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
+							<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
+						</video>
+				    </div>
+				    <div class="video-title">영상 제목</div>
+				    <div class="video-up">조회수.업로드시간</div>
+			    </div>
+			  </div>
+			</div><!-- 그리드 -->
+	   </div><!-- 마지막 -->
+	  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+	  	동영상
+	  </div>
+	  <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+	  	재생목록
+	  </div>
+	  <div class="tab-pane fade" id="comm-tab-pane" role="tabpanel" aria-labelledby="comm-tab" tabindex="0">
+	  	커뮤니티
+	  </div>
+	  <div class="tab-pane fade" id="infor-tab-pane" role="tabpanel" aria-labelledby="infor-tab" tabindex="0">
+	  	<div class="container text-center">
+		  	<div class="row">
+			    <div class="col-8" align="left">
+			   		 내용
+			    </div>
+			    <div class="col-4">
+			    통계
+			    <hr color="black" size="50%">
+			    가입일
+			    <hr color="black" size="50%">
+			    조회수
+			    </div>
 			</div>
 		</div>
-		
-	  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+	  </div>
+	  <div class="tab-pane fade" id="search-tab-pane" role="tabpanel" aria-labelledby="search-tab" tabindex="0">
 	  	
 	  </div>
-	  <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
-	  <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
+	  <%-- id, aria-labelledby --%>
 	</div> <!-- 토글버튼 내용 입력 -->
 	
 	
