@@ -26,7 +26,7 @@ import org.springframework.web.servlet.view.AbstractView;
 
 import com.vidividi.model.WatchDAO;
 import com.vidividi.variable.ReplyDTO;
-import com.vidividi.variable.User_channelDTO;
+import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -83,7 +83,7 @@ public class WatchController{
 		
 		VideoPlayDTO video_dto = this.dao.getVideo(video_code);
 		
-		User_channelDTO channel_dto = this.dao.getChannel(video_dto.getChannel_code());
+		ChannelDTO channel_dto = this.dao.getChannel(video_dto.getChannel_code());
 		
 		String channel_good = format(channel_dto.getChannel_like()); 
 		

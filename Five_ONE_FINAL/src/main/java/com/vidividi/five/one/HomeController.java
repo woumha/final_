@@ -40,11 +40,12 @@ public class HomeController {
 	public String home(Locale locale, Model model, HttpSession session) {
 			
 		List<VideoPlayDTO> list = this.dao.video();
+		
 		model.addAttribute("video_list", list);
 		
 		if (session.getAttribute("MemberCode")!=null) {
 			model.addAttribute("MemberCode", session.getAttribute("MemberCode"));
-			model.addAttribute("MemberNick", session.getAttribute("MemberNick"));
+			model.addAttribute("LastChannelCode", session.getAttribute("LastChannelCode"));
 		}
 		
 		return "main";

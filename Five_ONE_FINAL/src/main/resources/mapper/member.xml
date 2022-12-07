@@ -6,13 +6,16 @@
 
 <mapper namespace="memberdao">
 	<select id="checkMember" parameterType="logindto" resultType="String">
-		select member_code from members where member_id = #{id} and member_pwd = #{pwd}
-	</select>
-	<select id="getMember" parameterType="logindto" resultType="memberdto">
-		select * from members where member_id = #{id} and member_pwd = #{pwd}
-	</select>
-	<select id="getMemberByCode" parameterType="String" resultType="memberdto">
-		select * from members where member_code = #{memberCode}
-	</select>
+        select member_code from members where member_id = #{id} and member_pwd = #{pwd}
+    </select>
+    <select id="getMember" parameterType="logindto" resultType="memberdto">
+        select * from members where member_id = #{id} and member_pwd = #{pwd}
+    </select>
+    <select id="getMemberByCode" parameterType="String" resultType="memberdto">
+        select * from members where member_code = #{memberCode}
+    </select>
+    <update id="updateLastChannel" parameterType="memberdto">
+        update members set member_last_channel = #{member_last_channel} where member_code = #{member_code}
+    </update>
 	
 </mapper>

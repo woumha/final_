@@ -19,9 +19,11 @@ public class LoginServiceImpl implements LoginService {
 	public String loginCheck(LoginDTO dto, HttpSession session) {
 		String membercode = dao.checkMember(dto);
 		MemberDTO memberDTO = dao.getMember(dto);
+		
+		
 		if (membercode != null) {
 			session.setAttribute("MemberCode", membercode);
-			session.setAttribute("MemberNick", memberDTO.getMember_nickname());
+			session.setAttribute("LastChannelCode", memberDTO.getMember_last_channel());
 		}
 		return membercode;
 	}

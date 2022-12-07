@@ -10,7 +10,7 @@
 	</select>
 	
 	
-	<select id="getChannel" parameterType="int" resultType="user_channelDTO">
+	<select id="getChannel" parameterType="int" resultType="ChannelDTO">
 		select * from user_channel where channel_code = #{channel_code}
 	</select>
 	
