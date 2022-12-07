@@ -3,6 +3,7 @@ package com.vidividi.five.one;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -20,7 +21,11 @@ public class ChannelController {
 	}
 	
 	@RequestMapping("movie_upload.do")
-	public String upload() {
+	public String upload(HttpServletRequest request, Model model) {
+		String a = request.getParameter("num");
+		model.addAttribute("b", a);
+	
 		return "channel/movie_upload";
 	}
+	
 }
