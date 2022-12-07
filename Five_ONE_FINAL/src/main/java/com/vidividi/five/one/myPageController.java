@@ -21,9 +21,9 @@ public class myPageController {
 	private MyPageDAO dao;
 
 	@RequestMapping("myPage_go.do")
-	public String myPage_go(@RequestParam("member_code") int code, Model model) {
-		
-		int check = code;
+	public String myPage_go(
+			@RequestParam("channel_code") String code,
+			Model model) {
 		
 		// 동영상 리스트 불러오기
 		List<VideoPlayDTO> history_list = this.dao.getHistory_list(code);
@@ -41,25 +41,23 @@ public class myPageController {
 		// 해당 유저 채널정보 불러오기
 		User_channelDTO m_channel = this.dao.getChannel_info(code);
 		model.addAttribute("m_channel", m_channel);
+		System.out.println("member_code >>> "+code);
+		System.out.println("m_channel.getChannel_code() >>> "+m_channel.getChannel_code());
 		
-		if(check > 0) {
-			// 해당 유저 채널에 업로드 되어 있는 동영상 불러오기
-			int channel_code = m_channel.getChannel_code();
-			List<VideoPlayDTO> channel_video = this.dao.getChannel_video(channel_code);
-			model.addAttribute("channel_video", channel_video);
-			
-			// 해당 유저 채널을 구독자 수
-			List<SubscribeDTO> channel_sub = this.dao.getChannel_sub(channel_code);
-			model.addAttribute("channel_sub", channel_sub);
-		} else {
-			
-		}
+		// 해당 유저 채널에 업로드 되어 있는 동영상 불러오기
+		String channel_code = m_channel.getChannel_code();
+		List<VideoPlayDTO> channel_video = this.dao.getChannel_video(channel_code);
+		model.addAttribute("channel_video", channel_video);
+		
+		// 해당 유저 채널을 구독자 수
+		List<SubscribeDTO> channel_sub = this.dao.getChannel_sub(channel_code);
+		model.addAttribute("channel_sub", channel_sub);
 
 		return "myPage/myPage";
 	}
 
 	@RequestMapping("history_list.do")
-	public String history_list(@RequestParam("member_code") int code, Model model) {
+	public String history_list(@RequestParam("channel_code") String code, Model model) {
 
 		// 동영상 리스트 불러오기
 		List<VideoPlayDTO> history_list = this.dao.getHistory_list(code);
@@ -87,7 +85,7 @@ public class myPageController {
 	}
 	
 	@RequestMapping("delete_history.do")
-	public void delete_history(@RequestParam("member_code") int code, HttpServletResponse response) throws IOException {
+	public void delete_history(@RequestParam("channel_code") String code, HttpServletResponse response) throws IOException {
 		
 		PrintWriter out = response.getWriter();
 		
@@ -96,7 +94,7 @@ public class myPageController {
 		if(check > 0) {
 			out.println("<script>");
 			out.println("alert('전체 시청기록 삭제 완료')");
-			out.println("location.href='history_list.do?member_code=1'");
+			out.println("location.href='history_list.do?channel_code=995'");
 			out.println("</script>");
 		}else {
 			out.println("<script>");
@@ -108,7 +106,7 @@ public class myPageController {
 	
 	
 	@RequestMapping("history_search.do")
-	public String search(@RequestParam("member_code") int code,
+	public String search(@RequestParam("channel_code") String code,
 						@RequestParam("keyword") String keyword,
 						HttpServletRequest request, Model model) {
 		Map<String,Object>map = new HashMap<String,Object>();
@@ -126,12 +124,12 @@ public class myPageController {
 	
 	@RequestMapping("history_one_delete.do")
 	public void delete_history(@RequestParam("video_code") int video,
-								@RequestParam("member_code") int member,
+								@RequestParam("channel_code") String member,
 								HttpServletResponse response) throws IOException {
 		
 		Map<String,Object>map = new HashMap<String,Object>();
 		map.put("video_code", video);
-		map.put("member_code", member);
+		map.put("channel_code", member);
 		
 		// 선택된 history_num 가져오기
 		int history_num = this.dao.getHistory_num(map);
@@ -149,7 +147,7 @@ public class myPageController {
 			
 			out.println("<script>");
 			out.println("alert('시청기록 삭제 완료')");
-			out.println("location.href='history_list.do?member_code=1'");
+			out.println("location.href='history_list.do?channel_code=995'");
 			out.println("</script>");
 		}else {
 			out.println("<script>");
