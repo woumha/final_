@@ -1,15 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html id="html">
 <head>
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>  
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" 
 			integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" 
 			crossorigin="anonymous" 
 			referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
@@ -316,8 +319,16 @@
 				<button id="search_btn" class="search_item" type="submit"><i class="fas fa-search"></i></button>				
 				
 			<div id="user_div">
-				<button class="customm-btn" id="user_login" onclick="location.href='#'">Login</button>&nbsp;&nbsp;
-				<button class="customm-btn" id="user_join" onclick="location.href='#'">Join</button>&nbsp;&nbsp;
+
+				<c:if test="${!empty MemberCode }">
+					<input type="button" id="user_login" onclick="location.href='<%=request.getContextPath() %>/logout.do'" value="Logout"> &nbsp;&nbsp;
+				</c:if>
+				<c:if test="${empty MemberCode }">
+					<input type="button" id="user_login" onclick="location.href='<%=request.getContextPath() %>/login.do'" value="Login"> &nbsp;&nbsp;
+				</c:if>
+				<c:if test="${empty MemberCode }">
+					<input type="button" id="user_join" onclick="location.href='<%=request.getContextPath() %>/join.do'" value="Join"> &nbsp; &nbsp;
+				</c:if>
 				<i class="fa-solid fa-circle-user" id="user_icon"></i>
 			</div>
 			
@@ -328,19 +339,28 @@
 				
 			</form>
 		</div> 
-		
-		<div id="user_popup"> 
-			<ul id="user_list">
-				<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> 유저 닉네임</b></li>
-				<li> &nbsp;&nbsp; &nbsp; &nbsp;유저 아이디</li>
-				<hr>
-				<li> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
-				<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
-				<hr>
-				<li>&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;설정</li>
-				<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;로그아웃</li>		
-			</ul>
-		</div>
+	
+		<c:if test="${!empty MemberCode }">
+			<div id="user_popup"> 
+				<ul id="user_list">
+					<li> &nbsp;&nbsp;</li>
+					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberNick }님</b></li>
+					<li> &nbsp;&nbsp;</li>
+					<li> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
+					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
+					<hr>
+					<li>&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;설정</li>
+					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="location.href='<%=request.getContextPath() %>/logout.do'">로그아웃</a></li>		
+				</ul>
+			</div>
+		</c:if>
+		<c:if test="${empty MemberCode }">
+			<div id="user_popup">
+				<ul id="user_list">
+					<li><a href="location.href='<%=request.getContextPath() %>/login.do'">로그인이 필요합니다.</a></li>
+				</ul>
+			</div>
+		</c:if>
 
 </body>
 
