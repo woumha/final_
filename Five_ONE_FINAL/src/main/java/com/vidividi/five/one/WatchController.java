@@ -1,10 +1,15 @@
 package com.vidividi.five.one;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.UrlResource;
@@ -16,9 +21,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.AbstractView;
 
 import com.vidividi.model.WatchDAO;
+import com.vidividi.variable.ReplyDTO;
+import com.vidividi.variable.User_channelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -73,12 +81,58 @@ public class WatchController{
 	@RequestMapping("watch.do")
 	public String watch(@RequestParam("video_code") int video_code, Model model) {
 		
-		VideoPlayDTO dto = this.dao.getVideo(video_code);
+		VideoPlayDTO video_dto = this.dao.getVideo(video_code);
 		
-		model.addAttribute("dto", dto);
+		User_channelDTO channel_dto = this.dao.getChannel(video_dto.getChannel_code());
+		
+		String channel_good = format(channel_dto.getChannel_like()); 
+		
+		
+		model.addAttribute("video_dto", video_dto);
+		model.addAttribute("channel_dto", channel_dto);
+		model.addAttribute("channel_good", channel_good);
 		
 		return "/watch/watch";
 	}
 	
+	@RequestMapping("reply.do")
+	@ResponseBody
+	public String getReplyList(@RequestParam("video_code") int video_code, @RequestParam("video_option") String video_option) {
+		
+		JSONObject json = new JSONObject();
+		
+		List<ReplyDTO> dto = this.dao.getReply(video_code, video_option);
+		
+		
+		
+		
+		return json.toString();
+	}
+	
+	
+	
+	
+	
+
+	
+	public String format(int no) {
+		
+		String result = "";
+		
+		DecimalFormat df = new DecimalFormat("#.#");
+		
+		if(no >= 10000000) {
+			
+			result = df.format(no/10000000.0) +"천 만";
+			
+		}else if(no >= 10000) {
+			result = df.format(no/10000.0) +"만";
+		}else if(no >= 1000) {
+			result = df.format(no/1000.0) +"천";
+		}else {
+			result = String.valueOf(no);
+		}
+		return result;
+	}
 	
 }

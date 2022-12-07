@@ -1,5 +1,367 @@
 @charset "UTF-8";
 
-#watch{
+*:foccus{
+	outline: none;	
+}
+
+button{
+	border: none;
+}
+
+
+.container_L{
+	position: fixed;
+	width: 102px;
+}
+
+
+.watch_layer {
+
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+}
+
+
+.watch_container {
 	
+	flex: 1;
+	margin-left: 5rem;
+	margin-right: 2rem;
+}
+
+
+/* 영상 CSS */
+.video_wrap{
+	
+	width: 85rem;
+	height: auto;
+}
+
+
+/* watch_info CSS */
+
+.watch_info{
+
+	margin-top:0.5rem;
+	margin-bottom:1rem;
+}
+
+
+
+
+.card_a{
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: row;
+}
+
+.card_b{
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	align-items: center;
+}
+
+.card_c{
+	display: flex;
+	flex-direction: column;
+}
+
+.card_e{
+	display: flex;
+	justify-content: flex-end;
+	flex-direction: row;
+	align-items: center;
+}
+
+
+/* 해시태그 CSS */
+.hash_box{
+
+	text-align:left;
+	padding-bottom: 0.5rem;
+}
+
+.hash_box a{
+	margin-bottom: 1rem;
+}
+
+.title_box{
+	text-align: left;
+	font-size: 1.4rem;
+	font-weight: bold;
+}
+
+.cont_box{
+	text-align: left;
+	background-color: #e3e3e3;
+	border-radius: 30px;
+}
+
+.input_cont{
+	border-radius: inherit;
+	margin: 2rem;	
+}
+
+
+
+
+/* 채널 정보 CSS */
+.channel_wrap{
+	flex-basis: 50%;
+}
+
+.profile{
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-bottom: 10px;
+	margin-right: 1rem;
+	vertical-align: middle;
+}
+
+.channel_info{
+	margin-left: 0.5rem;
+	margin-right: 2rem;
+}
+
+.input_uploader{
+	font-size: 1.2rem;
+}
+
+.input_member{
+	font-size: 0.9rem;
+}
+
+.btn{
+	background-color: #e3e3e3;
+	border-radius: 80px / 130px;
+	width: auto;
+	height: 36px;
+}
+
+.btn2{
+	background-color: #e3e3e3;
+	opacity:0.7;
+	border-radius: 80px / 130px;
+	height: 36px;
+	width: 11rem;
+}
+
+.btn_wrap{
+	margin-right: 0.5rem;
+}
+
+.subscribe{
+	border-radius:inherit;
+	margin-right: 0.2rem;
+	vertical-align: middle;
+	padding-right: 0.2rem;
+}
+
+.save{
+	border-radius:inherit;
+}
+
+.good{
+	width: 24px;
+	height: 24px;
+	margin-right: 0.2rem;
+	vertical-align: middle;
+}
+
+.bad{
+	width: 24px;
+	height: 24px;
+	margin-right: 0.2rem;
+	vertical-align: middle;
+}
+
+
+/* 댓글 CSS */
+.option_box{
+	
+	text-align: left;
+	margin: 0.2rem;
+}
+
+.write_box{
+	width:100%;
+	box-sizing: border-box;
+}
+
+.write_field{
+	margin-bottom: 1rem;
+}
+
+.reply_count{
+	margin-right: 2rem;
+	margin-bottom: 2rem;
+}
+
+.menu_icon{
+	width: 24px;
+	height: 24px;
+	margin-right: 0.5rem;
+	vertical-align: middle;
+}
+
+.reply_cont{
+	width: 100%;
+	border: none;
+	font-size:14px;
+	border-bottom: 1px solid #999;
+	outline: none;
+}
+
+.reply_cont:empty:before{
+	content:attr(placeholder);
+	color:gray;
+	display: block;
+}
+
+
+
+.cancle_btn{
+	border-radius:inherit;
+}
+
+
+.item_reply{
+	margin-right: 1rem;
+	width: 100%;
+}
+
+.reply_box{
+	margin-top: 2rem;
+	text-align: left;
+}
+
+.reply_cont_box{
+	text-align: left;
+	margin-bottom: 1rem;
+}
+
+.reply_writer{
+	margin-bottom: 0.5rem;
+}
+
+.toolbar_wrap{
+	margin-bottom: 1rem;
+}
+
+
+.reply_good{
+	height: 1rem;
+	margin-right: 0.2rem;
+	padding-right: 0.2rem;
+	vertical-align: middle;
+	border-radius:inherit;
+}
+
+.reply_good_btn{
+	margin-right: 1rem;
+}
+
+.reply_bad_btn{
+	margin-right: 1rem;
+}
+
+.reply_bad{
+	height: 1rem;
+	margin-right: 0.2rem;
+	vertical-align: middle;
+	border-radius:inherit;
+}
+
+.input_reply{
+	width:100%;
+}
+
+
+
+
+/* 대댓글 CSS */
+.comment_box{
+	text-align: left;
+}
+
+.comment_card{
+	width:100%;
+}
+
+.comment_wrap{
+	margin-left: 2.5rem;
+}
+
+.comment_btn{
+	margin-bottom: 1rem;
+	
+}
+
+
+.comment_toggle{
+	background-color: #fff;
+	color: #66c;
+	font-weight:bold;
+	align-items: center;
+	font-size: 14px;
+}
+
+
+.comment_toggle:hover{
+	background-color: #9cf;
+	border-radius: 100px;
+}
+
+
+.toggle{
+	height: 1rem;
+	margin-right: 0.2rem;
+	padding-right: 0.2rem;
+	border-radius:inherit;
+	vertical-align: middle;
+}
+
+.render{
+	background-color: #fff;
+}
+
+.render_box{
+	width:5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;	
+}
+
+
+.render_icon{
+	width: 2rem;
+	display: none;
+}
+
+.reply_box:hover .render_icon{
+	display: block;
+}
+
+.input_comment:hover .render_icon{
+	display: block;
+}
+
+/* 사이드바 CSS */
+.side_box {
+	flex: 1;
+	background-color: blue;
+}
+
+
+
+.more{
+	opacity: 0.5;
+}
+
+.card_a{
+	vertical-align: middle;
 }

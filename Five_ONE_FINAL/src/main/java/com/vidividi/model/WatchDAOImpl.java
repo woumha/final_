@@ -1,6 +1,9 @@
 package com.vidividi.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -8,6 +11,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ReplyDTO;
+import com.vidividi.variable.User_channelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Repository
@@ -21,6 +25,12 @@ public class WatchDAOImpl implements WatchDAO {
 		
 		return this.sqlSession.selectOne("getVideo", video_code);
 	}
+	
+	@Override
+	public User_channelDTO getChannel(int channel_code) {
+		return this.sqlSession.selectOne("getChannel", channel_code);
+	}
+
 
 	@Override
 	public List<VideoPlayDTO> getVideoList() {
@@ -29,10 +39,31 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 	@Override
-	public ReplyDTO getReply() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ReplyDTO> getReply(int video_code, String video_option) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("video_option", video_option);
+		
+		List<ReplyDTO> list = this.sqlSession.selectList("getReply", map);
+		
+		return list;
 	}
+
+	@Override
+	public List<ReplyDTO> getComment(int video_code, String reply_group) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("video_option", reply_group);
+		
+		List<ReplyDTO> list = this.sqlSession.selectList("getComment", map);
+		
+		return list;
+	}
+
 
 	
 }
