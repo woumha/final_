@@ -25,4 +25,9 @@ public class VidividiDAOImpl implements VidividiDAO {
 	public List<VideoPlayDTO> video() {
 		return this.sqlSession.selectList("video_list");
 	}
+
+	@Override
+	public List<VideoPlayDTO> searchVideoList(String field, String keyword) {
+		return sqlSession.selectList(field, keyword);
+	}
 }
