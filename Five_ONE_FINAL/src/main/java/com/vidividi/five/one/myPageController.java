@@ -1,19 +1,18 @@
 package com.vidividi.five.one;
 
+import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
-
+import javax.servlet.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import com.vidividi.model.*;
+import com.vidividi.variable.*;
 
-import com.vidividi.model.MyPageDAO;
-import com.vidividi.variable.ReplyDTO;
-import com.vidividi.variable.SubscribeDTO;
-import com.vidividi.variable.User_channelDTO;
-import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
 public class myPageController {
@@ -60,8 +59,12 @@ public class myPageController {
 	}
 
 	@RequestMapping("history_list.do")
-	public String history_list() {
+	public String history_list(@RequestParam("member_code") int code, Model model) {
 
+		// 동영상 리스트 불러오기
+		List<VideoPlayDTO> history_list = this.dao.getHistory_list(code);
+		model.addAttribute("h_list", history_list);
+		
 		return "myPage/history";
 	}
 
@@ -82,4 +85,87 @@ public class myPageController {
 
 		return "myPage/good";
 	}
+	
+	@RequestMapping("delete_history.do")
+	public void delete_history(@RequestParam("member_code") int code, HttpServletResponse response) throws IOException {
+		
+		PrintWriter out = response.getWriter();
+		
+		int check = this.dao.delete_history(code);
+		
+		if(check > 0) {
+			out.println("<script>");
+			out.println("alert('전체 시청기록 삭제 완료')");
+			out.println("location.href='history_list.do?member_code=1'");
+			out.println("</script>");
+		}else {
+			out.println("<script>");
+			out.println("alert('전체 시청기록 삭제 중 오류 발생')");
+			out.println("history.back()");
+			out.println("</script>");
+		}
+	}
+	
+	
+	@RequestMapping("history_search.do")
+	public String search(@RequestParam("member_code") int code,
+						@RequestParam("keyword") String keyword,
+						HttpServletRequest request, Model model) {
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("keyword", keyword);
+		map.put("code", code);
+		
+		
+		
+		List<VideoPlayDTO> search_history = this.dao.searchHistory(map);
+		
+		model.addAttribute("h_list", search_history);
+		
+		return "myPage/history";
+	}
+	
+	@RequestMapping("history_one_delete.do")
+	public void delete_history(@RequestParam("video_code") int video,
+								@RequestParam("member_code") int member,
+								HttpServletResponse response) throws IOException {
+		
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("video_code", video);
+		map.put("member_code", member);
+		
+		// 선택된 history_num 가져오기
+		int history_num = this.dao.getHistory_num(map);
+		
+		// 선택된 history 데이터 지우기
+		int check = this.dao.history_one_delete(map);
+		
+		
+		
+		PrintWriter out = response.getWriter();
+		
+		if(check > 0) {
+			
+			this.dao.updateSequence(history_num);
+			
+			out.println("<script>");
+			out.println("alert('시청기록 삭제 완료')");
+			out.println("location.href='history_list.do?member_code=1'");
+			out.println("</script>");
+		}else {
+			out.println("<script>");
+			out.println("alert('시청기록 삭제 중 오류 발생')");
+			out.println("history.back()");
+			out.println("</script>");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

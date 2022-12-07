@@ -10,7 +10,17 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
+<!-- 모달창 관련 링크 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+<!-- 모달창 관련 링크 end -->
 <style type="text/css">
+
+html {
+/* 항상 우측 스크롤바 표시 */
+overflow-y : scroll;
+}
 
 body {
 margin: 0;
@@ -44,7 +54,7 @@ width: 60%;
 height: auto;
 margin-top: 30px;
 float: left;
-margin-left: 12%;
+margin-left: 14%;
 }
 
 /* 오른쪽 사이드 채널 정보 영역 */
@@ -65,9 +75,9 @@ display: inline-block;
 }
 
 /* ------------- 동영상 설정 ------------- */
-.tset_video {
+.test_video {
 border-radius: 10px;
-width: 300px;
+width: 250px;
 margin-right: 10px;
 margin-left: 2px;
 }
@@ -101,7 +111,7 @@ margin-left: 15px;
 .content_title1 a { text-decoration: none; }
 
 .video_title_p {
-font-size: 20px; margin-bottom: -10px; margin-top: 0px;
+font-size: 22px; margin-bottom: -10px; margin-top: 0px;
 overflow: hidden;
 text-overflow: ellipsis;
 display: -webkit-box;
@@ -110,24 +120,25 @@ display: -webkit-box;
 }
 .video_channel_p { font-size: 12px; margin-bottom: 0px; margin-top: 0px;}
 .video_views_p {
-font-size: 10px; margin-bottom: -15px;
+font-size: 12px;
+margin-top: 30px;
 overflow: hidden;
 text-overflow: ellipsis;
 display: -webkit-box;
 -webkit-line-clamp: 2;
 -webkit-box-orient: vertical;
 }
-.video_upload_p { font-size: 10px; margin-bottom: -10px;}
 
-.info_title button {
-border: 0;
-outline: 0;
+
+.btn {
 background-color: white;
 font-size: 15px;
+color: black;
+text-decoration: none;
 
 margin-left: 10px;
 }
-.info_title button span{
+.btn span{
 font-size: 20px;
 }
 
@@ -145,6 +156,39 @@ margin-bottom: 20px;
 		display: none;
 	}
 }
+
+#history_search_area {
+  position: relative;
+  width: 200px;
+  margin-bottom: 70px;
+}
+
+.history_search {
+  width: 100%;
+  /* border: 1px solid #bbb;
+  border-radius: 8px; */
+  border: none;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+#search_img {
+  position : absolute;
+  width: 17px;
+  top: 10px;
+  right: 0px;
+  margin: 0;
+}
+
+.video_history_d_img {
+display: inline-block;
+width: 25px;
+vertical-align: top;
+}
+.video_history_d_img:hover {
+cursor: pointer;
+}
+
 </style>
 
 </head>
@@ -162,97 +206,128 @@ margin-bottom: 20px;
 	
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
 	<div id="chanel_area" class="area_style">
+		<div id="history_search_area">
+			<form action="<%=request.getContextPath()%>/history_search.do">
+				<input type="hidden" name="member_code" value="1">
+				<input type="text" class="history_search" name="keyword" placeholder="시청 기록 검색">
+				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
+			</form>
+			
+		</div>
+	
 		<div id="profile_info">
 			<div class="info_box">
 				<div class="info_title">
-					<button> <span>🗑</span> &nbsp;시청 기록 지우기 </button>
+					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?member_code=1"><span>🗃</span> 내 보관함</a></p>
 				</div>
 			</div>
+			
 			<hr class="info_hr">
+			
 			<div class="info_box">
 				<div class="info_title">
-					<button> <span>🚦</span> 시청 기록 일시정지 </button>
+					<p><a class="btn" href="#history_delete"><span>🗑</span>&nbsp;시청 기록 지우기</a></p>
 				</div>
 			</div>
+			
 			<hr class="info_hr">
+			
 			<div class="info_box">
 				<div class="info_title">
-					<button> <span>✂</span> 시청 기록 전체관리 </button>
+					<p><a class="btn" href="#history_stop"><span>✂</span>&nbsp;시청 기록 일시정지</a></p>
 				</div>
 			</div>
+			
 		</div>
 	</div>
 	
 	<!-- 중앙 메인컨텐츠 영역 -->
+	
 	<div id="content_area" class="area_style">
 		
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="#">시청 기록</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?member_code=1">시청 기록</a></p>
 			</div>
+			<c:if test="${!empty h_list }">
+			<c:set var="history" value="${h_list }" />
+			<c:forEach items="${history }" var="h_dto">
 			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class ="video_pbox">
-					<p class="video_title_p">동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명 • 조회수<p>
-					<p class="video_views_p">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcbcabcabcabcabc<p>
+				<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
+				<div class="video_pbox">
+					<p class="video_title_p">${h_dto.getVideo_title() }<p>
+					<p class="video_channel_p">${h_dto.getChannel_name() } • 조회수 ${h_dto.getVideo_view_cnt() }회<p>
+					<p class="video_views_p">${h_dto.getVideo_cont() }<p>
 				</div>
+				<a href="<%=request.getContextPath() %>/history_one_delete.do?video_code=${h_dto.getVideo_code() }&member_code=1">
+					<img class="video_history_d_img" src="${pageContext.request.contextPath}/resources/img/delete.png">
+				</a>
 			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class ="video_pbox">
-					<p class="video_title_p">동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명 • 조회수<p>
-					<p class="video_views_p">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcbcabcabcabcabc<p>
-				</div>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class ="video_pbox">
-					<p class="video_title_p">동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명 • 조회수<p>
-					<p class="video_views_p">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcbcabcabcabcabc<p>
-				</div>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class ="video_pbox">
-					<p class="video_title_p">동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명 • 조회수<p>
-					<p class="video_views_p">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcbcabcabcabcabc<p>
-				</div>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class ="video_pbox">
-					<p class="video_title_p">동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명 • 조회수<p>
-					<p class="video_views_p">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcbcabcabcabcabc<p>
-				</div>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class ="video_pbox">
-					<p class="video_title_p">동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명 • 조회수<p>
-					<p class="video_views_p">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcbcabcabcabcabc<p>
-				</div>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class ="video_pbox">
-					<p class="video_title_p">동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명 • 조회수<p>
-					<p class="video_views_p">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcbcabcabcabcabc<p>
-				</div>
-			</div>
+			</c:forEach>
+			</c:if>
+			<c:if test="${empty h_list }">
+				목록에 동영상이 없습니다.
+			</c:if>
 		</div>
-		
 	</div>
-
-</div>
 	
+	
+</div>
+<style>
+.modal {
+max-width: 780px;
+}
 
+#h_d_title {
+font-size: 25px;
+}
+#h_d_btn {
+float: right;
+margin-right: 10px;
+margin-bottom: 10px;
+}
+#h_s_title {
+font-size: 25px;
+}
+#h_s_btn {
+float: right;
+margin-right: 10px;
+margin-bottom: 10px;
+}
+</style>
+<!-- ======================== 모달창 관련 영역 ========================  -->
+<div id="history_delete" class="modal">
+	<p id="h_d_title">시청 기록을 삭제할까요?</p>
+	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
+	<br>
+	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
+	<br>
+	<button id="h_d_btn" onclick="location.href='delete_history.do?member_code=1'">시청 기록 지우기</button>
+</div>
+<div id="history_stop" class="modal">
+	<p id="h_s_title">시청 기록을 중지할까요?</p>
+	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 기록 중지됩니다.(임시 내용입니다)</p>
+	<br>
+	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
+	<br>
+	<button id="h_s_btn" onclick="location.href='delete_history.do?member_code=1'">시청 기록 중지하기</button>
+</div>
+<!-- ====================== 모달창 자바 스크립트 영역 ====================== -->
+<script>
+	$('a[href="#history_delete"]').click(function(event) {
+ 		event.preventDefault();
+		$(this).modal({
+			fadeDuration: 250
+		});
+	});
+	$('a[href="#history_stop"]').click(function(event) {
+ 		event.preventDefault();
+		$(this).modal({
+			fadeDuration: 250
+		});
+	});
+</script>	
+<!-- ======================= 모달창 관련 영역 end =======================  -->
 </body>
 </html>
