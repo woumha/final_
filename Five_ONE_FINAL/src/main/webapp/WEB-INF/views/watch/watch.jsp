@@ -122,9 +122,17 @@
 			
 				<div class="option_box card_c">
 					<div class="item_a">
-						<div id="input_reply" class="card_a">
-							<div class="reply_count">댓글 ${reply_count }개</div>
-							<div class="reply_option"><img class="menu_icon" src="${pageContext.request.contextPath}/resources/watch/watch_img/dropdown_menu.svg">정렬기준</div>
+						<div class="card_a">
+							<div class="reply_cnt">댓글 ${reply_count }개</div>
+							<div class="dropdown_menu card_c">
+								<div><img class="menu_icon" src="${pageContext.request.contextPath}/resources/watch/watch_img/dropdown_menu.svg">정렬기준</div>
+								<div id="dropdown" class="dropdown_box">
+									<div class="dropdown_wrap card_c">
+										<div class="dropdown_content"><a>인기 댓글순</a></div>
+										<div class="dropdown_content"><a>최신순</a></div>
+									</div>
+								</div>								
+							</div>
 						</div>
 					</div>
 					

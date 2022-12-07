@@ -9,17 +9,17 @@ import com.vidividi.variable.VideoPlayDTO;
 
 public interface WatchDAO {
 
-	public VideoPlayDTO getVideo(int video_code);
+	public VideoPlayDTO getVideo(String video_code);
 	
 	
-	public User_channelDTO getChannel(int channel_code); 
+	public User_channelDTO getChannel(String channel_code); 
 	
 	
 	public List<VideoPlayDTO> getVideoList();
 	
-	public List<ReplyDTO> getReply(int video_code, String video_option);
+	public List<ReplyDTO> getReply(String video_code, String video_option);
 
-	public List<ReplyDTO> getComment(int video_code, String reply_group);
+	public List<ReplyDTO> getComment(String video_code, String reply_group);
 	
 	
 }
