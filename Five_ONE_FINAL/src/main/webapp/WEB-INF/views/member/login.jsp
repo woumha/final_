@@ -146,6 +146,11 @@
 	div.toast-error {
 		background-color: #BD362F;
 	}
+	
+	/* password 클래스를 가진 input 태그 비밀번호 안보이게 처리 */
+	input.password{
+		-webkit-text-security:disc;
+	}
 
 
 </style>
@@ -205,6 +210,7 @@
 		
 		<div id="login-wrap">
 			<div id="login-side-bar">
+				<jsp:include page="../include/side_include.jsp"></jsp:include>
 			</div>
 			<div id="login-wrap-top">
 				<div id="login-logo">
@@ -215,8 +221,8 @@
 			<div id="login-wrap-bottom">
 				<div id="login-component-left">
 					<form method="post" action="<%=request.getContextPath()%>/loginOk.do" id="login-form">
-						<input type="text" name="id" class="form-input" placeholder="아이디" autocomplete="asdfasdf">
-						<input type="password" name="pwd" class="form-input" placeholder="비밀번호" autocomplete="asdfawg">
+						<input name="id" class="form-input id" placeholder="아이디">
+						<input name="pwd" class="form-input password" placeholder="비밀번호">
 						<!-- <input type="submit" value="로그인" class="form-btn"> -->
 						<input type="button" value="로그인" class="form-btn" onclick="loginCheck()">
 						<hr class="horizontal-hr">

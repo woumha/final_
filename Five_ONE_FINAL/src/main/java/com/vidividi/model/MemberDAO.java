@@ -8,4 +8,5 @@ public interface MemberDAO {
 	String checkMember(LoginDTO dto);
 	MemberDTO getMember(LoginDTO dto);
 	MemberDTO getMember(String memberCode);
+	void updateLastChannel(MemberDTO dto);
 }
