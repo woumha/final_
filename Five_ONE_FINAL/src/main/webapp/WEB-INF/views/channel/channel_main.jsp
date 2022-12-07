@@ -8,24 +8,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/channel.css">
+<link rel="stylesheet" href="${path }/resources/hochan_CSS/uploadBtn.css">
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/css/bootstrap.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
+<script type="text/javascript">
+	$(function() {
+		
+	});
+</script>
 
 
 <title>채널입니다.</title>
 </head>
 <body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 	<%-- 검색 필드 include 영역 --%>
 	<jsp:include page="../include/top_include.jsp"/>
 	
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel.js"></script>
 	
-	<img src="${path }/resources/hochan_img/vidi.png" class="col-lg-12 img-fluid mb-3" style="width: 1546px; height: 423px; border: 1px solid" alt="...">
+	<img src="${path }/resources/hochan_img/vidi.png" class="col-lg-12 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
 	<div class="container text-center mb-3">
 	  <div class="row mb-3">
 	    <div class="col-lg-2">
@@ -44,10 +50,22 @@
 	    </div> <!-- 중간 -->
 	    <div class="col-lg-4 align-self-center">
 	     	<button type="button" class="btn btn-primary btn-dark">구독</button>
-	     	<button id="video_upload_btn" class="btn btn-primary btn-blue">동영상 업로드</button>
+	     	
+	     	<button data-toggle="modal" data-target="#exampleModal" role="button" id="video_upload_btn" class="btn btn-primary btn-blue">
+	     		동영상 업로드
+	     	</button>
+	     	
+	     	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			    <div class="modal-dialog modal-lg">
+			        <div class="modal-content">
+			        	
+			       		 <jsp:include page="/movie_upload.do?num=1"></jsp:include>
+			        </div>
+			    </div>
+			</div>
 	    </div>
 	  </div>
-	  <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+	  <ul class="nav nav-tabs mb-3 container text-center" id="myTab" role="tablist">
 		  <li class="nav-item" role="presentation">
 		    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">홈</button>
 		  </li>
@@ -77,7 +95,7 @@
 		  </li>
 		</ul> <%--id, data-bs-target, aria-controls --%>
 		<%-- 영상이 없을때 영상을 업로드 하는 버튼 생성 --%>
-	  <div class="tab-content" id="myTabContent">
+	  <div class="tab-content container text-center" id="myTabContent">
 	  	<div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 		  	<div>
 			  <div align="left" class="row">
@@ -215,9 +233,6 @@
 	  </div>
 	  <%-- id, aria-labelledby --%>
 	</div> <!-- 토글버튼 내용 입력 -->
-	
-	
-	
-</div>
+</div><!-- 배너를 제외한 모든 -->
 </body>
 </html>
