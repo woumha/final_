@@ -12,7 +12,7 @@
 		    padding: 0 10%;
 		    justify-content: space-between;
 		    align-items: center;
-		}	
+		}
 		
 	}	
 
@@ -118,10 +118,6 @@
 		    #side_wrap{
 		    	display: none;
 		    }
-		    
-		    #slide_wrap{
-		    	display: none;
-		    }
 		
 		}  
 		
@@ -167,14 +163,12 @@
 		
 		#slide{
 			 z-index: 10;
-			
 		}
 		
 		#slidebtn_wrap{
 			display:flex;
-		    width: 1303px;
+		    width: 1305px;
 		    height: 350px;
-		    padding: 0 10%;
 		    justify-content: space-between;
 		    align-items: center;	
 		}
@@ -183,6 +177,7 @@
 			background-color: white;
 			color: #424242;
 			border: none;
+			margin-left: 18px;
 		}
 		
 		#prev:hover{

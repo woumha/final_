@@ -23,7 +23,7 @@
 	    box-sizing: border-box;
 	}
 	
-	body {
+	#sidebody {
 	    position: relative;
 	    margin: 0;
 	    padding: 2rem 0 0 6.75rem;
@@ -32,15 +32,6 @@
 	    transition: .5s;
 	}
 	
-	h1 {
-	    margin: 0;
-	}
-	
-	ul {
-	    margin: 0;
-	    padding: 0;
-	    list-style: none;
-	}
 	
 	a {
 	    text-decoration: none;
@@ -135,7 +126,7 @@
 	}
 	
 	/* Active links menu */
-	.active {
+	.active_nav {
 	    background-color: var(--first-color);
 	}
 	

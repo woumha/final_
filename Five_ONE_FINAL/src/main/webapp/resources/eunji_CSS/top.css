@@ -80,10 +80,7 @@
 		  margin: 0;
 		  padding: 0;
 	}
-	
-	#wrap{
-		height: 80px;
-	}
+
 	
 	#search_div{
 		margin-top: 1%;
@@ -319,8 +316,51 @@
 	  top: 2px;
 	}
 
+	
+	/* ------------------------------------user_logout css--------------------------------------------------------- */
+		
+		
+	 #user_logout {
+	  background: #424242;
+	  border: none;
+	  z-index: 3;
+	  width: 100px;
+	  height: 35px;
+	  font-size: 17;
+	  font-weight: bold;
+	  box-shadow: none;
+	}
+	
+ 	#user_logout:after {
+	  position: absolute;
+	  content: "";
+	  width: 0;
+	  height: 100%;
+	  top: 0;
+	  right: 0;
+	  z-index: -1;
+	  background-color: #fc942c;
+	  border-radius: 5px;
+	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+	   7px 7px 20px 0px rgba(0,0,0,.1),
+	   4px 4px 5px 0px rgba(0,0,0,.1);
+	  transition: all 0.3s ease;
+	} 
+	
+	#user_logout:hover {
+	  background-color: #fc942c;
+	}
+	#user_logout:hover:after {
+	  left: 0;
+	  width: 100%;
+	}
+	#user_logout:active {
+	  top: 2px;
+	}
+		
 
-	/*----------------------------------------user_popup css---------------------------  */
+
+	/*----------------------------------------user_popup css-----------------------------------------------------  */
 	#user_popup{
 		position: absolute;
 		display: none;
@@ -344,9 +384,9 @@
 	
 	#user_popup ul li{
 		font-size: 1rem;
-		padding-left: 10px;
 		color: #5c3306;
 		margin: 5px;
+		list-style: none;
 	}
 
 	#user_nickname{
@@ -376,7 +416,7 @@
 		  border-radius: 0 0 6px 6px;
 		  width: 50em;
 		  text-align: left;
-		  margin-left: 20.7%;
+		  margin-left: 20.8%;
 		  line-height: 1.8rem;
 		  background-color: #fff;
 		  border-top: 0;
@@ -385,13 +425,14 @@
 		
 		.pop_rel_keywords {
 		  list-style: none;
-		  margin-right: 30%;
-		
+		  margin-left: -25px;
 		}
 		
 		.pop_rel_keywords > li {
 		  line-height : 250%;
-		  padding-left: 20px;
 		  width: 49.8em;
 		}
-			
+		
+		li.selected {
+			background-color: red;
+		}

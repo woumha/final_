@@ -9,7 +9,7 @@ public interface VidividiDAO {
 	
 	List<TestDTO> test();
 	
-	List<VideoPlayDTO> video();
+	List<VideoPlayDTO> video(String video_option);
 	
 	List<VideoPlayDTO> searchVideoList(String field, String keyword);
 	

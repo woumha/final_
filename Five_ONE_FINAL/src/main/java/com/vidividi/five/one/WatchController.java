@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.AbstractView;
 
+import com.vidividi.model.VidividiDAO;
 import com.vidividi.model.WatchDAO;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.ChannelDTO;
@@ -39,6 +40,8 @@ public class WatchController{
 
 	@Inject
 	private WatchDAO dao;
+	
+
 	
 	
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -128,7 +131,11 @@ public class WatchController{
 	
 	
 	
-	
+	  @RequestMapping("test.do")
+	  public String test() {
+		 
+		  return "search/test"; 
+	  }
 	
 
 	
