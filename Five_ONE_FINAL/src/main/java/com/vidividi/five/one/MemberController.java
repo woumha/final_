@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.LoginDTO;
@@ -40,6 +42,8 @@ public class MemberController {
 		
 		String membercode = service.loginCheck(loginDTO, session);
 		
+		
+		
 		if (membercode != null) {
 			model.addAttribute("MemberCode", membercode);
 			return "success";
@@ -58,5 +62,6 @@ public class MemberController {
 	public String join() {
 		return "member/join";
 	}
+	
 
 }

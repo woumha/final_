@@ -5,17 +5,16 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="watchDAO">
-	<select id="getVideo" parameterType="int" resultType="videoplayDTO">
+	<select id="getVideo" parameterType="String" resultType="videoplayDTO">
 		select * from video_play where video_code = #{video_code}
 	</select>
-	
-	
-	<select id="getChannel" parameterType="int" resultType="user_channelDTO">
+
+	<select id="getChannel" parameterType="String" resultType="user_channelDTO">
 		select * from user_channel where channel_code = #{channel_code}
 	</select>
 	
 	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
-		select r.*, (r.reply_good - r.reply_bad) most from reply r where video_code = #{video_code} and reply_comment = 0 order by ${video_option} desc
+		select r.*, (r.reply_good - r.reply_bad) most from (select * from reply inner join user_channel using (channel_code)) r where video_code = #{video_code} and reply_comment = 0 order by ${video_option} desc;
 	</select>
 
 	<select id="getComment" parameterType="String" resultType="replyDTO">

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="channeldao">
+ 	<select id="owner" parameterType="memberdto" resultType="channeldto">
+ 		select * from user_channel where member_code = #{member_code} and channel_code = #{member_last_channel}
+ 	</select>
+ </mapper>
+  
+ 

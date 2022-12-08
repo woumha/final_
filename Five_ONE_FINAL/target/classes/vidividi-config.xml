@@ -15,7 +15,13 @@
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
 		
 		<!-- myPage 관련 -->
-		<typeAlias type="com.vidividi.variable.User_channelDTO" alias="user_channelDTO" />
+		<typeAlias type="com.vidividi.variable.ChannelDTO" alias="user_channelDTO" />
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
+		<typeAlias type="com.vidividi.variable.HistoryDTO" alias="historyDTO" />
+    
+		<!-- Member -->
+		<typeAlias type="com.vidividi.model.MemberDAO" alias="memberdao" />
+		<typeAlias type="com.vidividi.variable.MemberDTO" alias="memberdto" />
+		<typeAlias type="com.vidividi.variable.LoginDTO" alias="logindto" />
 	</typeAliases>
 </configuration>

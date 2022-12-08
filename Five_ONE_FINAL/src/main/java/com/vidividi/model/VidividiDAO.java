@@ -11,4 +11,6 @@ public interface VidividiDAO {
 	
 	List<VideoPlayDTO> video();
 	
+	List<VideoPlayDTO> searchVideoList(String field, String keyword);
+	
 }

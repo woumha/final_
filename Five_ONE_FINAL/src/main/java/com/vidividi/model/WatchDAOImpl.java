@@ -11,7 +11,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ReplyDTO;
-import com.vidividi.variable.User_channelDTO;
+import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Repository
@@ -21,13 +21,13 @@ public class WatchDAOImpl implements WatchDAO {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public VideoPlayDTO getVideo(int video_code) {
+	public VideoPlayDTO getVideo(String video_code) {
 		
 		return this.sqlSession.selectOne("getVideo", video_code);
 	}
 	
 	@Override
-	public User_channelDTO getChannel(int channel_code) {
+	public ChannelDTO getChannel(int channel_code) {
 		return this.sqlSession.selectOne("getChannel", channel_code);
 	}
 
@@ -39,7 +39,7 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 	@Override
-	public List<ReplyDTO> getReply(int video_code, String video_option) {
+	public List<ReplyDTO> getReply(String video_code, String video_option) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -52,7 +52,7 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 	@Override
-	public List<ReplyDTO> getComment(int video_code, String reply_group) {
+	public List<ReplyDTO> getComment(String video_code, String reply_group) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		

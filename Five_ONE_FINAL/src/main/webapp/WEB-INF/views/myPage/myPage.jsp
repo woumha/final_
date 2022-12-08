@@ -62,13 +62,13 @@ width: 100%;
 height: auto;
 }
 
-/* 각 컨텐츠 박스 스타일 */
-#watch_box {}
-#playlist_box {}
-#reply_box {}
-#good_box {}
-
-.tset_video {
+.test_video {
+border-radius: 10px;
+width: 210px;
+margin-right: 2px;
+margin-left: 2px;
+}
+.test_video_play {
 border-radius: 10px;
 width: 210px;
 margin-right: 2px;
@@ -108,7 +108,25 @@ vertical-align: middle
 .content_title2 a { text-decoration: none; vertical-align: middle; }
 
 .hr_style { width: 95%; margin-top: 10px; margin-bottom: 10px;}
-.video_title_p { font-size: 15px; margin-bottom: -5px;}
+.video_title_p {
+width: 215px;
+font-size: 15px; margin-bottom: -5px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+.video_title_p_his {
+width: 215px;
+font-size: 15px; margin-bottom: 12px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+
 .video_channel_p { font-size: 12px; margin-bottom: -15px;}
 .video_views_p { font-size: 12px; margin-bottom: -15px;}
 .video_upload_p { font-size: 10px; margin-bottom: -10px;}
@@ -165,12 +183,45 @@ font-size: 17px;
 
 }
 
+#reply_box {
 
+margin-bottom: 200px;
+/* margin-bottom: 100px; */
+
+}
 /* (foreach) 작성한 댓글 리스트 스타일 */
 .reply_list {
 display: inline-block;
-background-color: gray;
+border-radius: 10px;
+padding-left: 10px;
+width: 200px;
+height: 100px;
+
+font-size: 15px;
+
+box-shadow: 5px 5px 5px gray;
+border: 1px solid;
 }
+
+/* (foreach) 댓글 작성자 p */
+.reply_list_writer {
+margin-top: 10px;
+font-size: 13px;
+}
+/* (foreach) 댓글 내용 p */
+.reply_list_cont {
+font-size: 12px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+/* (foreach) 댓글 업로드 날짜 p */
+.reply_list_date {
+font-size: 10px;
+}
+
 
 /* ======================= 미디어 쿼리 스타일 영역 ======================= */
 @media screen and (max-width: 1088px) {
@@ -215,7 +266,7 @@ background-color: gray;
 	<div id="chanel_area" class="area_style">
 		<div id="profile_box">
 			<div id="profile_icon">
-				<img src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"> 
+				<img src="${pageContext.request.contextPath}/resources/img/unnamed.jpg">
 			</div>
 			<div id="profile_name">
 				${c_info.getChannel_name() }
@@ -259,16 +310,16 @@ background-color: gray;
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do">기록</a></p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=995">기록</a></p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=995">모두보기</a></p>
 			</div>
 			
 			<c:set var="history" value="${h_list }" />
 			
-			<c:forEach items="${history }" var="h_dto">
+			<c:forEach items="${history }" var="h_dto" begin="0" end="9" step="1">
 			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">${h_dto.getVideo_title() }<p>
+				<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
+				<p class="video_title_p_his">${h_dto.getVideo_title() }</p>
 				<p class="video_channel_p">${h_dto.getChannel_name() }<p>
 				<p class="video_views_p">조회수 ${h_dto.getVideo_view_cnt() }회 • ${h_dto.getVideo_regdate().substring(0,10) }<p>
 			</div>
@@ -280,18 +331,72 @@ background-color: gray;
 		<!-- [재생목록] 박스 -->
 		<div id="playlist_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do">재생목록</a></p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">재생목록</a></p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">모두보기</a></p>
 			</div>
 			
 			<c:set var="playlist" value="${p_list }" />
 			
-			<c:forEach items="${playlist }" var="p_dto">
+			<c:forEach items="${playlist }" var="p_dto" begin="0" end="9" step="1">
 			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">${p_dto.getVideo_title() }<p>
-				<p class="video_channel_p">${p_dto.getChannel_name() }<p>
-				<p class="video_views_p">조회수 ${p_dto.getVideo_view_cnt() }회 • ${p_dto.getVideo_regdate().substring(0,10) }<p>
+				<!-- 재생목록 덮개 -->
+<style>
+.playlist_lid {
+position: absolute;
+text-align: center;
+width: 50%;
+height: 118px;
+background-color: black;
+
+margin-top: 0px;
+
+opacity:0.8; /* 불투명도 */
+margin-left: 108px;
+
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+
+cursor: pointer;
+
+z-index: 3;
+}
+.test_video_play {
+position: absolute;
+z-index: 2;
+}
+.playlist_video_div {
+position: relative;
+width: 210px;
+height: 119px;
+}
+.playlist_lid_img {
+width: 20px;
+color: white;
+margin-left: 0px;
+
+
+}
+.playlist_lid p {
+font-size: 18px;
+color: white;
+margin-top: 26px;
+margin-bottom: 5px;
+margin-left: 0px;
+}
+</style>
+				
+				
+				<div class="playlist_video_div">
+					<!-- 재생목록 덮개 영역 -->
+					<div class="playlist_lid" onclick="location.href='<%=request.getContextPath() %>/playlist_no_page.do?playlist_no=${p_dto.getPlaylist_no() }'">
+						<p>3</p>
+						<img class="playlist_lid_img" src="${pageContext.request.contextPath}/resources/img/playlist_lid1.png">
+					</div>
+					<video class="test_video_play" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
+				</div>
+				<p class="video_title_p">${p_dto.getPlaylist_title() }<p>
+				<p class="video_channel_p">${c_info.getChannel_name() }<p>
+				<%-- <p class="video_views_p">조회수 ${p_dto.getVideo_view_cnt() }회 • ${p_dto.getVideo_regdate().substring(0,10) }<p> --%>
 			</div>
 			</c:forEach>
 		</div>
@@ -302,15 +407,15 @@ background-color: gray;
 		<!-- [좋아요 표시한 동영상] 박스 -->
 		<div id="good_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/good_list.do">좋아요 표시한 동영상</a> [갯수]</p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/good_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/good_list.do?channel_code=995">좋아요 표시한 동영상</a> [${fn:length(g_list)}]</p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/good_list.do?channel_code=995">모두보기</a></p>
 			</div>
 			
 			<c:set var="good" value="${g_list }" />
 			
-			<c:forEach items="${good }" var="g_dto">
+			<c:forEach items="${good }" var="g_dto" begin="0" end="9" step="1">
 			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
+				<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
 				<p class="video_title_p">${g_dto.getVideo_title() }<p>
 				<p class="video_channel_p">${g_dto.getChannel_name() }<p>
 				<p class="video_views_p">조회수 ${g_dto.getVideo_view_cnt() }회 • ${g_dto.getVideo_regdate().substring(0,10) }<p>
@@ -319,17 +424,24 @@ background-color: gray;
 		</div>
 		
 		<hr class="hr_style">
-		
+
 		<!-- [작성한 댓글 리스트] 박스 -->
 		<div id="reply_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/reply_list.do">작성한 댓글</a> [갯수]</p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/reply_list.do">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/reply_list.do?channel_code=995">작성한 댓글</a> [${fn:length(reply_list)}]</p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/reply_list.do?channel_code=995">모두보기</a></p>
 			</div>
 			<c:set var="r_list" value="${reply_list }"  />
-			<c:forEach items="${r_list }" var="r_dto">
-			<div class="reply_list">
-				<p>${r_dto.getReply_cont() }</p>
+			<c:forEach  var="r_dto" items="${r_list }" begin="0" end="9" step="1">
+			<div class="reply_list">				
+				<p class="reply_list_writer">${c_info.getChannel_name() }</p>
+				<p class="reply_list_cont">${r_dto.getReply_cont() }</p>
+				<c:if test="${r_dto.getReply_regdate() ne null }">
+					<p class="reply_list_date">작성일 ${r_dto.getReply_regdate().substring(0,10) }</p>
+				</c:if>
+				<c:if test="${r_dto.getReply_regdate() eq null }">
+					<p class="reply_list_date">${r_dto.getReply_update().substring(0,10) }•수정됨 </p>
+				</c:if>
 			</div>
 			</c:forEach>
 			
