@@ -11,9 +11,8 @@
 <title>Insert title here</title>
 
 <!-- 모달창 관련 링크 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
 <!-- 모달창 관련 링크 end -->
 <style type="text/css">
 
@@ -176,7 +175,7 @@ margin-bottom: 20px;
   position : absolute;
   width: 17px;
   top: 10px;
-  right: 0px;
+  right: 5px;
   margin: 0;
 }
 
@@ -198,7 +197,12 @@ cursor: pointer;
 
 	<!-- top 영역 -->
 	<jsp:include page="../include/top_include.jsp"/>
-
+	<script type="text/javascript">
+		$("link[rel=stylesheet][href*='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css']").remove();
+		$("link[rel=stylesheet][href*='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css']").remove();
+		$("link[rel=stylesheet][href*='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css']").remove();
+		
+	</script>
 
 	<!-- 왼쪽 사이드 서브 메뉴 영역 -->
 	<div id="sub_menu_area" class="area_style">
@@ -208,7 +212,7 @@ cursor: pointer;
 	<div id="chanel_area" class="area_style">
 		<div id="history_search_area">
 			<form action="<%=request.getContextPath()%>/history_search.do">
-				<input type="hidden" name="member_code" value="1">
+				<input type="hidden" name="channel_code" value="995">
 				<input type="text" class="history_search" name="keyword" placeholder="시청 기록 검색">
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
 			</form>
@@ -218,7 +222,7 @@ cursor: pointer;
 		<div id="profile_info">
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?member_code=1"><span>🗃</span> 내 보관함</a></p>
+					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=995"><span>🗃</span> 내 보관함</a></p>
 				</div>
 			</div>
 			
@@ -248,7 +252,7 @@ cursor: pointer;
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?member_code=1">시청 기록</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=995">시청 기록</a></p>
 			</div>
 			<c:if test="${!empty h_list }">
 			<c:set var="history" value="${h_list }" />
@@ -260,7 +264,7 @@ cursor: pointer;
 					<p class="video_channel_p">${h_dto.getChannel_name() } • 조회수 ${h_dto.getVideo_view_cnt() }회<p>
 					<p class="video_views_p">${h_dto.getVideo_cont() }<p>
 				</div>
-				<a href="<%=request.getContextPath() %>/history_one_delete.do?video_code=${h_dto.getVideo_code() }&member_code=1">
+				<a href="<%=request.getContextPath() %>/history_one_delete.do?video_code=${h_dto.getVideo_code() }&channel_code=995">
 					<img class="video_history_d_img" src="${pageContext.request.contextPath}/resources/img/delete.png">
 				</a>
 			</div>
@@ -296,6 +300,8 @@ margin-right: 10px;
 margin-bottom: 10px;
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <!-- ======================== 모달창 관련 영역 ========================  -->
 <div id="history_delete" class="modal">
 	<p id="h_d_title">시청 기록을 삭제할까요?</p>
@@ -303,7 +309,7 @@ margin-bottom: 10px;
 	<br>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
-	<button id="h_d_btn" onclick="location.href='delete_history.do?member_code=1'">시청 기록 지우기</button>
+	<button id="h_d_btn" onclick="location.href='delete_history.do?channel_code=995'">시청 기록 지우기</button>
 </div>
 <div id="history_stop" class="modal">
 	<p id="h_s_title">시청 기록을 중지할까요?</p>
@@ -311,7 +317,7 @@ margin-bottom: 10px;
 	<br>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
-	<button id="h_s_btn" onclick="location.href='delete_history.do?member_code=1'">시청 기록 중지하기</button>
+	<button id="h_s_btn" onclick="location.href='dont_save_history.do?member_code=VD00002'">시청 기록 중지하기</button>
 </div>
 <!-- ====================== 모달창 자바 스크립트 영역 ====================== -->
 <script>

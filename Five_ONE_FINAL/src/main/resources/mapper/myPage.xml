@@ -6,49 +6,49 @@
 
 <mapper namespace="myPageDAO">
 
-	<select id="history_list" resultType="videoplayDTO" parameterType="int">
-		select * from video_play where video_code in (select video_code from history where member_code = #{code}) order by video_regdate desc
+	<select id="history_list" resultType="videoplayDTO" parameterType="String">
+		select * from video_play where video_code in (select video_code from history where channel_code = #{code}) order by video_regdate desc
 	</select>
 	
-	<select id="playlist_list" resultType="videoplayDTO" parameterType="int">
-		select * from video_play where video_code in (select video_code from playlist where member_code = #{code}) order by video_regdate desc
+	<select id="playlist_list" resultType="playlistDTO" parameterType="String">
+		select distinct playlist_no, playlist_title from playlist where channel_code = #{code}
 	</select>
 	
-	<select id="good_list" resultType="videoplayDTO" parameterType="int">
-		select * from video_play where video_code in (select video_code from good where member_code = #{code}) order by video_regdate desc
+	<select id="good_list" resultType="videoplayDTO" parameterType="String">
+		select * from video_play where video_code in (select video_code from good where channel_code = #{code}) order by video_regdate desc
 	</select>
 	
 	
-	<select id="member_channel" resultType="ChannelDTO" parameterType="int">
+	<select id="member_channel" resultType="channeldto" parameterType="String">
 		select * from user_channel where member_code = #{code}
 	</select>
 	
-	<select id="channel_video" resultType="videoplayDTO" parameterType="int">
+	<select id="channel_video" resultType="videoplayDTO" parameterType="String">
 		select * from video_play where channel_code = #{code} order by video_regdate desc
 	</select>
 	
-	<select id="channel_sub" resultType="videoplayDTO" parameterType="int">
+	<select id="channel_sub" resultType="videoplayDTO" parameterType="String">
 		select * from subscribe where channel_code = #{code}
 	</select>
 	
-	<select id="reply_list" resultType="replyDTO" parameterType="int">
-		select * from reply where member_code = #{code}
+	<select id="reply_list" resultType="replyDTO" parameterType="String">
+		select * from reply where channel_code = #{code}
 	</select>
 	
-	<delete id="delete_history" parameterType="int">
-		delete from history where member_code = #{code}
+	<delete id="delete_history" parameterType="String">
+		delete from history where channel_code = #{code}
 	</delete>
 	
 	<select id="history_search" parameterType="Map" resultType="videoplayDTO">
-		select * from video_play where video_code in (select video_code from history where member_code = #{code}) and video_title like '%' || #{keyword} || '%' order by video_regdate desc
+		select * from video_play where video_code in (select video_code from history where channel_code = #{code}) and video_title like '%' || #{keyword} || '%' order by video_regdate desc
 	</select>
 	
-	<delete id="history_one_delete" parameterType="int">
-		delete from history where member_code = #{member_code} and video_code = #{video_code}
+	<delete id="history_one_delete" parameterType="Map">
+		delete from history where channel_code = #{channel_code} and video_code = #{video_code}
 	</delete>
 	
 	<select id="getHistory_num" parameterType="Map" resultType="int">
-		select history_num from history where member_code = #{member_code} and video_code = #{video_code}
+		select history_num from history where channel_code = #{channel_code} and video_code = #{video_code}
 	</select>
 	
 	<update id="updateSeq" parameterType="int">

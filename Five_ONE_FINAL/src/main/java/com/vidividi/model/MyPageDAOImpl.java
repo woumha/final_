@@ -22,42 +22,42 @@ public class MyPageDAOImpl implements MyPageDAO {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<VideoPlayDTO> getHistory_list(int code) {
+	public List<VideoPlayDTO> getHistory_list(String code) {
 		return this.sqlSession.selectList("history_list", code);
 	}
 
 	@Override
-	public List<VideoPlayDTO> getPlaylist_list(int code) {
+	public List<VideoPlayDTO> getPlaylist_list(String code) {
 		return this.sqlSession.selectList("playlist_list", code);
 	}
 
 	@Override
-	public List<VideoPlayDTO> getGood_list(int code) {
+	public List<VideoPlayDTO> getGood_list(String code) {
 		return this.sqlSession.selectList("good_list", code);
 	}
 
 	@Override
-	public ChannelDTO getChannel_info(int code) {
+	public ChannelDTO getChannel_info(String code) {
 		return this.sqlSession.selectOne("member_channel", code);
 	}
 
 	@Override
-	public List<VideoPlayDTO> getChannel_video(int code) {
+	public List<VideoPlayDTO> getChannel_video(String code) {
 		return this.sqlSession.selectList("channel_video", code);
 	}
 
 	@Override
-	public List<SubscribeDTO> getChannel_sub(int code) {
+	public List<SubscribeDTO> getChannel_sub(String code) {
 		return this.sqlSession.selectList("channel_sub", code);
 	}
 
 	@Override
-	public List<ReplyDTO> getReply_list(int code) {
+	public List<ReplyDTO> getReply_list(String code) {
 		return this.sqlSession.selectList("reply_list", code);
 	}
 
 	@Override
-	public int delete_history(int code) {
+	public int delete_history(String code) {
 		return this.sqlSession.delete("delete_history", code);
 	}
 

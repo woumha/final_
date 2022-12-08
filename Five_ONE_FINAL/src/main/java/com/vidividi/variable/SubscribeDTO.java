@@ -6,6 +6,6 @@ import lombok.Data;
 public class SubscribeDTO {
 
 	private int subscribe_num;
-	private int member_code;
-	private int channel_code;
+	private String member_code;
+	private String channel_code;
 }

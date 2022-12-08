@@ -6,6 +6,6 @@ import lombok.Data;
 public class GoodDTO {
 
 	private int good_num;
-	private int member_code;
-	private int video_code;
+	private String channel_code;
+	private String video_code;
 }

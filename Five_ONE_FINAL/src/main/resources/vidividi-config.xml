@@ -17,6 +17,7 @@
 		<!-- myPage 관련 -->
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
 		<typeAlias type="com.vidividi.variable.HistoryDTO" alias="historyDTO" />
+		<typeAlias type="com.vidividi.variable.PlaylistDTO" alias="playlistDTO" />
 		
 		<!-- Member -->
 		<typeAlias type="com.vidividi.model.MemberDAO" alias="memberdao" />
