@@ -11,7 +11,7 @@ public interface WatchDAO {
 
 	public VideoPlayDTO getVideo(String video_code);
 
-	public ChannelDTO getChannel(int channel_code); 
+	public ChannelDTO getChannel(String channel_code); 
 	
 	public List<VideoPlayDTO> getVideoList();
 	

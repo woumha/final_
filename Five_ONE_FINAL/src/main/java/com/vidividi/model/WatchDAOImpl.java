@@ -27,7 +27,7 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 	
 	@Override
-	public ChannelDTO getChannel(int channel_code) {
+	public ChannelDTO getChannel(String channel_code) {
 		return this.sqlSession.selectOne("getChannel", channel_code);
 	}
 
