@@ -63,3 +63,27 @@ body {
 	border: none;
 	display: none;
 }
+
+#join-wrap {
+   display: flex;
+}
+
+#join-side-bar {
+   flex: 1;
+}
+
+#join-content {
+        flex: 9;
+        
+    }
+
+/* 최상위 부모로 배경색을 하얀색으로 */
+.side-color {
+	background-color: white !important;
+}
+
+.nav_channel {
+	display: flex !important;
+	flex-direction: row !important;
+	justify-content: unset !important;
+}
