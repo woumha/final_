@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import com.vidividi.model.*;
 import com.vidividi.variable.*;
 
+import com.vidividi.model.MyPageDAO;
+import com.vidividi.variable.ReplyDTO;
+import com.vidividi.variable.SubscribeDTO;
+import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
 public class myPageController {
@@ -39,7 +44,7 @@ public class myPageController {
 		model.addAttribute("reply_list", reply_list);
 		
 		// 해당 유저 채널정보 불러오기
-		User_channelDTO m_channel = this.dao.getChannel_info(code);
+		ChannelDTO m_channel = this.dao.getChannel_info(code);
 		model.addAttribute("m_channel", m_channel);
 		System.out.println("member_code >>> "+code);
 		System.out.println("m_channel.getChannel_code() >>> "+m_channel.getChannel_code());

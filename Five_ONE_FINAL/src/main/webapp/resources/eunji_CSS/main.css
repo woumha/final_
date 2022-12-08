@@ -1,0 +1,398 @@
+@charset "UTF-8";
+
+	@media screen and (max-width: 992px) {
+		.container1 div{
+			width: 500px;
+			justify-content: center;
+		}
+		
+		#slide {
+		    width: 800px;
+		    height: 350px;
+		    padding: 0 10%;
+		    justify-content: space-between;
+		    align-items: center;
+		}	
+		
+	}	
+
+	tr { display: block; float: left; }
+	th, td { display: block; }	
+	
+	html, body {
+		  margin: 0;
+		  padding: 0;
+		  text-align: center;
+	}
+
+	.group:after {
+	  content: "";
+	  display: table;
+	  clear: both;
+	}
+
+
+	#side_wrap{
+		display: flex;
+	}
+	
+	#sidebar{
+		flex: 1;
+	}
+
+ 	/* #top_wrap{
+		position: fixed;
+	} */ 
+
+	/*--------------------------------------- 상단 카테고리 바------------------------------------- */	
+		#mainnav {
+		    background: #424242;
+		    color: #fff;
+		    font-weight: bold;
+		    text-transform:uppercase;
+		    letter-spacing: .05em;
+		}
+		
+		#mainnav #menu {
+		    display: none;
+		    padding: .8em 1.5em;
+		    cursor: pointer;
+		}
+		
+		
+		#mainnav ul {
+		    display: block;
+		    margin: 0;
+		    margin-left: 7%;
+		    text-align: center;
+		}
+		
+		#mainnav ul li {
+		    margin: 0;
+		    list-style: none;
+		    display: inline-block;
+		}
+		
+		#mainnav ul li a {
+		    color: #fff;
+		    text-decoration: none;
+		    display: inline-block;
+		    padding: .9em 1.5em .8em 1.5em;
+		}
+		
+		#mainnav ul li a:hover {
+		    color: #000;
+		    background: #fc942c;
+		}
+		
+		.content {
+			  padding: 1.5em;
+		}
+		
+	
+		@media all and (min-width: 768px) and (max-width: 992px) {
+		
+		}
+		
+		@media all and (max-width: 767px) {
+			
+		    #mainnav #menu {
+		        display: block;
+		    }
+		
+		    #mainnav ul {
+		        display: none;
+		        background: #666;
+		        padding: 1em;
+		        text-align: left;
+		    }
+		    #mainnav ul li {
+		        display: block;
+		    }
+		
+		    #mainnav ul li a {
+		        display: block;
+		        padding: .75em 1.5em .5em 1.5em;
+		    }
+		    
+		    #side_wrap{
+		    	display: none;
+		    }
+		    
+		    #slide_wrap{
+		    	display: none;
+		    }
+		
+		}  
+		
+		#all{
+			background-color: #fc942c;
+		}
+		
+      #video_list {
+      	display: flex;
+      	flex: 3;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin-left: 20%;
+		margin-top: -235px;
+   		}
+     	
+		video{
+			width: 300px;
+			height: 171px;
+			border-radius: 10px;
+		}
+		
+		#video_view_ctn, #video_title, #video_channel{
+			padding-left: 6px;
+			padding-top: 2px;
+		}
+	
+     	
+   /* --------------------------------------------글자 설정--------------------------------------- */ 
+     	 
+     	 td{
+     	 	font-size: 0.8rem;
+     	 }
+     	 
+     	 #video_title{
+     		 font-size: 1rem;
+     		 font-weight: bold;
+     	 }
+     	 
+     	 
+     /* -----------------------------------------캐러셀 설정------------------------------------------ */  	 
+		
+		#slide{
+			 z-index: 10;
+			
+		}
+		
+		#slidebtn_wrap{
+			display:flex;
+		    width: 1303px;
+		    height: 350px;
+		    padding: 0 10%;
+		    justify-content: space-between;
+		    align-items: center;	
+		}
+		
+		#prev{
+			background-color: white;
+			color: #424242;
+			border: none;
+		}
+		
+		#prev:hover{
+			color: #fc942c;
+		}
+		
+		#prev:focus {
+   		 outline: none;
+		}
+		
+		#next:focus {
+   		 outline: none;
+		}
+		
+		
+		#next:hover{
+			color: #fc942c;
+		}
+		
+		#next{
+			background-color: white;
+			color: #424242;
+			border: none;
+		}
+		
+		#next i{
+			font-size: 30;
+		    background-color: white;
+		    border: none;
+		}
+		
+		#prev i{
+			font-size: 30;
+		    background-color: white;
+		    border: none;
+		}
+		
+		
+		#section {
+		  width: 40em;
+		  height: 13em;
+		  position: relative;
+		  margin-top: 4%;
+		  margin-left: 21%;
+		  text-align: center;
+		}	
+		
+		#section li {
+		  width: 600px;
+		  height: 320px;
+		  background: #424242;
+		  display: inline-block;
+		  -webkit-transition: all .3s ease-in-out;
+		  -moz-transition: all .3s ease-in-out;
+		  transition: all .3s ease-in-out;
+		  overflow: hidden;
+		  box-shadow: 0 2px 3px 0;
+		  border-radius: 10px;
+		}
+		
+		#section li p {
+		  color: white;
+		  font-weight: bold;
+		  font-size: 5em;
+		  text-align: center;
+		  margin-top: 1.175em;
+		}
+		
+		.items {
+		  position: absolute;
+		}
+		
+		.main-pos {
+		  margin-left: 2em !important;
+		  z-index: 3000;
+		  /*background-image: url('https://dl.dropbox.com/u/32649907/imgs/shadow.png');*/
+		}
+		
+		.left-pos {
+		  opacity: .3;
+		  margin-left: -17em !important;
+		  z-index: 1000;
+		  -webkit-transform: scale(.75);
+		  -moz-transform: scale(.75);
+		  transform: scale(.75);
+		}
+		
+		.back-pos {
+		  margin-left: 2em !important;
+		  opacity: .05;
+		  -webkit-transform: scale(.5);
+		  -moz-transform: scale(.5);
+		  transform: scale(.5);
+		}
+		
+		.right-pos {
+		  opacity: .3;
+		  margin-left:  21em !important;
+		  z-index: 1000;
+		  -webkit-transform: scale(.75);
+		  -moz-transform: scale(.75);
+		  transform: scale(.75);
+		}
+		
+		section span {
+		  position: relative;
+		  margin: 0 auto;
+		  left: 17em;
+		  top: 20em;
+		} 
+		
+		     	
+		
+   /* ------------------------------------------------추천 동영상 라벨-------------------------------------------------  */
+   
+	  button {
+	  margin: 20px;
+	}
+	.custom-btn {
+	  width: 130px;
+	  height: 40px;
+	  color: #fff;
+	  border-radius: 5px;
+	  padding: 10px 25px;
+	  font-family: 'Lato', sans-serif;
+	  font-weight: 500;
+	  background: transparent;
+	  cursor: pointer;
+	  transition: all 0.3s ease;
+	  position: relative;
+	  display: inline-block;
+	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+	   7px 7px 20px 0px rgba(0,0,0,.1),
+	   4px 4px 5px 0px rgba(0,0,0,.1);
+	  outline: none;
+	}
+   
+	 .re_btn {
+	  margin-left: 20.2%;
+   	  margin-top: 10%;
+	  background: #fc942c;
+	  border: none;
+	  z-index: 1;
+	  width: 200px;
+	  outline: none;
+	}
+	
+	.re_btn:after {
+	  position: absolute;
+	  content: "";
+	  width: 0;
+	  height: 100%;
+	  top: 0;
+	  right: 0;
+	  z-index: -1;
+	  background-color: #424242;
+	  border-radius: 5px;
+	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+	   7px 7px 20px 0px rgba(0,0,0,.1),
+	   4px 4px 5px 0px rgba(0,0,0,.1);
+	  transition: all 0.3s ease;
+	  outline: none;
+	}
+	.re_btn:hover {
+	  color: #fff;
+	}
+	.re_btn:hover:after {
+	  left: 0;
+	  width: 100%;
+	}
+	.re_btn:active {
+	  top: 2px;
+	}
+	   
+	   
+	/*---------------------------------------------- 신규 동영상 버튼 --------------------------------------------------*/
+	
+	.up_btn {
+	  margin-left: 1%;
+   	  margin-top: 10%;
+	  background: #424242;
+	  border: none;
+	  z-index: 1;
+	  width: 200px;
+	  outline: none;
+	}
+	
+	.up_btn:after {
+	  position: absolute;
+	  content: "";
+	  width: 0;
+	  height: 100%;
+	  top: 0;
+	  right: 0;
+	  z-index: -1;
+	  background-color: #fc942c;
+	  border-radius: 5px;
+	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+	   7px 7px 20px 0px rgba(0,0,0,.1),
+	   4px 4px 5px 0px rgba(0,0,0,.1);
+	  transition: all 0.3s ease;
+	  outline: none;
+	}
+	.up_btn:hover {
+	  color: #fff;
+	}
+	.up_btn:hover:after {
+	  left: 0;
+	  width: 100%;
+	}
+	.up_btn:active {
+	  top: 2px;
+	}

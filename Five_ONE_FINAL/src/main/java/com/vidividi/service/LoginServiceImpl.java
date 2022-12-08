@@ -17,17 +17,33 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Override
 	public String loginCheck(LoginDTO dto, HttpSession session) {
-		String membercode = dao.checkMember(dto);
+		String memberCode = dao.checkMember(dto);
 		MemberDTO memberDTO = dao.getMember(dto);
+		
 		if (membercode != null) {
 			session.setAttribute("MemberCode", membercode);
-			session.setAttribute("MemberNick", memberDTO.getMember_nickname());
+			session.setAttribute("LastChannelCode", memberDTO.getMember_last_channel());
 		}
-		return membercode;
+		
+		return memberCode;
 	}
 
 	@Override
 	public void logout(HttpSession session) {
+		
+		if (session.getAttribute("MemberCode") != null) {
+			String memberCode = (String)session.getAttribute("MemberCode");
+			String currentChannelCode = (String)session.getAttribute("CurrentChannelCode");
+			MemberDTO memberDTO = dao.getMember(memberCode);
+			
+			if (memberCode != null) {
+				if (currentChannelCode != null) {
+					memberDTO.setMember_last_channel(currentChannelCode);
+				}
+				dao.updateLastChannel(memberDTO);
+			}
+		}
+		
 		session.invalidate();
 	}
 

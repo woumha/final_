@@ -19,8 +19,8 @@
 	</select>
 	
 	
-	<select id="member_channel" resultType="user_channelDTO" parameterType="String">
-		select * from user_channel where channel_code = #{code}
+	<select id="member_channel" resultType="channeldto" parameterType="String">
+		select * from user_channel where member_code = #{code}
 	</select>
 	
 	<select id="channel_video" resultType="videoplayDTO" parameterType="String">

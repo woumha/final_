@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
-import com.vidividi.variable.User_channelDTO;
+import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 public interface MyPageDAO {
