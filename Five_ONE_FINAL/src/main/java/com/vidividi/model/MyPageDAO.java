@@ -13,7 +13,7 @@ public interface MyPageDAO {
 	List<VideoPlayDTO> getHistory_list(String code);
 	List<VideoPlayDTO> getPlaylist_list(String code);
 	List<VideoPlayDTO> getGood_list(String code);
-	User_channelDTO getChannel_info(String code);
+	ChannelDTO getChannel_info(String code);
 	List<VideoPlayDTO> getChannel_video(String code);
 	List<SubscribeDTO> getChannel_sub(String code); 
 	List<ReplyDTO> getReply_list(String code);
