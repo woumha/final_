@@ -14,7 +14,7 @@
 	</select>
 	
 	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
-		select r.*, (r.reply_good - r.reply_bad) most from (select * from reply inner join user_channel using (channel_code)) r where video_code = #{video_code} and reply_comment = 0 order by ${video_option} desc;
+		select r.*, (r.reply_good - r.reply_bad) most from (select * from reply inner join user_channel using (channel_code)) r where video_code = #{video_code} and reply_comment = 0 order by ${video_option} desc
 	</select>
 
 	<select id="getComment" parameterType="String" resultType="replyDTO">
