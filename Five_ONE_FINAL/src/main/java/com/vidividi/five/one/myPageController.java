@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import com.vidividi.model.*;
 import com.vidividi.variable.*;
 
-import com.vidividi.model.MyPageDAO;
-import com.vidividi.variable.ReplyDTO;
-import com.vidividi.variable.SubscribeDTO;
-import com.vidividi.variable.ChannelDTO;
-import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
 public class myPageController {
@@ -29,6 +24,8 @@ public class myPageController {
 	public String myPage_go(
 			@RequestParam("channel_code") String code,
 			Model model) {
+		
+		
 		
 		// 동영상 리스트 불러오기
 		List<VideoPlayDTO> history_list = this.dao.getHistory_list(code);
@@ -72,11 +69,43 @@ public class myPageController {
 	}
 
 	@RequestMapping("playlist_list.do")
-	public String playlist_list() {
-
+	public String playlist_list(@RequestParam("channel_code") String code,
+								@RequestParam("playlist_no") int no,
+								Model model) {
+		
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("code", code);
+		map.put("no", no);
+		
+		// 현재 세션의 채널, 선택한 재생목록no 에 해당하는 video_play 리스트 불러오기
+		List<VideoPlayDTO> playlist_list = this.dao.getPlaylist_no(map);
+		model.addAttribute("playlist_list", playlist_list);
+		model.addAttribute("playlist_no", no);
+		model.addAttribute("channel_code", code);
+		
+		
 		return "myPage/playlist";
 	}
-
+	@RequestMapping("playlist_search.do")
+	public String search(@RequestParam("channel_code") String code,
+						@RequestParam("playlist_no") int no,
+						@RequestParam("keyword") String keyword,
+						HttpServletRequest request, Model model) {
+		
+		
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("keyword", keyword);
+		map.put("code", code);
+		map.put("no", no);
+		
+		List<VideoPlayDTO> search_playlist = this.dao.searchPlaylist(map);
+		
+		model.addAttribute("playlist_list", search_playlist);
+		model.addAttribute("channel_code", code);
+		model.addAttribute("playlist_no", no);
+		
+		return "myPage/playlist";
+	}
 	@RequestMapping("reply_list.do")
 	public String reply_list() {
 
@@ -92,6 +121,7 @@ public class myPageController {
 	@RequestMapping("delete_history.do")
 	public void delete_history(@RequestParam("channel_code") String code, HttpServletResponse response) throws IOException {
 		
+		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
 		int check = this.dao.delete_history(code);
@@ -109,6 +139,33 @@ public class myPageController {
 		}
 	}
 	
+	@RequestMapping("delete_playlist.do")
+	public void delete_history(@RequestParam("channel_code") String code,
+								@RequestParam("playlist_no") int no,
+								HttpServletResponse response) throws IOException {
+		
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("code", code);
+		map.put("no", no);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		
+		int check = this.dao.delete_playlist(map);
+		
+		if(check > 0) {
+			out.println("<script>");
+			out.println("alert('재생목록 삭제 완료')");
+			out.println("location.href='myPage_go.do?channel_code="+code+"'");
+			out.println("</script>");
+		}else {
+			out.println("<script>");
+			out.println("alert('재생목록 삭제 중 오류 발생')");
+			out.println("history.back()");
+			out.println("</script>");
+		}
+	}
+	
 	
 	@RequestMapping("history_search.do")
 	public String search(@RequestParam("channel_code") String code,
@@ -118,14 +175,14 @@ public class myPageController {
 		map.put("keyword", keyword);
 		map.put("code", code);
 		
-		
-		
 		List<VideoPlayDTO> search_history = this.dao.searchHistory(map);
 		
 		model.addAttribute("h_list", search_history);
 		
 		return "myPage/history";
 	}
+	
+	
 	
 	@RequestMapping("history_one_delete.do")
 	public void delete_history(@RequestParam("video_code") int video,
@@ -142,7 +199,7 @@ public class myPageController {
 		// 선택된 history 데이터 지우기
 		int check = this.dao.history_one_delete(map);
 		
-		
+		response.setContentType("text/html; charset=UTF-8");
 		
 		PrintWriter out = response.getWriter();
 		
@@ -162,7 +219,46 @@ public class myPageController {
 		}
 	}
 	
-	
+	@RequestMapping("playlist_one_delete.do")
+	public void delete_history(@RequestParam("video_code") String video,
+								@RequestParam("channel_code") String channel,
+								@RequestParam("playlist_no") int no,
+								HttpServletResponse response) throws IOException {
+		
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("video_code", video);
+		map.put("channel_code", channel);
+		map.put("playlist_no", no);
+		
+		System.out.println("video_code >>> " + video);
+		System.out.println("channel_code >>> " + channel);
+		System.out.println("playlist_no >>> " + no);
+		
+		// 선택된 playlist_num 가져오기
+		int playlist_num = this.dao.getPlayList_num(map);
+		
+		// 선택된 playlist_num 데이터 지우기
+		int check = this.dao.playlist_one_delete(map);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		PrintWriter out = response.getWriter();
+		
+		if(check > 0) {
+			
+			this.dao.updateSequence_p(playlist_num);
+			
+			out.println("<script>");
+			out.println("alert('재생목록 삭제 완료')");
+			out.println("location.href='playlist_list.do?channel_code="+channel+"&playlist_no="+no+"'");
+			out.println("</script>");
+		}else {
+			out.println("<script>");
+			out.println("alert('재생목록 삭제 중 오류 발생')");
+			out.println("history.back()");
+			out.println("</script>");
+		}
+	}
 	
 	
 	

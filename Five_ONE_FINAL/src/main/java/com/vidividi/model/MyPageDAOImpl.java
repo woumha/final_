@@ -8,9 +8,9 @@ import javax.inject.Inject;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
-import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 
@@ -81,5 +81,33 @@ public class MyPageDAOImpl implements MyPageDAO {
 		return this.sqlSession.update("updateSeq", num);
 	}
 
-	
+	@Override
+	public List<VideoPlayDTO> getPlaylist_no(Map<String, Object> map) {
+		return this.sqlSession.selectList("playlist_no", map);
+	}
+
+	@Override
+	public List<VideoPlayDTO> searchPlaylist(Map<String, Object> map) {
+		return this.sqlSession.selectList("playlist_search", map);
+	}
+
+	@Override
+	public int playlist_one_delete(Map<String, Object> map) {
+		return this.sqlSession.delete("playlist_one_delete", map);
+	}
+
+	@Override
+	public int getPlayList_num(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getPlaylist_num", map);
+	}
+
+	@Override
+	public int updateSequence_p(int num) {
+		return this.sqlSession.update("updateSeq_p", num);
+	}
+
+	@Override
+	public int delete_playlist(Map<String, Object> map) {
+		return this.sqlSession.delete("delete_playlist", map);
+	}
 }
