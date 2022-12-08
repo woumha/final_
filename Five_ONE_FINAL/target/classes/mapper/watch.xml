@@ -8,8 +8,7 @@
 	<select id="getVideo" parameterType="String" resultType="videoplayDTO">
 		select * from video_play where video_code = #{video_code}
 	</select>
-	
-	
+
 	<select id="getChannel" parameterType="String" resultType="user_channelDTO">
 		select * from user_channel where channel_code = #{channel_code}
 	</select>
