@@ -1,6 +1,7 @@
 package com.vidividi.model;
 
 import com.vidividi.variable.LoginDTO;
+
 import com.vidividi.variable.MemberDTO;
 
 public interface MemberDAO {

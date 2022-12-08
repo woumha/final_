@@ -15,7 +15,7 @@
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
 		
 		<!-- myPage 관련 -->
-		<typeAlias type="com.vidividi.variable.User_channelDTO" alias="user_channelDTO" />
+		<typeAlias type="com.vidividi.variable.ChannelDTO" alias="user_channelDTO" />
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
 		<typeAlias type="com.vidividi.variable.HistoryDTO" alias="historyDTO" />
     

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
+<c:set var="owner" value="${currentOwner }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +40,7 @@
 	    </div>
 	    <div class="col-lg-6">
 	     	<div class="col-sm-12 text-left mb-1" style="font-size: 18px">
-			  채널이름
+			  ${owner.channel_name }
 			</div>
 			<div class="col-sm-12 text-left mb-1" style="font-size: 14px">
 			  채널아이디
@@ -49,16 +50,19 @@
 			</div>
 	    </div> <!-- 중간 -->
 	    <div class="col-lg-4 align-self-center">
-	     	<button type="button" class="btn btn-primary btn-dark">구독</button>
-	     	
-	     	<button data-toggle="modal" data-target="#exampleModal" role="button" id="video_upload_btn" class="btn btn-primary btn-blue">
-	     		동영상 업로드
-	     	</button>
+	    	<c:if test="${empty owner }">
+		     	<button type="button" class="btn btn-primary btn-dark">구독</button>
+	    	</c:if>
+			<c:if test="${!empty owner }">
+		     	<button data-toggle="modal" data-target="#exampleModal" role="button" id="video_upload_btn" class="btn btn-primary btn-blue">
+		     		동영상 업로드
+		     	</button>				
+			</c:if>	     	
 	     	
 	     	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			    <div class="modal-dialog modal-lg">
 			        <div class="modal-content">
-			       		 <jsp:include page="/movie_upload.do?num=1"></jsp:include>
+			       		 <jsp:include page="/movie_upload.do?code=${owner.getChannel_code() }"></jsp:include>
 			        </div>
 			    </div>
 			</div>

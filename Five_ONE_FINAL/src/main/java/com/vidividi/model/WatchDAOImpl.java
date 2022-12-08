@@ -11,7 +11,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ReplyDTO;
-import com.vidividi.variable.User_channelDTO;
+import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Repository
@@ -27,7 +27,7 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 	
 	@Override
-	public User_channelDTO getChannel(String channel_code) {
+	public ChannelDTO getChannel(int channel_code) {
 		return this.sqlSession.selectOne("getChannel", channel_code);
 	}
 

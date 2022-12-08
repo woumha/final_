@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.LoginDTO;
@@ -40,6 +41,8 @@ public class MemberController {
 	public String loginOk(Model model, LoginDTO loginDTO, HttpSession session) throws IOException {
 		
 		String membercode = service.loginCheck(loginDTO, session);
+		
+		
 		
 		if (membercode != null) {
 			model.addAttribute("MemberCode", membercode);

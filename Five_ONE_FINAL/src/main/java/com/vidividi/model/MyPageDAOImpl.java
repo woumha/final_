@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
-import com.vidividi.variable.User_channelDTO;
+import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 
@@ -37,7 +37,7 @@ public class MyPageDAOImpl implements MyPageDAO {
 	}
 
 	@Override
-	public User_channelDTO getChannel_info(int code) {
+	public ChannelDTO getChannel_info(int code) {
 		return this.sqlSession.selectOne("member_channel", code);
 	}
 

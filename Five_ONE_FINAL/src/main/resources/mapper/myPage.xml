@@ -19,7 +19,7 @@
 	</select>
 	
 	
-	<select id="member_channel" resultType="user_channelDTO" parameterType="int">
+	<select id="member_channel" resultType="ChannelDTO" parameterType="int">
 		select * from user_channel where member_code = #{code}
 	</select>
 	

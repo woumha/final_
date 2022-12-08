@@ -3,9 +3,9 @@ package com.vidividi.variable;
 import lombok.Data;
 
 @Data
-public class User_channelDTO {
+public class ChannelDTO {
 
-	private int channel_code;
+	private String channel_code;
 	private String channel_name;
 	private String channel_banner;
 	private String channel_cont;
@@ -13,6 +13,6 @@ public class User_channelDTO {
 	private String channel_live;
 	private String channel_date;
 	private String channel_lastupload;
-	private int member_code;
+	private String member_code;
 	
 }
