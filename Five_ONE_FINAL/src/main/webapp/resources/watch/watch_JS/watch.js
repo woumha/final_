@@ -21,6 +21,30 @@ $(document).ready(function() {
 	let video_code = $("#video_code").val();
 	
 	
+	function getReply(video_code, video_option){
+
+		$.ajax({
+
+			url : getContextPath() +"/reply.do",
+			data : {
+				"video_code" : video_code,
+				"video_option" : video_option
+			},
+			datatype : JSON,
+			success : function(data){
+				console.log(data);
+			},
+			error : function(){
+				alert('댓글 불러오기 에러');
+			}
+			
+		});
+
+	}
+
+
+
+
 
 
  	 $(".reply_cont_box").each(function(){
@@ -92,10 +116,9 @@ $(document).ready(function() {
 
 	            }
 	        }
-	    });
- 	 
- 	 
- 		
+	 });
+
+ 	 		
  		
  		/* 대댓글 토글 버튼 */
  		$(".comment_toggle").on("click", function(){
@@ -115,6 +138,17 @@ $(document).ready(function() {
  			
  		
  		
- 	 });
+ 		 });
+
+		 $("#dropdown_menu").on("click", function(){
+			//let video_option = $("#video_option").val();
+			//getReply(video_code, video_option);
+			
+
+		 });
+		 
+		
+
+		  
  
 });

@@ -196,10 +196,40 @@ button{
 	margin-bottom: 1rem;
 }
 
-.reply_count{
+.reply_cnt{
 	margin-right: 2rem;
 	margin-bottom: 2rem;
 }
+
+.dropdown_box{
+	position: relative;
+	z-index: 1;
+	width:8rem;
+}
+
+.dropdown_wrap{
+	position: absolute;
+	display:none;
+  	box-shadow: 0px 2px 2px 0px;
+  	border: 1px solid #999;
+  	border-radius:10%;
+  	padding-bottom: 1rem;
+  	padding-top: 1rem;
+    align-items: center;
+    width: 100%;
+    background-color:#fff;
+}
+
+
+.dropdown_content{
+	margin: 1rem auto;
+	font-weight: bold;
+}
+
+.dropdown_content a:hover {background-color: #ddd;}
+
+.dropdown_menu:hover .dropdown_wrap {display: block;}
+
 
 .menu_icon{
 	width: 24px;

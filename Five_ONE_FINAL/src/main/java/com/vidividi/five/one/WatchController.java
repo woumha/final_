@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,7 @@ public class WatchController{
 	
 	
 	@RequestMapping("watch.do")
-	public String watch(@RequestParam("video_code") int video_code, Model model) {
+	public String watch(@RequestParam("video_code") String video_code, Model model) {
 		
 		VideoPlayDTO video_dto = this.dao.getVideo(video_code);
 		
@@ -95,18 +96,33 @@ public class WatchController{
 		return "/watch/watch";
 	}
 	
-	@RequestMapping("reply.do")
+	
 	@ResponseBody
-	public String getReplyList(@RequestParam("video_code") int video_code, @RequestParam("video_option") String video_option) {
+	@RequestMapping("reply.do")
+	public JSONArray getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option) {
 		
-		JSONObject json = new JSONObject();
+		JSONArray jArray = new JSONArray();
 		
-		List<ReplyDTO> dto = this.dao.getReply(video_code, video_option);
+		List<ReplyDTO> list = this.dao.getReply(video_code, video_option);
 		
+		for(ReplyDTO dto : list) {
+			
+			JSONObject json = new JSONObject();
+			
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("channel_profil", dto.getChannel_profil());
+			json.put("reply_no", dto.getReply_no());
+			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_regdate", dto.getReply_regdate());
+			json.put("reply_update", dto.getReply_update());
+			json.put("reply_good", dto.getReply_good());
+			json.put("reply_bad", dto.getReply_bad());
 		
+			jArray.put(json);
+		}
 		
-		
-		return json.toString();
+		return jArray;
 	}
 	
 	
