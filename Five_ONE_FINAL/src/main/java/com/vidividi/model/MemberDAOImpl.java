@@ -25,6 +25,11 @@ public class MemberDAOImpl implements MemberDAO {
 	
 	@Override
 	public MemberDTO getMember(String memberCode) {
-		return this.sqlSession.selectOne("getMemberByCode");
+		return this.sqlSession.selectOne("getMemberByCode", memberCode);
+	}
+	
+	@Override
+	public void updateLastChannel(MemberDTO dto) {
+		this.sqlSession.update("updateLastChannel", dto);
 	}
 }

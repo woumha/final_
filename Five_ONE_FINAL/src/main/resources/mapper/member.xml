@@ -14,5 +14,8 @@
 	<select id="getMemberByCode" parameterType="String" resultType="memberdto">
 		select * from members where member_code = #{memberCode}
 	</select>
+	<update id="updateLastChannel" parameterType="memberdto">
+		update members set member_last_channel = #{member_last_channel} where member_code = #{member_code}
+	</update>
 	
 </mapper>

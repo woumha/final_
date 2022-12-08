@@ -74,16 +74,17 @@
 			
 		
 		<c:if test="${!empty MemberCode }">
+			<div onclick="location.href='<%=request.getContextPath() %>/channel.do?code=${LastChannelCode}'">내 채널(삭제예정)</div>
 			<div id="user_popup"> 
 				<ul id="user_list">
 					<li> &nbsp;&nbsp;</li>
-					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberNick }님</b></li>
+					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberName }님</b></li>
 					<li> &nbsp;&nbsp;</li>
 					<li> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
 					<li>&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;설정</li>
-					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="location.href='<%=request.getContextPath() %>/logout.do'">로그아웃</a></li>		
+					<li onclick="location.href='<%=request.getContextPath() %>/logout.do'">&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<%-- <a href="<%=request.getContextPath() %>/logout.do"> --%>로그아웃<!-- </a> --></li>		
 				</ul>
 			</div>
 		</c:if>
