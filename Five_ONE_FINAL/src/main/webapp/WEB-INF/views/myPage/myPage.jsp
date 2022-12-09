@@ -32,7 +32,6 @@ height: 1080px;
 background-color: gray;
 width: 100px;
 height: 1080px;
-
 float: left;
 }
 
@@ -41,7 +40,7 @@ float: left;
 /* background-color: blue; */
 width: 60%;
 height: auto;
-margin-top: 30px;
+margin-top: 70px;
 float: right;
 }
 
@@ -68,12 +67,6 @@ width: 210px;
 margin-right: 2px;
 margin-left: 2px;
 }
-.test_video_play {
-border-radius: 10px;
-width: 210px;
-margin-right: 2px;
-margin-left: 2px;
-}
 
 .video_box {
 display: inline-block;
@@ -94,8 +87,11 @@ display: inline-block;
 
 .content_title1 {
 font-size: 20px;
-margin-left: 15px;
+margin-left: 50px;
 float: left;
+}
+.test img {
+width: 25px;
 }
 
 .content_title2 {
@@ -141,7 +137,6 @@ margin-bottom: 7px;
 .info_cont {float: right;}
 .info_title p { margin: 0px; font-size: 13px;}
 .info_cont p { margin: 0px; font-size: 13px;}
-
 
 #profile_icon {
 margin-top: 90px;
@@ -196,7 +191,7 @@ border-radius: 10px;
 padding-left: 10px;
 width: 200px;
 height: 100px;
-
+margin-left: 7px;
 font-size: 15px;
 
 box-shadow: 5px 5px 5px gray;
@@ -222,7 +217,53 @@ display: -webkit-box;
 font-size: 10px;
 }
 
+.playlist_lid {
+position: absolute;
+text-align: center;
+width: 50%;
+height: 118px;
+background-color: black;
+margin-top: 0px;
+opacity:0.8; /* 불투명도 */
+margin-left: 108px;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+cursor: pointer;
+z-index: 3;
+}
+.video_play {
+position: absolute;
+z-index: 2;
+border-radius: 10px;
+width: 210px;
+margin-right: 2px;
+margin-left: 2px;
+}
+.playlist_video_div {
+position: relative;
+width: 210px;
+height: 119px;
+}
+.playlist_lid_img {
+width: 20px;
+color: white;
+margin-left: 0px;
 
+
+}
+.playlist_lid p {
+font-size: 18px;
+color: white;
+margin-top: 26px;
+margin-bottom: 5px;
+margin-left: 0px;
+}
+
+.p_playlist_none {
+margin-top: 5px;
+margin-bottom: 25px;
+margin-left: 20px;
+}
 /* ======================= 미디어 쿼리 스타일 영역 ======================= */
 @media screen and (max-width: 1088px) {
 	#chanel_area {
@@ -253,11 +294,11 @@ font-size: 10px;
 
 	<!-- top 영역 -->
 	<jsp:include page="../include/top_include.jsp"/>
-
+	<jsp:include page="../include/side_include.jsp"/>
 
 	<!-- 왼쪽 사이드 서브 메뉴 영역 -->
-	<div id="sub_menu_area" class="area_style">
-	</div>
+	<!-- <div id="sub_menu_area" class="area_style">
+	</div> -->
 	
 	<c:set var="c_info" value="${m_channel }" />
 
@@ -310,6 +351,7 @@ font-size: 10px;
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
 			<div class="test">
+				<img src="${pageContext.request.contextPath}/resources/img/history.png" style="margin-left: -80px">
 				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=995">기록</a></p>
 				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=995">모두보기</a></p>
 			</div>
@@ -331,74 +373,35 @@ font-size: 10px;
 		<!-- [재생목록] 박스 -->
 		<div id="playlist_box" class="content_box">
 			<div class="test">
+				<img src="${pageContext.request.contextPath}/resources/img/playlist_lid.png" style="margin-left: -120px">
 				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">재생목록</a></p>
 				<p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">모두보기</a></p>
 			</div>
 			
 			<c:set var="playlist" value="${p_list }" />
-			
+			<c:if test="${!empty playlist }">
 			<c:forEach items="${playlist }" var="p_dto" begin="0" end="9" step="1">
 			<div class="video_box">
 				<!-- 재생목록 덮개 -->
-<style>
-.playlist_lid {
-position: absolute;
-text-align: center;
-width: 50%;
-height: 118px;
-background-color: black;
-
-margin-top: 0px;
-
-opacity:0.8; /* 불투명도 */
-margin-left: 108px;
-
-border-top-right-radius: 10px;
-border-bottom-right-radius: 10px;
-
-cursor: pointer;
-
-z-index: 3;
-}
-.test_video_play {
-position: absolute;
-z-index: 2;
-}
-.playlist_video_div {
-position: relative;
-width: 210px;
-height: 119px;
-}
-.playlist_lid_img {
-width: 20px;
-color: white;
-margin-left: 0px;
-
-
-}
-.playlist_lid p {
-font-size: 18px;
-color: white;
-margin-top: 26px;
-margin-bottom: 5px;
-margin-left: 0px;
-}
-</style>
-				
-				
 				<div class="playlist_video_div">
 					<!-- 재생목록 덮개 영역 -->
-					<div class="playlist_lid" onclick="location.href='<%=request.getContextPath() %>/playlist_no_page.do?playlist_no=${p_dto.getPlaylist_no() }'">
-						<p>3</p>
+					<div class="playlist_lid" onclick="location.href='<%=request.getContextPath() %>/playlist_list.do?channel_code=995&playlist_no=${p_dto.getPlaylist_no() }'">
+						<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!테스트 중!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+						<p>${fn:length(p_dto.getPlaylist_title())}</p>
+						<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!테스트 중!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 						<img class="playlist_lid_img" src="${pageContext.request.contextPath}/resources/img/playlist_lid1.png">
 					</div>
-					<video class="test_video_play" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
+					<video class="video_play" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
 				</div>
-				<p class="video_title_p">${p_dto.getPlaylist_title() }<p>
+				<p class="video_title_p" style="margin-top: 5px;">${p_dto.getPlaylist_title() }<p>
+				<p class="video_title_p">${p_dto.getPlaylist_no() }<p>
 				<p class="video_channel_p">${c_info.getChannel_name() }<p>
-				<%-- <p class="video_views_p">조회수 ${p_dto.getVideo_view_cnt() }회 • ${p_dto.getVideo_regdate().substring(0,10) }<p> --%>
 			</div>
 			</c:forEach>
+			</c:if>
+			<c:if test="${empty playlist }">
+				<p class="p_playlist_none">만들거나 저장한 재생목록이 여기에 표시됩니다.</p>
+			</c:if>
 		</div>
 	
 		
@@ -407,6 +410,7 @@ margin-left: 0px;
 		<!-- [좋아요 표시한 동영상] 박스 -->
 		<div id="good_box" class="content_box">
 			<div class="test">
+				<img src="${pageContext.request.contextPath}/resources/img/good.png" style="margin-left: -258px">
 				<p class="content_title1"><a href="<%=request.getContextPath() %>/good_list.do?channel_code=995">좋아요 표시한 동영상</a> [${fn:length(g_list)}]</p>
 				<p class="content_title2"><a href="<%=request.getContextPath() %>/good_list.do?channel_code=995">모두보기</a></p>
 			</div>
@@ -428,6 +432,7 @@ margin-left: 0px;
 		<!-- [작성한 댓글 리스트] 박스 -->
 		<div id="reply_box" class="content_box">
 			<div class="test">
+				<img src="${pageContext.request.contextPath}/resources/img/reply.png" style="margin-left: -172px">
 				<p class="content_title1"><a href="<%=request.getContextPath() %>/reply_list.do?channel_code=995">작성한 댓글</a> [${fn:length(reply_list)}]</p>
 				<p class="content_title2"><a href="<%=request.getContextPath() %>/reply_list.do?channel_code=995">모두보기</a></p>
 			</div>

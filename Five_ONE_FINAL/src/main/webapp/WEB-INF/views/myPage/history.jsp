@@ -197,16 +197,45 @@ cursor: pointer;
 
 	<!-- top 영역 -->
 	<jsp:include page="../include/top_include.jsp"/>
+	<jsp:include page="../include/side_include.jsp"/>
 	<script type="text/javascript">
-		$("link[rel=stylesheet][href*='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css']").remove();
+		/* $("link[rel=stylesheet][href*='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css']").remove();
 		$("link[rel=stylesheet][href*='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css']").remove();
-		$("link[rel=stylesheet][href*='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css']").remove();
-		
+		$("link[rel=stylesheet][href*='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css']").remove(); */
+		/* $("link[rel=stylesheet][href*='https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css']").add(); */
 	</script>
+	<!-- 모달창 관련 링크 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+<style>
+.modal {
+max-width: 780px;
+height: 300px;
+}
+.modal a.close-modal {
+top: 5.5px;
+right: 5.5px;
+}
+#h_d_title {
+margin-top: 25px;
+font-size: 25px;
+}
+#h_d_btn {
+float: right;
+margin-right: 10px;
+margin-bottom: 10px;
+}
+#h_s_title {
+font-size: 25px;
+}
+#h_s_btn {
+float: right;
+margin-right: 10px;
+margin-bottom: 10px;
 
+</style>
 	<!-- 왼쪽 사이드 서브 메뉴 영역 -->
-	<div id="sub_menu_area" class="area_style">
-	</div>
+	<!-- <div id="sub_menu_area" class="area_style">
+	</div> -->
 	
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
 	<div id="chanel_area" class="area_style">
@@ -279,25 +308,7 @@ cursor: pointer;
 	
 </div>
 <style>
-.modal {
-max-width: 780px;
-}
 
-#h_d_title {
-font-size: 25px;
-}
-#h_d_btn {
-float: right;
-margin-right: 10px;
-margin-bottom: 10px;
-}
-#h_s_title {
-font-size: 25px;
-}
-#h_s_btn {
-float: right;
-margin-right: 10px;
-margin-bottom: 10px;
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
@@ -305,8 +316,8 @@ margin-bottom: 10px;
 <!-- ======================== 모달창 관련 영역 ========================  -->
 <div id="history_delete" class="modal">
 	<p id="h_d_title">시청 기록을 삭제할까요?</p>
-	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
 	<br>
+	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
 	<button id="h_d_btn" onclick="location.href='delete_history.do?channel_code=995'">시청 기록 지우기</button>
