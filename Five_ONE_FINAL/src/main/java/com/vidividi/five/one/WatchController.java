@@ -5,13 +5,17 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.UrlResource;
@@ -26,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.AbstractView;
 
+
+import com.fasterxml.jackson.core.JsonParser;
 import com.vidividi.model.WatchDAO;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.ChannelDTO;
@@ -39,6 +45,8 @@ public class WatchController{
 
 	@Inject
 	private WatchDAO dao;
+	
+
 	
 	
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -100,9 +108,17 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping("reply.do")
-	public JSONArray getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option) {
+	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option) {
+		
+		System.out.println("매핑완료");
+		
+		System.out.println("code >>> " +video_code);
+		System.out.println("option >>> " +video_option);
+
+		JSONObject result = new JSONObject();
 		
 		JSONArray jArray = new JSONArray();
+		
 		
 		List<ReplyDTO> list = this.dao.getReply(video_code, video_option);
 		
@@ -120,15 +136,56 @@ public class WatchController{
 			json.put("reply_good", dto.getReply_good());
 			json.put("reply_bad", dto.getReply_bad());
 		
-			jArray.put(json);
+			
+			jArray.add(json);
 		}
+			
 		
-		return jArray;
+		
+			
+			
+//			for(int i=0; i<jArray.size(); i++) {
+//				result += jArray.toJSONString();
+//			}
+		
+			result.put("datas", jArray);
+		
+			System.out.println("===================");
+			System.out.println(result);
+			
+			
+			
+			
+		return result.toString();
 	}
 	
+//	@ResponseBody
+//	@RequestMapping("reply.do")
+//	public List<ReplyDTO> getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option) {
+//		
+//		System.out.println("매핑완료");
+//		
+//		System.out.println("code >>> " +video_code);
+//		System.out.println("option >>> " +video_option);
+//		
+//		JSONArray jArray = new JSONArray();
+//		
+//		List<ReplyDTO> list = this.dao.getReply(video_code, video_option);
+//		
+//		return list;
+//	}
+//	
+//	@RequestMapping("test.do")
+//	public String test() {
+//		
+//		return "watch/test";
+//	}
 	
-	
-	
+	  @RequestMapping("test.do")
+	  public String test() {
+		 
+		  return "search/test"; 
+	  }
 	
 
 	

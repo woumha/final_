@@ -14,16 +14,19 @@ import com.vidividi.variable.VideoPlayDTO;
 @Controller
 public class SearchController {
 	
-	@Autowired
-	private VidividiDAO dao;
+	 @Autowired
+	 private VidividiDAO dao;
+	 
 	
-	  @RequestMapping("search.do") public String search(@RequestParam("field")String field, @RequestParam("keyword") String keyword, Model model) {
+	  @RequestMapping("search.do") public String search(@RequestParam("field")String
+			  field, @RequestParam("keyword") String keyword, Model model) {
+	 
+		 List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword);
+		  
+		 model.addAttribute("Search", searchList);
 	  
-		  List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword);
+		 return "search/mainSearch"; 
 		 
-		  model.addAttribute("Search", searchList);
-		 
-		  return "mainSearch"; 
 	  }
 	 
 

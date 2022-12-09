@@ -17,296 +17,11 @@
 
 <!-- 자동완성 기능 라이브러리 -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <title>Insert title here</title>
-<style type="text/css">
 
-	@media screen and (max-width: 1500px) {
-		#user_div{
-			display: none;
-		}
-		
-		#search_div{
-			width: 600px;
-		}
-	
-	}
-	
-	
-	@media screen and (min-width: 1501px) {
-		#user_div{
-			margin-top: 22px;
-			flex: 1;
-			height: 60px;
-			color: white;
-			position: absolute;
-			right: 1px;
-			font-size: 1.5rem;
-			display: inline-flex;
-			margin-right: 1%;
-			vertical-align: bottom;
-			text-align: center;
-		}
-	}
-	
-	
-	#wrap{
-		height: 80px;
-		width: 100%;
-		background-color: white;
-		margin: 0px;
-		padding-bottom: 0px;
-		display: flex;
-		text-align: center;
-	}
-	
-	#search_go {
-		width: 100%;
-		justify-content: center;
-		margin-top: 11px;
-	}
-
-	#search_input:focus {
-   		 outline: none;
-	}
-	
-	#html, #body {
-		  margin: 0;
-		  padding: 0;
-	}
-	
-	#wrap{
-		height: 80px;
-	}
-	
-	#search_div{
-		margin-top: 1%;
-		justify-content: center;
-		display: inline-flex;
-		align-items: center;
-		vertical-align: middle;
-		flex: 1;
-	}
-	
-	#user_icon {
-		font-size: 1.6em;
-		color: #fc942c;
-		position: relative;
-	}
-	
-
-	#search_input{
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		margin: 0 auto;
-		width: 50em;
-		height: 3em;
-		border-radius: 5px 0 0 5px;
-		border: 3px solid #fc942c;
- 		padding: 10px;
- 		box-shadow: 3px 3px 3px 2px rgba(0, 0, 0, 0.3);
-	}
-	
-	#search_btn{
-		  color: white;
-		  width: 40px;
-		  height: 40px;
-		  border-color: white;
-		  border-radius: 50%;
-		  background: #fc942c;
-		  align-items: center;
-		  justify-content: center;
-		  display: inline-flex;
-		  margin: 0 auto;
-		  font-size: 1.3rem;
-	}
-	
-	#search_input:hover {
-		 background-color: #e1eff7;
-		 color: #fc942c;
-	}
-	
-	#search_btn:hover {
-		 background-color: white;
-		 color: #fc942c;
-	}
-	
-	
-	/* ----------------------------------------user_login  css-------------------------- */
-	
-	 .customm-btn {
-	  width: 200px;
-	  height: 40px;
-	  color: #fff;
-	  border-radius: 5px;
-	  font-family: 'Lato', sans-serif;
-	  background: transparent;
-	  cursor: pointer;
-	  transition: all 0.3s ease;
-	  position: relative;
-	  display: inline-block;
-	  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-	   7px 7px 20px 0px rgba(0,0,0,.1),
-	   4px 4px 5px 0px rgba(0,0,0,.1);
-	  outline: none;
-	}
-   
-	 #user_login {
-	  background: #333333;
-	  border: none;
-	  z-index: 3;
-	  width: 100px;
-	}
-	
-  	#user_login:after {
-	  position: absolute;
-	  content: "";
-	  width: 0;
-	  height: 100%;
-	  top: 0;
-	  right: 0;
-	  z-index: -1;
-	  background-color: #fc942c;
-	  border-radius: 5px;
-	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-	   7px 7px 20px 0px rgba(0,0,0,.1),
-	   4px 4px 5px 0px rgba(0,0,0,.1);
-	  transition: all 0.3s ease;
-	} 
-	 
-	#user_login:hover {
-	  background-color: #fc942c;
-	}
- 	#user_login:hover:after {
-	  left: 0;
-	  width: 100%;
-	}
-	#user_login:active {
-	  top: 2px;
-	} 
-	
-	
-	
-	/* ----------------------------------------user_join css---------------------------  */
-	
-	 #user_join {
-	  background: #333333;
-	  border: none;
-	  z-index: 3;
-	  width: 100px;
-	}
-	
- 	#user_join:after {
-	  position: absolute;
-	  content: "";
-	  width: 0;
-	  height: 100%;
-	  top: 0;
-	  right: 0;
-	  z-index: -1;
-	  background-color: #fc942c;
-	  border-radius: 5px;
-	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-	   7px 7px 20px 0px rgba(0,0,0,.1),
-	   4px 4px 5px 0px rgba(0,0,0,.1);
-	  transition: all 0.3s ease;
-	} 
-	
-	#user_join:hover {
-	  background-color: #fc942c;
-	}
-	#user_join:hover:after {
-	  left: 0;
-	  width: 100%;
-	}
-	#user_join:active {
-	  top: 2px;
-	}
-
-
-	/*----------------------------------------user_popup css---------------------------  */
-	#user_popup{
-		position: absolute;
-		display: none;
-		width: 230px;
-		height: 300px;
-		background-color:white;
-		right: 1px;
-		top: 80px;
-		border-color: lightgray;
-		border-radius: 15px;
-		border: 1px solid;
-		text-align: left;
-		
-	}
-	
-	#user_popup ul{
-		padding-bottom: 5px;
-	}
-	
-	
-	
-	#user_popup ul li{
-		font-size: 1rem;
-		padding-left: 10px;
-		color: #33333;
-		margin: 5px;
-	}
-
-	#user_nickname{
-		margin-top: 10px;
-		font-size: 2rem;
-		color: #33333;
-	}
-	
-	#user_div b{
-		margin-top: 15px;
-	}
-	
-	
-	/* ------------------------------------------------자동완성창 css--------------------------------------- */
-	 .hide {
-		  display: none !important;
-		} 
-		
-		.rel_search {
-		  position: fixed; 
-		  flex-direction:column; 
-		  z-index: 10000; 
-		  justify-content : space-around;
-		  border: 1px solid #e4e7e8;
-		  border-radius: 0 0 6px 6px;
-		  width: 50em;
-		  text-align: left;
-		  margin-left: 22.2%;
-		  line-height: 1.8rem;
-		  background-color: #fff;
-		  border-top: 0;
-		  box-shadow: 0 2px 3px 0;
-		}	
-		
-		.pop_rel_keywords {
-		  list-style: none;
-		  margin-right: 30%;
-		
-		}
-		
-		.pop_rel_keywords > li {
-		  line-height : 250%
-		}
-		
-		/* 내 채널 css //이호찬 */
-		.style-scope {
-			display: inline-block;
-			position: relative;
-			z-index: 1; 
-		}
-		
-</style>
 </head>
+
 
 <body id="body">
 
@@ -315,7 +30,7 @@
 			<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png"  
 				id="logo" width="230px" height="90px" onclick="location.href='<%= request.getContextPath() %>/'">
 			
-			<form method="post" action="<%=request.getContextPath() %>/search.do" id="search_go">
+			<form method="post" action="<%=request.getContextPath() %>/test.do" id="search_go">
 						
 			<div id="search_div">
 			
@@ -358,19 +73,18 @@
 			
 		
 		<c:if test="${!empty MemberCode }">
-			<div onclick="location.href='<%=request.getContextPath() %>/channel.do?cha=${LastChannelCode }'">내 채널(삭제예정)</div>
 			<div id="user_popup"> 
 				<ul id="user_list">
 					<li> &nbsp;&nbsp;</li>
-					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberName }님</b></li>
+					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberNick }님</b></li>
 					<li> &nbsp;&nbsp;</li>
 					<%-- 내 채널 이미지 //이호찬 --%>
-					<li onclick="location.href='<%=request.getContextPath() %>/channel.do'"> &nbsp;<yt-icon class="style-scope ytd-compact-link-renderer"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 25px; height: 25px;"><g class="style-scope yt-icon"><path d="M3,3v18h18V3H3z M4.99,20c0.39-2.62,2.38-5.1,7.01-5.1s6.62,2.48,7.01,5.1H4.99z M9,10c0-1.65,1.35-3,3-3s3,1.35,3,3 c0,1.65-1.35,3-3,3S9,11.65,9,10z M12.72,13.93C14.58,13.59,16,11.96,16,10c0-2.21-1.79-4-4-4c-2.21,0-4,1.79-4,4 c0,1.96,1.42,3.59,3.28,3.93c-4.42,0.25-6.84,2.8-7.28,6V4h16v15.93C19.56,16.73,17.14,14.18,12.72,13.93z" class="style-scope yt-icon"></path></g></svg><!--css-build:shady--></yt-icon>&nbsp;&nbsp;내 채널</li>
+					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?cha=${LastChannelCode }'"> &nbsp;<yt-icon class="style-scope ytd-compact-link-renderer"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 25px; height: 25px;"><g class="style-scope yt-icon"><path d="M3,3v18h18V3H3z M4.99,20c0.39-2.62,2.38-5.1,7.01-5.1s6.62,2.48,7.01,5.1H4.99z M9,10c0-1.65,1.35-3,3-3s3,1.35,3,3 c0,1.65-1.35,3-3,3S9,11.65,9,10z M12.72,13.93C14.58,13.59,16,11.96,16,10c0-2.21-1.79-4-4-4c-2.21,0-4,1.79-4,4 c0,1.96,1.42,3.59,3.28,3.93c-4.42,0.25-6.84,2.8-7.28,6V4h16v15.93C19.56,16.73,17.14,14.18,12.72,13.93z" class="style-scope yt-icon"></path></g></svg><!--css-build:shady--></yt-icon>&nbsp;&nbsp;내 채널</li>
 					<li> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
 					<li>&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;설정</li>
-					<li onclick="location.href='<%=request.getContextPath() %>/logout.do'">&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<%-- <a href="<%=request.getContextPath() %>/logout.do"> --%>로그아웃<!-- </a> --></li>		
+					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="location.href='<%=request.getContextPath() %>/logout.do'">로그아웃</a></li>		
 				</ul>
 			</div>
 		</c:if>
@@ -393,7 +107,7 @@
 			}
 				
 			var offset = $("#user_popup").offset();
-	         $("html, body").animate({scrollTop: offset.top}, 100);
+	         $("html, body").animate({scrollTop: offset.top}, 300);
 		});	
 	});
 	
@@ -411,7 +125,7 @@
 	    timer(beforeInput);
 	}
 	
-	<%--
+	
 	const timer = (beforeInput) => {
 	  setTimeout(() => {
 	
@@ -430,7 +144,7 @@
 	    }
 	  }, 100);
 	}
-  --%>
+  
 
 	const loadData = (input) => {
 	  const url = `https://completion.amazon.com/api/2017/suggestions?session-id=135-3077052-6015425&customer-id=&request-id=DMRETXPQ3PZJQ5TKYSWX&page-type=Gateway&lop=en_US&site-variant=desktop&client-info=amazon-search-ui&mid=ATVPDKIKX0DER&alias=aps&b2b=0&fresh=0&ks=undefined&prefix=`+input+`&event=onFocusWithSearchTerm&limit=11&fb=1&suggestion-type=KEYWORD&suggestion-type=WIDGET&_=1615280967091`;
@@ -461,8 +175,8 @@
 		checkInput();
 		
 
-//-------------------------------------------------------------자동완성 클릭 + 방향키 이동----------------------------
-//자동완성 클릭 + input에 클릭 값 넣기 + 리스트 방향키 이동 이벤트
+//-------------------------------------------------------------자동완성 클릭 + 방향키 이동----------------------------------------------
+//자동완성 클릭 + input에 클릭 값 넣기
 	$(document).on("click", ".autoList", function(){		
 		$(this).css('background-color', '#facc9d');
 		$(".autoList").not(this).css('background-color', 'white');
@@ -470,8 +184,62 @@
 			   
 	});  	
 	
-	//".autoList:eq(0)"
- 
+	// autoList에서 search_input 노드...
+	//this.parentElement.parentElement.parentElement.firstElementChild.nextElementSibling
+	
+
+//리스트 방향키 이벤트	
+	var autoli = $('.autoList');
+	var liSelected;
+	$(document).on("keydown", ".search_input", function(e){
+	    if(e.keyCode == 40){ //아래키
+	        if(liSelected){
+	            liSelected.removeClass('selected');
+	            //alert(liSelected.text())
+	            $(".search_input").val(liSelected.text());
+	            alert("지워짐");
+
+	            
+	            next = liSelected.next();
+	            if(next.length > 0){
+	                liSelected = next.addClass('selected');
+	                alert("선택됨");
+
+	                
+	                //alert(liSelected.text());
+	                $(".search_input").val(liSelected.text());
+	               
+	            }else{
+	                liSelected = autoli.eq(0).addClass('selected');
+	                $(".search_input").val(liSelected.text());
+	            }
+	        }else{
+	            liSelected = autoli.eq(0).addClass('selected');
+	            $(".search_input").val(liSelected.text());
+	        }
+	    }else if(e.keyCode == 38){ //위쪽키
+	        if(liSelected){
+	            liSelected.removeClass('selected');
+	            next = liSelected.prev();
+	            if(next.length > 0){
+	                liSelected = next.addClass('selected');
+	                alert(liSelected);
+	               // alert(liSelected.text())
+	               
+	                $(".search_input").val(liSelected.text());
+	            }else{
+	                liSelected = autoli.last().addClass('selected');
+	                alert(liSelected);
+	                $(".search_input").val(liSelected.text());
+	            }
+	        }else{
+	            liSelected = autoli.last().addClass('selected');
+	            alert(liSelected);
+	            $(".search_input").val(liSelected.text());
+	        }
+	   	 }
+	});
+	
 	
 	
 </script>
