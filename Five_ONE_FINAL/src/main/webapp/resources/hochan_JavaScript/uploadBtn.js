@@ -66,7 +66,7 @@
 			
 			let title = document.querySelector(".title_field");
 			let title_value = document.querySelector(".upload_input_btn");
-			console.log(title_value);
+			console.log(title_value.);
 			
 		}
 	    fileReader.readAsDataURL(file);
