@@ -26,11 +26,12 @@
 	
 	<input type="hidden" value="${video_dto.getVideo_code() }" name="video_code" id="video_code">
 	
-	<jsp:include page="../include/top_include.jsp"/>
 	
+<div class="all">
+	<jsp:include page="../include/top_include.jsp"/>
 	<div class="watch_layer">
-		<div class="container_L">
 		
+		<div class="container_L">
 		</div>
 		<div class="watch_container">
 		
@@ -73,7 +74,7 @@
 							</div>
 							
 							<div class="item_a">
-								<button class="btn">
+								<button class="watch_btn">
 									<div class="subscribe">구독</div>
 								</button>
 							</div>
@@ -82,25 +83,25 @@
 					<div class="channel_wrap">
 						<div class="card_e">
 							<div class="item_a btn_wrap">
-								<button class="btn2 card_b">
+								<button class="watch_btn2 card_b">
 									<div class="subscribe"><div class="card_b"><img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good.svg"><div>좋아요</div></div></div>
 									<div class="subscribe"><div class="card_b"><img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad.svg"><div>싫어요</div></div></div>
 								</button>
 							</div>
 							<div class="item_a btn_wrap">
-								<button class="btn">
+								<button class="watch_btn">
 									<div class="share">공유</div>
 								</button>
 							</div>
 							
 							<div class="item_a btn_wrap">
-								<button class="btn">
+								<button class="watch_btn">
 									<div class="save">오프라인 저장</div>
 								</button>
 							</div>
 							
 							<div class="item_a btn_wrap">
-								<button class="btn">
+								<button class="watch_btn">
 									<div class="other">기타</div>
 								</button>
 							</div>
@@ -124,12 +125,12 @@
 					<div class="item_a">
 						<div class="card_a">
 							<div class="reply_cnt">댓글 ${reply_count }개</div>
-							<div class="dropdown_menu card_c">
-								<div><img class="menu_icon" src="${pageContext.request.contextPath}/resources/watch/watch_img/dropdown_menu.svg">정렬기준</div>
+							<div class="card_c">
+								<div class="dropdown_menu"><img class="menu_icon" src="${pageContext.request.contextPath}/resources/watch/watch_img/dropdown_menu.svg">정렬기준</div>
 								<div id="dropdown" class="dropdown_box">
-									<div class="dropdown_wrap card_c">
-										<div class="dropdown_content"><a>인기 댓글순</a></div>
-										<div class="dropdown_content"><a>최신순</a></div>
+									<div id="dropdown_wrap" class="dropdown_wrap card_c">
+										<div class="dropdown_content"><a class="video_option" data-value="most">인기 댓글순</a></div>
+										<div class="dropdown_content"><a class="video_option" data-value="reply_regdate">최신순</a></div>
 									</div>
 								</div>								
 							</div>
@@ -149,12 +150,12 @@
 										<div>이모티콘</div>
 										<div class="card_e">
 											<div class="item_reply btn_wrap">
-												<button class="btn">
+												<button class="watch_btn">
 													<div class="cancle_btn">취소</div>
 												</button>
 											</div>
 											<div class="item_reply btn_wrap">
-												<button class="btn">
+												<button class="watch_btn">
 													<div class="reply_btn">답글</div>
 												</button>
 											</div>
@@ -365,8 +366,10 @@
 	
 		<div class="side_box">
 		</div>
+		
+		<%-- <jsp:include page="../include/side_include.jsp"/> --%>
 	</div>
-
+</div>
 	
 
 
