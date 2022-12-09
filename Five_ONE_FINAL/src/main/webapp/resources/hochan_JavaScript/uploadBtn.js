@@ -4,15 +4,19 @@
  
  const dropArea = document.querySelector(".drag-area"),
  dragText = dropArea.querySelector("header"),
- button = dropArea.querySelector("button"),
- input = dropArea.querySelector("input");
+ button = dropArea.querySelector(".upload_click_btn"),
+ input_hidden = dropArea.querySelector(".upload_input_btn");
+ 
+ const uploadButton = document.querySelector(".video_upload_btn");
  let file; // drop 한 파일의 전역 변수 이름명
+ let fileURL; // drop한 파일의 경로
  
  button.onclick = () => {
- 	input.click();	
+ 	input_hidden.click();	
  }
  
- input.addEventListener("change", function() {
+ // 클릭버튼 눌렀을때
+ input_hidden.addEventListener("change", function() {
  	file = this.files[0];
  	showFile() // calling function
  });
@@ -26,18 +30,19 @@
  });
  
  // 사용자가 파일을 드래그 밖으로 뺏을때 했을 때 발생
- dropArea.addEventListener('dragleave', (event) => {
- 	event.preventDefault();
- 	dropArea.classList.remove("active");
- 	
- 	
- 	dragText.textContent = "Drag & Drop to Upload File";
- });
+ /*
+	 dropArea.addEventListener('dragleave', (event) => {
+	 	event.preventDefault();
+	 	dropArea.classList.remove("active");
+	 	
+	 	
+	 	dragText.textContent = "Drag & Drop to Upload File";
+	 });
+ */
  
  // 사용자가 파일을 넣었을때
  dropArea.addEventListener('drop', (event) => {
  	event.preventDefault();
- 	console.log("File drop");
  	
  	// 전역변수에 파일 넣기
  	file = event.dataTransfer.files[0];
@@ -46,8 +51,6 @@
  
  function showFile() {
  	let fileType = file.type;
- 	console.log(file);
- 	console.log(fileType);
  	
  	let vaildExtensions = ["video/quicktime", "video/mp4", "video/wmv", "video/avi", "video/avchd", "video/mpeg-2"]; // 모든 목록
  	
@@ -56,14 +59,20 @@
  		let fileReader = new FileReader();
 		console.log(fileReader);
 		fileReader.onload = ()=> {
-		    let fileURL  = fileReader.result;
+		    fileURL  = fileReader.result;
 		    let videoTag = `<video><source src="${fileURL}"></video>`;
 			dropArea.innerHTML = videoTag; 
+			console.log(fileURL);
+			
+			let title = document.querySelector(".title_field");
+			let title_value = document.querySelector(".upload_input_btn");
+			console.log(title_value);
+			
 		}
 	    fileReader.readAsDataURL(file);
  	} else {
  		alert("MOV, MP4, WMV, AVI, AVCHD, mpeg-2 파일을 넣어주세요.");
  	}
  }
- 
+
  

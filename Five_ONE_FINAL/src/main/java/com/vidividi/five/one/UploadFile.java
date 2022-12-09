@@ -15,12 +15,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 public class UploadFile {
 	
 	public String fileUpload(MultipartHttpServletRequest mRequest) {
-
+		// 채널 코드 또는 채널 이름, 영상 제목 
 		String saveFileName = "";
 		String dateFolder = "";
 
-		String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/Upload/UploadVideo/";
-		String uploadImagePath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/Upload/UploadImage/";
+		String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/testVideo/";
+		
+		//String uploadImagePath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/Upload/UploadImage/";
+		
 		
 		Calendar cal = Calendar.getInstance();
 		
