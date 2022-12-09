@@ -63,7 +63,7 @@
 	     	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			    <div class="modal-dialog modal-lg">
 			        <div class="modal-content">
-			       		 <jsp:include page="/movie_upload.do?code=${owner.getChannel_code() }"></jsp:include>
+			       		 <jsp:include page="/movie_upload.do?code=${owner.channel_code }"></jsp:include>
 			        </div>
 			    </div>
 			</div>

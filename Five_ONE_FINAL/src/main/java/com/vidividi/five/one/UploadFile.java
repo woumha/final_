@@ -14,12 +14,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 // 해당 Upload라는 클래스는 비지니스 로직을 수행하는 클래스
 public class UploadFile {
 	
-	public String fileUpload(MultipartHttpServletRequest mRequest) {
+	public boolean fileUpload(MultipartHttpServletRequest mRequest, String lastChannelCode) {
+		boolean isUpload = false;
+		
 		// 채널 코드 또는 채널 이름, 영상 제목 
 		String saveFileName = "";
 		String dateFolder = "";
 
-		String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/testVideo/";
+		String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + lastChannelCode + "/";
 		
 		//String uploadImagePath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/Upload/UploadImage/";
 		
@@ -62,7 +64,7 @@ public class UploadFile {
 				File origin = new File(homedir+"/"+saveFileName);
 				mFile.transferTo(origin);     // 파일 데이터를 지정한 폴더로 이동하는 메서드
 				
-				
+				isUpload = true;
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -71,7 +73,7 @@ public class UploadFile {
 			
 		}
 		
-		return "upload/" + dateFolder + "/" + saveFileName;
+		return isUpload;
 	}
 
 }
