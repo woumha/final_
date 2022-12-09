@@ -26,7 +26,8 @@ public class ChannelController {
 	ChannelDTO dto;
 	
 	@RequestMapping("channel.do")
-	public String channel(HttpServletRequest request, HttpSession session, Model model) throws Exception {
+	public String channel(
+			/* @RequestParam("cha") String CurrentChannelCode, */ HttpServletRequest request, HttpSession session, Model model) throws Exception {
 		//MultipartHttpServletRequest mRequest, 
 		//String uploadPath = request.getSession().getServletContext().getRealPath("/").concat("resources"); // 이미지를 업로드할 폴더 경로 설정 = /uploadPath/imgUpload
 		
@@ -39,8 +40,7 @@ public class ChannelController {
 		memberDTO.setMember_last_channel(lastChannelCode);
 		dto = this.dao.getChannelOwner(memberDTO); // 유저의 모든 값
 		
-		
-		//session.setAttribute("CurrentChannel", currentCode);
+		/* session.setAttribute("CurrentChannelCode", CurrentChannelCode); */
 		
 		model.addAttribute("currentOwner", dto);
 		
