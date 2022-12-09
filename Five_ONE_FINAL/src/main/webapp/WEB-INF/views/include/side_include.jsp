@@ -13,19 +13,19 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
+<body id="sidebody">
 
 
  <div class="l-navbar" id="navbar">
         <nav class="nav">
             <div>
                 <div class="nav__brand">
-                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                    <i class="fa-solid fa-bars nav__toggle" id="nav-toggle"></i>
                     <a href="#" class="nav__logo"><i class="fa-solid fa-carrot"></i>&nbsp;VIDIVIDI</a>
                 </div>
                 <div class="nav__list">
-                    <a href="#" class="nav__link active">
-                        <ion-icon name="home-outline" class="nav__icon"></ion-icon>
+                    <a href="#" class="nav__link active_nav">
+                        <i class="fa-solid fa-house nav__icon"></i>
                         <span class="nav_name"> &nbsp; Home</span>
                     </a>
                     <a href="#" class="nav__link">
@@ -96,8 +96,8 @@
 	/* 링크 활성화 */
 	const linkColor = document.querySelectorAll('.nav__link')
 	function colorLink() {
-	    linkColor.forEach(l=> l.classList.remove('active'))
-	    this.classList.add('active')
+	    linkColor.forEach(l=> l.classList.remove('active_nav'))
+	    this.classList.add('active_nav')
 	}
 	linkColor.forEach(l=> l.addEventListener('click', colorLink))
 	

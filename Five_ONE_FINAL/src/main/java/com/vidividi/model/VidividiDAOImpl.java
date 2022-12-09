@@ -22,7 +22,7 @@ public class VidividiDAOImpl implements VidividiDAO {
 	}
 
 	@Override
-	public List<VideoPlayDTO> video() {
+	public List<VideoPlayDTO> video(String video_option) {
 		return this.sqlSession.selectList("video_list");
 	}
 

@@ -94,11 +94,10 @@
 	
 	
 <%-- 동영상 리스트 영역 --%>
-	 <div id="video_list">  
-		 <!-- 	<h4> 오늘의 추천 동영상 </h4> -->
-		 <table cellspacing="0">
-		 	<c:set var="list" value="${video_list }" />
-	     	 <c:if test="${!empty list }">
+	  <div id="video_list">  
+		<c:set var="list" value="${video_list }" />
+		 <table cellspacing="0" id="video_table">
+		 	<c:if test="${!empty list }">
 				 <c:forEach items="${list }" var="dto">
 				 
 			        <tr>
@@ -126,13 +125,17 @@
 	            </td>
 	         </tr>
 	      </c:if>
-	      
 		</table>	
-	</div>
-	 
+	</div> 
+	
+
+
+<%-- ajaxlist 영역 --%>
+	<div id="ajaxList"></div>
+
+	
 	
 <%-- 사이드바 영역 --%>
-	
 	<div id="side_wrap">
 		<div id="sidebar">
 			<jsp:include page="./include/side_include.jsp"/>
@@ -145,6 +148,62 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	
 <script>
+//--------------------------------------------------------동영상 리스트 ajax---------------------------------------
+
+$(function() {
+		
+	// ajax에서 동일하게 사용되는 속성 설정
+	$.ajaxSetup({
+		// ajax에서 한글 깨짐 문제 해결
+		ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		type : "post"
+	});
+		
+		
+	//getVideoList 함수
+	function getVideoList() {
+			
+		$.ajax({
+			url : "./ajax/main_video.do",
+			datatype : "json",
+			data : "video_option" : video_option,
+			success : function(data){
+				alert ('데이터 통신 성공');
+				
+				/* var table = "";
+				
+				table += "<table>"
+				
+				$.each(data,function(){
+				
+				table += "<tr>"
+				table += "<td>" + arr["video_title"] + "</td>" 
+				table += "<td>" + arr["video_cont"] + "</td>" 
+				table += "<td>" + arr["channel_name"] + "</td>" 
+				table += "<td>" + arr["video_view_cnt"] + "</td>" 
+				table += "<td>" + arr["video_regdate"] + "</td>" 
+				
+				table += "</tr>"
+			}
+				
+				table += "</table>"
+				
+				
+				$("#ajaxList").html(table) */
+			},
+	
+			error : function() {
+				alert('데이터 통신 에러 발생');
+			}
+		});
+			
+	} //getVideoList end
+		
+	
+	//함수 실행
+	getVideoList();
+		
+
 //----------------------------------------------------------------------카테고리------------------------------------------------------------------------
 	$(document).ready(function() {
 			   

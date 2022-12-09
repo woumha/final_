@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.AbstractView;
 
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.vidividi.model.WatchDAO;
 import com.vidividi.variable.ReplyDTO;
@@ -44,6 +45,8 @@ public class WatchController{
 
 	@Inject
 	private WatchDAO dao;
+	
+
 	
 	
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -178,7 +181,11 @@ public class WatchController{
 //		return "watch/test";
 //	}
 	
-	
+	  @RequestMapping("test.do")
+	  public String test() {
+		 
+		  return "search/test"; 
+	  }
 	
 
 	
