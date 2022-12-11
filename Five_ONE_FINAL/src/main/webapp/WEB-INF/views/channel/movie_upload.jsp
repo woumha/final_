@@ -15,7 +15,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 	<div class="modal-body">
 	<%-- action="<%=request.getContextPath() %>/upload_success.do?code=${channelcode.channel_code}" --%>
-	<form method="post" enctype="multipart/form-data" onsubmit="upload_seccess();" class="form-floating">
+	<%-- <form method="post" enctype="multipart/form-data" action="<%=request.getContextPath() %>/upload_success.do;" class="form-floating" id="send_form"> --%>
 		<div class="container-fluid">
 		    <div class="row">
 		      <div class="col-md-2">
@@ -64,7 +64,7 @@
 			    <div class="row">
 			      <div class="col-sm-9" align="left">
 			        <label for="validationServer04" class="form-label">재생목록</label>
-				    <select id="play_List" class="form-select" aria-label="Default select example">
+				    <select id="play_List" class="form-select" name="play_List" aria-label="Default select example">
 					  <option selected value="0">기본 목록</option>
 					  <option value="1">One</option>
 					  <option value="2">Two</option>
@@ -105,7 +105,7 @@
 			        </div>
 			    </div>
 		  </div>
-	 </form>
+	<!--  </form> -->
 	</div>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/uploadBtn.js"></script>
 </body>

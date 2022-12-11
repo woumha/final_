@@ -74,25 +74,25 @@ public class ChannelController {
 	
 	
 	@RequestMapping("upload_success.do")
-	public String upload(MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
+	public String upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age,
+			MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
 		
-		String title = request.getParameter("title_field");
-		String cont = request.getParameter("cont_area");
-		PrintWriter out = response.getWriter();
+		System.out.println(context.trim() + " " + playList.trim() + " " + age.trim());
+		
 		
 		String lastChannelCode = (String)session.getAttribute("LastChannelCode");
+		System.out.println(lastChannelCode);
 		
-		if(uploadFile.fileUpload(mRequest, lastChannelCode)) {
+		PrintWriter out = response.getWriter();
+		if(uploadFile.fileUpload(mRequest, lastChannelCode, title)) {
 			System.out.println("성공");
 		} else {
 			System.out.println("실패");
 		}
 		
 		model.addAttribute("currentOwner", channelWorlddto);
-		out.println();
 		
 		return "channel/channel_main";
 		
 	}
-	
 }
