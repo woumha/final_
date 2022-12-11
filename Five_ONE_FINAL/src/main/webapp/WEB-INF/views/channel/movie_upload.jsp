@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+<c:set var="channelcode" value="${uploadOwner }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,9 +11,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
 <body>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 	<div class="modal-body">
-	<form method="post" action="<%=request.getContextPath() %>/upload_success.do" enctype="multipart/form-data" class="form-floating">
+	<%-- action="<%=request.getContextPath() %>/upload_success.do?code=${channelcode.channel_code}" --%>
+	<%-- <form method="post" enctype="multipart/form-data" action="<%=request.getContextPath() %>/upload_success.do;" class="form-floating" id="send_form"> --%>
 		<div class="container-fluid">
 		    <div class="row">
 		      <div class="col-md-2">
@@ -26,13 +29,15 @@
 		      <div class="col-md-12 ms-auto out-side">
 		      	<%-- 업로드 섹션 시작 --%>
 		      	<div class="drag-area">
-		      		<div class="icon">
-		      			<i class="fas fa-cloud-upload-alt"></i>
+		      		<div class="submit_video">
+			      		<div class="icon icon_change">
+			      			<i class="fas fa-cloud-upload-alt"></i>
+			      		</div>
+			      		<header>업로드할 파일을 드래그 해주세요.</header>
+			      		<span>또는</span>		      		
 		      		</div>
-		      		<header>업로드할 파일을 드래그 해주세요.</header>
-		      		<span>또는</span>
 		      		<input type="button" class="upload_click_btn" value="클 릭">
-		      		<input class="upload_input_btn" name="video_save_file" type="file">
+		      		<div class="file_div"><input class="upload_input_file" id="upload_input_file" name="upload_input_file"  type="file" hidden></div>
 		      	</div>
 		      <%-- 업로드 섹션 끝 --%>
 			    </div>
@@ -40,7 +45,7 @@
 			<div class="row">
 			  <div class="col-md-12 ms-auto">
 				  	<div class="form-floating cont_area">
-					  <textarea class="form-control title_field" placeholder id="floatingTextarea2"></textarea>
+					  <textarea class="form-control title_field" name="title_field" placeholder id="floatingTextarea2"></textarea>
 					  <label for="floatingTextarea2" >시청자에게 제목을 알려주세요</label>
 					</div>
 		      </div>
@@ -49,7 +54,7 @@
 			    <div class="row">
 	 		      <div class="col-md-12 ms-auto">
 			      	<div class="form-floating cont_area">
-					  <textarea class="form-control" placeholder="시청자에게 동영상에 대해 이야기하기" id="floatingTextarea3"></textarea>
+					  <textarea class="form-control" name="cont_area" placeholder="시청자에게 동영상에 대해 이야기하기" id="floatingTextarea3"></textarea>
 					  <label for="floatingTextarea3" >시청자에게 동영상에 대해 이야기하기</label>
 					</div>
 			      </div>
@@ -59,8 +64,8 @@
 			    <div class="row">
 			      <div class="col-sm-9" align="left">
 			        <label for="validationServer04" class="form-label">재생목록</label>
-				    <select class="form-select" aria-label="Default select example">
-					  <option selected>기본 목록</option>
+				    <select id="play_List" class="form-select" name="play_List" aria-label="Default select example">
+					  <option selected value="0">기본 목록</option>
 					  <option value="1">One</option>
 					  <option value="2">Two</option>
 					  <option value="3">Three</option>
@@ -77,13 +82,13 @@
 			          </div>
 			          <div class="col-4 col-sm-6 age_select">
 			          	<div class="form-check age_select">
-							  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+							  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
 							  <label class="form-check-label" for="flexRadioDefault1">
 							    예 아동용 입니다
 							  </label>
 							</div>
 							<div class="form-check age_select">
-							  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+							  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
 							  <label class="form-check-label" for="flexRadioDefault2">
 							    아니요 성인용 입니다
 							  </label>
@@ -94,13 +99,13 @@
 			        	<div class="col-8 col-sm-6">
 			        	</div>
 			        	<div class="col-4 col-sm-6">
-			        		<button type="submit" class="btn btn-primary video_upload_btn">업로드</button>
+			        		<button type="button" onclick="upload_seccess();" class="btn btn-primary video_upload_btn">업로드</button>
 					        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 			        	</div>
 			        </div>
 			    </div>
 		  </div>
-	 </form>
+	<!--  </form> -->
 	</div>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/uploadBtn.js"></script>
 </body>

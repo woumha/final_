@@ -14,21 +14,22 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 // 해당 Upload라는 클래스는 비지니스 로직을 수행하는 클래스
 public class UploadFile {
 	
-	public String fileUpload(MultipartHttpServletRequest mRequest) {
+	public boolean fileUpload(MultipartHttpServletRequest mRequest, String lastChannelCode, String title) {
+		boolean isUpload = false;
+		
 		// 채널 코드 또는 채널 이름, 영상 제목 
 		String saveFileName = "";
 		String dateFolder = "";
 
-		String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/testVideo/";
+		//String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + lastChannelCode + "/";
 		
-		//String uploadImagePath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/Upload/UploadImage/";
+		String uploadVideoPath = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/";
 		
 		
-		Calendar cal = Calendar.getInstance();
-		
-		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH) + 1;
-		int day = cal.get(Calendar.DAY_OF_MONTH);
+//		Calendar cal = Calendar.getInstance();
+//		int year = cal.get(Calendar.YEAR);
+//		int month = cal.get(Calendar.MONTH) + 1;
+//		int day = cal.get(Calendar.DAY_OF_MONTH);
 		
 		Iterator<String> iterator = mRequest.getFileNames();
 		
@@ -36,33 +37,33 @@ public class UploadFile {
 			String uploadFileName = iterator.next(); 
 			MultipartFile mFile = mRequest.getFile(uploadFileName);
 			
-			String originalFileName = mFile.getOriginalFilename();
-			
+			String originalFileName = mFile.getOriginalFilename(); // 파일 이름 저장
+			System.out.println("파일이름?: " + originalFileName);
 			// 실제 폴더를 만들어보자 
 			// .... \\resources\\upload\\2022-11-25
-			dateFolder = year + "-" + month + "-" + day;
-			String homedir = uploadVideoPath + dateFolder;
+//			dateFolder = year + "-" + month + "-" + day;
 			
-			
-			File path1 = new File(homedir);
+			dateFolder = uploadVideoPath + lastChannelCode;
+			File path1 = new File(dateFolder); // 폴더 경로
 			
 			if(!path1.exists()) {
 				path1.mkdirs();
 			}
 			
-			// 실제 파일 만들기
+			// 실제 저장되는 파일 이름
 			saveFileName = originalFileName;
-			
 			if (!saveFileName.equals("")) {
-				saveFileName = System.currentTimeMillis() + "_" +saveFileName;
+				//saveFileName = System.currentTimeMillis() + "_" +saveFileName;
+				saveFileName = title;
 			}
-			
+			System.out.println(title);
+			// 파일 저장 및 예외처리
 			try {
-
-				File origin = new File(homedir+"/"+saveFileName);
+				// 파일 저장
+				File origin = new File(dateFolder+"/"+saveFileName + ".mp4");
 				mFile.transferTo(origin);     // 파일 데이터를 지정한 폴더로 이동하는 메서드
 				
-				
+				isUpload = true;
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -71,7 +72,7 @@ public class UploadFile {
 			
 		}
 		
-		return "upload/" + dateFolder + "/" + saveFileName;
+		return isUpload;
 	}
 
 }

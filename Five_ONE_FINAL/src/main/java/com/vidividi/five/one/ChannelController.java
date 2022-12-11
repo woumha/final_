@@ -1,9 +1,15 @@
 package com.vidividi.five.one;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +29,10 @@ public class ChannelController {
 	@Inject
 	private ChannelDAO dao;
 	
-	@Inject
+	@Autowired
 	private UploadFile uploadFile;
 	
-	ChannelDTO dto;
+	ChannelDTO channelWorlddto;
 	
 	@RequestMapping("channel.do")
 	public String channel(
@@ -41,29 +47,52 @@ public class ChannelController {
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setMember_code(memCode);
 		memberDTO.setMember_last_channel(lastChannelCode);
-		dto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값
+		channelWorlddto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값
 		
 		/* session.setAttribute("CurrentChannelCode", CurrentChannelCode); */
 		
-		model.addAttribute("currentOwner", dto);
+		model.addAttribute("currentOwner", channelWorlddto);
 		
 		return "channel/channel_main";
 	}
 	
 	@RequestMapping("movie_upload.do")
-	public String modalUploadPage(HttpServletRequest request, Model model) {
+	public String modalUploadPage(HttpServletRequest request, HttpSession session, Model model) {
+		// 취약점 찾았다... 다른 사람이 채널코드만 바꿔서 영상 올릴수가 있다..?
+		
+		String lastChannelCode = (String)session.getAttribute("LastChannelCode");
+		
+		// 유효성 체크 한번 해야됨
+		
+		ChannelDTO channelDTO = new ChannelDTO();
+		
+		channelDTO.setChannel_code((lastChannelCode));
+		model.addAttribute("uploadOwner", channelDTO);
+		
 		return "channel/movie_upload";
 	}
 	
 	
 	@RequestMapping("upload_success.do")
-	public String upload(MultipartHttpServletRequest mRequest, Model model) {
-		//System.out.println(uploadFile.fileUpload(mRequest));
-		System.out.println("mRequest =" + mRequest);
+	public String upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age,
+			MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
 		
-		System.out.println(uploadFile.fileUpload(mRequest));
+		System.out.println(context.trim() + " " + playList.trim() + " " + age.trim());
 		
-		return null;
+		
+		String lastChannelCode = (String)session.getAttribute("LastChannelCode");
+		System.out.println(lastChannelCode);
+		
+		PrintWriter out = response.getWriter();
+		if(uploadFile.fileUpload(mRequest, lastChannelCode, title)) {
+			System.out.println("성공");
+		} else {
+			System.out.println("실패");
+		}
+		
+		model.addAttribute("currentOwner", channelWorlddto);
+		
+		return "channel/channel_main";
+		
 	}
-	
 }

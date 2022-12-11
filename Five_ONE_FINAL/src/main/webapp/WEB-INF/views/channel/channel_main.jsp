@@ -63,7 +63,7 @@
 	     	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			    <div class="modal-dialog modal-lg">
 			        <div class="modal-content">
-			       		 <jsp:include page="/movie_upload.do?code=${owner.getChannel_code() }"></jsp:include>
+			       		 <jsp:include page="/movie_upload.do?code=${owner.channel_code }"></jsp:include>
 			        </div>
 			    </div>
 			</div>
@@ -105,7 +105,7 @@
 			  <div align="left" class="row">
 			  	
 			  	<div class="embed-responsive embed-responsive-16by9 col-lg-4" align="left">
-					<video autoplay loop class="embed-responsive-item" width="400px" height="300px" controls>
+					<video loop class="embed-responsive-item" width="400px" height="300px" controls> <!-- autoplay -->
 						<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
 					</video>
 					
