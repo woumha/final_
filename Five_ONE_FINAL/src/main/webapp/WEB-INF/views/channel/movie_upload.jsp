@@ -26,7 +26,18 @@
 		      </div>
 		    </div>
 		    <div class="row">
-		      <div class="col-md-12 ms-auto out-side">
+		      <div class="col-md-3 ms-auto">
+		      	<div class="touch_img">
+		      		<div class="d-grid gap-2 d-md-block">
+					  <button class="btn btn-primary start_img_btn" type="button">영상 미리보기 이미지</button>
+					  <input type="file" hidden name="upload_input_img" class="input_start_img">
+					  <div class="icon_img">
+					  	
+					  </div>
+					</div>
+		      	</div>
+		      </div>
+		      <div class="col-md-9 ms-auto out-side">
 		      	<%-- 업로드 섹션 시작 --%>
 		      	<div class="drag-area">
 		      		<div class="submit_video">

@@ -5,6 +5,10 @@ body {
 }
 
 
+#channel_banner {
+	z-index: -1;
+}
+
 #chennelprofil {
 	border-radius: 50%;
 }

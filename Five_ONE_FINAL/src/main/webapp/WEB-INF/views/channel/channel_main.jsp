@@ -32,7 +32,7 @@
 	<jsp:include page="../include/side_include.jsp"/>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel.js"></script>
 	
-	<img src="${path }/resources/hochan_img/vidi.png" class="col-lg-12 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
+	<img src="${path }/resources/hochan_img/vidi.png" id="channel_banner" class="col-lg-12 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
 	<div class="container text-center mb-3">
 	  <div class="row mb-3">
 	    <div class="col-lg-2">
