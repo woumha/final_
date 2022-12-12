@@ -105,7 +105,7 @@
 			  <div align="left" class="row">
 			  	
 			  	<div class="embed-responsive embed-responsive-16by9 col-lg-4" align="left">
-					<video loop class="embed-responsive-item" width="400px" height="300px" controls> <!-- autoplay -->
+					<video autoplay loop class="embed-responsive-item" width="400px" height="300px" controls>
 						<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
 					</video>
 					
