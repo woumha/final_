@@ -46,5 +46,12 @@ public class LoginServiceImpl implements LoginService {
 		
 		session.invalidate();
 	}
+	
+	@Override
+	public int joinIdCheck(String id) {
+		int idCheck = dao.joinIdCheck(id);
+		System.out.println("count(*) :"+idCheck);
+		return idCheck;
+	}
 
 }

@@ -2,12 +2,14 @@ package com.vidividi.five.one;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,6 +64,32 @@ public class MemberController {
 	public String join() {
 		return "member/join";
 	}
+	
+	@ResponseBody
+	@RequestMapping("joinIdCheck.do")
+	public String idCheck(@RequestParam("id") String id) {
+		System.out.println("paramid : "+id);
+		int count = service.joinIdCheck(id);
+		System.out.println("serviceCount : "+count);
+		
+		if (count == 0) {
+			return "allow";
+		}else {
+			return "deny";
+		}
+	}
+	
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("testajax.do") public List<MemberDTO> test(){ List<MemberDTO>
+	 * list = dao.getMemberList();
+	 * 
+	 * if(list.size() != 0) { System.out.println("리스트 잘 넘어옴"); }
+	 * 
+	 * return list; }
+	 */
+	
 	
 
 }
