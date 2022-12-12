@@ -17,5 +17,11 @@
 	<update id="updateLastChannel" parameterType="memberdto">
 		update members set member_last_channel = #{member_last_channel} where member_code = #{member_code}
 	</update>
+	<select id="joinIdCheck" parameterType="String" resultType="int">
+		select count(*) from members where member_id = #{id}
+	</select>
+	<select id="getMemberList" resultType="memberdto">
+		select * from members
+	</select>
 	
 </mapper>
