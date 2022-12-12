@@ -23,5 +23,30 @@
 	<select id="getMemberList" resultType="memberdto">
 		select * from members
 	</select>
+	<insert id="joinMember" parameterType="logindto">
+		insert into members values(
+			#{code},
+			#{id},
+			#{id},
+			#{pwd},
+			'',
+			'',
+			'',
+			'',
+			'',
+			sysdate,
+			default,
+			default,
+			sysdate,
+			default,
+			default,
+			'',
+			default			
+		)
+	</insert>
+	
+	<update id="memberInfoUpdate" parameterType="memberdto">
+		update members set member_name = #{member_name}, member_email = #{member_email}, member_birth = #{member_birth}, member_phone = #{member_phone}, member_addr = #{member_addr} where member_code = #{member_code}
+	</update>
 	
 </mapper>

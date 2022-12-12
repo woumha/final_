@@ -43,4 +43,15 @@ public class MemberDAOImpl implements MemberDAO {
 	public List<MemberDTO> getMemberList() {
 		return this.sqlSession.selectList("getMemberList");
 	}
+	
+	@Override
+	public int joinMember(LoginDTO dto) {
+		return this.sqlSession.insert("joinMember", dto);
+	}
+	
+	@Override
+	public int mebmerInfoUpdate(MemberDTO dto) {
+		return this.sqlSession.update("memberInfoUpdate", dto);
+	}
+	
 }
