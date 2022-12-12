@@ -30,23 +30,23 @@
 			<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png"  
 				id="logo" width="230px" height="90px" onclick="location.href='<%= request.getContextPath() %>/'">
 			
-			<form method="post" action="<%=request.getContextPath() %>/test.do" id="search_go">
+			<form method="post" action="<%=request.getContextPath() %>/search.do" id="search_go">
 						
 			<div id="search_div">
 			
 			<div class="search_select">
-			  <select>
-			    <option value="1">동영상 제목</option>
-			    <option value="2">채널명</option>
-			    <option value="3">태그</option>
+			  <select name="field">
+			    <option value="vi_title">동영상 제목</option>
+			    <option value="ch_name">채널명</option>
+			    <option value="vi_hash">태그</option>
 			  </select>
 			</div>
 			
-				<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="검색어를 입력하세요."> &nbsp;&nbsp;
+				<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="검색어를 입력하세요." required> &nbsp;&nbsp;
 				<button id="search_btn" type="submit"><i class="fas fa-search"></i></button>	
 				
 				<div class = "rel_search">
-					<ul class="pop_rel_keywords"> </ul>
+					<ul class="pop_rel_keywords" id="pop_rel_keywords"> </ul>
 			    </div>		
 			    	
 			</div> 
@@ -188,58 +188,74 @@
 	//this.parentElement.parentElement.parentElement.firstElementChild.nextElementSibling
 	
 
-//리스트 방향키 이벤트	
-	var autoli = $('.autoList');
+	var ul2 = document.getElementById('pop_rel_keywords');
 	var liSelected;
-	$(document).on("keydown", ".search_input", function(e){
-	    if(e.keyCode == 40){ //아래키
-	        if(liSelected){
-	            liSelected.removeClass('selected');
-	            //alert(liSelected.text())
-	            $(".search_input").val(liSelected.text());
-	            alert("지워짐");
-
-	            
-	            next = liSelected.next();
-	            if(next.length > 0){
-	                liSelected = next.addClass('selected');
-	                alert("선택됨");
-
-	                
-	                //alert(liSelected.text());
-	                $(".search_input").val(liSelected.text());
-	               
-	            }else{
-	                liSelected = autoli.eq(0).addClass('selected');
-	                $(".search_input").val(liSelected.text());
-	            }
-	        }else{
-	            liSelected = autoli.eq(0).addClass('selected');
-	            $(".search_input").val(liSelected.text());
-	        }
-	    }else if(e.keyCode == 38){ //위쪽키
-	        if(liSelected){
-	            liSelected.removeClass('selected');
-	            next = liSelected.prev();
-	            if(next.length > 0){
-	                liSelected = next.addClass('selected');
-	                alert(liSelected);
-	               // alert(liSelected.text())
-	               
-	                $(".search_input").val(liSelected.text());
-	            }else{
-	                liSelected = autoli.last().addClass('selected');
-	                alert(liSelected);
-	                $(".search_input").val(liSelected.text());
-	            }
-	        }else{
-	            liSelected = autoli.last().addClass('selected');
-	            alert(liSelected);
-	            $(".search_input").val(liSelected.text());
-	        }
-	   	 }
-	});
+	var index = -1;
 	
+	document.addEventListener('keydown', function(event) {
+	  var len = ul2.getElementsByTagName('li').length - 1;
+	  if (event.which === 40) {
+	    index++;
+	    //down 
+	    if (liSelected) {
+	      removeClass(liSelected, 'selected');
+	      next = ul2.getElementsByTagName('li')[index];
+	      if (typeof next !== undefined && index <= len) {
+	
+	        liSelected = next;
+	      } else {
+	        index = 0;
+	        liSelected = ul2.getElementsByTagName('li')[0];
+	      }
+	      addClass(liSelected, 'selected');
+	      $(".search_input").val(($('.selected').text())); 
+	      
+	    } else {
+	      index = 0;
+	
+	      liSelected = ul2.getElementsByTagName('li')[0];
+	      addClass(liSelected, 'selected');
+	    }
+	  } else if (event.which === 38) {
+	
+	    //up
+	    if (liSelected) {
+	      removeClass(liSelected, 'selected');
+	      index--;
+	      
+	      $(".search_input").val(($('.selected').text())); 
+	      
+	      next = ul2.getElementsByTagName('li')[index];
+	      if (typeof next !== undefined && index >= 0) {
+	        liSelected = next;
+	      } else {
+	        index = len;
+	        liSelected = ul2.getElementsByTagName('li')[len];
+	      }
+	      addClass(liSelected, 'selected');
+	    } else {
+	      index = 0;
+	      liSelected = ul2.getElementsByTagName('li')[len];
+	      addClass(liSelected, 'selected');
+	    }
+	  }
+	}, false);
+	
+	function removeClass(el, className) {
+	  if (el.classList) {
+	    el.classList.remove(className);
+	  } else {
+	    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+	  }
+	};
+	
+	function addClass(el, className) {
+	  if (el.classList) {
+	    el.classList.add(className);
+	  } else {
+	    el.className += ' ' + className;
+	  }
+	};
 	
 	
 </script>
