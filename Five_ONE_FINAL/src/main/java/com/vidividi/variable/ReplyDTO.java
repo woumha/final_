@@ -18,6 +18,8 @@ public class ReplyDTO {
 	private String channel_profil;
 	private int reply_good;
 	private int reply_bad;
+	private String reply_group;
+	
 	
 	
 }

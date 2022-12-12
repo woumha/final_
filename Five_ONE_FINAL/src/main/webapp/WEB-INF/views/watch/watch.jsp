@@ -20,8 +20,8 @@
 <body>
 	
 	<c:set var="video_dto" value="${video_dto }" />
-	<c:set var="channel_dto" value="${channel_dto }" />
 	<c:set var="channel_good" value="${channel_good }" />
+	<c:set var="reply_count" value="${reply_count }" />
 	
 	
 	<input type="hidden" value="${video_dto.getVideo_code() }" name="video_code" id="video_code">
@@ -68,7 +68,7 @@
 							
 							<div class="item_a">
 								<div class="channel_info card_c">
-									<div id="input_uploader">${channel_dto.getChannel_name()}</div>
+									<div id="input_uploader">${video_dto.getChannel_name()}</div>
 									<div id="input_member">구독자 &nbsp; ${channel_good }명</div>
 								</div>
 							</div>
@@ -168,7 +168,12 @@
 				</div>				
 			
 				
-				<div class="reply_box card_a">
+				
+				<!-- 댓글영역 시작 -->
+				<div id="input_reply_box">
+				
+				</div>
+<%-- 	 			<div class="reply_box card_a">
 					<div class="item_a">
 						<div class="reply_wrap">
 							<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"></div>	
@@ -215,7 +220,7 @@
 				</div>  <!-- 댓글하나 -->
 			
 			
-				<!-- 대댓글영역 -->
+				<!-- 대댓글영역 시작 -->
 				<div class="comment_box">
 					<div class="comment_wrap card_c">
 						<div class="comment_btn close">
@@ -264,104 +269,19 @@
 								</div>
 							</div>
 						</div>
-					</div>
-				</div><!-- 대댓글영역 -->	
+					</div>	  
+				</div> <!-- 댓글영역 end -->	 --%>
 				
 				
 				<!-- ==========================댓글 1개 + 대댓글====================== -->
+
 				
 				
 				
 				
 				
-				
-								<div class="reply_box card_a">
-					<div class="item_a">
-						<div class="reply_wrap">
-							<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"></div>	
-						</div>
-					</div>
-					
-					<div class="intput_reply item_a">
-						<div id="input_reply_writer" class="writer_info">
-							<span class="reply_writer">댓글작성자</span>
-							<span class="reply_date">날짜</span>
-						</div>
-						
-						<div class="reply_cont_box">
-							<div id="input_reply_cont">
-								wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-							</div>
-						</div>
-						
-						<div class="reply_action_box">
-							<div class="toolbar_wrap card_a">
-								<div class="reply_good_btn">
-									<div class="card_b"><img class="reply_good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good.svg"><div>1.1만개</div></div>
-								</div>
-								
-								<div class="reply_bad_btn">
-									<img class="reply_bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad.svg">
-								</div>
-								
-								<div class="reply_comment_btn">
-									답글
-								</div>
-								
-							</div>
-						</div>
-					</div>
-				</div>  
-			
-				<div class="comment_box">
-					<div class="comment_wrap card_c">
-						<div class="comment_btn close">
-							<button class="comment_toggle card_a">
-								<img class="toggle open" src="${pageContext.request.contextPath}/resources/watch/watch_img/comment_open.png">
-								<div class="comment_count">답글 x개</div>
-							</button>
-						</div>
-						
-						<div class="input_comment card_a">
-							<div class="profile">
-								<img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg">
-							</div>
-							
-							<div class="comment_card card_c">
-								<div id="input_comment_writer" class="writer_info">
-									<span class="reply_writer">댓글작성자</span>
-									<span class="reply_date">날짜</span>
-								</div>
-								
-								<div class="reply_cont_box">
-									<div id="input_comment_cont">
-										ddddddddddddddddddddddddddddddd
-									</div>
-								</div>
-								
-								<div class="reply_action_box">
-									<div class="toolbar_wrap card_a">
-										<div class="reply_good_btn">
-											<div class="card_b"><img class="reply_good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good.svg"><div>1.1만개</div></div>
-										</div>
-										
-										<div class="reply_bad_btn">
-											<img class="reply_bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad.svg">
-										</div>
-										
-									</div>
-								</div>
-							</div>
-						</div>					
-					</div>
-				</div><!-- 대댓글영역 -->	
-				
-				
-				
-				
-				
-			</div> <!-- 댓글영역 -->
-		</div>
+			</div> <!-- 댓글 end -->
+		</div> <!-- watch container end -->
 
 	
 		<div class="side_box">
