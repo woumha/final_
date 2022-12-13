@@ -31,9 +31,10 @@
  	
  	let vaildExtensions = ["video/quicktime", "video/mp4", "video/wmv", "video/avi", "video/avchd", "video/mpeg-2"]; // 모든 목록
  	
+ 	 	
  	// 사용자가 vaildExtensions에 있는 이외의 파일을 넣었을때
  	if(vaildExtensions.includes(fileType)) {
-	 	showFile() // calling function 	
+		showFile() // calling function
  	} else {
 		alert("MOV, MP4, WMV, AVI, AVCHD, mpeg-2 파일을 넣어주세요.");
 	}
@@ -136,7 +137,7 @@
 				this.uploadtitle = $("#floatingTextarea2").val();
 
 				//내용
-				this.uploadCont = $("#floatingTextarea3").val(null);
+				this.uploadCont = $("#floatingTextarea3").val();
 				
 
 				// 재생목록
@@ -182,12 +183,17 @@ function upload_move() {
 	});
 
 	var form = document.createElement('form');
-	const url= "/one/upload_success.do";
+	const url= "'<%=request.getContextpath() %>/upload_success.do'";
+	
 	form.setAttribute("method", "post");
 	form.setAttribute("id", "send_form");
 	form.setAttribute("enctype", "multipart/form-data");
-	form.setAttribute("action", url);
+	form.setAttribute("action", '/one/upload_success.do');
 	
+	console.log(this.uploadtitle);
+	console.log(this.uploadCont);
+	console.log(this.selectPlayList);
+	console.log(this.selectAn.trim());
 	var hiddenField1 = document.createElement('input');
 	hiddenField1.setAttribute('type', 'hidden');
 	hiddenField1.setAttribute('name', "1");
@@ -206,9 +212,14 @@ function upload_move() {
 	var hiddenField4 = document.createElement('input');
 	hiddenField4.setAttribute('type', 'hidden');
 	hiddenField4.setAttribute('name', "4");
-	hiddenField4.setAttribute('value', this.selectAn);
-
-	$(".modal-body").append(form);
+	hiddenField4.setAttribute('value', this.selectAn.trim());
+	
+	$(".container-fluid").wrap(form);
+	
+	$(".container-fluid").append(hiddenField1);
+	$(".container-fluid").append(hiddenField2);
+	$(".container-fluid").append(hiddenField3);
+	$(".container-fluid").append(hiddenField4);
 	$("#send_form").submit();
 
 
@@ -234,4 +245,46 @@ function upload_move() {
 	// });
 }
 
+// 영상 업로드 자바스크립트 끝
+
+// 이미지 업로드 스크립트 시작
+const touchImg = document.querySelector(".touch_img"),
+imgBtnTag = touchImg.querySelector(".start_img_btn");
+imgInputTag = touchImg.querySelector(".input_start_img"),
+imgIcon = touchImg.querySelector(".icon_img");
+
+imgBtnTag.onclick = () => {
+	imgInputTag.click();
+}
+
+imgInputTag.addEventListener("change", function() {
+	file = this.files[0];
+ 	
+ 	let fileType = file.type;
+ 	console.log(fileType);
+ 	//let vaildExtensions = ["video/quicktime", "video/mp4", "video/wmv", "video/avi", "video/avchd", "video/mpeg-2"]; // 모든 목록
+ 	
+ 	showFile2() // calling function 	
+});
+
+// 파일을 클릭, 업로드 했을때 발생
+ function showFile2() {
+	let fileReader = new FileReader();
+    let reader = new FileReader();
+
+    reader.fileName = file.name;
+    
+
+	fileReader.onload = function(e) {
+        fileURL  = fileReader.result;
+        let imgTag = `<img src="${fileURL}" class="save_img" />`;
+     	imgIcon.innerHTML = imgTag;
+	    
+        fileReader.fileName = file.name;
+	};
+			
+    fileReader.readAsDataURL(file);
+ }
+ 
+// 이미지 업로드 스크립트 시작
  

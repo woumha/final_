@@ -22,54 +22,92 @@ public class UploadFile {
 		String dateFolder = "";
 
 		//String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + lastChannelCode + "/";
-		
-		String uploadVideoPath = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/";
-		
-		
-//		Calendar cal = Calendar.getInstance();
-//		int year = cal.get(Calendar.YEAR);
-//		int month = cal.get(Calendar.MONTH) + 1;
-//		int day = cal.get(Calendar.DAY_OF_MONTH);
-		
+		//String uploadVideoPath = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/"; // 집 PC
+		String uploadVideoPath = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/"; // MACBOOK
+		//thumbnail
 		Iterator<String> iterator = mRequest.getFileNames();
 		
+		
+		// 들어오기 전부터 뭔가를 해야할듯...
+		String extMovieArr[] = { "mp4" };
+		String extImgArr[] = { "png" };
+		
 		while(iterator.hasNext()) {
+			
 			String uploadFileName = iterator.next(); 
 			MultipartFile mFile = mRequest.getFile(uploadFileName);
 			
 			String originalFileName = mFile.getOriginalFilename(); // 파일 이름 저장
-			System.out.println("파일이름?: " + originalFileName);
-			// 실제 폴더를 만들어보자 
-			// .... \\resources\\upload\\2022-11-25
-//			dateFolder = year + "-" + month + "-" + day;
 			
-			dateFolder = uploadVideoPath + lastChannelCode;
-			File path1 = new File(dateFolder); // 폴더 경로
 			
-			if(!path1.exists()) {
-				path1.mkdirs();
+			System.out.println("파일이름: " + originalFileName);
+			String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+			
+			// 영상 확장자 찾기
+			for(int i=0; i<extMovieArr.length; i++) {
+				if(ext.equals(extImgArr[i]) ) {
+					dateFolder = uploadVideoPath + lastChannelCode;
+					File path1 = new File(dateFolder); // 폴더 경로
+					
+					if(!path1.exists()) {
+						path1.mkdirs();
+					}
+					
+					// 실제 저장되는 파일 이름
+					saveFileName = originalFileName;
+					if (!saveFileName.equals("")) {
+						//saveFileName = System.currentTimeMillis() + "_" +saveFileName;
+						saveFileName = title;
+					}
+					System.out.println(saveFileName);
+					// 파일 저장 및 예외처리
+					try {
+						// 파일 저장
+						File origin = new File(dateFolder+"/"+saveFileName + "." + ext);
+						mFile.transferTo(origin);     // 파일 데이터를 지정한 폴더로 이동하는 메서드
+						
+						isUpload = true;
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			
-			// 실제 저장되는 파일 이름
-			saveFileName = originalFileName;
-			if (!saveFileName.equals("")) {
-				//saveFileName = System.currentTimeMillis() + "_" +saveFileName;
-				saveFileName = title;
+			// 이미지 확장자 찾기
+			for(int i=0; i<extImgArr.length; i++) {
+				if(ext.equals(extImgArr[i])) {
+					// 실제 폴더를 만들어보자 
+					// .... \\resources\\upload\\2022-11-25
+					dateFolder = uploadVideoPath + lastChannelCode + "/thumbnail";
+					File path1 = new File(dateFolder); // 폴더 경로
+					
+					if(!path1.exists()) {
+						path1.mkdirs();
+					}
+					
+					// 실제 저장되는 파일 이름
+					saveFileName = originalFileName;
+					if (!saveFileName.equals("")) {
+						//saveFileName = System.currentTimeMillis() + "_" +saveFileName;
+						saveFileName = title;
+					}
+					System.out.println(saveFileName);
+					// 파일 저장 및 예외처리
+					try {
+						// 파일 저장
+						File origin = new File(dateFolder+"/"+saveFileName + "." + ext);
+						mFile.transferTo(origin);     // 파일 데이터를 지정한 폴더로 이동하는 메서드
+						
+						isUpload = true;
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} 
+				}
 			}
-			System.out.println(title);
-			// 파일 저장 및 예외처리
-			try {
-				// 파일 저장
-				File origin = new File(dateFolder+"/"+saveFileName + ".mp4");
-				mFile.transferTo(origin);     // 파일 데이터를 지정한 폴더로 이동하는 메서드
-				
-				isUpload = true;
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} 
-			
 		}
 		
 		return isUpload;

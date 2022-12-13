@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class VideoPlayDTO {
 
-	private String video_code;
-	private String channel_code;
-	private String channel_name;
+	private String video_code; // 비디오코드
+	private String channel_code; // 채널코드
+	private String channel_name; //
 	private String video_title;
 	private String video_cont;
 	private String video_img;

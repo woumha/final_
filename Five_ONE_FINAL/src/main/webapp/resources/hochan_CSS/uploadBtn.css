@@ -127,3 +127,12 @@
 	padding-top: 15px;
 }
 
+.start_img {
+	color: white;
+}
+
+.save_img {
+	max-height: 50%;
+	max-width: 100%;
+	padding-top: 15px;
+}
