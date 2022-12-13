@@ -20,7 +20,7 @@
 	
 	
 	<select id="member_channel" resultType="channeldto" parameterType="String">
-		select * from user_channel where member_code = #{code}
+		select * from user_channel where channel_code = #{code}
 	</select>
 	
 	<select id="channel_video" resultType="videoplayDTO" parameterType="String">
@@ -54,5 +54,30 @@
 	<update id="updateSeq" parameterType="int">
 		<![CDATA[update history set history_num = history_num - 1 where history_num > #{num}]]>
 	</update>
+	
+	<select id="playlist_no" parameterType="Map" resultType="videoplayDTO">
+		select * from video_play where video_code in (select video_code from playlist where channel_code = #{code} and playlist_no = #{no})
+	</select>
+	
+	<select id="playlist_search" parameterType="Map" resultType="videoplayDTO">
+		select * from video_play where video_code in (select video_code from playlist where channel_code = #{code} and playlist_no = #{no}) and video_title like '%' || #{keyword} || '%'
+	</select>
+	
+	<delete id="playlist_one_delete" parameterType="Map">
+		delete from playlist where channel_code = #{channel_code} and video_code = #{video_code} and playlist_no = #{playlist_no}
+	</delete>
+	
+	<select id="getPlaylist_num" parameterType="Map" resultType="int">
+		select playlist_num from playlist where channel_code = #{channel_code} and video_code = #{video_code} and playlist_no = #{playlist_no}
+	</select>
+	
+	<update id="updateSeq_p" parameterType="int">
+		<![CDATA[update playlist set playlist_num = playlist_num - 1 where playlist_num > #{num}]]>
+	</update>
+	
+	<delete id="delete_playlist" parameterType="Map">
+		delete from playlist where channel_code = #{code} and playlist_no = #{no}
+	</delete>
+	
 </mapper>
 

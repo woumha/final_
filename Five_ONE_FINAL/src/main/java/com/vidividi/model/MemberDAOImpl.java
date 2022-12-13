@@ -1,5 +1,7 @@
 package com.vidividi.model;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -32,4 +34,24 @@ public class MemberDAOImpl implements MemberDAO {
 	public void updateLastChannel(MemberDTO dto) {
 		this.sqlSession.update("updateLastChannel", dto);
 	}
+	
+	@Override
+	public int joinIdCheck(String id) {
+		return this.sqlSession.selectOne("joinIdCheck", id);
+	}
+	@Override
+	public List<MemberDTO> getMemberList() {
+		return this.sqlSession.selectList("getMemberList");
+	}
+	
+	@Override
+	public int joinMember(LoginDTO dto) {
+		return this.sqlSession.insert("joinMember", dto);
+	}
+	
+	@Override
+	public int mebmerInfoUpdate(MemberDTO dto) {
+		return this.sqlSession.update("memberInfoUpdate", dto);
+	}
+	
 }

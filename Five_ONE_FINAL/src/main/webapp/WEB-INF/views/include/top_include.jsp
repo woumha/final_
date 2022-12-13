@@ -30,23 +30,23 @@
 			<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png"  
 				id="logo" width="230px" height="90px" onclick="location.href='<%= request.getContextPath() %>/'">
 			
-			<form method="post" action="<%=request.getContextPath() %>/test.do" id="search_go">
+			<form method="post" action="<%=request.getContextPath() %>/search.do" id="search_go">
 						
 			<div id="search_div">
 			
 			<div class="search_select">
-			  <select>
-			    <option value="1">동영상 제목</option>
-			    <option value="2">채널명</option>
-			    <option value="3">태그</option>
+			  <select name="field">
+			    <option value="vi_title">동영상 제목</option>
+			    <option value="ch_name">채널명</option>
+			    <option value="vi_hash">태그</option>
 			  </select>
 			</div>
 			
-				<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="검색어를 입력하세요."> &nbsp;&nbsp;
+				<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="검색어를 입력하세요." required> &nbsp;&nbsp;
 				<button id="search_btn" type="submit"><i class="fas fa-search"></i></button>	
 				
 				<div class = "rel_search">
-					<ul class="pop_rel_keywords"> </ul>
+					<ul class="pop_rel_keywords" id="pop_rel_keywords"> </ul>
 			    </div>		
 			    	
 			</div> 
@@ -76,7 +76,7 @@
 			<div id="user_popup"> 
 				<ul id="user_list">
 					<li> &nbsp;&nbsp;</li>
-					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberNick }님</b></li>
+					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberName }님</b></li>
 					<li> &nbsp;&nbsp;</li>
 					<%-- 내 채널 이미지 //이호찬 --%>
 					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?cha=${LastChannelCode }'"> &nbsp;<yt-icon class="style-scope ytd-compact-link-renderer"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 25px; height: 25px;"><g class="style-scope yt-icon"><path d="M3,3v18h18V3H3z M4.99,20c0.39-2.62,2.38-5.1,7.01-5.1s6.62,2.48,7.01,5.1H4.99z M9,10c0-1.65,1.35-3,3-3s3,1.35,3,3 c0,1.65-1.35,3-3,3S9,11.65,9,10z M12.72,13.93C14.58,13.59,16,11.96,16,10c0-2.21-1.79-4-4-4c-2.21,0-4,1.79-4,4 c0,1.96,1.42,3.59,3.28,3.93c-4.42,0.25-6.84,2.8-7.28,6V4h16v15.93C19.56,16.73,17.14,14.18,12.72,13.93z" class="style-scope yt-icon"></path></g></svg><!--css-build:shady--></yt-icon>&nbsp;&nbsp;내 채널</li>
@@ -188,58 +188,74 @@
 	//this.parentElement.parentElement.parentElement.firstElementChild.nextElementSibling
 	
 
-//리스트 방향키 이벤트	
-	var autoli = $('.autoList');
+	var ul2 = document.getElementById('pop_rel_keywords');
 	var liSelected;
-	$(document).on("keydown", ".search_input", function(e){
-	    if(e.keyCode == 40){ //아래키
-	        if(liSelected){
-	            liSelected.removeClass('selected');
-	            //alert(liSelected.text())
-	            $(".search_input").val(liSelected.text());
-	            alert("지워짐");
-
-	            
-	            next = liSelected.next();
-	            if(next.length > 0){
-	                liSelected = next.addClass('selected');
-	                alert("선택됨");
-
-	                
-	                //alert(liSelected.text());
-	                $(".search_input").val(liSelected.text());
-	               
-	            }else{
-	                liSelected = autoli.eq(0).addClass('selected');
-	                $(".search_input").val(liSelected.text());
-	            }
-	        }else{
-	            liSelected = autoli.eq(0).addClass('selected');
-	            $(".search_input").val(liSelected.text());
-	        }
-	    }else if(e.keyCode == 38){ //위쪽키
-	        if(liSelected){
-	            liSelected.removeClass('selected');
-	            next = liSelected.prev();
-	            if(next.length > 0){
-	                liSelected = next.addClass('selected');
-	                alert(liSelected);
-	               // alert(liSelected.text())
-	               
-	                $(".search_input").val(liSelected.text());
-	            }else{
-	                liSelected = autoli.last().addClass('selected');
-	                alert(liSelected);
-	                $(".search_input").val(liSelected.text());
-	            }
-	        }else{
-	            liSelected = autoli.last().addClass('selected');
-	            alert(liSelected);
-	            $(".search_input").val(liSelected.text());
-	        }
-	   	 }
-	});
+	var index = -1;
 	
+	document.addEventListener('keydown', function(event) {
+	  var len = ul2.getElementsByTagName('li').length - 1;
+	  if (event.which === 40) {
+	    index++;
+	    //down 
+	    if (liSelected) {
+	      removeClass(liSelected, 'selected');
+	      next = ul2.getElementsByTagName('li')[index];
+	      if (typeof next !== undefined && index <= len) {
+	
+	        liSelected = next;
+	      } else {
+	        index = 0;
+	        liSelected = ul2.getElementsByTagName('li')[0];
+	      }
+	      addClass(liSelected, 'selected');
+	      $(".search_input").val(($('.selected').text())); 
+	      
+	    } else {
+	      index = 0;
+	
+	      liSelected = ul2.getElementsByTagName('li')[0];
+	      addClass(liSelected, 'selected');
+	    }
+	  } else if (event.which === 38) {
+	
+	    //up
+	    if (liSelected) {
+	      removeClass(liSelected, 'selected');
+	      index--;
+	      
+	      $(".search_input").val(($('.selected').text())); 
+	      
+	      next = ul2.getElementsByTagName('li')[index];
+	      if (typeof next !== undefined && index >= 0) {
+	        liSelected = next;
+	      } else {
+	        index = len;
+	        liSelected = ul2.getElementsByTagName('li')[len];
+	      }
+	      addClass(liSelected, 'selected');
+	    } else {
+	      index = 0;
+	      liSelected = ul2.getElementsByTagName('li')[len];
+	      addClass(liSelected, 'selected');
+	    }
+	  }
+	}, false);
+	
+	function removeClass(el, className) {
+	  if (el.classList) {
+	    el.classList.remove(className);
+	  } else {
+	    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+	  }
+	};
+	
+	function addClass(el, className) {
+	  if (el.classList) {
+	    el.classList.add(className);
+	  } else {
+	    el.className += ' ' + className;
+	  }
+	};
 	
 	
 </script>

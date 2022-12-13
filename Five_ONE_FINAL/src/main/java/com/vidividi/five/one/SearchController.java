@@ -17,17 +17,17 @@ public class SearchController {
 	 @Autowired
 	 private VidividiDAO dao;
 	 
-	
-	  @RequestMapping("search.do") public String search(@RequestParam("field")String
-			  field, @RequestParam("keyword") String keyword, Model model) {
+	  @RequestMapping("search.do")
+	  public String search(@RequestParam("field")String
+			  field, @RequestParam("auto_search") String keyword, Model model) {
 	 
 		 List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword);
 		  
 		 model.addAttribute("Search", searchList);
-	  
-		 return "search/mainSearch"; 
+		 
+		 return "/search/mainSearch"; 
 		 
 	  }
-	 
+
 
 }

@@ -1,5 +1,7 @@
 package com.vidividi.service;
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -45,6 +47,24 @@ public class LoginServiceImpl implements LoginService {
 		}
 		
 		session.invalidate();
+	}
+	
+	@Override
+	public int joinIdCheck(String id) {
+		int idCheck = dao.joinIdCheck(id);
+		System.out.println("count(*) :"+idCheck);
+		return idCheck;
+	}
+	
+	@Override
+	public String generateMembercode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "VD-"+uuid.toString();
+		
+		System.out.println("새로 가입하는 멤버 코드"+result);
+		
+		return result;
 	}
 
 }

@@ -9,9 +9,14 @@
 		select * from test1130
 	</select>
 	
-	<!-- main video list 출력 -->
+	<!-- main video list 출력(인기순) -->
 	<select id="video_list" parameterType="String" resultType="VideoPlayDTO">
 		select video_title, video_cont, channel_name, video_view_cnt, video_regdate from video_play order by video_good
+	</select>
+	
+	<!-- main video list 출력(최신순) -->
+	<select id="video_list_up" parameterType="String" resultType="VideoPlayDTO">
+		select video_title, video_cont, channel_name, video_view_cnt, video_regdate from video_play order by video_regdate
 	</select>
 	
 	

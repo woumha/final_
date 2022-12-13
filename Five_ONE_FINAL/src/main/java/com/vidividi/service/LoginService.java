@@ -9,4 +9,6 @@ public interface LoginService {
 	
 	String loginCheck(LoginDTO dto, HttpSession session);
 	void logout(HttpSession session);
+	int joinIdCheck(String id);
+	String generateMembercode();
 }

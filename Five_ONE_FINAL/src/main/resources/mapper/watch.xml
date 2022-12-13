@@ -6,19 +6,23 @@
 
 <mapper namespace="watchDAO">
 	<select id="getVideo" parameterType="String" resultType="videoplayDTO">
-		select * from video_play where video_code = #{video_code}
+		select r.* from (select * from video_play inner join user_channel using(channel_code)) r where video_code = #{video_code}
 	</select>
 
-	<select id="getChannel" parameterType="String" resultType="channeldto">
-		select * from user_channel where channel_code = #{channel_code}
+	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
+		select r.*, (r.reply_good - r.reply_bad) most from (select * from reply inner join user_channel using (channel_code)) r where video_code = #{video_code} and reply_comment in(0,1) order by ${video_option} desc
+	</select>
+
+	<select id="getComment" parameterType="hashmap" resultType="replyDTO">
+		select * from reply where video_code = #{video_code} and reply_group = #{reply_group} and reply_comment = 2 order by reply_regdate desc
 	</select>
 	
-	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
-		select r.*, (r.reply_good - r.reply_bad) most from (select * from reply inner join user_channel using (channel_code)) r where video_code = #{video_code} and reply_comment = 0 order by ${video_option} desc
+	<select id="getReplyCount" parameterType="String" resultType="int">
+		select count(*) count from reply where video_code = #{video_code}
 	</select>
-
-	<select id="getComment" parameterType="String" resultType="replyDTO">
-		select * from reply where video_code = #{video_code} and reply_group = #{reply_group} and reply_comment = 1 order by reply_regdate desc
+	
+	<select id="getCommentCount" parameterType="hashmap" resultType="int">
+		select count(*) count from reply where video_code = #{video_code} and reply_group = #{reply_group} and reply_comment = 2
 	</select>
 	
 	

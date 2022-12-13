@@ -434,5 +434,7 @@
 		}
 		
 		li.selected {
-			background-color: red;
+			background-color: #facc9d;
+			margin-left: -18px;
+			padding-left: 10px;
 		}

@@ -21,13 +21,27 @@ public class VidividiDAOImpl implements VidividiDAO {
 		return this.sqlSession.selectList("test");
 	}
 
+	//비디오 인기순(메인 페이지)
 	@Override
-	public List<VideoPlayDTO> video(String video_option) {
+	public List<VideoPlayDTO> mainVideo() {
 		return this.sqlSession.selectList("video_list");
 	}
-
+	
+	//비디오 최신순(메인 페이지)
+	@Override
+	public List<VideoPlayDTO> mainVideo_up() {
+		return this.sqlSession.selectList("video_list_up");
+	}
+	
+	//검색
 	@Override
 	public List<VideoPlayDTO> searchVideoList(String field, String keyword) {
 		return sqlSession.selectList(field, keyword);
+	}
+
+	//페이지네이션
+	@Override
+	public int getListCount() {
+		return this.sqlSession.selectOne("count");
 	}
 }

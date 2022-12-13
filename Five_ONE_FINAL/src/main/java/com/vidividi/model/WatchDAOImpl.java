@@ -26,11 +26,6 @@ public class WatchDAOImpl implements WatchDAO {
 		return this.sqlSession.selectOne("getVideo", video_code);
 	}
 	
-	@Override
-	public ChannelDTO getChannel(String channel_code) {
-		return this.sqlSession.selectOne("getChannel", channel_code);
-	}
-
 
 	@Override
 	public List<VideoPlayDTO> getVideoList() {
@@ -57,11 +52,28 @@ public class WatchDAOImpl implements WatchDAO {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("video_code", video_code);
-		map.put("video_option", reply_group);
+		map.put("reply_group", reply_group);
 		
 		List<ReplyDTO> list = this.sqlSession.selectList("getComment", map);
 		
 		return list;
+	}
+
+	@Override
+	public int getCommentCount(String video_code, String reply_group) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("reply_group", reply_group);
+		
+		return this.sqlSession.selectOne("getCommentCount", map);
+		
+	}
+
+	@Override
+	public int getReplyCount(String video_code) {
+		return this.sqlSession.selectOne("getReplyCount",video_code);
 	}
 
 

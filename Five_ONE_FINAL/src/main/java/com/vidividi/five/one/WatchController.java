@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.AbstractView;
 
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.vidividi.model.WatchDAO;
 import com.vidividi.variable.ReplyDTO;
@@ -45,8 +45,6 @@ public class WatchController{
 
 	@Inject
 	private WatchDAO dao;
-	
-
 	
 	
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -93,29 +91,25 @@ public class WatchController{
 		
 		VideoPlayDTO video_dto = this.dao.getVideo(video_code);
 		
-		ChannelDTO channel_dto = this.dao.getChannel(video_dto.getChannel_code());
+		int reply_count = this.dao.getReplyCount(video_code);
 		
-		String channel_good = format(channel_dto.getChannel_like()); 
+		String channel_good = format(video_dto.getChannel_like());
 		
 		
 		model.addAttribute("video_dto", video_dto);
-		model.addAttribute("channel_dto", channel_dto);
 		model.addAttribute("channel_good", channel_good);
+		model.addAttribute("reply_count", reply_count);
 		
 		return "/watch/watch";
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping("reply.do")
-	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option) {
+	@RequestMapping(value = "reply.do" , produces = "application/text; charset=UTF-8")
+	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option, HttpServletResponse response) {
 		
-		System.out.println("매핑완료");
+		response.setContentType("text/html; charset=UTF-8");
 		
-		System.out.println("code >>> " +video_code);
-		System.out.println("option >>> " +video_option);
-
-		JSONObject result = new JSONObject();
 		
 		JSONArray jArray = new JSONArray();
 		
@@ -126,16 +120,21 @@ public class WatchController{
 			
 			JSONObject json = new JSONObject();
 			
+			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
+			
 			json.put("channel_code", dto.getChannel_code());
 			json.put("channel_name", dto.getChannel_name());
 			json.put("channel_profil", dto.getChannel_profil());
 			json.put("reply_no", dto.getReply_no());
 			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_comment", dto.getReply_comment());
 			json.put("reply_regdate", dto.getReply_regdate());
 			json.put("reply_update", dto.getReply_update());
 			json.put("reply_good", dto.getReply_good());
 			json.put("reply_bad", dto.getReply_bad());
-		
+			json.put("reply_group", dto.getReply_group());
+			json.put("comment_count", comment_count);
+			
 			
 			jArray.add(json);
 		}
@@ -148,44 +147,51 @@ public class WatchController{
 //				result += jArray.toJSONString();
 //			}
 		
-			result.put("datas", jArray);
-		
-			System.out.println("===================");
-			System.out.println(result);
 			
-			
-			
-			
-		return result.toString();
+		return jArray.toString();
 	}
 	
-//	@ResponseBody
-//	@RequestMapping("reply.do")
-//	public List<ReplyDTO> getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option) {
-//		
-//		System.out.println("매핑완료");
-//		
-//		System.out.println("code >>> " +video_code);
-//		System.out.println("option >>> " +video_option);
-//		
-//		JSONArray jArray = new JSONArray();
-//		
-//		List<ReplyDTO> list = this.dao.getReply(video_code, video_option);
-//		
-//		return list;
-//	}
-//	
-//	@RequestMapping("test.do")
-//	public String test() {
-//		
-//		return "watch/test";
-//	}
+	@ResponseBody
+	@RequestMapping(value = "comment.do" , produces = "application/text; charset=UTF-8")
+	public String getComment(String video_code, String reply_group, HttpServletResponse response) {
+		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		System.out.println("comment 매핑완료");
+		
+		JSONArray jArray = new JSONArray();
+		
+		List<ReplyDTO> list = this.dao.getComment(video_code, reply_group);
+		
+		for(ReplyDTO dto : list) {
+			
+			JSONObject json = new JSONObject();
+			
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("channel_profil", dto.getChannel_profil());
+			json.put("reply_no", dto.getReply_no());
+			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_comment", dto.getReply_comment());
+			json.put("reply_regdate", dto.getReply_regdate());
+			json.put("reply_update", dto.getReply_update());
+			json.put("reply_good", dto.getReply_good());
+			json.put("reply_bad", dto.getReply_bad());
+
+			jArray.add(json);
+		}
+		
+		
+		return jArray.toJSONString();
+	}
 	
-	  @RequestMapping("test.do")
-	  public String test() {
-		 
-		  return "search/test"; 
-	  }
+	
+	
+	
+	
+
+	
+	
 	
 
 	
