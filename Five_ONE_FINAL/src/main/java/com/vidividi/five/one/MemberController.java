@@ -90,6 +90,40 @@ public class MemberController {
 	 * return list; }
 	 */
 	
+	@ResponseBody
+	@RequestMapping("joinOk.do")
+	public String joinMember(LoginDTO loginDTO) {
+		
+		String result = "";
+		
+		loginDTO.setCode(service.generateMembercode());
+		
+		System.out.println(loginDTO.getId());
+		System.out.println(loginDTO.getPwd());
+		System.out.println(loginDTO.getCode());
+		
+		int insertResult = dao.joinMember(loginDTO);
+		System.out.println(insertResult);
+		
+		if (insertResult != 0) {
+			result = loginDTO.getCode();
+		}else if (insertResult == 0) {
+			result = "fail";
+		}
+		return result;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("infoUpdate.do")
+	public int infoUpdate(MemberDTO dto) {
+		
+		System.out.println(dto.getMember_name());
+		System.out.println(dto.getMember_birth());
+		
+		return dao.mebmerInfoUpdate(dto);
+	}
+	
 	
 
 }

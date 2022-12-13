@@ -7,5 +7,6 @@ public class LoginDTO {
 	
 	private String id;
 	private String pwd;
+	private String code;
 
 }

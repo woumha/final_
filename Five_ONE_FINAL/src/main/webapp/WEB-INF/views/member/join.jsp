@@ -47,7 +47,7 @@
 	}
 	
 	
-	#join-content-box div input, #join-content-box div span {
+	#join-content-box div input, #join-content-box div span.block-span {
 		display: block;
 		width: 100%;
 		padding: 15px;
@@ -164,18 +164,6 @@
 		$("#submit-1").attr("disabled", true);
 		$("#submit-2").attr("disabled", true);
 		
-		// 창 전환, 프로세스바 이동
-		$(".join-form-btn").on('click', function(){
-			$(this).parent().parent('div').fadeOut('fast');
-			$(this).parent().parent('div').next().fadeIn(1000);
-			if ($(this).val() == '회원가입'){
-				$("#bar").animate({width: "66%"}, 1000);
-			}else {
-				$("#bar").animate({width: "100%"}, 1000);
-			}
-			
-		});
-		
 		// input 창 placeholder 구현
 		$(".join-input").on('focus', function(){
 			$(this).prev('div').addClass('onfocus');
@@ -259,10 +247,10 @@
 				url: "<%=request.getContextPath()%>/joinIdCheck.do",
 				data: { id : id },
 				success: function(result){
-					if ($("#input-id").val() != ""){
+/* 					if ($("#input-id").val() != ""){
 						$("#input-id-check").show();
 						$("#input-id-label").hide();
-					}
+					} */
 					
 					if(result == 'allow'){
 						$("#input-id-check").text("사용 가능한 아이디입니다.");
@@ -280,7 +268,7 @@
 		}
 		
 		
-		// 1초동안 keyup없으면 id유효성 검사하는 이벤트 (db에 과요청 방지)
+		// 아이디 입력 시 1초동안 keyup없으면 id유효성 검사하는 이벤트 (db에 과요청 방지)
 		$("#input-id").on('keyup', function(){
 			
 			let keyupTimeout;
@@ -289,26 +277,35 @@
 				
 				if ($("#input-id").val() != ""){
 					
-					$("#input-id-check").show();
-					$("#input-id-label").hide();
-					
 					if (!regCheck(idReg, $("#input-id").val())){
-						$("#input-id").val($("#input-id").val().replace(idReg, ''));
+						// 정규식 어긋나는거 지우는건 잘 안되는 중..
+						$("#input-id").val($("#input-id").val().replace("/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi", ''));
 						$("#input-id-check").text("4~10글자의 이하의 영문, 숫자만 아이디로 사용할 수 있습니다.");
 						$("#input-id-check").css("color", "red");
 					}else{
 						joinIdCheck();
 					}
+					
+					$("#input-id-check").show();
+					$("#input-id-label").hide();
+										
 				}
+			
 			}, 1000);
 			
 			
 		});
 		
+		// -------------------------- 나중에 할 일 ------------------------
+		
+		
+		// 비빌번호 유효 검사
+		
+		// 선택정보 유효 검사
 		
 		
 	});
-	
+
 /* 	function ajaxTest(){
 		$.ajax({
 			url : "./testajax.do",
@@ -326,6 +323,61 @@
 		});
 		
 	} */
+	
+	let newMemberCode;
+	
+	// 회원가입
+	function joinMember(){
+		
+		$.ajax({
+			url : "<%=request.getContextPath()%>/joinOk.do",
+			data : $('#join-form-1').serialize(),
+			success : function(data){
+				
+				if (data != "fail"){
+					// 새로 생성된 멤버코드 반환받아 히든 태그에 저장
+					newMemberCode = data;
+					$("#new-membercode").val(data);
+					// 창 전환, 프로세스 바 이동
+					$("#join-content-1").fadeOut('fast');
+					$("#join-content-2").fadeIn(1000);
+					$("#bar").animate({width: "66%"}, 1000);
+				}else if (data == "fail"){
+					toastr.warning("아이디/비밀번호를 확인하세요.", "가입 실패!");
+				}
+			},
+			error : function(){
+				toastr.error("데이터 통신 에러");
+			}
+			
+		});
+	}
+	
+	function DIVchange(){
+		$("#join-content-2").fadeOut('fast');
+		$("#join-content-3").fadeIn(1000);
+		$("#bar").animate({width: "100%"}, 1000);
+	}
+	
+	function infoUpdate(){
+		
+		$.ajax({
+			url : "<%=request.getContextPath()%>/infoUpdate.do",
+			data : $('#join-form-2').serialize(),
+			success : function(result){
+				if (result != 0){
+					DIVchange();
+				}else if (result == 0){
+					toastr.warning("입력한 정보가 정확한지 확인하세요.", "정보 입력 실패!");
+				}
+				
+			},
+			error: function(){
+				toastr.error("데이터 통신 에러");
+			}
+			
+		});		
+	}
 
 	
 </script>
@@ -345,7 +397,7 @@
 					</div>
 					<div id="join-content-1">
 						<form method="post" id="join-form-1">
-							<span>간편회원가입</span>
+							<span class="block-span">간편회원가입</span>
 							
 							<div class="label-input" >
 								<label for="input-id" id="input-id-check"></label>
@@ -365,51 +417,54 @@
 							</div>
 							<input name="check-pwd" class="password join-input essential" id="input-pwd-confirm">
 							
-							<input type="button" value="회원가입" class="join-form-btn" id="submit-1">
+							<input type="button" value="회원가입" class="join-form-btn" id="submit-1" onclick="joinMember()">
 						</form>
 						<hr>
-						<span>소셜로 가입하기</span>
+						<span class="block-span">소셜로 가입하기</span>
 						<input type="button" value="구글로 가입하기">
 						<input type="button" value="카카오로 가입하기">
 						<input type="button" value="네이버로 가입하기">
 					</div>
 					<div id="join-content-2">
+						<div>
 						<span>회원가입이 완료되었어요!</span>
+						<br>
 						<span>선택정보를 입력하시면 더욱 편리하게 이용할 수 있어요</span>
-						<span>사실 가입 안됐습니다. view 페이지 구성중입니다.</span>
+						</div>
 						<form method="post" id="join-form-2">
+							<input type="hidden" name="member_code" id="new-membercode">
 							<div class="label-input" >
 								<label for="input-name" class="label-input" id="input-name-check"></label>
 								<label for="input-name" class="label-input" id="input-name-label">이름</label>
 							</div>
-							<input name="name" class="join-input optional" id="input-name"> <!-- 이름을 입력하지 않으면 id값을 받아와 이름으로 처리 -->
+							<input name="member_name" class="join-input optional" id="input-name"> <!-- 이름을 입력하지 않으면 id값을 받아와 이름으로 처리 -->
 							
 							<div class="label-input" >
 								<label for="input-email" class="label-input" id="input-email-check"></label>
 								<label for="input-email" class="label-input" id="input-email-label">이메일</label>
 							</div>
-							<input name="email" class="join-input optional" id="input-email"> <!-- *@*.* 형식인지 체크-->
+							<input name="member_email" class="join-input optional" id="input-email"> <!-- *@*.* 형식인지 체크-->
 							
 							<div class="label-input" >
 								<label for="input-birth" class="label-input" id="input-birth-check"></label>
 								<label for="input-birth" class="label-input" id="input-birth-label">생년월일</label>
 							</div>
-							<input type="date" name="birth" class="join-input optional date-placeholder date-empty" id="input-birth" data-placeholder=""> <!-- 일정 나이 이상이어야 조회가능한 동영상이 있음. -->
+							<input type="date" name="member_birth" class="join-input optional date-placeholder date-empty" id="input-birth" data-placeholder=""> <!-- 일정 나이 이상이어야 조회가능한 동영상이 있음. -->
 							
 							<div class="label-input" >
 								<label for="input-phone" class="label-input" id="input-phone-check"></label>
 								<label for="input-phone" class="label-input" id="input-phone-label">전화번호</label>
 							</div>
-							<input name="phone" class="join-input optional" id="input-phone"> <!-- 문자인증 하지않으면 동영상 업로드 안되게..? 불법적인 동영상 있을 수 있으니까 실명인증 -->
+							<input name="member_phone" class="join-input optional" id="input-phone"> <!-- 문자인증 하지않으면 동영상 업로드 안되게..? 불법적인 동영상 있을 수 있으니까 실명인증 -->
 							
 							<div class="label-input" >
 								<label for="input-addr" class="label-input" id="input-addr-check"></label>
 								<label for="input-addr" class="label-input" id="input-addr-label">주소</label>
 							</div>
-							<input name="addr" class="join-input optional" id="input-addr"> <!-- 주소는..없앨까...? -->
+							<input name="member_addr" class="join-input optional" id="input-addr"> <!-- 주소는..없앨까...? -->
 														
-							<input type="button" value="선택정보 입력" class="join-form-btn" id="submit-2">
-							<input type="button" value="다음에 할래요" class="join-form-btn" id="submit-3">
+							<input type="button" value="선택정보 입력" class="join-form-btn" id="submit-2" onclick = "infoUpdate()">
+							<input type="button" value="다음에 할래요" class="join-form-btn" id="submit-3" onclick = "DIVchange()">
 						</form>
 					</div>
 					<div id="join-content-3">
