@@ -5,6 +5,7 @@
 	height: 100%;
 }
 
+
 *:foccus{
 	outline: none;	
 }
@@ -226,6 +227,7 @@ button{
     align-items: center;
     width: 100%;
     background-color:#fff;
+    text-align: center;
 }
 
 .open_wrap{
@@ -278,6 +280,10 @@ button{
 .reply_box{
 	margin-top: 2rem;
 	text-align: left;
+}
+
+.writer_info{
+	margin-bottom: 1rem;
 }
 
 .reply_cont_box{
@@ -333,7 +339,7 @@ button{
 	width:100%;
 }
 
-.comment_wrap{
+.comment_menu{
 	margin-left: 2.5rem;
 }
 
@@ -387,7 +393,12 @@ button{
 	display: block;
 }
 
- .input_comment:hover .render_icon{
+.input_comment{
+	margin-left: 2.5rem;
+	display: none; 
+}
+
+ .comment_wrap:hover .render_icon{
 	display: block;
 } 
 
@@ -407,6 +418,9 @@ button{
 	vertical-align: middle;
 }
 
+.show{
+	display: block;
+}
 
 
 

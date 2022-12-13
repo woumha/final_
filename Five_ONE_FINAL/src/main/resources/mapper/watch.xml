@@ -10,11 +10,22 @@
 	</select>
 
 	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
-		select r.*, (r.reply_good - r.reply_bad) most from (select * from reply inner join user_channel using (channel_code)) r where video_code = #{video_code} and reply_comment in(0,1) order by ${video_option} desc
+	<![CDATA[
+		select * 
+		from (select row_number() over(order by a.${reply_option} desc) rnum, a.* 
+		from (select b.*, (b.reply_good - b.reply_bad) most 
+		from (select * from reply inner join user_channel using(channel_code) where video_code = #{video_code} and reply_comment in(0,1)) b) a) 
+		where rnum >= #{startNo} and rnum <= #{endNo}
+	]]>
 	</select>
 
 	<select id="getComment" parameterType="hashmap" resultType="replyDTO">
-		select * from reply where video_code = #{video_code} and reply_group = #{reply_group} and reply_comment = 2 order by reply_regdate desc
+	<![CDATA[
+		select *
+		from (select row_number() over(order by a.reply_regdate desc) rnum, a.* 
+	    from (select * from reply inner join user_channel using(channel_code) where video_code = #{video_code} and reply_group = #{reply_group} and reply_comment=2) a)
+		where rnum >= #{startNo} and rnum <= #{endNo}
+	]]>
 	</select>
 	
 	<select id="getReplyCount" parameterType="String" resultType="int">

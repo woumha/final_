@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.view.AbstractView;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.vidividi.model.WatchDAO;
+import com.vidividi.service.FormatCnt;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.VideoPlayDTO;
@@ -93,7 +95,11 @@ public class WatchController{
 		
 		int reply_count = this.dao.getReplyCount(video_code);
 		
-		String channel_good = format(video_dto.getChannel_like());
+		//String channel_good = format(video_dto.getChannel_like());
+		
+		FormatCnt format = new FormatCnt();
+		
+		String channel_good = format.format(video_dto.getChannel_like());
 		
 		
 		model.addAttribute("video_dto", video_dto);
@@ -106,15 +112,19 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping(value = "reply.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("video_option") String video_option, HttpServletResponse response) {
+	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("reply_option") String reply_option, int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
 		
+		int rowsize = 5;
+		int startNo = (page * rowsize) - (rowsize - 1);
+		int endNo = (page * rowsize);
+		
 		JSONArray jArray = new JSONArray();
 		
 		
-		List<ReplyDTO> list = this.dao.getReply(video_code, video_option);
+		List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, startNo, endNo);
 		
 		for(ReplyDTO dto : list) {
 			
@@ -142,7 +152,6 @@ public class WatchController{
 		
 		
 			
-			
 //			for(int i=0; i<jArray.size(); i++) {
 //				result += jArray.toJSONString();
 //			}
@@ -153,15 +162,17 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping(value = "comment.do" , produces = "application/text; charset=UTF-8")
-	public String getComment(String video_code, String reply_group, HttpServletResponse response) {
+	public String getComment(String video_code, String reply_group, int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
-		System.out.println("comment 매핑완료");
+		int rowsize = 10;
+		int startNo = (page * rowsize) - (rowsize - 1);
+		int endNo = (page * rowsize);
 		
 		JSONArray jArray = new JSONArray();
 		
-		List<ReplyDTO> list = this.dao.getComment(video_code, reply_group);
+		List<ReplyDTO> list = this.dao.getComment(video_code, reply_group, startNo, endNo);
 		
 		for(ReplyDTO dto : list) {
 			
@@ -188,8 +199,23 @@ public class WatchController{
 	
 	
 	
+	@RequestMapping("test.do")
+	public String test() {
+		return "/watch/test";
+	}
 	
-
+	@RequestMapping("test2.do")
+	public String test(HttpServletRequest request, Model model) {
+		
+		String field = request.getParameter("field");
+		String keyword = request.getParameter("keyword");
+		
+		model.addAttribute("field", field);
+		model.addAttribute("keyword", keyword);
+		
+		
+		return "/watch/test2";
+	}
 	
 	
 	
@@ -202,9 +228,7 @@ public class WatchController{
 		DecimalFormat df = new DecimalFormat("#.#");
 		
 		if(no >= 10000000) {
-			
 			result = df.format(no/10000000.0) +"천 만";
-			
 		}else if(no >= 10000) {
 			result = df.format(no/10000.0) +"만";
 		}else if(no >= 1000) {
