@@ -36,9 +36,9 @@
 			
 			<div class="search_select">
 			  <select name="field">
-			    <option value="vi_title">동영상 제목</option>
-			    <option value="ch_name">채널명</option>
-			    <option value="vi_hash">태그</option>
+			    <option value="video_title">동영상 제목</option>
+			    <option value="channel_name">채널명</option>
+			    <option value="video_hash">태그</option>
 			  </select>
 			</div>
 			
@@ -208,7 +208,7 @@
 	        liSelected = ul2.getElementsByTagName('li')[0];
 	      }
 	      addClass(liSelected, 'selected');
-	      $(".search_input").val(($('.selected').text())); 
+	      //$(".search_input").val(($('.selected').text())); 
 	      
 	    } else {
 	      index = 0;

@@ -1,6 +1,8 @@
 package com.vidividi.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,7 +38,13 @@ public class VidividiDAOImpl implements VidividiDAO {
 	//검색
 	@Override
 	public List<VideoPlayDTO> searchVideoList(String field, String keyword) {
-		return sqlSession.selectList(field, keyword);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("field", field);
+        map.put("keyword", keyword);
+		
+		return sqlSession.selectList("searchVideo", map);
 	}
 
 	//페이지네이션

@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+	/* 커서 이미지 변경 */
+	
+	body {
+		font-family: 'Noto Sans KR' !important;
+		cursor: url('../eunji_IMG/cursor_rabbit.png'),auto;
+	}
+
 	@media screen and (max-width: 992px) {
 		.container1 div{
 			width: 500px;
@@ -127,6 +134,7 @@
 			margin-left: 22%;
 			margin-top: 25px;
 			padding-left: 10px;
+			
      	}
      	
 		video{

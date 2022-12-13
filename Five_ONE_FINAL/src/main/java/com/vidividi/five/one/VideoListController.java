@@ -23,8 +23,6 @@ public class VideoListController {
 	@RequestMapping("mainVideoList.do")
 	public List<VideoPlayDTO> mainList(HttpServletRequest request){
 		
-		System.out.println("_____________________________________________________________________________________________________________");
-		
 		List<VideoPlayDTO> list = this.dao.mainVideo();
 
 		return list;
@@ -33,8 +31,6 @@ public class VideoListController {
 	@ResponseBody
 	@RequestMapping("mainVideoList_up.do")
 	public List<VideoPlayDTO> mainList_up(){
-		
-		System.out.println("_____________________________________________________________________________________________________________");
 		
 		List<VideoPlayDTO> list2 = this.dao.mainVideo_up();
 		
