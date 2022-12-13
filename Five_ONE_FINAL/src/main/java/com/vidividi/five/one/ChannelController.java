@@ -115,18 +115,18 @@ public class ChannelController {
 			playdto.setCategory_code(0);
 			playdto.setChannel_like(channelWorlddto.getChannel_like());
 			
-			int check = this.dao.setVideoUpload(playdto);
-			if(check > 0 ) {
-				out.println("<script>"
-						+ "alert('업로드 완료');"
-						+ "location.href='" + request.getContextPath() +"/channel.do';");
-				out.println("</script>");
-			} else {
-				out.println("<script>"
-						+ "alert('업로드 실패');"
-						+ "history.bakc();");
-				out.println("</script>");
-			}
+//			int check = this.dao.setVideoUpload(playdto);
+//			if(check > 0 ) {
+//				out.println("<script>"
+//						+ "alert('업로드 완료');"
+//						+ "location.href='" + request.getContextPath() +"/channel.do';");
+//				out.println("</script>");
+//			} else {
+//				out.println("<script>"
+//						+ "alert('업로드 실패');"
+//						+ "history.bakc();");
+//				out.println("</script>");
+//			}
 		} else {
 			System.out.println("실패");
 		}

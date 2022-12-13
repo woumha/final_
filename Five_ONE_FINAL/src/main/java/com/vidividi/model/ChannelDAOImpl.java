@@ -22,8 +22,8 @@ public class ChannelDAOImpl implements ChannelDAO {
 		return this.session.selectOne("owner", memberDTO);
 	}
 	
-	@Override
-	public int setVideoUpload(VideoPlayDTO playDTO) {
-		return this.session.insert("video_update", playDTO);
-	}
+//	@Override
+//	public int setVideoUpload(VideoPlayDTO playDTO) {
+//		return this.session.insert("video_update", playDTO);
+//	}
 }
