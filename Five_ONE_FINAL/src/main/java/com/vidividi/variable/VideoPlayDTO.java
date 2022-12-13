@@ -18,5 +18,6 @@ public class VideoPlayDTO {
 	private String video_regdate;
 	private int video_open;
 	private int category_code;
+	private int channel_like;
 	
 }
