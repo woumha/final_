@@ -42,10 +42,11 @@ public class UploadFile {
 			
 			System.out.println("파일이름: " + originalFileName);
 			String ext = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+			System.out.println("ext: " + ext);
 			
 			// 영상 확장자 찾기
 			for(int i=0; i<extMovieArr.length; i++) {
-				if(ext.equals(extImgArr[i]) ) {
+				if(ext.equals(extMovieArr[i]) ) {
 					dateFolder = uploadVideoPath + lastChannelCode;
 					File path1 = new File(dateFolder); // 폴더 경로
 					
@@ -59,7 +60,6 @@ public class UploadFile {
 						//saveFileName = System.currentTimeMillis() + "_" +saveFileName;
 						saveFileName = title;
 					}
-					System.out.println(saveFileName);
 					// 파일 저장 및 예외처리
 					try {
 						// 파일 저장
@@ -93,7 +93,6 @@ public class UploadFile {
 						//saveFileName = System.currentTimeMillis() + "_" +saveFileName;
 						saveFileName = title;
 					}
-					System.out.println(saveFileName);
 					// 파일 저장 및 예외처리
 					try {
 						// 파일 저장

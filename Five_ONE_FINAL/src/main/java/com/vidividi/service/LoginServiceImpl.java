@@ -67,4 +67,13 @@ public class LoginServiceImpl implements LoginService {
 		return result;
 	}
 
+	// 비디오 코드
+	@Override
+	public String videoCodeMaking() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "CH-"+uuid.toString();
+		
+		return result;
+	}
 }

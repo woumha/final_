@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
 public class ChannelDAOImpl implements ChannelDAO {
@@ -19,5 +20,10 @@ public class ChannelDAOImpl implements ChannelDAO {
 	@Override
 	public ChannelDTO getChannelOwner(MemberDTO memberDTO) {
 		return this.session.selectOne("owner", memberDTO);
+	}
+	
+	@Override
+	public int setVideoUpload(VideoPlayDTO playDTO) {
+		return this.session.insert("video_update", playDTO);
 	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.vidividi.model.ChannelDAO;
+import com.vidividi.service.LoginService;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
 import com.vidividi.variable.VideoPlayDTO;
@@ -35,10 +37,17 @@ public class ChannelController {
 	@Inject
 	private ChannelDAO dao;
 	
+	
+	@Autowired
+	private LoginService service;
+	
+	
 	@Autowired
 	private UploadFile uploadFile;
 	
 	ChannelDTO channelWorlddto;
+	
+	
 	
 	@RequestMapping("channel.do")
 	public String channel(
@@ -58,7 +67,7 @@ public class ChannelController {
 		/* session.setAttribute("CurrentChannelCode", CurrentChannelCode); */
 		
 		model.addAttribute("currentOwner", channelWorlddto);
-		
+		System.out.println(channelWorlddto);
 		return "channel/channel_main";
 	}
 	
@@ -80,41 +89,44 @@ public class ChannelController {
 	
 	
 	@RequestMapping("upload_success.do")
-	public String upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age, MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
-		
-		System.out.println(title.trim());
-		
+	public String upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age, @RequestParam("5") String[] hash,MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
 		String lastChannelCode = (String)session.getAttribute("LastChannelCode");
 		
-		
-		
 		PrintWriter out = response.getWriter();
-		System.out.println(mRequest);
+		String allHashTag = "";
+		for(int i=0; i<hash.length; i++) {
+			allHashTag = allHashTag + "," + hash[i];
+		}
 		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
-			System.out.println("성공");
-			
-			ArrayList<String> name = new ArrayList<String>();
-			String video = "";
-			String img = "";
-		
 			
 			
-			// 시간이 나면 파일의 이름을 구해서 마지막을 짤라서 하나씩 다 구분해야 될듯...
-			//String video_path = "pageContext.request.contextPath/resources/AllChannel/" + lastChannelCode.trim() + "/" + title.trim() + ".mp4"; // 영상 저장 경로(.jsp 기준)
-			//String img_path = "pageContext.request.contextPath/resources/AllChannel/" + lastChannelCode.trim() + "/thumbnail" + title.trim() + ".png"; 
-			for(int i=0; i<name.size(); i++) {
-				
-			}
 			
 			VideoPlayDTO playdto = new VideoPlayDTO();
-			playdto.setVideo_code(videoCodeMaking());
-			playdto.setChannel_code(lastChannelCode.trim());
-			//playdto.setChannel_name();
-			playdto.setVideo_title(title.trim());
-			playdto.setVideo_cont(context.trim());
-		
+			String[] name = fileName(mRequest);
+			playdto.setVideo_code(service.videoCodeMaking());
+			playdto.setChannel_code(channelWorlddto.getChannel_code());//lastChannelCode
+			playdto.setChannel_name(channelWorlddto.getChannel_name());
+			playdto.setVideo_title(name[1]);
+			playdto.setVideo_cont(context);
+			playdto.setVideo_img(name[0]);
 			
+			playdto.setVideo_hash(allHashTag);
+			playdto.setVideo_open(0); // 기본 공개 (만들어야됨)
+			playdto.setCategory_code(0);
+			playdto.setChannel_like(channelWorlddto.getChannel_like());
 			
+			int check = this.dao.setVideoUpload(playdto);
+			if(check > 0 ) {
+				out.println("<script>"
+						+ "alert('업로드 완료');"
+						+ "location.href='" + request.getContextPath() +"/channel.do';");
+				out.println("</script>");
+			} else {
+				out.println("<script>"
+						+ "alert('업로드 실패');"
+						+ "history.bakc();");
+				out.println("</script>");
+			}
 		} else {
 			System.out.println("실패");
 		}
@@ -125,24 +137,30 @@ public class ChannelController {
 		
 	}
 	
-	public String videoCodeMaking() {
-		String result = "";
-		UUID uuid = UUID.randomUUID();
-		result = "VD-"+uuid.toString();
-		
-		return result;
-	}
-	
-	public ArrayList<String> fileName(MultipartHttpServletRequest mRequest) {
+	// 영상 이름 받아오기
+	public String[] fileName(MultipartHttpServletRequest mRequest) {
 		Iterator<String> iterator = mRequest.getFileNames();
-		ArrayList<String> name = new ArrayList<String>();
+		String[] name = new String[2];
+		int count = 0;
 		while(iterator.hasNext()) {
 			String uploadFileName = iterator.next();
 			MultipartFile mFile = mRequest.getFile(uploadFileName);
 			String orginalFilename = mFile.getOriginalFilename();
 			
-			name.add(orginalFilename);
+			name[count] = orginalFilename;
+			count++;
 		}
+
 		return name;
+	}
+	
+	//해시태그
+	public String[] hashTag(String context) {
+		String[] hash = context.split("#");
+		
+		for(int i=0; i<hash.length; i++) {
+			
+		}
+		return null;
 	}
 }
