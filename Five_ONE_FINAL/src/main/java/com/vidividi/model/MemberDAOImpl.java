@@ -45,7 +45,7 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 	
 	@Override
-	public int joinMember(LoginDTO dto) {
+	public int joinMember(MemberDTO dto) {
 		return this.sqlSession.insert("joinMember", dto);
 	}
 	
