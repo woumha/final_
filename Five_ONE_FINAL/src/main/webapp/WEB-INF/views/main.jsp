@@ -33,13 +33,13 @@
 	    <div id="menu">&#x2261; Menu</div>
 	    <ul>
 	        <li id="all"><a href="#">전체</a></li>
-	        <li><a href="#">음악</a></li>
-	        <li><a href="#">게임</a></li>
-	        <li><a href="#">요리</a></li>
-	        <li><a href="#">스포츠</a></li>
-	        <li><a href="#">뉴스</a></li>
-	        <li><a href="#">교육</a></li>
-	        <li><a href="#">유아</a></li>
+	        <li id="music"><a href="#">음악</a></li>
+	        <li id="game"><a href="#">게임</a></li>
+	        <li id="cook"><a href="#">요리</a></li>
+	        <li id="sports"><a href="#">스포츠</a></li>
+	        <li id="news"><a href="#">뉴스</a></li>
+	        <li id="education"><a href="#">교육</a></li>
+	        <li id="kids"><a href="#">유아</a></li>
 	    </ul>
 	</nav>
 	 	
@@ -93,48 +93,6 @@
 	</div>
 	
 	
-<%-- 동영상 리스트 영역 --%>
-	  <div id="video_list">  
-		<c:set var="list" value="${video_list }" />
-		 <table cellspacing="0" id="video_table">
-		 	<c:if test="${!empty list }">
-				 <c:forEach items="${list }" var="dto">
-				 
-			        <tr>
-			          <td colspan="1">
-			          <video src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video></td>
-			          <td id = "video_title">${dto.getVideo_title() }</td>
-			          <td id ="video_channel">${dto.getChannel_name() }</td>
-			          <td id = "video_view_ctn">조회수: ${dto.getVideo_view_cnt() } &nbsp; &nbsp; ${dto.getVideo_regdate() }</td>
-			          <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>	
-			        </tr>
-			        
-			        <tr>
-						<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>		        
-			        </tr>
-					
-					<br>
-					
-			 	</c:forEach>
-			 </c:if>
-			 
-		   <c:if test="${empty list }">
-	         <tr>
-	            <td colspan="4" align="center">
-	               <h3>동영상 리스트가 없습니다.....</h3>
-	            </td>
-	         </tr>
-	      </c:if>
-		</table>	
-	</div> 
-	
-
-
-<%-- ajaxlist 영역 --%>
-	<div id="ajaxList"></div>
-
-	
-	
 <%-- 사이드바 영역 --%>
 	<div id="side_wrap">
 		<div id="sidebar">
@@ -142,67 +100,121 @@
 		</div>
 	</div>
 	
+	
+<%-- 동영상 리스트 영역 --%>
+	  <div id="video_list"> </div> 
+	
 </body>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	
 <script>
-//--------------------------------------------------------동영상 리스트 ajax---------------------------------------
 
-$(function() {
-		
-	// ajax에서 동일하게 사용되는 속성 설정
-	$.ajaxSetup({
-		// ajax에서 한글 깨짐 문제 해결
-		ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
-		type : "post"
-	});
-		
-		
-	//getVideoList 함수
-	function getVideoList() {
-			
+
+
+//--------------------------------------------------------동영상 리스트 ajax(인기도순)---------------------------------------
+
+function getContextPath(){
+
+    let path = location.href.indexOf(location.host)+location.host.length;
+
+    return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
+	//좋아요 순 정렬
+	function getMainVideoList_popular(){
 		$.ajax({
-			url : "./ajax/main_video.do",
-			datatype : "json",
-			data : "video_option" : video_option,
-			success : function(data){
-				alert ('데이터 통신 성공');
+			url : "mainVideoList.do",
+			type: "post",
+			success: function(data){
 				
-				/* var table = "";
+				var table = "";
 				
-				table += "<table>"
+				table += "<table id='video_table'>"
 				
-				$.each(data,function(){
+				$(data).each(function(){
 				
-				table += "<tr>"
-				table += "<td>" + arr["video_title"] + "</td>" 
-				table += "<td>" + arr["video_cont"] + "</td>" 
-				table += "<td>" + arr["channel_name"] + "</td>" 
-				table += "<td>" + arr["video_view_cnt"] + "</td>" 
-				table += "<td>" + arr["video_regdate"] + "</td>" 
+				table += "<tr>";
+				table += "<td colspan='2'>" + "<video width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
+				table += "<td id = 'video_title'>" + this.video_title + "</td>";
+				table += "<td id = 'video_channel'>" + this.channel_name + "</td>";
+				table += "<td id = 'video_view_ctn'>" + '조회수&nbsp;: &nbsp;' + this.video_view_cnt + "&nbsp; &nbsp;" + this.video_regdate + "</td>";
+				table += "</tr>";
 				
-				table += "</tr>"
-			}
+				}); //each end
 				
-				table += "</table>"
+				table += "</table>";
 				
+				$("#video_list").html(table);			
 				
-				$("#ajaxList").html(table) */
 			},
-	
-			error : function() {
-				alert('데이터 통신 에러 발생');
+			
+			error: function(){
+				alert("메인 비디오 리스트 ajax 오류입니다.");
+				
 			}
 		});
-			
-	} //getVideoList end
+	}
 		
+	getMainVideoList_popular();
 	
-	//함수 실행
-	getVideoList();
-		
+//-------------------------------------------------------------동영상 리스트 ajax(최신순)-------------------------------------------------------------------------
+
+ 
+//최신순 정렬
+function getMainVideoList_recent(){
+		$.ajax({
+			url : "mainVideoList_up.do",
+			type: "post",
+			success: function(data){
+				
+				var table = "";
+				
+				table += "<table id='video_table'>"
+				
+				$(data).each(function(){
+				
+				table += "<tr>";
+				table += "<td>" +
+		         		 "<video src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
+				table += "<td id = 'video_title'>" + this.video_title + "</td>";
+				table += "<td id = 'video_channel'>" + this.channel_name + "</td>";
+				table += "<td id = 'video_view_ctn'>" + '조회수&nbsp;: &nbsp;' + this.video_view_cnt + "&nbsp; &nbsp;" + this.video_regdate + "</td>";
+				table += "</tr>";
+				
+				}); //each end
+				
+				table += "</table>";
+				
+				$("#video_list").html(table);			
+				
+			},
+			
+			error: function(){
+				alert("메인 비디오 리스트 ajax 오류입니다.");
+				
+			}
+		});
+	} //최신순 정렬 end
+
+
+	//인기순 버튼을 클릭했을 때
+	$(document).on("click", ".re_btn", function(){		
+		getMainVideoList_popular();
+	});
+	
+	//최신순 버튼을 클릭했을 때
+	$(document).on("click", ".up_btn", function(){		
+		getMainVideoList_recent();
+	});
+	
+
+	
+//-----------------------------------------------------------------상단 내비 소트-------------------------------------------------
+	
+	//video_play 데이터 category_code 수정 후 작업
+	
 
 //----------------------------------------------------------------------카테고리------------------------------------------------------------------------
 	$(document).ready(function() {
