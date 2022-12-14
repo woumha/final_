@@ -35,21 +35,35 @@ public class VidividiDAOImpl implements VidividiDAO {
 		return this.sqlSession.selectList("video_list_up");
 	}
 	
-	//검색
+	//인기순 검색
 	@Override
-	public List<VideoPlayDTO> searchVideoList(String field, String keyword) {
+	public List<VideoPlayDTO> searchVideoList(String field, String keyword, String option) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 
         map.put("field", field);
         map.put("keyword", keyword);
+        map.put("option", option);
 		
 		return sqlSession.selectList("searchVideo", map);
 	}
+	
+	//최신순 검색
+	@Override
+	public List<VideoPlayDTO> searchVideoList_new(String field, String keyword, String option) {
+		Map<String, Object> map = new HashMap<String, Object>();
 
+        map.put("field", field);
+        map.put("keyword", keyword);
+		
+		return sqlSession.selectList("searchVideo_new", map);
+	}
+	
 	//페이지네이션
 	@Override
 	public int getListCount() {
 		return this.sqlSession.selectOne("count");
 	}
+
+
 }
