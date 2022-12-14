@@ -18,6 +18,14 @@
  let uploadCont; // 영상 설명
  let selectPlayList; // 영상 재생목록
  let selectAn; // 아동용&성인용
+ /////////////////////
+
+ //해시태그 변수
+let key = false; 
+let text = "";
+let hashText = [];
+/////////////////////
+ 
  
  button.onclick = () => {
  	input.click();	// 만약 클릭버튼을 클릭했을 때 >> input이 클릭
@@ -194,6 +202,7 @@ function upload_move() {
 	console.log(this.uploadCont);
 	console.log(this.selectPlayList);
 	console.log(this.selectAn.trim());
+	
 	var hiddenField1 = document.createElement('input');
 	hiddenField1.setAttribute('type', 'hidden');
 	hiddenField1.setAttribute('name', "1");
@@ -214,35 +223,22 @@ function upload_move() {
 	hiddenField4.setAttribute('name', "4");
 	hiddenField4.setAttribute('value', this.selectAn.trim());
 	
+	
+	var request_text = hashText;
+	var hiddenField5 = document.createElement('input');
+	hiddenField5.setAttribute('type', 'hidden');
+	hiddenField5.setAttribute('name', "5");
+	hiddenField5.setAttribute('value', request_text);
+	
+	
 	$(".container-fluid").wrap(form);
 	
 	$(".container-fluid").append(hiddenField1);
 	$(".container-fluid").append(hiddenField2);
 	$(".container-fluid").append(hiddenField3);
 	$(".container-fluid").append(hiddenField4);
+	$(".container-fluid").append(hiddenField5);
 	$("#send_form").submit();
-
-
-
-	// let form = new FormData();
-	// form.append("upload_input_file", $("#upload_input_file")[0].files[0]);
-
-	// $.ajax({
-	// 	url: "/Five_ONE_FINAL/upload_success.do",
-	// 	data: {
-	// 		form,
-	// 		title: this.uploadtitle,
-	// 		context: this.uploadCont,
-	// 		playList: this.selectPlayList,
-	// 		age: this.selectAn
-	// 	},
-	// 	success: function(data) {
-	// 		console.log("test");
-	// 	},
-	// 	error: function() {
-	// 		alert("데이터 통신 오류");
-	// 	}
-	// });
 }
 
 // 영상 업로드 자바스크립트 끝
@@ -287,4 +283,31 @@ imgInputTag.addEventListener("change", function() {
  }
  
 // 이미지 업로드 스크립트 시작
+
+
+// hastTag 판별 스크립트 시작
+const word = /#[^\s#]+/gi;
+/////////////////////
+// tag안에 있는 값을 array type으로 만들어서 넘긴다.
+$(function () {
+	$("#floatingTextarea3").on("keyup", function(event) {
+		let areaValue = $(this).val();
+		key = word.test(areaValue);
+		
+		if(key) {
+			if(event.keyCode == 32 || event.keyCode == 13) {
+				hashText.pop();
+				hashText.push(areaValue.match(word));
+				
+			}
+		}
+		/*
+		for(var i=0; i<hashText.length; i++) {
+			console.log("해시태그: " + hashText[i]);
+			
+		}
+		*/
+	});
+});
+// hashTag판별 끝
  

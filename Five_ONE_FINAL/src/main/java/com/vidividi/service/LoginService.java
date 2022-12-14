@@ -11,4 +11,5 @@ public interface LoginService {
 	void logout(HttpSession session);
 	int joinIdCheck(String id);
 	String generateMembercode();
+	String videoCodeMaking();
 }
