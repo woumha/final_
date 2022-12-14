@@ -34,12 +34,14 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 	@Override
-	public List<ReplyDTO> getReply(String video_code, String video_option) {
+	public List<ReplyDTO> getReply(String video_code, String reply_option, int startNo, int endNo) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("video_code", video_code);
-		map.put("video_option", video_option);
+		map.put("reply_option", reply_option);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
 		
 		List<ReplyDTO> list = this.sqlSession.selectList("getReply", map);
 		
@@ -47,12 +49,14 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 	@Override
-	public List<ReplyDTO> getComment(String video_code, String reply_group) {
+	public List<ReplyDTO> getComment(String video_code, String reply_group, int startNo, int endNo) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("video_code", video_code);
 		map.put("reply_group", reply_group);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
 		
 		List<ReplyDTO> list = this.sqlSession.selectList("getComment", map);
 		

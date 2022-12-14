@@ -17,9 +17,9 @@ public interface WatchDAO {
 	
 	public List<VideoPlayDTO> getVideoList();
 	
-	public List<ReplyDTO> getReply(String video_code, String video_option);
+	public List<ReplyDTO> getReply(String video_code, String reply_option, int startNo, int endNo);
 
-	public List<ReplyDTO> getComment(String video_code, String reply_group);
+	public List<ReplyDTO> getComment(String video_code, String reply_group, int startNo, int endNo);
 	
 	
 }

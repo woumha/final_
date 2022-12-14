@@ -12,6 +12,7 @@
 <link href="//vjs.zencdn.net/7.20.3/video-js.min.css" rel="stylesheet">
 
 <script type="text/javascript" src="${path }/resources/watch/watch_JS/watch.js"></script>
+<script type="text/javascript" src="${path }/resources/watch/watch_JS/watch_event.js"></script>
 
 
 <link rel="stylesheet" href="${path }/resources/watch/watch_CS/watch.css">
@@ -305,8 +306,12 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
+let vid = ${video_dto.getVideo_code()};
+
 
 let video_url = ${video_dto.getVideo_code()} +".mp4"; 
+
+
 
 var player = videojs("myPlayer", {
 	sources : [
