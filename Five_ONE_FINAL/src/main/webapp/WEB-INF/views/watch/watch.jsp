@@ -23,16 +23,19 @@
 	<c:set var="video_dto" value="${video_dto }" />
 	<c:set var="channel_good" value="${channel_good }" />
 	<c:set var="reply_count" value="${reply_count }" />
+	<c:set var="playList_dto" value="${playlist_dto }"/>
 	
 	
 	<input type="hidden" value="${video_dto.getVideo_code() }" name="video_code" id="video_code">
 	
-	
+	<jsp:include page="../include/top_include2.jsp"/>
+	<jsp:include page="../include/side_include.jsp"/>
 <div class="all">
-	<jsp:include page="../include/top_include.jsp"/>
+	
 	<div class="watch_layer">
 		
 		<div class="container_L">
+			
 		</div>
 		<div class="watch_container">
 		
@@ -273,20 +276,51 @@
 					</div>	  
 				</div> <!-- 댓글영역 end -->	 --%>
 				
-				
-				<!-- ==========================댓글 1개 + 대댓글====================== -->
-
-				
-				
-				
-				
-				
 			</div> <!-- 댓글 end -->
 		</div> <!-- watch container end -->
 
 	
-		<div class="side_box">
-		</div>
+		<div class="side_container">
+			<c:if test="${!empty playList_dto }">
+				<div>리스트 있음</div>
+			</c:if>
+			
+			
+			<div class="video_list_wrap card_c">
+				<div class="video_list_nav card_a">
+					<div class="nav_item"><button class="nav_btn" value="all">모두</button></div>
+					<div class="nav_item"><button class="nav_btn" value="category">관련 콘텐츠</button></div>
+					<div class="nav_item"><button class="nav_btn" value="current">최근 업로드된 동영상</button></div>
+					<div class="nav_item"><button class="nav_btn" value="history">감상한 동영상</button></div>
+				</div>
+				
+				<div class="video_list_box card_a">
+				
+					<div class="video_list_thumbnail">
+						<a>
+							<img class="video_list_img" src="${pageContext.request.contextPath}/resources/watch/watch_img/render_icon.png">
+						</a>
+					</div>
+					
+					<div class="video_list_info card_c">
+						<div class="video_list_title">title</div>
+						<div class="video_list_channel_name">name</div>
+						<div class="video_list_view_cnt">cnt</div>
+						<div class="video_list_date">date</div>
+					</div>
+					
+					<div class="render_box">
+						<div class="render_wrap">
+							<button class="render">
+								<img class="render_icon" src="${pageContext.request.contextPath}/resources/watch/watch_img/render_icon.png">
+							</button>
+						</div>
+					</div>
+					
+				</div><!-- video_list_box end -->
+			</div><!-- video_list_wrap end -->
+						
+		</div> <!-- side_box end -->
 		
 		<%-- <jsp:include page="../include/side_include.jsp"/> --%>
 	</div>
