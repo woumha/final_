@@ -30,6 +30,9 @@ public class HomeController {
 
     @Inject
     private MemberDAO memberDAO;
+    
+    @Inject
+    private ChannelDAO channelDAO;
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
@@ -39,17 +42,14 @@ public class HomeController {
         if (session.getAttribute("MemberCode")!=null) {
         	
         	String memberCode = (String)session.getAttribute("MemberCode");
-        	String lastChannelCode = (String)session.getAttribute("LastChannelCode");
-        	System.out.println(memberCode);
+        	String repChannelCode = (String)session.getAttribute("RepChannelCode");
 			MemberDTO memberDTO = memberDAO.getMember(memberCode);
-			
-			/*
-			 * List<ChannelDTO> AllChannelList = ChannelDAO.getAllChannelList(memberCode);
-			 */
+			String repChannelPsa = channelDAO.getChannelPsa(repChannelCode);
 			
             model.addAttribute("MemberCode", memberCode);
 			model.addAttribute("MemberName", memberDTO.getMember_name());
-			model.addAttribute("LastChannelCode", lastChannelCode);
+			model.addAttribute("RepChannelPsa", repChannelPsa);
+			model.addAttribute("RepChannelCode", repChannelCode);
         }
 
         return "main";

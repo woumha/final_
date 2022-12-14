@@ -61,7 +61,7 @@ public class ChannelController {
 		
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setMember_code(memCode);
-		memberDTO.setMember_last_channel(lastChannelCode);
+		memberDTO.setMember_rep_channel(lastChannelCode);
 		channelWorlddto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값
 		
 		/* session.setAttribute("CurrentChannelCode", CurrentChannelCode); */
