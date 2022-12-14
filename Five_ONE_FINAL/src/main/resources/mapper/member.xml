@@ -23,12 +23,12 @@
 	<select id="getMemberList" resultType="memberdto">
 		select * from members
 	</select>
-	<insert id="joinMember" parameterType="logindto">
+	<insert id="joinMember" parameterType="memberdto">
 		insert into members values(
-			#{code},
-			#{id},
-			#{id},
-			#{pwd},
+			#{member_code},
+			#{member_id},
+			#{member_id},
+			#{member_pwd},
 			'',
 			'',
 			'',
@@ -40,7 +40,7 @@
 			sysdate,
 			default,
 			default,
-			'',
+			#{member_last_channel},
 			default			
 		)
 	</insert>

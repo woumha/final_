@@ -398,18 +398,18 @@
 					<div id="join-content-1">
 						<form method="post" id="join-form-1">
 							<span class="block-span">간편회원가입</span>
-							
+							<input type="hidden" name="member_code" id="new-membercode">
 							<div class="label-input" >
 								<label for="input-id" id="input-id-check"></label>
 								<label for="input-id" id="input-id-label">아이디</label>
 							</div>
-							<input name="id" class="join-input essential" id="input-id">
+							<input name="member_id" class="join-input essential" id="input-id">
 							
 							<div class="label-input" >
 								<label for="input-id" class="label-input" id="input-pwd-check"></label>
 								<label for="input-id" class="label-input" id="input-pwd-label">비밀번호</label>
 							</div>
-							<input name="pwd" class="password join-input essential" id="input-pwd">
+							<input name="member_pwd" class="password join-input essential" id="input-pwd">
 							
 							<div class="label-input" >
 								<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
