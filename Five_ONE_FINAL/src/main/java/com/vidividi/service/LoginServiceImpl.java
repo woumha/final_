@@ -26,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
 		
 		if (memberCode != null) {
 			session.setAttribute("MemberCode", memberCode);
-			session.setAttribute("LastChannelCode", memberDTO.getMember_last_channel());
+			session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
 		}
 		
 		return memberCode;
@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
 			
 			if (memberCode != null) {
 				if (currentChannelCode != null) {
-					memberDTO.setMember_last_channel(currentChannelCode);
+					memberDTO.setMember_rep_channel(currentChannelCode);
 					dao.updateLastChannel(memberDTO);
 				}
 			}

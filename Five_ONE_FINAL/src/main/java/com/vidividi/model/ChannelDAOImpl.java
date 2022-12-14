@@ -1,6 +1,8 @@
 package com.vidividi.model;
 
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -16,14 +18,27 @@ public class ChannelDAOImpl implements ChannelDAO {
 	
 	@Inject
 	private SqlSessionTemplate session;
-
+	
+	// 채널 정보
 	@Override
 	public ChannelDTO getChannelOwner(MemberDTO memberDTO) {
 		return this.session.selectOne("owner", memberDTO);
 	}
 	
-//	@Override
-//	public int setVideoUpload(VideoPlayDTO playDTO) {
-//		return this.session.insert("video_update", playDTO);
-//	}
+	// 영상 업로드
+	@Override
+	public int setVideoUpload(VideoPlayDTO playDTO) {
+		return this.session.insert("video_update", playDTO);
+	}
+	
+	// 영상 전체 목록
+	@Override
+	public List<VideoPlayDTO> getVideoList(String code) {
+		return this.session.selectList("channel_video_list", code);
+	}
+	
+	@Override
+	public VideoPlayDTO getNewVideo(String new_code) {
+		return this.session.selectOne("channel_new_video", new_code);
+	}
 }

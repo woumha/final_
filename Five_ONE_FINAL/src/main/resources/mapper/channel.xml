@@ -6,7 +6,33 @@
   
  <mapper namespace="channeldao">
  	<select id="owner" parameterType="memberdto" resultType="channeldto">
- 		select * from user_channel where member_code = #{member_code} and channel_code = #{member_last_channel}
+ 		select * from user_channel where member_code = #{member_code} and channel_code = #{member_rep_channel}
+ 	</select>
+ 	
+ 	<insert id="video_update" parameterType="videoplayDTO">
+ 		insert into video_play values (
+	 		#{video_code}, 
+	 		#{channel_code}, 
+	 		#{channel_name}, 
+	 		#{video_title}, 
+	 		#{video_cont}, 
+	 		#{video_img}, 
+	 		default, 
+	 		default, 
+	 		default, 
+	 		#{video_hash}, 
+	 		sysdate, 
+	 		#{video_open}, 
+	 		#{channel_like}
+ 		) 
+ 	</insert>
+ 	
+ 	<select id="channel_video_list" parameterType="String" resultType="videoplayDTO">
+ 		select * from video_play where channel_code = #{code}
+ 	</select>
+ 	
+ 	<select id="channel_new_video" parameterType="String" resultType="videoplayDTO">
+ 		select * from (select * from video_play where channel_code =#{new_code} order by video_regdate) where <![CDATA[rownum <= 1]]>
  	</select>
  </mapper>
   
