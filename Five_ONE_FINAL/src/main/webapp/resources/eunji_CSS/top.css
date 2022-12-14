@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+	#logo{
+		cursor: pointer;
+	}
+	
 
 	@media screen and (max-width: 1500px) {
 		#user_div{
@@ -40,18 +44,19 @@
 	
 	
 	@media screen and (min-width: 1501px) {
-		#user_div{
-			margin-top: 32px;
-			flex: 1;
-			height: 60px;
-			color: white;
-			position: absolute;
-			right: 1px;
-			font-size: 1.5rem;
-			display: inline-flex;
-			margin-right: 1%;
-			vertical-align: bottom;
-			text-align: center;
+	
+	#user_div{
+		margin-top: 32px;
+		flex: 1;
+		height: 60px;
+		color: white;
+		position: absolute;
+		right: 1px;
+		font-size: 1.5rem;
+		display: inline-flex;
+		margin-right: 1%;
+		vertical-align: bottom;
+		text-align: center;
 		}
 	}
 	
@@ -81,7 +86,6 @@
 		  padding: 0;
 	}
 
-	
 	#search_div{
 		margin-top: 1%;
 		justify-content: center;
@@ -242,13 +246,14 @@
 	  z-index: 3;
 	  width: 100px;
 	  height: 35px;
-	  font-size: 17;
+	  font-size: 17px;
 	  font-weight: bold;
 	  box-shadow: none;
 	}
 	
   	#user_login:after {
 	  position: absolute;
+	  font-size: 17px;
 	  content: "";
 	  width: 0;
 	  height: 100%;
@@ -284,13 +289,14 @@
 	  z-index: 3;
 	  width: 100px;
 	  height: 35px;
-	  font-size: 17;
+	  font-size: 17px;
 	  font-weight: bold;
 	  box-shadow: none;
 	}
 	
  	#user_join:after {
 	  position: absolute;
+	  font-size: 17px;
 	  content: "";
 	  width: 0;
 	  height: 100%;
@@ -326,13 +332,14 @@
 	  z-index: 3;
 	  width: 100px;
 	  height: 35px;
-	  font-size: 17;
+	  font-size: 17px;
 	  font-weight: bold;
 	  box-shadow: none;
 	}
 	
  	#user_logout:after {
 	  position: absolute;
+	  font-size: 17px;
 	  content: "";
 	  width: 0;
 	  height: 100%;
@@ -423,18 +430,27 @@
 		  box-shadow: 0 2px 3px 0;
 		}	
 		
+		
 		.pop_rel_keywords {
 		  list-style: none;
-		  margin-left: -25px;
+   		  margin-left: -50px;
+    	  width: 50em;
 		}
 		
 		.pop_rel_keywords > li {
 		  line-height : 250%;
-		  width: 49.8em;
+		  width: 50em;
 		}
 		
 		li.selected {
 			background-color: #facc9d;
-			margin-left: -18px;
-			padding-left: 10px;
+		    margin-left: 9px;
+		    padding-left: 10px;
+		    width: 50em;
+		}
+		
+		.autolist{
+			margin-left: 9px;
+		    padding-left: 10px;
+		    width: 50em;
 		}

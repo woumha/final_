@@ -1,6 +1,23 @@
 @charset "UTF-8";
 
-button{
+/* -----------------------------------------video css------------------------------- */
+
+	#search_video{
+	 	flex: 8;
+	 	width: 1500px;
+	 	margin-left: 300px;
+	 	margin-top: 110px;
+	}
 	
-	font-size: 17;
-}
+	video{
+		border-radius: 10px;
+		padding-right: 20px;
+		width: 659px;
+	}
+		
+	#re_video{
+		width: 660px;
+		height: 320px;
+		border-radius: 10px;
+		padding-right: 20px;
+	}
