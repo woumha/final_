@@ -14,6 +14,6 @@ public interface MemberDAO {
 	List<MemberDTO> getMemberList();
 	void updateLastChannel(MemberDTO dto);
 	int joinIdCheck(String id);
-	int joinMember(LoginDTO dto);
+	int joinMember(MemberDTO dto);
 	int mebmerInfoUpdate(MemberDTO dto);
 }

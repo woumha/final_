@@ -111,8 +111,6 @@
 	
 <script>
 
-
-
 //--------------------------------------------------------동영상 리스트 ajax(인기도순)---------------------------------------
 
 function getContextPath(){
@@ -127,8 +125,7 @@ function getContextPath(){
 		$.ajax({
 			url : "mainVideoList.do",
 			type: "post",
-			success: function(data){
-				
+			success: function(data){				
 				var table = "";
 				
 				table += "<table id='video_table'>"
@@ -156,7 +153,8 @@ function getContextPath(){
 			}
 		});
 	}
-		
+	
+	//기본적으로 인기순 정렬
 	getMainVideoList_popular();
 	
 //-------------------------------------------------------------동영상 리스트 ajax(최신순)-------------------------------------------------------------------------

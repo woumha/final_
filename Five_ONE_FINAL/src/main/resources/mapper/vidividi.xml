@@ -11,29 +11,29 @@
 	
 	<!-- main video list 출력(인기순) -->
 	<select id="video_list" parameterType="String" resultType="VideoPlayDTO">
-		select video_title, video_cont, channel_name, video_view_cnt, video_regdate from video_play order by video_good
+		select video_title, video_cont, channel_name, video_view_cnt, video_regdate, video_code from video_play order by video_good
 	</select>
 	
 	<!-- main video list 출력(최신순) -->
 	<select id="video_list_up" parameterType="String" resultType="VideoPlayDTO">
-		select video_title, video_cont, channel_name, video_view_cnt, video_regdate from video_play order by video_regdate
+		select video_title, video_cont, channel_name, video_view_cnt, video_regdate, video_code from video_play order by video_regdate
 	</select>
 	
 	
-	<select id="vi_title" parameterType="String" resultType="VideoPlayDTO">
-		select * from video_play where video_title 
+	<select id="searchVideo" parameterType="hashmap" resultType="VideoPlayDTO">
+		select * from video_play where ${field} 
 		like '%' || #{keyword} || '%' order by video_good
 	</select>
 	
 	
-	<select id="ch_name" parameterType="String" resultType="VideoPlayDTO">
-		select * from video_play where channel_name 
+	<select id="ch_name" parameterType="hashmap" resultType="VideoPlayDTO">
+		select * from video_play where ${field} 
 		like '%' || #{keyword} || '%' order by video_good
 	</select>
 	
 	
-	<select id="vi_hash" parameterType="String" resultType="VideoPlayDTO">
-		select * from video_play where video_hash 
+	<select id="vi_hash" parameterType="hashmap" resultType="VideoPlayDTO">
+		select * from video_play where ${field}
 		like '%' || #{keyword} || '%' order by video_good
 	</select>
 	

@@ -1,7 +1,9 @@
 package com.vidividi.five.one;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,8 +45,6 @@ public class MemberController {
 	public String loginOk(Model model, LoginDTO loginDTO, HttpSession session) throws IOException {
 		
 		String membercode = service.loginCheck(loginDTO, session);
-		
-		
 		
 		if (membercode != null) {
 			model.addAttribute("MemberCode", membercode);
@@ -92,21 +92,18 @@ public class MemberController {
 	
 	@ResponseBody
 	@RequestMapping("joinOk.do")
-	public String joinMember(LoginDTO loginDTO) {
+	public String joinMember(MemberDTO memberDTO) {
 		
 		String result = "";
 		
-		loginDTO.setCode(service.generateMembercode());
+		memberDTO.setMember_code(service.generateMembercode());
+		/* memberDTO.setMember_last_channel(service.channelcodemaking()); */
 		
-		System.out.println(loginDTO.getId());
-		System.out.println(loginDTO.getPwd());
-		System.out.println(loginDTO.getCode());
-		
-		int insertResult = dao.joinMember(loginDTO);
+		int insertResult = dao.joinMember(memberDTO);
 		System.out.println(insertResult);
 		
 		if (insertResult != 0) {
-			result = loginDTO.getCode();
+			result = memberDTO.getMember_code();
 		}else if (insertResult == 0) {
 			result = "fail";
 		}
@@ -117,11 +114,29 @@ public class MemberController {
 	@ResponseBody
 	@RequestMapping("infoUpdate.do")
 	public int infoUpdate(MemberDTO dto) {
-		
-		System.out.println(dto.getMember_name());
-		System.out.println(dto.getMember_birth());
-		
 		return dao.mebmerInfoUpdate(dto);
+	}
+	
+	
+	@RequestMapping("info.do")
+	public String memberInfo(Model model, HttpSession session, MemberDTO dto) throws IOException {
+				
+		if (session.getAttribute("MemberCode") != null) {
+			String memberCode = (String)session.getAttribute("MemberCode");
+			dto = dao.getMember(memberCode);
+			model.addAttribute("MemberCode", memberCode);
+			model.addAttribute("MemberName", dto.getMember_name());
+			model.addAttribute("MemberDTO", dto);
+			return "member/member_info";
+		}else {
+			// 프론트에서 null 체크 해야 toast 창 제대로 보일 것 같음
+			// 일단 이대로 둠
+			model.addAttribute("msg", "로그인 하세요");
+			model.addAttribute("url", "login.do");
+			
+			return "redirect";
+		}
+				
 	}
 	
 	

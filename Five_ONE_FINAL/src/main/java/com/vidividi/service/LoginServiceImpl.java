@@ -3,8 +3,10 @@ package com.vidividi.service;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.stereotype.Service;
 
 import com.vidividi.model.MemberDAO;
@@ -32,21 +34,21 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public void logout(HttpSession session) {
-		
 		if (session.getAttribute("MemberCode") != null) {
 			String memberCode = (String)session.getAttribute("MemberCode");
+			System.out.println("로그인 중인 멤버코드"+memberCode);
 			String currentChannelCode = (String)session.getAttribute("CurrentChannelCode");
+			System.out.println("현재채널코드"+currentChannelCode);
 			MemberDTO memberDTO = dao.getMember(memberCode);
 			
 			if (memberCode != null) {
 				if (currentChannelCode != null) {
 					memberDTO.setMember_last_channel(currentChannelCode);
+					dao.updateLastChannel(memberDTO);
 				}
-				dao.updateLastChannel(memberDTO);
 			}
+			session.invalidate();
 		}
-		
-		session.invalidate();
 	}
 	
 	@Override
@@ -67,4 +69,13 @@ public class LoginServiceImpl implements LoginService {
 		return result;
 	}
 
+	// 비디오 코드
+	@Override
+	public String videoCodeMaking() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "CH-"+uuid.toString();
+		
+		return result;
+	}
 }
