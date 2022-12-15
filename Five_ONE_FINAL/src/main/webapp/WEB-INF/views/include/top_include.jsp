@@ -155,7 +155,8 @@
 					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberName }님</b></li>
 					<hr>
 					<%-- 내 채널 이미지 //이호찬 --%>
-					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?cha=${RepChannelCode }'"> &nbsp;
+          <c:set var="ccode" value="${RepChannelCode }" />
+					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'"> &nbsp;
 					<i class="bi bi-camera-reels"></i>&nbsp;&nbsp;내 채널</li>
 					<li onclick="location.href='<%=request.getContextPath()%>'"> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>

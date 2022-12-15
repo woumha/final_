@@ -38,22 +38,21 @@ public class HomeController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Locale locale, Model model, HttpSession session) {
-        
+
         if (session.getAttribute("MemberCode")!=null) {
-        	
-        	String memberCode = (String)session.getAttribute("MemberCode");
-        	String repChannelCode = (String)session.getAttribute("RepChannelCode");
-			MemberDTO memberDTO = memberDAO.getMember(memberCode);
-			String repChannelPsa = channelDAO.getChannelPsa(repChannelCode);
-			
+            String memberCode = (String)session.getAttribute("MemberCode");
+            String repChannelCode = (String)session.getAttribute("RepChannelCode");
+            MemberDTO memberDTO = memberDAO.getMember(memberCode);
+            //String repChannelPsa = ChannelDAO.getChannelPsa(repChannelCode);
+
             model.addAttribute("MemberCode", memberCode);
-			model.addAttribute("MemberName", memberDTO.getMember_name());
-			model.addAttribute("RepChannelPsa", repChannelPsa);
-			model.addAttribute("RepChannelCode", repChannelCode);
+            model.addAttribute("MemberName", memberDTO.getMember_name());
+            //model.addAttribute("RepChannelPsa", repChannelPsa);
+            model.addAttribute("RepChannelCode", repChannelCode);
         }
 
         return "main";
-       		
+
     }
    
    

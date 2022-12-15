@@ -27,6 +27,7 @@ public class LoginServiceImpl implements LoginService {
 		
 		if (memberCode != null) {
 			session.setAttribute("MemberCode", memberCode);
+
 			System.out.println("로그인 중인 멤버 코드 : "+memberCode);
 			session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
 			System.out.println("대표 채널 코드 : "+memberDTO.getMember_rep_channel());
