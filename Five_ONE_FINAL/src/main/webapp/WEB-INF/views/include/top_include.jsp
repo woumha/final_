@@ -19,6 +19,77 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <title>Insert title here</title>
+<style type="text/css">
+
+	img.channel-psa{
+		border-radius: 100%;
+	}
+
+	#user_popup img.channel-psa{
+		width: 22px;
+	}
+	
+	#user_div img.channel-psa{
+		width: 40px;
+		height: 40px;
+	}
+
+</style>
+<script type="text/javascript">
+
+	$(function(){
+		if ('${RepChannelCode}' != ''){
+			let channelCode = '${RepChannelCode}';
+			switch(channelCode.charAt(3)){
+				case "1" :
+					$(".channel-psa").css("background-color","darkred");
+				break
+				
+				case "2" :
+					$(".channel-psa").css("background-color","orange");
+				break
+				
+				case "3" :
+					$(".channel-psa").css("background-color","darkyellow");
+				break
+				
+				case "4" :
+					$(".channel-psa").css("background-color","lightpink");
+				break
+				
+				case "5" :
+					$(".channel-psa").css("background-color","darkgreen");
+				break
+				
+				case "6" :
+					$(".channel-psa").css("background-color","lightblue");
+				break
+				
+				case "7" :
+					$(".channel-psa").css("background-color","darkblue");
+				break
+				
+				case "8" :
+					$(".channel-psa").css("background-color","purple");
+				break
+				
+				case "9" :
+					$(".channel-psa").css("background-color","gray");
+				break
+				
+				case "0" :
+					$(".channel-psa").css("background-color","lightgreen");
+				break
+				default:
+					$(".channel-psa").css("background-color","#fc942c");
+				break
+			} 
+		}
+		
+	});
+	
+
+</script>
 
 </head>
 
@@ -56,8 +127,14 @@
 				<c:if test="${!empty MemberCode }">
 					<button class="customm-btn" id="user_logout" onclick="location.href='<%=request.getContextPath() %>/logout.do'" value="Login">Logout</button>&nbsp;&nbsp;
 				</c:if>
+				
 				<c:if test="${!empty MemberCode }">
-					<i class="fa-solid fa-circle-user" id="user_icon"></i>&nbsp;&nbsp;
+					<c:if test="${RepChannelPsa == default_channel_profile.png}">
+						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/default_channel_profile.png" class="channel-psa">
+					</c:if>
+					<c:if test="${RepChannelPsa != default_channel_profile.png}">
+						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/${RepChannelPsa }" class="channel-psa">
+					</c:if>
 				</c:if>
 				
 				<c:if test="${empty MemberCode }">
@@ -76,13 +153,14 @@
 			<div id="user_popup"> 
 				<ul id="user_list">
 					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberName }님</b></li>
+					<hr>
 					<%-- 내 채널 이미지 //이호찬 --%>
-					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?cha=${LastChannelCode }'"> &nbsp;<yt-icon class="style-scope ytd-compact-link-renderer"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 25px; height: 25px;"><g class="style-scope yt-icon">
-						<path d="M3,3v18h18V3H3z M4.99,20c0.39-2.62,2.38-5.1,7.01-5.1s6.62,2.48,7.01,5.1H4.99z M9,10c0-1.65,1.35-3,3-3s3,1.35,3,3 c0,1.65-1.35,3-3,3S9,11.65,9,10z M12.72,13.93C14.58,13.59,16,11.96,16,10c0-2.21-1.79-4-4-4c-2.21,0-4,1.79-4,4 c0,1.96,1.42,3.59,3.28,3.93c-4.42,0.25-6.84,2.8-7.28,6V4h16v15.93C19.56,16.73,17.14,14.18,12.72,13.93z" class="style-scope yt-icon"></path></g></svg><!--css-build:shady--></yt-icon>&nbsp;&nbsp;내 채널</li>
+					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?cha=${RepChannelCode }'"> &nbsp;
+					<i class="bi bi-camera-reels"></i>&nbsp;&nbsp;내 채널</li>
 					<li onclick="location.href='<%=request.getContextPath()%>'"> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
-					<li>&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;설정</li>
+					<li onclick="location.href='<%=request.getContextPath()%>/info.do'">&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
 					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
 				</ul>
 			</div>

@@ -8,6 +8,23 @@
  	<select id="owner" parameterType="memberdto" resultType="channeldto">
  		select * from user_channel where member_code = #{member_code} and channel_code = #{member_last_channel}
  	</select>
+ 	<select id="channelPsa" parameterType="String" resultType="String">
+		select channel_profil from user_channel where channel_code = #{channelCode}
+ 	</select>
+ 	<insert id="insertChannel" parameterType="channeldto">
+ 		insert into user_channel values(
+ 			#{channel_code},
+ 			#{channel_name},
+ 			default,
+ 			default,
+ 			'',
+ 			default,
+ 			'',
+ 			sysdate,
+ 			'',
+ 			#{member_code} 		
+ 		)
+ 	</insert>
  </mapper>
   
  

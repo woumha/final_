@@ -22,6 +22,16 @@ public class ChannelDAOImpl implements ChannelDAO {
 		return this.session.selectOne("owner", memberDTO);
 	}
 	
+	@Override
+	public String getChannelPsa(String channelCode) {
+		return this.session.selectOne("channelPsa", channelCode);
+	}
+	
+	@Override
+	public int insertChannel(ChannelDTO dto) {
+		return this.session.insert("insertChannel", dto);
+	}
+	
 //	@Override
 //	public int setVideoUpload(VideoPlayDTO playDTO) {
 //		return this.session.insert("video_update", playDTO);
