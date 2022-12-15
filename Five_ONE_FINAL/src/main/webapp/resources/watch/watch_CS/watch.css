@@ -24,6 +24,7 @@ button{
 	margin: 0 auto;
 	display: flex;
 	flex-direction: row;
+	margin-left: 2rem;
 }
 
 
@@ -403,7 +404,7 @@ button{
 } 
 
 /* 사이드바 CSS */
-.side_box {
+.side_container {
 	flex: 1;
 	background-color: blue;
 }
@@ -422,6 +423,52 @@ button{
 	display: block;
 }
 
+/* 네비게이션 CSS */
+.video_lsit_nav{
+	position: absolute;
+	width: 5rem;
+	min-width: 3rem;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.nav_item{
+	position: relative;
+	left: 0;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+
+}
+
+.nav_item{
+	
+}
+
+
+/* 비디오리스트 CSS */
+.video_list_wrap{
+	background-color: green;
+}
+
+
+.video_list_box{
+	background-color: red;
+	margin: 0.5rem;
+}
+.video_list_thumnail{
+	background-color: marmoon;
+}
+
+.video_list_img{
+	width: 100px;
+}
+.video_list_info{
+	background-color: purple;
+	width: 100%;
+}
 
 
 #join-wrap {

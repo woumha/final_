@@ -89,7 +89,15 @@ public class WatchController{
 	
 	
 	@RequestMapping("watch.do")
-	public String watch(@RequestParam("video_code") String video_code, Model model) {
+	public String watch(@RequestParam("video_code") String video_code,@RequestParam(value="playlist_code", required = false) String playList_code, Model model) {
+		
+		
+		if(playList_code == null) {
+			System.out.println("플레이리스트 없음");
+		}else {
+			List<VideoPlayDTO> playList = this.dao.getPlayList(playList_code);
+			model.addAttribute("playList_dto", playList);
+		}
 		
 		VideoPlayDTO video_dto = this.dao.getVideo(video_code);
 		
@@ -105,6 +113,7 @@ public class WatchController{
 		model.addAttribute("video_dto", video_dto);
 		model.addAttribute("channel_good", channel_good);
 		model.addAttribute("reply_count", reply_count);
+		
 		
 		return "/watch/watch";
 	}

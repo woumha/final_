@@ -24,9 +24,6 @@ public class SearchController {
 			
 			model.addAttribute("field", field);
 			model.addAttribute("keyword", keyword);
-			
-			System.out.println("field>>> " + field);
-			System.out.println("keyword>>>" + keyword);
 					
 			return "/search/mainSearch"; 
 	  }
@@ -35,11 +32,30 @@ public class SearchController {
 	 //ajax로 list출력
 	 @ResponseBody
 	  @RequestMapping("search_result.do")
-	  public List<VideoPlayDTO> search(@RequestParam("field") String field, @RequestParam("keyword") String keyword) {
+	  public List<VideoPlayDTO> search(@RequestParam("field") String field, @RequestParam("keyword") String keyword, @RequestParam("option") String option) {
 
-			List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword);
+			List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword, option);
+			
+			System.out.println("p field>>>" + field);
+			System.out.println("p keyword>>>" + keyword);
+			System.out.println("p option>>> " + option);
 					
 			return searchList; 
+	  }
+	 
+	 
+	 //ajax로 list출력(최신순)
+	 @ResponseBody
+	  @RequestMapping("search_result_new.do")
+	  public List<VideoPlayDTO> search_new(@RequestParam("field") String field, @RequestParam("keyword") String keyword, @RequestParam("option") String option) {
+
+			List<VideoPlayDTO> searchList2 = this.dao.searchVideoList_new(field, keyword, option);
+			
+			System.out.println("n field>>>" + field);
+			System.out.println("n keyword>>>" + keyword);
+			System.out.println("n option>>> " + option);
+					
+			return searchList2; 
 		 
 	  }
 	 

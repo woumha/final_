@@ -81,5 +81,11 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 
+	@Override
+	public List<VideoPlayDTO> getPlayList(String playList_code) {
+		return this.sqlSession.selectList("getPlayList", playList_code);
+	}
+
+
 	
 }
