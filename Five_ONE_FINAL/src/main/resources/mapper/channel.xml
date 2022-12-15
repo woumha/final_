@@ -51,6 +51,10 @@
  			#{member_code} 		
  		)
  	</insert>
+ 	
+ 	<update id="profil_update" parameterType="String">
+ 		update user_channel set channel_profil = #{channelCode}-profile.png where channel_code = #{channelCode}
+ 	</update>
  </mapper>
   
  

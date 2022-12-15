@@ -57,6 +57,7 @@ public class LoginServiceImpl implements LoginService {
 		return idCheck;
 	}
 	
+	// 멤버 코드
 	@Override
 	public String generateMembercode() {
 		String result = "";
@@ -70,15 +71,28 @@ public class LoginServiceImpl implements LoginService {
 
 	// 비디오 코드
 	@Override
-	public String videoCodeMaking() {
+	public String generateChannelCode() {
 		String result = "";
 		UUID uuid = UUID.randomUUID();
-		result = "CH-"+uuid.toString();
+		result = "MV-"+uuid.toString();
 		
 		System.out.println("새로 생성된 채널 코드 : "+result);
 		
 		return result;
 	}
+	
+	// 비디오 코드
+	@Override
+	public String generateVideoCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "CH-"+uuid.toString();
+		
+		System.out.println("새로 생성된 비디오 코드 : "+result);
+		
+		return result;
+	}
+	
 	
 	@Override
 	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName) {
