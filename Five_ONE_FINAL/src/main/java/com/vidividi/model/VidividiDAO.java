@@ -18,8 +18,8 @@ public interface VidividiDAO {
 	List<VideoPlayDTO> mainVideo_up();
 	
 	//검색 페이지 넘기기(인기순)
-	List<VideoPlayDTO> searchVideoList(String field, String keyword, String option);
+	List<VideoPlayDTO> searchVideoList(String field, String keyword, String option, int startNo, int endNo);
 	
-	List<VideoPlayDTO> searchVideoList_new(String field, String keyword, String option);
+	List<VideoPlayDTO> searchVideoList_new(String field, String keyword, String option, int startNo, int endNo);
 	
 }

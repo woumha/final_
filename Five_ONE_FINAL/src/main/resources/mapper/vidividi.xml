@@ -16,17 +16,24 @@
 	
 	<!-- main video list 출력(최신순) -->
 	<select id="video_list_up" parameterType="String" resultType="VideoPlayDTO">
-		select video_title, video_cont, channel_name, video_view_cnt, video_regdate, video_code from video_play order by video_regdate
+		select video_title, video_cont, channel_name, video_view_cnt, video_regdate, video_code from video_play order by video_regdate desc
 	</select>
 	
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++ 구분해요 ++++++++++++++++++++++++++++++++++++++++++++++ -->	
 
 	<!-- 검색 video list 인기순 출력(제목) -->
 	<select id="searchVideo" parameterType="hashmap" resultType="VideoPlayDTO">
-		select * from video_play where ${field} 
-		like '%' || #{keyword} || '%' order by video_good desc
+		<![CDATA[
+		   select * from
+			(select v.*, row_number() 
+			   over(order by video_good desc) rnum from video_play v where  ${field} like '%' || #{keyword} || '%' )
+			   where rnum >= #{startNo} and rnum <= #{endNo}
+		]]>	
+			
 	</select>
 	
+	
+
 	<!-- 검색 video list 인기순 출력(채널명) -->
 	<select id="ch_name" parameterType="hashmap" resultType="VideoPlayDTO">
 		select * from video_play where ${field} 
@@ -42,9 +49,13 @@
 	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++ 구분해요 ++++++++++++++++++++++++++++++++++++++++++++++ -->
 	
 	<!-- 검색 video list 최신순 출력(제목) -->
-	<select id="searchVideo_new" parameterType="hashmap" resultType="VideoPlayDTO">
-		select * from video_play where ${field} 
-		like '%' || #{keyword} || '%' order by video_regdate desc
+	<select id="searchVideo_new" parameterType="hashmap" resultType="VideoPlayDTO">		
+		<![CDATA[
+		   select * from
+			(select v.*, row_number() 
+			   over(order by video_regdate desc) rnum from video_play v where  ${field} like '%' || #{keyword} || '%' )
+			   where rnum >= #{startNo} and rnum <= #{endNo}
+		]]>	
 	</select>
 
 	

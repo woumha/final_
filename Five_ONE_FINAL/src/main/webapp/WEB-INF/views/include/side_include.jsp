@@ -21,7 +21,7 @@
             <div>
                 <div class="nav__brand">
                     <i class="fa-solid fa-bars nav__toggle" id="nav-toggle"></i>
-                    <a href="#" class="nav__logo"><i class="fa-solid fa-carrot"></i>&nbsp;VIDIVIDI</a>
+                    <a href="<%= request.getContextPath() %>/" class="nav__logo"><i class="fa-solid fa-carrot"></i>&nbsp;VIDIVIDI</a>
                 </div>
                 <div class="nav__list">
                     <a href="#" class="nav__link active_nav">
