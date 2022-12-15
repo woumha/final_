@@ -1,0 +1,246 @@
+@charset "UTF-8";
+
+body {
+margin: 0;
+padding: 0;
+}
+
+#wrap_myPage {
+/* background-color: yellow; */
+width: 100%;
+height: 1080px;
+}
+
+/* 왼쪽 사이드 서브 메뉴 영역 */
+#sub_menu_area{
+background-color: gray;
+width: 100px;
+height: 1080px;
+float: left;
+}
+
+/* 중앙 메인 컨텐츠 영역 */
+#content_area {
+/* background-color: blue; */
+width: 60%;
+height: auto;
+margin-top: 70px;
+float: right;
+}
+
+/* 오른쪽 사이드 채널 정보 영역 */
+#chanel_area {
+/* background-color: orange; */
+width: 10%;
+height: 1000px;
+text-align: center;
+margin-right: 8%;
+margin-left: 1%;
+float: right;
+}
+/* 컨텐츠 박스 공통 스타일 */
+.content_box {
+background-color: white;
+width: 100%;
+height: auto;
+}
+
+.test_video {
+border-radius: 10px;
+width: 210px;
+}
+
+.video_box {
+display: inline-block;
+margin-right: 0px;
+margin-left: 0px;
+margin-bottom: 30px;
+}
+
+.video_box p {  }
+
+.content_title_box {
+width: 100%;
+display: inline-block;
+}
+.content_title_box img { width: 25px; }
+.content_title1 {
+font-size: 20px;
+margin-left: 50px;
+float: left;
+}
+.content_title2 {
+margin-right: 40px;
+float: right;
+text-decoration: none;
+vertical-align: middle
+}
+.content_title1 a { text-decoration: none; }
+.content_title2 a { text-decoration: none; vertical-align: middle; }
+
+.hr_style { width: 95%; margin-top: 10px; margin-bottom: 10px;}
+
+.video_title_p {
+width: 215px;
+font-size: 15px; margin-bottom: -5px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+.video_title_p_his {
+width: 215px;
+font-size: 15px; margin-bottom: 12px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+
+.video_channel_p { font-size: 12px; margin-bottom: -15px;}
+.video_views_p { font-size: 12px; margin-bottom: -15px;}
+.video_upload_p { font-size: 10px; margin-bottom: -10px;}
+
+.info_box {
+display: inline-block;
+width: 90%;
+margin-top: 10px;
+margin-bottom: 7px;
+}
+.info_title {float: left;}
+.info_cont {float: right;}
+.info_title p { margin: 0px; font-size: 13px;}
+.info_cont p { margin: 0px; font-size: 13px;}
+
+#profile_icon {
+margin-top: 90px;
+overflow: hidden;
+}
+
+#profile_icon img{
+width: 70px;
+height: 70px;
+border-radius: 50%;
+object-fit: cover;
+margin-bottom: 10px;
+}
+
+.channel_hr { width: 90%; }
+
+#profile_box { margin-bottom: 30px; }
+
+/* 로그인 안했을 시 */
+#page_none {
+width: 100%;
+height: 800px;
+text-align: center;
+}
+#none_img { margin-top: 12%; }
+#none_title {
+font-size: 30px;
+font-weight: bold;
+}
+#none_text { font-size: 17px; }
+#none_btn {  }
+#none_btn {
+border: 0; outline: 0;
+font-size: 12px;
+width: 60px; height: 32px;
+border-radius: 30px;
+margin-top: 12px;
+}
+#none_btn:hover { background-color: #FB8703; }
+
+#reply_box { margin-bottom: 200px; }
+
+/* (foreach) 작성한 댓글 리스트 스타일 */
+.reply_list {
+display: inline-block;
+border-radius: 10px;
+padding-left: 10px;
+width: 200px;
+height: 100px;
+margin-left: 7px;
+font-size: 15px;
+margin-bottom: 10px;
+box-shadow: 5px 5px 5px gray;
+border: 1px solid;
+}
+
+/* (foreach) 댓글 작성자 p */
+.reply_list_writer {
+margin-top: 10px;
+font-size: 13px;
+}
+/* (foreach) 댓글 내용 p */
+.reply_list_cont {
+font-size: 12px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+/* (foreach) 댓글 업로드 날짜 p */
+.reply_list_date {
+font-size: 10px;
+}
+
+/* 재생목록 동영상 스타일 */
+.video_play {
+position: absolute;
+z-index: 2;
+border-radius: 10px;
+width: 210px;
+}
+
+.playlist_video_div {
+position: relative;
+width: 210px;
+height: 118px;
+}
+
+.playlist_lid {
+position: absolute;
+text-align: center;
+width: 50%;
+height: 118px;
+background-color: black;
+opacity:0.8; /* 불투명도 */
+margin-left: 105px;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+cursor: pointer;
+z-index: 3;
+}
+
+.playlist_lid_img {
+width: 20px;
+color: white;
+}
+.p_playlist_lid {
+font-size: 11px;
+color: white;
+margin-top: 35px;
+margin-bottom: 5px;
+}
+.p_none {
+margin-top: 5px;
+margin-bottom: 25px;
+margin-left: 20px;
+}
+
+#history_logo { margin-left: -80px; }
+#playlist_logo { margin-left: -120px; }
+#good_logo { margin-left: -194px; }
+#reply_logo { margin-left: -172px; }
+/* ======================= 미디어 쿼리 스타일 영역 ======================= */
+@media screen and (max-width: 1106px) {
+	#chanel_area {display: none;}
+	#content_area {margin-right: 30px;}
+	.content_box {width: 81%;}
+	.content_title1 {font-size: 18px;}
+}
+/* ========================= 미디어 쿼리 end ========================= */
