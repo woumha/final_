@@ -1,23 +1,162 @@
 @charset "UTF-8";
 
-/* -----------------------------------------video css------------------------------- */
-
-	#search_video{
-	 	flex: 8;
-	 	width: 1500px;
-	 	margin-left: 300px;
-	 	margin-top: 110px;
-	}
+/* --------------------------------------------------------------video css---------------------------------------------- */
+#search_video{
+	flex: 8;
+	width: 1500px;
+}
 	
-	video{
-		border-radius: 10px;
-		padding-right: 20px;
-		width: 659px;
-	}
-		
-	#re_video{
-		width: 660px;
-		height: 320px;
-		border-radius: 10px;
-		padding-right: 20px;
-	}
+video{
+	border-radius: 10px;
+	width: 360px;
+	height: 200px;
+}
+	
+#search_result{
+	margin-left: 320px;
+	margin-top: 110px;
+}
+
+/* 컨텐츠 박스 공통 스타일 */
+.content_box {
+background-color: white;
+width: 100%;
+height: auto;
+display: inline-block;
+}
+
+.video_box {
+display: inline-block;
+margin-right: 0px;
+margin-left: 0px;
+margin-bottom: 30px;
+}
+
+.video_pbox {
+width: 800px;
+vertical-align: top;
+margin-top: 0px;
+display: inline-block;
+word-break:break-all;
+margin-bottom: 30px;
+margin-left: 20px;
+}
+
+.video_title_p {
+font-size: 22px; margin-bottom: -10px; margin-top: 0px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+width: 800px;
+}
+
+.video_channel_p {
+font-size: 15px;
+margin-bottom: 0px;
+margin-top: 20px;
+width: 800px;
+}
+
+.video_view_date_p {
+font-size: 13px;
+margin-bottom: 0px;
+margin-top: 10px;
+width: 800px;
+}
+	
+.video_views_p {
+font-size: 13px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+width: 800px;
+margin-top: 5px;
+}
+
+.video_hash_p{
+font-size: 13px;
+margin-bottom: 0px;
+margin-top: 10px;
+width: 800px;
+height: 25px;
+background-color: #fc942c;
+border-radius: 15px;
+vertical-align: middle;
+color: white;
+padding-left: 10px;
+padding-top: 2px;
+}
+
+
+/*-------------------------------------정렬 변환 토글 버튼---------------------------------------- */
+
+.centerer {
+  position: absolute;
+  margin-top: 70px;
+  margin-left: 420px;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+
+#ch_img{
+	font-size: 2.5rem;	
+}
+
+.switcher {
+  display: inline-block;
+  height: 39px;
+  padding: 4px;
+  background: #fff;
+  border-radius: 2px;
+  width: 208px;
+  border-radius: 30px;
+  border: solid 1px #ddd;
+  position: relative;
+  
+}
+
+.switcher__input {
+  display: none;
+}
+
+.switcher__label {
+  float: left;
+  width: 50%;
+  font-size: 14px;
+  line-height: 30px;
+  color: #000;
+  text-align: center;
+  cursor: pointer;
+  position: inherit;
+  z-index: 10;
+  transition: color 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  will-change: transform;
+}
+
+.switcher__toggle {
+  position: absolute;
+  float: left;
+  height: 30px;
+  width: 50%;
+  font-size: 12px;
+  line-height: 30px;
+  cursor: pointer;
+  background-color: #fc942c;
+  border-radius: 30px;
+  left: 5px;
+  top: 4px;
+  transition: left 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+  will-change: transform;
+}
+
+.switcher__input:checked + .switcher__label {
+  color: #fff;
+}
+
+.switcher__input--yang:checked ~ .switcher__toggle {
+  left: 100px;
+}

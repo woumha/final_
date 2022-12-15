@@ -387,11 +387,9 @@
 		padding-bottom: 5px;
 	}
 	
-	
-	
 	#user_popup ul li{
 		font-size: 1rem;
-		color: #5c3306;
+		color: #424242;
 		margin: 5px;
 		list-style: none;
 	}
@@ -399,7 +397,7 @@
 	#user_nickname{
 		margin-top: 10px;
 		font-size: 2rem;
-		color: #5c3306;
+		color: #424242;
 	}
 	
 	#user_div b{
