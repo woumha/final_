@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="path" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,141 +12,17 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
 <!-- jQuery UI -->
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script> 
+<!-- member css -->
+<link rel="stylesheet" href="${path}/resources/member/member_join.css">
+<link rel="stylesheet" href="${path}/resources/member/member_cummon.css">
 <!-- toast -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <style type="text/css">
-	html, body, #join-page-wrap {
-		height: 100%;
-	}
+	
 
-	#join-wrap {
-		display: flex;
-		align-items: center;
-		height: 80%;
-	}
-	
-	#join-side-bar {
-		flex: 1;
-	}
-	
-	#join-content {
-		flex: 9;
-		height: 100%;
-		display: flex;
-		align-items: center;
-	}
-	
-	#join-content-box {
-		margin: auto;
-		width: 30%;
-	}
-	
-	#join-content-1, #join-content-2, #join-content-3 {
-		display: inline-block;
-		width: 100%;
-	}
-	
-	
-	#join-content-box div input, #join-content-box div span.block-span {
-		display: block;
-		width: 100%;
-		padding: 15px;
-		padding-top: 20px;
-		margin-top: 10px;
-		margin-bottom: 10px;
-	}
-	
-	input.password {
-		-webkit-text-security:disc;
-	}
-	
-	#join-process-bar {
-		width: 100%;
-		height: 5px;
-		background-color: lightgray;
-	}
-	
-	#bar {
-		width: 33%;
-		height: 100%;
-		background-color: #fc942c;
-	}
-	
-	div.label-input {
-		display: inline;
-		position: absolute;
-	    color: gray;
-	    transition: all 0.5s;
-	    margin-left: 20px;
-	    margin-top: 18px;
-	}
-	
-	label.label-input{
-		
-	}
-	
-	.join-input{
-		border-radius: 10px;
-		border: 1px solid gray;
-		background-color: transparent;
-		font-size: 1em;
-	}
-	
-	.join-input:focus{
-		outline: none;
-		box-shadow: none;
-	}
-	
-	.onfocus{
-		font-size: 0.6em;
-		margin-left:12px !important;
-		margin-top:8px !important;
-	}
-	
-	/* input[type=date]::-webkit-datetime-edit-text {
-	    -webkit-appearance: none;
-	    display: none;
-	}
-	input[type=date]::-webkit-datetime-edit-month-field{
-	    -webkit-appearance: none;
-	    display: none;
-	}
-	input[type=date]::-webkit-datetime-edit-day-field {
-	    -webkit-appearance: none;
-	    display: none;
-	}
-	input[type=date]::-webkit-datetime-edit-year-field {
-	    -webkit-appearance: none;
-	    display: none;
-	}
-	 */
 	 
-	 
-	 .date-empty:before{
-	 	content: attr(data-placeholder);
-	 	width: 100%;
-	 }
-	 
-	 /* 부트스트랩 토스트창 배경색 중복 수정 */
-	div.toast {
-		background-color: unset;
-	}
-	
-	div.toast-success {
-		background-color: #51A351;
-	}
-	div.toast-warning {
-		background-color: #f89406;
-	}
-	div.toast-info {
-		background-color: #2F96B4;
-	}
-	div.toast-error {
-		background-color: #BD362F;
-	}
-	
 </style>
 
 <script type="text/javascript">
@@ -164,18 +42,8 @@
 		$("#submit-1").attr("disabled", true);
 		$("#submit-2").attr("disabled", true);
 		
-		// input 창 placeholder 구현
-		$(".join-input").on('focus', function(){
-			$(this).prev('div').addClass('onfocus');
-		});
-				
-		$(".join-input").on('blur', function(){
-			if($(this).val() == ''){
-				$(this).prev('div').removeClass('onfocus');
-				$(this).prev('div').children().eq(0).hide();
-				$(this).prev('div').children().eq(1).show();
-			}
-		});
+		// input 창 placeholder 구현 ->js파일에서 모듈화
+		inputPlaceholder();
 		
 		
 		// 선택정보 입력 확인하는 함수(1가지 항목이라도 입력하면 활성화)
@@ -194,7 +62,7 @@
 		}
 		
 		// 필수입력 & 선택입력 확인하여 submit버튼 활성화하는 함수
-		$(".join-input").on('keyup', function(){
+		$(".member-input").on('keyup', function(){
 			
 			// (필수입력은 모두 입력해야 활성화)
 			if ($("#input-id").val() != '' && $("#input-pwd").val() != '' && $("#input-pwd-confirm").val() != '') {
@@ -208,15 +76,10 @@
 		});
 		
 		
+		
 		// input[type=date] placeholder 제거하는 함수
-		$("input[type=date].date-placeholder").on("change", function(){
-			if ($(this).val() == ""){
-				$(this).addClass("date-empty");
-				console.log($("#input-birth").val());
-			}else{
-				$(this).removeClass("date-empty");
-				console.log($("#input-birth").val());
-			}
+		noCalHolder(); 
+		$("#input-birth").on("change", function(){
 			
 			optionalInputChange();
 		});
@@ -261,7 +124,7 @@
 					}
 				},
 				error: function(){
-					toastr.warning("데이터 전송 오류");	
+					toastr.warning("아이디 중복 검사 오류");	
 				}
 			});
 				
@@ -306,23 +169,6 @@
 		
 	});
 
-/* 	function ajaxTest(){
-		$.ajax({
-			url : "./testajax.do",
-			type: "POST",
-			success : function(data){
-				
-				$(data).each(function(){
-					alert(this.member_code+"/"+this.member_id+"/"+this.member_name);
-				});
-				
-			},
-			error : function(){
-				alert("데이터 통신 오류");
-			}
-		});
-		
-	} */
 	
 	let newMemberCode;
 	
@@ -337,6 +183,7 @@
 				if (data != "fail"){
 					// 새로 생성된 멤버코드 반환받아 히든 태그에 저장
 					newMemberCode = data;
+					console.log('ajax 반환값 : ' +data);
 					$("#new-membercode").val(data);
 					// 창 전환, 프로세스 바 이동
 					$("#join-content-1").fadeOut('fast');
@@ -347,7 +194,7 @@
 				}
 			},
 			error : function(){
-				toastr.error("데이터 통신 에러");
+				toastr.error("이미 존재하는 아이디입니다.");
 			}
 			
 		});
@@ -373,7 +220,7 @@
 				
 			},
 			error: function(){
-				toastr.error("데이터 통신 에러");
+				toastr.error("선택정보 입력 실패");
 			}
 			
 		});		
@@ -398,24 +245,23 @@
 					<div id="join-content-1">
 						<form method="post" id="join-form-1">
 							<span class="block-span">간편회원가입</span>
-							<input type="hidden" name="member_code" id="new-membercode">
 							<div class="label-input" >
 								<label for="input-id" id="input-id-check"></label>
 								<label for="input-id" id="input-id-label">아이디</label>
 							</div>
-							<input name="member_id" class="join-input essential" id="input-id">
+							<input name="member_id" class="member-input essential" id="input-id">
 							
 							<div class="label-input" >
 								<label for="input-id" class="label-input" id="input-pwd-check"></label>
 								<label for="input-id" class="label-input" id="input-pwd-label">비밀번호</label>
 							</div>
-							<input name="member_pwd" class="password join-input essential" id="input-pwd">
+							<input name="member_pwd" class="password member-input essential" id="input-pwd">
 							
 							<div class="label-input" >
 								<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
 								<label for="input-id" class="label-input" id="input-pwd-confirm-label">비밀번호 확인</label>
 							</div>
-							<input name="check-pwd" class="password join-input essential" id="input-pwd-confirm">
+							<input name="check-pwd" class="password member-input essential" id="input-pwd-confirm">
 							
 							<input type="button" value="회원가입" class="join-form-btn" id="submit-1" onclick="joinMember()">
 						</form>
@@ -432,36 +278,36 @@
 						<span>선택정보를 입력하시면 더욱 편리하게 이용할 수 있어요</span>
 						</div>
 						<form method="post" id="join-form-2">
-							<input type="hidden" name="member_code" id="new-membercode">
+							<input type="hidden" name="member_code" id="new-membercode" value="멤버코드">
 							<div class="label-input" >
 								<label for="input-name" class="label-input" id="input-name-check"></label>
 								<label for="input-name" class="label-input" id="input-name-label">이름</label>
 							</div>
-							<input name="member_name" class="join-input optional" id="input-name"> <!-- 이름을 입력하지 않으면 id값을 받아와 이름으로 처리 -->
+							<input name="member_name" class="member-input optional" id="input-name"> <!-- 이름을 입력하지 않으면 id값을 받아와 이름으로 처리 -->
 							
 							<div class="label-input" >
 								<label for="input-email" class="label-input" id="input-email-check"></label>
 								<label for="input-email" class="label-input" id="input-email-label">이메일</label>
 							</div>
-							<input name="member_email" class="join-input optional" id="input-email"> <!-- *@*.* 형식인지 체크-->
+							<input name="member_email" class="member-input optional" id="input-email"> <!-- *@*.* 형식인지 체크-->
 							
 							<div class="label-input" >
 								<label for="input-birth" class="label-input" id="input-birth-check"></label>
 								<label for="input-birth" class="label-input" id="input-birth-label">생년월일</label>
 							</div>
-							<input type="date" name="member_birth" class="join-input optional date-placeholder date-empty" id="input-birth" data-placeholder=""> <!-- 일정 나이 이상이어야 조회가능한 동영상이 있음. -->
+							<input type="date" name="member_birth" class="member-input optional date-placeholder date-empty" id="input-birth" data-placeholder=""> <!-- 일정 나이 이상이어야 조회가능한 동영상이 있음. -->
 							
 							<div class="label-input" >
 								<label for="input-phone" class="label-input" id="input-phone-check"></label>
 								<label for="input-phone" class="label-input" id="input-phone-label">전화번호</label>
 							</div>
-							<input name="member_phone" class="join-input optional" id="input-phone"> <!-- 문자인증 하지않으면 동영상 업로드 안되게..? 불법적인 동영상 있을 수 있으니까 실명인증 -->
+							<input name="member_phone" class="member-input optional" id="input-phone"> <!-- 문자인증 하지않으면 동영상 업로드 안되게..? 불법적인 동영상 있을 수 있으니까 실명인증 -->
 							
 							<div class="label-input" >
 								<label for="input-addr" class="label-input" id="input-addr-check"></label>
 								<label for="input-addr" class="label-input" id="input-addr-label">주소</label>
 							</div>
-							<input name="member_addr" class="join-input optional" id="input-addr"> <!-- 주소는..없앨까...? -->
+							<input name="member_addr" class="member-input optional" id="input-addr"> <!-- 주소는..없앨까...? -->
 														
 							<input type="button" value="선택정보 입력" class="join-form-btn" id="submit-2" onclick = "infoUpdate()">
 							<input type="button" value="다음에 할래요" class="join-form-btn" id="submit-3" onclick = "DIVchange()">

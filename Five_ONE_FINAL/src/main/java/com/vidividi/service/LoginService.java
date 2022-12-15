@@ -12,6 +12,8 @@ public interface LoginService {
 	void logout(HttpSession session);
 	int joinIdCheck(String id);
 	String generateMembercode();
-	String videoCodeMaking();
+	String generateChannelCode();
+	String generateVideoCode();
 	ChannelDTO newChannel(String memberCode, String channelCode, String memberName);
+	int getAge(String date);
 }

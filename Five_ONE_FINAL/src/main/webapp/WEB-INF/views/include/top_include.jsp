@@ -18,18 +18,21 @@
 <!-- 자동완성 기능 라이브러리 -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
+
 <title>Insert title here</title>
 <style type="text/css">
 
-	img.channel-psa{
+	img.channel-backcolor{
 		border-radius: 100%;
 	}
 
-	#user_popup img.channel-psa{
+	#user_popup img.channel-backcolor{
 		width: 22px;
 	}
 	
-	#user_div img.channel-psa{
+	#user_div img.channel-backcolor{
 		width: 40px;
 		height: 40px;
 	}
@@ -39,53 +42,9 @@
 
 	$(function(){
 		if ('${RepChannelCode}' != ''){
-			let channelCode = '${RepChannelCode}';
-			switch(channelCode.charAt(3)){
-				case "1" :
-					$(".channel-psa").css("background-color","darkred");
-				break
-				
-				case "2" :
-					$(".channel-psa").css("background-color","orange");
-				break
-				
-				case "3" :
-					$(".channel-psa").css("background-color","darkyellow");
-				break
-				
-				case "4" :
-					$(".channel-psa").css("background-color","lightpink");
-				break
-				
-				case "5" :
-					$(".channel-psa").css("background-color","darkgreen");
-				break
-				
-				case "6" :
-					$(".channel-psa").css("background-color","lightblue");
-				break
-				
-				case "7" :
-					$(".channel-psa").css("background-color","darkblue");
-				break
-				
-				case "8" :
-					$(".channel-psa").css("background-color","purple");
-				break
-				
-				case "9" :
-					$(".channel-psa").css("background-color","gray");
-				break
-				
-				case "0" :
-					$(".channel-psa").css("background-color","lightgreen");
-				break
-				default:
-					$(".channel-psa").css("background-color","#fc942c");
-				break
-			} 
+			let memberCode = '${RepChannelCode}';
+			changeBackColor(memberCode);
 		}
-		
 	});
 	
 
@@ -130,10 +89,10 @@
 				
 				<c:if test="${!empty MemberCode }">
 					<c:if test="${RepChannelPsa == default_channel_profile.png}">
-						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/default_channel_profile.png" class="channel-psa">
+						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/default_channel_profile.png" class="channel-backcolor">
 					</c:if>
 					<c:if test="${RepChannelPsa != default_channel_profile.png}">
-						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/${RepChannelPsa }" class="channel-psa">
+						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/${RepChannelPsa }" class="channel-backcolor">
 					</c:if>
 				</c:if>
 				
@@ -161,7 +120,7 @@
 					<li onclick="location.href='<%=request.getContextPath()%>'"> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
-					<li onclick="location.href='<%=request.getContextPath()%>/info.do'">&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
+					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'">&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
 					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
 				</ul>
 			</div>

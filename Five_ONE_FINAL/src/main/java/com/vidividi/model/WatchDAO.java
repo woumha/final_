@@ -23,5 +23,6 @@ public interface WatchDAO {
 	
 	public List<VideoPlayDTO> getPlayList(String playList_code);
 	
+	public int getVideoCount(String channel_code);
 	
 }
