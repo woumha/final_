@@ -44,4 +44,17 @@
 		where playlist_code = #{playlist_code}
 	</select>
 	
+	<select id="getNavList" parameterType="hashmap" resultType="videoplayDTO">
+		<![CDATA[
+		select *
+		from (select * from video_play inner join user_channel using(channel_code)
+		order by dbms_random.random)
+		where rownum >= #{startNo} and rownum <= #{endNo};
+		]]>
+	</select>
+	
+	<select id="getNavListOption" parameterType="hashmap" resultType="videoplayDTO">
+		
+	</select>
+	
 </mapper>

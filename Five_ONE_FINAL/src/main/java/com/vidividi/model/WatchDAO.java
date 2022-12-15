@@ -23,5 +23,9 @@ public interface WatchDAO {
 	
 	public List<VideoPlayDTO> getPlayList(String playList_code);
 	
+	public List<VideoPlayDTO> getNavList(int startNo, int endNo);
+	
+	public List<VideoPlayDTO> getNavList(int startNo, int endNo, String navOption);
+	
 	
 }

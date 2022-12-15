@@ -36,7 +36,7 @@ public class WatchDAOImpl implements WatchDAO {
 	@Override
 	public List<ReplyDTO> getReply(String video_code, String reply_option, int startNo, int endNo) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		
 		map.put("video_code", video_code);
 		map.put("reply_option", reply_option);
@@ -51,7 +51,7 @@ public class WatchDAOImpl implements WatchDAO {
 	@Override
 	public List<ReplyDTO> getComment(String video_code, String reply_group, int startNo, int endNo) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		
 		map.put("video_code", video_code);
 		map.put("reply_group", reply_group);
@@ -66,7 +66,7 @@ public class WatchDAOImpl implements WatchDAO {
 	@Override
 	public int getCommentCount(String video_code, String reply_group) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		
 		map.put("video_code", video_code);
 		map.put("reply_group", reply_group);
@@ -84,6 +84,28 @@ public class WatchDAOImpl implements WatchDAO {
 	@Override
 	public List<VideoPlayDTO> getPlayList(String playList_code) {
 		return this.sqlSession.selectList("getPlayList", playList_code);
+	}
+
+
+	@Override
+	public List<VideoPlayDTO> getNavList(int startNo, int endNo) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		return this.sqlSession.selectList("getNavList", map);
+	}
+
+
+	@Override
+	public List<VideoPlayDTO> getNavList(int startNo, int endNo, String navOption) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("navOption", navOption);
+		
+		return this.sqlSession.selectList(navOption, map);
 	}
 
 
