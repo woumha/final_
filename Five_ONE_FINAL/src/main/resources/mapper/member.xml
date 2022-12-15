@@ -40,7 +40,7 @@
 			sysdate,
 			default,
 			default,
-			#{member_last_channel},
+			#{member_rep_channel},
 			default			
 		)
 	</insert>

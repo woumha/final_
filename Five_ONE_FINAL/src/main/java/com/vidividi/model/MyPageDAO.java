@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.VideoPlayDTO;
@@ -11,7 +12,7 @@ import com.vidividi.variable.VideoPlayDTO;
 public interface MyPageDAO {
 	
 	List<VideoPlayDTO> getHistory_list(String code);
-	List<VideoPlayDTO> getPlaylist_list(String code);
+	List<PlaylistDTO> getPlaylist_list(String code);
 	List<VideoPlayDTO> getGood_list(String code);
 	ChannelDTO getChannel_info(String code);
 	List<VideoPlayDTO> getChannel_video(String code);
@@ -28,4 +29,11 @@ public interface MyPageDAO {
 	int playlist_one_delete(Map<String, Object> map);
 	int updateSequence_p(int num);
 	int delete_playlist(Map<String, Object> map);
+	
+	List<ChannelDTO> getSubscribe_list(String code);
+	int getSubscribe_num(Map<String, Object> map);
+	int subscribe_one_delete(int num);
+	int updateSequence_s(int num);
+	/* ajax */
+	List<VideoPlayDTO> history_list(String code);
 }

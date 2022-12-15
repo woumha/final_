@@ -37,4 +37,11 @@
 	</select>
 	
 	
+	<select id="getPlayList" parameterType="String" resultType="videoplayDTO">
+		select *
+		from playlist p join (select * from video_play inner join user_channel using(channel_code)) v
+		on p.video_code = v.video_code
+		where playlist_code = #{playlist_code}
+	</select>
+	
 </mapper>

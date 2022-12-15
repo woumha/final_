@@ -60,13 +60,13 @@ public class ChannelController {
 		MemberDTO memberDTO = new MemberDTO();
 		
 		memberDTO.setMember_code(memCode);
+
 		memberDTO.setMember_rep_channel(repCcode);
 		System.out.println("memCode: " + memCode);
 		
 		//System.out.println("memberCode: " +memCode); // VD~~
 		//System.out.println("RepChannelCode: " + repCcode); // 888
-		
-		
+    
 		channelWorlddto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값
 		System.out.println("channelWorlddto: " + channelWorlddto);
 		

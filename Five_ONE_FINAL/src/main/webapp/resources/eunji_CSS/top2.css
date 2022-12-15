@@ -1,9 +1,9 @@
 @charset "UTF-8";
-
-	#logo{
-		cursor: pointer;
-	}
-	
+.card_a{
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: row;
+}
 
 	@media screen and (max-width: 1500px) {
 		#user_div{
@@ -44,37 +44,34 @@
 	
 	
 	@media screen and (min-width: 1501px) {
-	
-	#user_div{
-		margin-top: 32px;
-		flex: 1;
-		height: 60px;
-		color: white;
-		position: absolute;
-		right: 1px;
-		font-size: 1.5rem;
-		display: inline-flex;
-		margin-right: 1%;
-		vertical-align: bottom;
-		text-align: center;
+		#user_div{
+			margin-top: 32px;
+			flex: 1;
+			height: 60px;
+			color: white;
+			font-size: 1.5rem;
+			display: inline-flex;
+			margin-right: 1%;
+			vertical-align: bottom;
+			text-align: center;
 		}
 	}
 	
-	#wrap{
-		height: 80px;
+#wrap{
+		height: 5rem;
 		width: 100%;
 		background-color: white;
 		margin: 0px;
 		padding-bottom: 0px;
 		display: flex;
 		text-align: center;
+		jus
 	}
 	
-	#search_go {
+	.search_go {
 		width: 100%;
 		justify-content: center;
 		margin-top: 11px;
-		margin-left: -65px;
 	}
 
 	#search_input:focus {
@@ -86,10 +83,10 @@
 		  padding: 0;
 	}
 
+	
 	#search_div{
 		margin-top: 1%;
 		justify-content: center;
-		display: inline-flex;
 		align-items: center;
 		vertical-align: middle;
 		flex: 1;
@@ -102,15 +99,19 @@
 		position: relative;
 	}
 	
+	.search_bar{
+		
+		height: 3rem;
+	}
+	
 	#search_input{
 		display: inline-flex;
 		position: relative;
 		justify-content: center;
 		align-items: center;
 		margin: 0 auto;
-		margin-left: -60px;
-		width: 50em;
-		height: 3em;
+		font-size:17px;
+		width: 50rem;
 		background-color: #fc942c;
 		color: white;
 		border-radius: 5px 0 0 5px;
@@ -198,7 +199,7 @@
 	  height: 48px;
 	  border-radius: .25em;
 	  overflow: hidden;
-	  margin-right: 68px;
+	  margin-right:0.5rem;
 	  
 	}
 	
@@ -253,7 +254,6 @@
 	
   	#user_login:after {
 	  position: absolute;
-	  font-size: 17px;
 	  content: "";
 	  width: 0;
 	  height: 100%;
@@ -296,7 +296,6 @@
 	
  	#user_join:after {
 	  position: absolute;
-	  font-size: 17px;
 	  content: "";
 	  width: 0;
 	  height: 100%;
@@ -339,7 +338,6 @@
 	
  	#user_logout:after {
 	  position: absolute;
-	  font-size: 17px;
 	  content: "";
 	  width: 0;
 	  height: 100%;
@@ -387,9 +385,11 @@
 		padding-bottom: 5px;
 	}
 	
+	
+	
 	#user_popup ul li{
 		font-size: 1rem;
-		color: #424242;
+		color: #5c3306;
 		margin: 5px;
 		list-style: none;
 	}
@@ -397,7 +397,7 @@
 	#user_nickname{
 		margin-top: 10px;
 		font-size: 2rem;
-		color: #424242;
+		color: #5c3306;
 	}
 	
 	#user_div b{
@@ -406,49 +406,38 @@
 	
 	
 	/* ------------------------------------------------자동완성창 css--------------------------------------- */
-	 .hide {
-		  display: none !important;
-		} 
-		
-		.rel_search {
-		  position: absolute;
-		  top:75px;
-		  left:335px;
-		  flex-direction:column; 
-		  z-index: 10000; 
-		  justify-content : space-around;
-		  border: 1px solid #e4e7e8;
-		  border-radius: 0 0 6px 6px;
-		  width: 50em;
-		  text-align: left;
-		  margin-left: 20.8%;
-		  line-height: 1.8rem;
-		  background-color: #fff;
-		  border-top: 0;
-		  box-shadow: 0 2px 3px 0;
-		}	
-		
-		
-		.pop_rel_keywords {
-		  list-style: none;
-   		  margin-left: -50px;
-    	  width: 50em;
-		}
-		
-		.pop_rel_keywords > li {
-		  line-height : 250%;
-		  width: 50em;
-		}
-		
-		li.selected {
-			background-color: #facc9d;
-		    margin-left: 9px;
-		    padding-left: 10px;
-		    width: 50em;
-		}
-		
-		.autolist{
-			margin-left: 9px;
-		    padding-left: 10px;
-		    width: 50em;
-		}
+.hide {
+  display: none !important;
+} 
+
+.rel_search {
+  position: absolute;
+  top:75px;
+  flex-direction:column; 
+  z-index: 10000; 
+  justify-content : space-around;
+  border: 1px solid #e4e7e8;
+  border-radius: 0 0 6px 6px;
+  width: 50em;
+  text-align: left;
+  line-height: 1.8rem;
+  background-color: #fff;
+  border-top: 0;
+  box-shadow: 0 2px 3px 0;
+}	
+
+.pop_rel_keywords {
+  list-style: none;
+  margin-left: -25px;
+}
+
+.pop_rel_keywords > li {
+  line-height : 250%;
+  width: 49.8em;
+}
+
+li.selected {
+	background-color: #facc9d;
+	margin-left: -18px;
+	padding-left: 10px;
+}

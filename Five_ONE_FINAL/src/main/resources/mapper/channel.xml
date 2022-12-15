@@ -34,6 +34,23 @@
  	<select id="channel_new_video" parameterType="String" resultType="videoplayDTO">
  		select * from (select * from video_play where channel_code =#{new_code} order by video_regdate) where <![CDATA[rownum <= 1]]>
  	</select>
+ 	<select id="channelPsa" parameterType="String" resultType="String">
+		select channel_profil from user_channel where channel_code = #{channelCode}
+ 	</select>
+ 	<insert id="insertChannel" parameterType="channeldto">
+ 		insert into user_channel values(
+ 			#{channel_code},
+ 			#{channel_name},
+ 			default,
+ 			default,
+ 			'',
+ 			default,
+ 			'',
+ 			sysdate,
+ 			'',
+ 			#{member_code} 		
+ 		)
+ 	</insert>
  </mapper>
   
  

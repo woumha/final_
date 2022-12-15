@@ -30,6 +30,9 @@ public class HomeController {
 
     @Inject
     private MemberDAO memberDAO;
+    
+    @Inject
+    private ChannelDAO channelDAO;
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
@@ -37,7 +40,6 @@ public class HomeController {
     public String home(Locale locale, Model model, HttpSession session) {
 
         if (session.getAttribute("MemberCode")!=null) {
-
             String memberCode = (String)session.getAttribute("MemberCode");
             String repChannelCode = (String)session.getAttribute("RepChannelCode");
             MemberDTO memberDTO = memberDAO.getMember(memberCode);

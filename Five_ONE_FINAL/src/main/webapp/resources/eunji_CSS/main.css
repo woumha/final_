@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+html body {
+	outline: none;
+}
+
+
 	/* 커서 이미지 변경 */
 	
 	body {
@@ -123,7 +128,6 @@
 			background-color: #fc942c;
 		}
 		
-     	
      	#video_table{
      		width: 1500px;
      		display: flex;
@@ -138,10 +142,7 @@
      	}
      	
 		video{
-			width: 320px;
-			height: 180px;
 			border-radius: 10px;
-			padding-right: 20px;
 		}
 		
 		#video_view_ctn, #video_title, #video_channel{
@@ -156,15 +157,25 @@
 		tr { display: block; float: left; }
 		th, td { display: block; }	
      	
-   /* --------------------------------------------글자 설정--------------------------------------- */ 
+   /* --------------------------------------------글자 설정------------------------------------------ */ 
      	 
      	 td{
      	 	font-size: 0.8rem;
+     	 	vertical-align: text-top;
      	 }
      	 
      	 #video_title{
-     		 font-size: 1rem;
+     		 font-size: 1.1rem;
      		 font-weight: bold;
+     	 }
+     	 
+     	 
+     /*------------------------------------------유저 이미지 설정-------------------------------------  */	 
+     	 
+     	 #ch_img{
+     	 	font-size: 2.5rem;
+     	 	padding-top: 2px;
+     	 	padding-left: 2px;
      	 }
      	 
      	 
@@ -307,7 +318,7 @@
 	   }
 	   
 	   #re_label{
-	  	margin-top: 0%;
+	  	margin-top: -30px;
 	  	margin-left: 3.1%;
 	  }
 	  
