@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+	/* 페이지 수직 값 받아오기*/
+	html, body, #login-page-wrap {
+		height: 100%;
+	}
+
+	#login-wrap {
+		display: flex;
+		flex-direction: column;
+		height: 80%;
+		width: 50%;
+		margin:auto;
+	}
+	
+	#login-wrap-top {
+		flex: 1;
+		display: flex;
+		align-items: center;
+	}
+	
+	#login-wrap-bottom {
+		flex: 9;
+		display: flex;
+		align-items: center;
+	}
+	
+	#login-logo {
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	#login-component-left {
+		flex: 5;
+		padding-right: 50px;
+	}
+	#login-component-right {
+		flex: 5;
+		padding-left: 50px;
+	}
+	
+

@@ -119,7 +119,7 @@ public class ChannelController {
 			
 			VideoPlayDTO playdto = new VideoPlayDTO();
 			String[] name = fileName(mRequest);
-			playdto.setVideo_code(service.videoCodeMaking());
+			playdto.setVideo_code(service.generateVideoCode());
 			playdto.setChannel_code(channelWorlddto.getChannel_code());//lastChannelCode
 			playdto.setChannel_name(channelWorlddto.getChannel_name());
 			playdto.setVideo_title(title);

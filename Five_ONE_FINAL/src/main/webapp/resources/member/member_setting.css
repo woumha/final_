@@ -1,0 +1,147 @@
+@charset "UTF-8";
+
+	
+	#info-wrap {
+		display: flex;
+	}
+	
+	#info-side-bar {
+		flex: 1;
+	}
+	
+	#info-content {
+		flex: 9;
+		display: flex;
+		flex-direction: column;
+	}
+	
+	#info-wrap-top {
+		flex: 2;
+		text-align: center;
+	}
+	
+	#info-wrap-bottom {
+		flex: 8;
+	}
+	
+	#info-logo {
+		height: 100px;
+		display: flex;
+		align-items: center;
+	}
+	
+	#info-navi-wrap {
+		height: 60px;
+	}
+	
+	ul.info-navi {
+		list-style: none;
+	    padding-left: 0;
+	    display: flex;
+	    justify-content: space-around;
+	    width: 50%;
+	    height: 40px;
+	    margin: auto;
+	    border-bottom: 2px solid lightgray;
+	}
+	
+	ul.info-navi li {
+		font-size: 1.3em;
+		color: gray;
+		transition: all 0.2s;
+		border-bottom: 4px solid transparent;
+	}
+	
+	ul.info-navi li:hover {
+		cursor: pointer;
+		border-bottom: 4px solid #fc942c;
+	}
+
+
+	#info-protect-card, #info-premium-card {
+		display: inline-block;
+		border: 1px solid lightgray;
+		border-radius: 10px;
+		padding: 30px;
+		width: 48%;
+		text-align: left;
+	}
+	
+	#info-protect-card {
+		margin-right: 1%;
+	}	
+	
+	#info-premium-card {
+		margin-left: 1%;
+	}	
+	
+	#info-profile-card, #info-channel-card {
+		border: 1px solid lightgray;
+		border-radius: 10px;
+		padding: 30px;
+		width: 49%;
+		margin: auto;
+	}
+
+	#info-card-wrap-bottom {
+		width: 50%;
+		display: flex;
+		margin-left: auto;
+		margin-right: auto;
+		justify-content: center;
+	}
+	
+	#info-profile-card-content {
+		text-align: left;
+	}
+	
+	#info-profile-card-content-left, #info-profile-card-content-right {
+		flex: 5;
+	}
+	
+	#info-profile-card-title, #info-channel-card-title{
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	div.card-in-card{
+		margin-top:10px;
+		margin-bottom:10px;
+		border-radius: 10px;
+		border: 1px solid lightgray;
+		padding: 10px;
+	}
+	
+	div.card-in-card:hover{
+		cursor: pointer;
+		border: 1px solid #fc942c;
+		background-color: rgba(252, 148, 44, 0.1);
+	}
+	
+	#info-channel-card-content {
+		text-align: left;
+	}
+	
+	#info-profile-table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+	
+	#info-profile-table th{
+		width: 15%;
+	}
+	#info-profile-table td{
+		width: 35%;
+	}
+	
+	img.channel-backcolor{
+		border-radius: 100%;
+		width: 80%;"
+	}
+	
+	span.info-logo {
+		font-size: 1.5em;
+		color: #fc942c;
+		margin: auto;
+	}
+	
