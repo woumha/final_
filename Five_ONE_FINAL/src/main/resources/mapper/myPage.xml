@@ -95,5 +95,12 @@
 		<![CDATA[update subscribe set subscribe_num = subscribe_num - 1 where subscribe_num > #{num}]]>
 	</update>
 	
+	<select id="getHistory_list" resultType="videoplayDTO" parameterType="Map">
+		<![CDATA[select * from (select b.*, row_number()
+				 over(order by video_regdate desc) rnum from video_play b 
+				 where video_code in (select video_code from history where channel_code = #{code})) 
+				 where rnum >= #{startNo} and rnum <= #{endNo}]]>
+	</select>
+	
 </mapper>
 

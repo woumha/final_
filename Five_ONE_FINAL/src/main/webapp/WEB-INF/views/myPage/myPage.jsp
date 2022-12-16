@@ -70,6 +70,7 @@
 					<div class="video_box">
 						<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
 						<p class="video_title_p_his">${h_dto.getVideo_title() }</p>
+						<%-- <img class="more_img${h_dto.getVideo_code() }" src="${pageContext.request.contextPath}/resources/img/more.png"> --%>
 						<p class="video_channel_p">${h_dto.getChannel_name() }<p>
 						<p class="video_views_p">조회수 
 						<%-- 조회수 출력 영역 --%>
@@ -88,7 +89,7 @@
 							<fmt:formatNumber value="${cnt / 100000000 }" pattern=".00" />억회
 						</c:if>
 						<%-- 구독자 출력 영역 끝 --%>
-						• ${h_dto.getVideo_regdate().substring(0,10) }<p>
+						• ${h_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
 			</c:if>
@@ -165,7 +166,7 @@
 							<fmt:formatNumber value="${g_cnt / 100000000 }" pattern=".00" />억회
 						</c:if>
 						<%-- 구독자 출력 영역 끝 --%>
-						• ${g_dto.getVideo_regdate().substring(0,10) }<p>
+						• ${g_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
 			</c:if>
@@ -191,11 +192,11 @@
 						<p class="reply_list_writer">${c_info.getChannel_name() }</p>
 						<p class="reply_list_cont">${r_dto.getReply_cont() }</p>
 						<c:if test="${r_dto.getReply_regdate() ne null }">
-							<p class="reply_list_date">작성일 ${r_dto.getReply_regdate().substring(0,10) }</p>
+							<p class="reply_list_date">작성일 ${r_dto.getReply_regdate() }</p>
 						</c:if>
-						<c:if test="${r_dto.getReply_regdate() eq null }">
+						<%-- <c:if test="${r_dto.getReply_regdate() eq null }">
 							<p class="reply_list_date">${r_dto.getReply_update().substring(0,10) }•수정됨 </p>
-						</c:if>
+						</c:if> --%>
 					</div>
 				</c:forEach>
 			</c:if>
