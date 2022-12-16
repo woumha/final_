@@ -56,5 +56,10 @@
 	<select id="getNavListOption" parameterType="hashmap" resultType="videoplayDTO">
 		
 	</select>
+
+	<select id="getVideoCount" parameterType="String" resultType="int">
+ 		select count(*) from video_play where channel_code = #{channel_code}
+ 	</select>
+
 	
 </mapper>

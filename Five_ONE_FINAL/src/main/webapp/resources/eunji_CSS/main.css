@@ -1,15 +1,17 @@
 @charset "UTF-8";
 
+
+/* --------------------------------------------------------------------------------------------------- */
+
 html body {
 	outline: none;
 }
-
 
 	/* 커서 이미지 변경 */
 	
 	body {
 		font-family: 'Noto Sans KR' !important;
-		cursor: url('../eunji_IMG/cursor_rabbit.png'),auto;
+		cursor: url('../eunji_IMG/bunny.png'),auto;
 	}
 
 	@media screen and (max-width: 992px) {
@@ -152,6 +154,7 @@ html body {
 		
 		#video_view_ctn{
 			padding-bottom: 5px;
+			margin-bottom: 10px;
 		}
 	
 		tr { display: block; float: left; }

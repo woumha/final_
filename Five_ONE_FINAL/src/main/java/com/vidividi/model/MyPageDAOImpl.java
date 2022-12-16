@@ -1,5 +1,6 @@
 package com.vidividi.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -136,4 +137,21 @@ public class MyPageDAOImpl implements MyPageDAO {
 	public int updateSequence_s(int num) {
 		return this.sqlSession.update("updateSeq_s", num);
 	}
+
+	@Override
+	public List<VideoPlayDTO> getHistoryListCount(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		System.out.println("code >>> "+code);
+		System.out.println("startNo >>> "+startNo);
+		System.out.println("endNo >>> "+endNo);
+		
+		map.put("code", code);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		
+		return this.sqlSession.selectList("getHistory_list", map);
+	}
+
+	
 }
