@@ -2,6 +2,7 @@ package com.vidividi.five.one;
 
 import java.io.IOException;
 
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,12 +17,14 @@ import javax.servlet.http.HttpSession;
 
 
 import org.apache.catalina.connector.Response;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +32,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.vidividi.model.ChannelDAO;
+import com.vidividi.model.VideoPlayDAO;
+import com.vidividi.model.VideoPlayDAOImpl;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
@@ -42,6 +47,8 @@ public class ChannelController {
 	@Inject
 	private ChannelDAO dao;
 	
+	@Inject
+	private VideoPlayDAO videodao;
 	
 	@Autowired
 	private LoginService service;
@@ -162,28 +169,41 @@ public class ChannelController {
 	
 	// 영상 관리 페이지
 	@RequestMapping("channel_manager.do")
-	public String manager(Model model, @RequestParam("code") String code) {
+	public String manager(Model model, @RequestParam("code") String code, HttpServletResponse response) {
+		response.setContentType("text/html charset=UTF-8");
+		
 		List<VideoPlayDTO> videoList = this.dao.getVideoList(code);
 		
-		
 		model.addAttribute("currentOwner", channelWorlddto);
-		model.addAttribute("list", videoList);
-		
+		model.addAttribute("mvList", videoList);
+	
 		return "channel/channel_manager";
 	}
 	
 	// 체널 프로필 이미지 업로드
 	@RequestMapping("channel_profil.do")
-	public void profilImg(Model model, MultipartHttpServletRequest mRequest , HttpServletResponse response) throws IOException {
+	public void profilImg(Model model, MultipartHttpServletRequest mRequest, HttpServletResponse response) throws IOException {
 		System.out.println("mrequest: " + mRequest);
 		
-//		String[] name = fileName(mRequest);
-//		
-//		sendPosition = "profilChange";
-//		uploadFile.fileChangeUpload(mRequest, sendPosition, chCode, dynamicPath());
-//		
-//		int check = this.dao.setChangeChannelProfil(chCode);
-//		PrintWriter out =  response.getWriter();
+		
+		sendPosition = "profilChange";
+		//uploadFile.fileChangeUpload(mRequest, sendPosition, chCode, dynamicPath());
+		
+		//int check = this.dao.setChangeChannelProfil(chCode);
+		//PrintWriter out =  response.getWriter();
+	}
+	
+	@RequestMapping("video_update_modal.do")
+	public String setVideoUpdate(Model model, @RequestParam("video_code") String code, HttpServletResponse response) {
+		response.setContentType("text/html; charset=UTF-8");
+		
+		VideoPlayDTO playdto = new VideoPlayDTO();
+		playdto.setVideo_code(code);
+		
+		playdto = this.videodao.getVideoOne(playdto.getVideo_code());
+		
+		model.addAttribute("list", playdto);
+		return "channel/channel_update_modal";
 	}
 	
 	// 영상 이름 받아오기
