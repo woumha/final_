@@ -13,7 +13,6 @@
 <!-- 스타일 시트 -->
 <link rel="stylesheet" href="${path }/resources/eunji_CSS/main.css">	
 
-
 <title>VIDIVIDI</title>
 </head>
 
@@ -102,7 +101,14 @@
 	
 	
 <%-- 동영상 리스트 영역 --%>
-	  <div id="video_list"> </div> 
+	<div id="video_list"> </div> 
+	  
+
+<%-- 하단 영역 --%>	  
+<%-- 	<div id="bottom_wrap">
+		<jsp:include page="./include/bottom_include.jsp"/>
+	</div>
+	 --%>
 	
 </body>
 
@@ -136,7 +142,19 @@ function getContextPath(){
 				table += "<td colspan='2'>" + "<video width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
 				table += "<td id= 'video_title'>" + "<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
 				table += "<td id = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + this.channel_name + "</td>";
-				table += "<td id = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수 : &nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+				table += "<td id = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+				table += "</tr>";
+				table += "<tr>";
+				table += "<td>" + "</td>";
+				table += "</tr>";
+				table += "<tr>";
+				table += "<td>" + "</td>";
+				table += "</tr>";
+				table += "<tr>";
+				table += "<td>" + "</td>";
+				table += "</tr>";
+				table += "<tr>";
+				table += "<td>" + "</td>";
 				table += "</tr>";
 				
 				}); //each end
@@ -177,8 +195,19 @@ function getMainVideoList_recent(){
 					table += "<td colspan='2'>" + "<video width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
 					table += "<td id= 'video_title'>" + "<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
 					table += "<td id = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + this.channel_name + "</td>";
-					table += "<td id = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +'조회수 : &nbsp;' + this.video_view_cnt + "&nbsp; &nbsp;" + this.video_regdate + "</td>";
+					table += "<td id = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
 					table += "</tr>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
+					table += "</tr>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
+					table += "</tr>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
+					table += "</tr>"
 				}); //each end
 				
 				table += "</table>";
