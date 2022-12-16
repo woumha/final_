@@ -32,17 +32,11 @@ width: 100%;
 height: 1080px;
 }
 
-
-/* area 공통 스타일 */
-.area_style{
-
-}
 /* 왼쪽 사이드 서브 메뉴 영역 */
 #sub_menu_area{
 background-color: gray;
 width: 100px;
 height: 1080px;
-
 float: left;
 }
 
@@ -61,7 +55,6 @@ margin-left: 14%;
 /* background-color: orange; */
 width: 250px;
 margin-top: 100px;
-
 position: fixed;
 right: 10%;
 }
@@ -105,8 +98,6 @@ display: inline-block;
 font-size: 20px;
 margin-left: 15px;
 }
-
-
 .content_title1 a { text-decoration: none; }
 
 .video_title_p {
@@ -128,13 +119,11 @@ display: -webkit-box;
 -webkit-box-orient: vertical;
 }
 
-
 .btn {
 background-color: white;
 font-size: 15px;
 color: black;
 text-decoration: none;
-
 margin-left: 10px;
 }
 .btn span{
@@ -208,7 +197,7 @@ cursor: pointer;
 		<div id="history_search_area">
 			<form action="<%=request.getContextPath()%>/playlist_search.do">
 				<input type="hidden" name="channel_code" value="${channel_code }">
-				<input type="hidden" name="playlist_no" value="${playlist_no }">
+				<input type="hidden" name="playlist_code" value="${playlist_code }">
 				<input type="text" class="history_search" name="keyword" placeholder="재생목록 검색">
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
 			</form>
@@ -218,7 +207,7 @@ cursor: pointer;
 		<div id="profile_info">
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=995"><span>🗃</span> 내 보관함</a></p>
+					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=${channel_code }"><span>🗃</span> 내 보관함</a></p>
 				</div>
 			</div>
 			
@@ -250,12 +239,11 @@ cursor: pointer;
 			<c:if test="${!empty playlist }">
 			<div class="test">
 				<p class="content_title1">
-					<a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=${channel_code }&playlist_title=${playlist_title }&playlist_no=${playlist_no }">
+					<a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=${channel_code }&playlist_title=${playlist_title }&playlist_code=${playlist_code }">
 						재생목록
 					</a>
 				</p>
 			</div>
-			
 			
 			<c:forEach items="${playlist }" var="p_dto">
 			<div class="video_box">
@@ -265,7 +253,7 @@ cursor: pointer;
 					<p class="video_channel_p">${p_dto.getChannel_name() } • 조회수 ${p_dto.getVideo_view_cnt() }회<p>
 					<p class="video_views_p">${p_dto.getVideo_cont() }<p>
 				</div>
-				<a href="<%=request.getContextPath() %>/playlist_one_delete.do?video_code=${p_dto.getVideo_code() }&channel_code=${channel_code }&playlist_no=${playlist_no }">
+				<a href="<%=request.getContextPath() %>/playlist_one_delete.do?video_code=${p_dto.getVideo_code() }&channel_code=${channel_code }&playlist_code=${playlist_code }">
 					<img class="video_history_d_img" src="${pageContext.request.contextPath}/resources/img/delete.png">
 				</a>
 			</div>
@@ -286,43 +274,29 @@ height: 300px;
 top: 5.5px;
 right: 5.5px;
 }
-#h_d_title {
+#p_d_title {
 margin-top: 25px;
 font-size: 25px;
 }
-#h_d_btn {
+#p_d_btn {
 float: right;
 margin-right: 10px;
 margin-bottom: 10px;
 }
-#h_s_title {
-font-size: 25px;
-}
-#h_s_btn {
-float: right;
-margin-right: 10px;
-margin-bottom: 10px;
-}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <!-- ======================== 모달창 관련 영역 ========================  -->
 <div id="playlist_delete" class="modal">
-	<p id="h_d_title">시청 기록을 삭제할까요?</p>
-	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
+	<p id="p_d_title">재생목록을 삭제할까요?</p>
+	<p>현재 선택된 재생목록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
 	<br>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
-	<button id="h_d_btn" onclick="location.href='delete_playlist.do?channel_code=${channel_code}&playlist_no=${playlist_no }'">시청 기록 지우기</button>
+	<button id="p_d_btn" onclick="location.href='delete_playlist.do?channel_code=${channel_code}&playlist_code=${playlist_code }'">시청 기록 지우기</button>
 </div>
-<div id="playlist_stop" class="modal">
-	<p id="h_s_title">시청 기록을 중지할까요?</p>
-	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 기록 중지됩니다.(임시 내용입니다)</p>
-	<br>
-	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
-	<br>
-	<button id="h_s_btn" onclick="location.href='dont_save_playlist.do?member_code=VD00002'">시청 기록 중지하기</button>
-</div>
+
 <!-- ====================== 모달창 자바 스크립트 영역 ====================== -->
 <script>
 	$('a[href="#playlist_delete"]').click(function(event) {
@@ -331,12 +305,7 @@ margin-bottom: 10px;
 			fadeDuration: 250
 		});
 	});
-	$('a[href="#playlist_stop"]').click(function(event) {
- 		event.preventDefault();
-		$(this).modal({
-			fadeDuration: 250
-		});
-	});
+
 </script>	
 <!-- ======================= 모달창 관련 영역 end =======================  -->
 </body>

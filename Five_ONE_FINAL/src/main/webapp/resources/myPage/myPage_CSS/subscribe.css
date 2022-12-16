@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+body { margin: 0; padding: 0; }
+
+#wrap_myPage {
+/* background-color: yellow; */
+width: 100%; }
+
+#content_box {
+margin-top: 94px;
+margin-left: 300px;
+}
+
+#subscribe_title {
+	
+font-size: 16px;
+font-weight: bold;
+margin-bottom: 20px;
+}
+
+/* 오른쪽 사이드 채널 정보 영역 */
+.chanel_area {
+width: 210px;
+text-align: center;
+float: left;
+margin-left: 30px;
+margin-right: 30px;
+margin-top: 40px;
+margin-bottom: 40px;
+}
+#chanel_area_plus:hover {
+cursor: pointer;
+}
+
+.channel_box {  }
+
+.channel_icon { overflow: hidden; }
+
+.channel_icon img {
+width: 103px;
+height: 103px;
+border-radius: 50%;
+object-fit: cover;
+margin-bottom: 10px;
+}
+
+.channel_name {
+width: 210px;
+height: 48px; /* 채널명 한줄 24px, 최대 두줄 48px */
+margin-left: auto;
+margin-right: auto;
+font-size: 14px;
+display: table-cell;
+vertical-align: middle;
+padding-right: 25px;
+padding-left: 25px;
+}
+.channel_name p { color: #0F0F0F; }
+
+.info_box { width: auto; }
+.info_text { font-size: 12px; }
+.info_text p {
+margin: 0;
+font-size: 13px;
+color: #606060;
+}
+
+.cancel_btn {
+border: 0; outline: 0;
+font-size: 12px;
+width: 60px; height: 32px;
+border-radius: 30px;
+margin-top: 12px;
+}
+.cancel_btn:hover:before {
+content: '구독취소';
+font-size: 12px;
+}
+.cancel_btn:hover {
+background-color: #FB8703;
+font-size:0;
+}
+.cancel_btn_plus {
+border: 0; outline: 0;
+font-size: 12px;
+width: 60px; height: 32px;
+border-radius: 30px;
+margin-top: 12px;
+}
+.cancel_btn_plus:hover { background-color: #FB8703; }
+
+/* 로그인 안했을 시 */
+#page_none {
+width: 100%;
+height: 800px;
+text-align: center;
+}
+#none_img { margin-top: 12%; margin-bottom: 20px;}
+#none_title {
+font-size: 30px;
+font-weight: bold;
+}
+#none_text { font-size: 17px; }
+#none_btn {  }
+#none_btn {
+border: 0; outline: 0;
+font-size: 12px;
+width: 60px; height: 32px;
+border-radius: 30px;
+margin-top: 12px;
+}
+#none_btn:hover { background-color: #FB8703; }
+
+
+
+/* ======================= 미디어 쿼리 스타일 영역 ======================= */
+@media screen and (max-width: 1500px) {
+	#content_box {
+		margin-left: 200px;
+	}
+}
+@media screen and (max-width: 1200px) {
+	#content_box {
+		margin-left: 130px;
+	}
+	#subscribe_title {
+		margin-left: 105px;
+	}
+}
+/* ========================= 미디어 쿼리 end ========================= */

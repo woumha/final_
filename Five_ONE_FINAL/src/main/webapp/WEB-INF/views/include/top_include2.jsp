@@ -13,83 +13,12 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 <!-- 스타일 시트 -->
-<link rel="stylesheet" href="${path }/resources/eunji_CSS/top.css">	
+<link rel="stylesheet" href="${path }/resources/eunji_CSS/top2.css">	
 
 <!-- 자동완성 기능 라이브러리 -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <title>Insert title here</title>
-<style type="text/css">
-
-	img.channel-psa{
-		border-radius: 100%;
-	}
-
-	#user_popup img.channel-psa{
-		width: 22px;
-	}
-	
-	#user_div img.channel-psa{
-		width: 40px;
-		height: 40px;
-	}
-
-</style>
-<script type="text/javascript">
-
-	$(function(){
-		if ('${RepChannelCode}' != ''){
-			let channelCode = '${RepChannelCode}';
-			switch(channelCode.charAt(3)){
-				case "1" :
-					$(".channel-psa").css("background-color","darkred");
-				break
-				
-				case "2" :
-					$(".channel-psa").css("background-color","orange");
-				break
-				
-				case "3" :
-					$(".channel-psa").css("background-color","darkyellow");
-				break
-				
-				case "4" :
-					$(".channel-psa").css("background-color","lightpink");
-				break
-				
-				case "5" :
-					$(".channel-psa").css("background-color","darkgreen");
-				break
-				
-				case "6" :
-					$(".channel-psa").css("background-color","lightblue");
-				break
-				
-				case "7" :
-					$(".channel-psa").css("background-color","darkblue");
-				break
-				
-				case "8" :
-					$(".channel-psa").css("background-color","purple");
-				break
-				
-				case "9" :
-					$(".channel-psa").css("background-color","gray");
-				break
-				
-				case "0" :
-					$(".channel-psa").css("background-color","lightgreen");
-				break
-				default:
-					$(".channel-psa").css("background-color","#fc942c");
-				break
-			} 
-		}
-		
-	});
-	
-
-</script>
 
 </head>
 
@@ -97,44 +26,41 @@
 <body id="body">
 
 		 <div id="wrap">
-		
-			<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png"  
-				id="logo" width="230px" height="90px" onclick="location.href='<%= request.getContextPath() %>/'">
-			
-			<form method="post" action="<%=request.getContextPath() %>/search.do" id="search_go">
-						
-			<div id="search_div">
-			
-			<div class="search_select">
-			  <select name="field">
-			    <option value="video_title">동영상 제목</option>
-			    <option value="channel_name">채널명</option>
-			    <option value="video_hash">태그</option>
-			  </select>
+		 	<div class="logo">
+				<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png"  
+					id="logo" width="230px" height="90px" onclick="location.href='<%= request.getContextPath() %>/'">
 			</div>
-			
-				<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="검색어를 입력하세요." required> &nbsp;&nbsp;
-				<button id="search_btn" type="submit"><i class="fas fa-search"></i></button>	
+			<div class="search_go" class="form_box">
+				<form method="post" action="<%=request.getContextPath() %>/search.do" id="search_go">
+							
+					<div id="search_div" class="card_a">
+					
+						<div class="search_select">
+						  <select name="field">
+						    <option value="vi_title">동영상 제목</option>
+						    <option value="ch_name">채널명</option>
+						    <option value="vi_hash">태그</option>
+						  </select>
+						</div>
+						<div class="search_bar card_a">
+							<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="검색어를 입력하세요." required> &nbsp;&nbsp;
+							<button id="search_btn" type="submit"><i class="fas fa-search"></i></button>
+							<div class = "rel_search">
+								<ul class="pop_rel_keywords" id="pop_rel_keywords"> </ul>
+					   		</div>	
+						</div>
+	
+					    	
+					</div> <!-- search_div end -->
+				</form>
+			</div>	
 				
-				<div class = "rel_search">
-					<ul class="pop_rel_keywords" id="pop_rel_keywords"> </ul>
-			    </div>		
-			    	
-			</div> 
-			</form>	
-				
-			<div id="user_div">
+			<div id="user_div" class="item_a">
 				<c:if test="${!empty MemberCode }">
 					<button class="customm-btn" id="user_logout" onclick="location.href='<%=request.getContextPath() %>/logout.do'" value="Login">Logout</button>&nbsp;&nbsp;
 				</c:if>
-				
 				<c:if test="${!empty MemberCode }">
-					<c:if test="${RepChannelPsa == default_channel_profile.png}">
-						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/default_channel_profile.png" class="channel-psa">
-					</c:if>
-					<c:if test="${RepChannelPsa != default_channel_profile.png}">
-						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/${RepChannelPsa }" class="channel-psa">
-					</c:if>
+					<i class="fa-solid fa-circle-user" id="user_icon"></i>&nbsp;&nbsp;
 				</c:if>
 				
 				<c:if test="${empty MemberCode }">
@@ -146,23 +72,22 @@
 				
 			</div>
 			
-			</div>
+		</div> <!-- wrap end -->
 			
 		
 		<c:if test="${!empty MemberCode }">
 			<div id="user_popup"> 
 				<ul id="user_list">
+					<li> &nbsp;&nbsp;</li>
 					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberName }님</b></li>
-					<hr>
+					<li> &nbsp;&nbsp;</li>
 					<%-- 내 채널 이미지 //이호찬 --%>
-          <c:set var="ccode" value="${RepChannelCode }" />
-					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'"> &nbsp;
-					<i class="bi bi-camera-reels"></i>&nbsp;&nbsp;내 채널</li>
-					<li onclick="location.href='<%=request.getContextPath()%>'"> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
+					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?cha=${LastChannelCode }'"> &nbsp;<yt-icon class="style-scope ytd-compact-link-renderer"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 25px; height: 25px;"><g class="style-scope yt-icon"><path d="M3,3v18h18V3H3z M4.99,20c0.39-2.62,2.38-5.1,7.01-5.1s6.62,2.48,7.01,5.1H4.99z M9,10c0-1.65,1.35-3,3-3s3,1.35,3,3 c0,1.65-1.35,3-3,3S9,11.65,9,10z M12.72,13.93C14.58,13.59,16,11.96,16,10c0-2.21-1.79-4-4-4c-2.21,0-4,1.79-4,4 c0,1.96,1.42,3.59,3.28,3.93c-4.42,0.25-6.84,2.8-7.28,6V4h16v15.93C19.56,16.73,17.14,14.18,12.72,13.93z" class="style-scope yt-icon"></path></g></svg><!--css-build:shady--></yt-icon>&nbsp;&nbsp;내 채널</li>
+					<li> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
-					<li onclick="location.href='<%=request.getContextPath()%>/info.do'">&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
-					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
+					<li>&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;설정</li>
+					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="location.href='<%=request.getContextPath() %>/logout.do'">로그아웃</a></li>		
 				</ul>
 			</div>
 		</c:if>
@@ -286,7 +211,7 @@
 	        liSelected = ul2.getElementsByTagName('li')[0];
 	      }
 	      addClass(liSelected, 'selected');
-	      //$(".search_input").val(($('.selected').text())); 
+	      $(".search_input").val(($('.selected').text())); 
 	      
 	    } else {
 	      index = 0;

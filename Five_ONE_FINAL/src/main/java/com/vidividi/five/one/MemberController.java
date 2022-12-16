@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
 import com.vidividi.service.LoginService;
+import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.LoginDTO;
 import com.vidividi.variable.MemberDTO;
 
@@ -31,6 +32,9 @@ public class MemberController {
 	
 	@Inject
 	private MemberDAO dao;
+	
+	@Inject
+	private ChannelDAO channelDAO;
 	
 	@Autowired
 	private LoginService service;
@@ -97,14 +101,18 @@ public class MemberController {
 		String result = "";
 		
 		memberDTO.setMember_code(service.generateMembercode());
-		/* memberDTO.setMember_last_channel(service.channelcodemaking()); */
+		memberDTO.setMember_rep_channel(service.videoCodeMaking());
 		
-		int insertResult = dao.joinMember(memberDTO);
-		System.out.println(insertResult);
+		int joinResult = dao.joinMember(memberDTO);
+		System.out.println("회원 가입 결과 : " +joinResult);
 		
-		if (insertResult != 0) {
+		ChannelDTO channelDTO = service.newChannel(memberDTO.getMember_code(), memberDTO.getMember_rep_channel(), memberDTO.getMember_id());
+		
+		int channelResult = channelDAO.insertChannel(channelDTO);
+		
+		if (joinResult != 0) {
 			result = memberDTO.getMember_code();
-		}else if (insertResult == 0) {
+		}else if (joinResult == 0) {
 			result = "fail";
 		}
 		return result;
@@ -127,7 +135,7 @@ public class MemberController {
 			model.addAttribute("MemberCode", memberCode);
 			model.addAttribute("MemberName", dto.getMember_name());
 			model.addAttribute("MemberDTO", dto);
-			return "member/member_info";
+			return "member/setting_main";
 		}else {
 			// 프론트에서 null 체크 해야 toast 창 제대로 보일 것 같음
 			// 일단 이대로 둠

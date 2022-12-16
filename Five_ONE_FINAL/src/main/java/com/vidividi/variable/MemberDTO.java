@@ -21,7 +21,6 @@ public class MemberDTO {
 	private String member_pwd_date;
 	private int member_drop;
 	private int member_admin;
-	private String member_last_channel;
+	private String member_rep_channel;
 	private int member_historysave;
-
 }

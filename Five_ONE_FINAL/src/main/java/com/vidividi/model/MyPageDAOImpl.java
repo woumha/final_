@@ -9,6 +9,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.VideoPlayDTO;
@@ -27,7 +28,7 @@ public class MyPageDAOImpl implements MyPageDAO {
 	}
 
 	@Override
-	public List<VideoPlayDTO> getPlaylist_list(String code) {
+	public List<PlaylistDTO> getPlaylist_list(String code) {
 		return this.sqlSession.selectList("playlist_list", code);
 	}
 
@@ -109,5 +110,30 @@ public class MyPageDAOImpl implements MyPageDAO {
 	@Override
 	public int delete_playlist(Map<String, Object> map) {
 		return this.sqlSession.delete("delete_playlist", map);
+	}
+
+	@Override
+	public List<VideoPlayDTO> history_list(String code) {
+		return this.sqlSession.selectList("history_list", code);
+	}
+
+	@Override
+	public List<ChannelDTO> getSubscribe_list(String code) {
+		return this.sqlSession.selectList("subscribe_list", code);
+	}
+
+	@Override
+	public int getSubscribe_num(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getSubscribe_num", map);
+	}
+
+	@Override
+	public int subscribe_one_delete(int num) {
+		return this.sqlSession.delete("delete_one_subscribe", num);
+	}
+
+	@Override
+	public int updateSequence_s(int num) {
+		return this.sqlSession.update("updateSeq_s", num);
 	}
 }
