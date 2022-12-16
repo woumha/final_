@@ -29,23 +29,17 @@ public class SearchController {
 	  }
 	 
 	 
-	 //ajax로 list출력
+	 //ajax로 list출력(인기순)
 	 @ResponseBody
 	  @RequestMapping("search_result.do")
 	  public List<VideoPlayDTO> search(@RequestParam("field") String field, @RequestParam("keyword") String keyword,
 			  			@RequestParam("option") String option, int page) {
 
-		 	int rowsize = 8;
+		 	int rowsize = 5;
 			int startNo = (page * rowsize) - (rowsize - 1);
 			int endNo = (page * rowsize);
 		 
 			List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword, option, startNo, endNo);
-			
-			System.out.println("p field>>>" + field);
-			System.out.println("p keyword>>>" + keyword);
-			System.out.println("p option>>> " + option);
-			System.out.println("p paging>>> " + startNo);
-			System.out.println("p paging>>> " + endNo);
 					
 			return searchList; 
 	  }
@@ -57,19 +51,11 @@ public class SearchController {
 	  public List<VideoPlayDTO> search_new(@RequestParam("field") String field, @RequestParam("keyword") String keyword, 
 			  @RequestParam("option") String option, int page) {
 
-		 	int rowsize = 8;
+		 	int rowsize = 5;
 			int startNo = (page * rowsize) - (rowsize - 1);
 			int endNo = (page * rowsize);
 		 
-		 
 			List<VideoPlayDTO> searchList2 = this.dao.searchVideoList_new(field, keyword, option, startNo, endNo);
-			
-			System.out.println("n field>>>" + field);
-			System.out.println("n keyword>>>" + keyword);
-			System.out.println("n option>>> " + option);
-			System.out.println("n paging>>> " + startNo);
-			System.out.println("n paging>>> " + endNo);
-					
 					
 			return searchList2; 
 		 

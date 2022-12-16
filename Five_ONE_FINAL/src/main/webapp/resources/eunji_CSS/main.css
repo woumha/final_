@@ -1,68 +1,94 @@
 @charset "UTF-8";
 
 
-/* --------------------------------------------------------------------------------------------------- */
-
-html body {
-	outline: none;
+* {
+	outline: none !important;
+	text-decoration: none !important;
 }
 
-	/* 커서 이미지 변경 */
+
+#video_table a:hover{
+	color: #fc942c !important;
+}
+
+
+/* -----------------------------------------------------------커서 이미지 변경------------------------------------------------------------- */
 	
-	body {
-		font-family: 'Noto Sans KR' !important;
-		cursor: url('../eunji_IMG/bunny.png'),auto;
-	}
+body {
+	font-family: 'Noto Sans KR' !important;
+	cursor: url('../eunji_IMG/bunny.png'),auto;
+}
 
-	@media screen and (max-width: 992px) {
-		.container1 div{
-			width: 500px;
-			justify-content: center;
-		}
+@media screen and (max-width: 992px) {
+	.container1 div{
+		width: 500px;
+		justify-content: center;
+	}
 		
-		#slide {
-		    width: 800px;
-		    height: 350px;
-		    padding: 0 10%;
-		    justify-content: space-between;
-		    align-items: center;
-		}
+	#slide {
+		width: 800px;
+		height: 350px;
+		 padding: 0 10%;
+		 justify-content: space-between;
+		 align-items: center;
+	}
 		
-	}	
+}	
 
-	.group:after {
-	  content: "";
-	  display: table;
-	  clear: both;
-	}
+.group:after {
+	content: "";
+	display: table;
+	clear: both;
+}
 
 
-	#side_wrap{
-		display: flex;
-	}
+#side_wrap{
+	display: flex;
+}
 	
-	#sidebar{
-		flex: 1;
-	}
+#sidebar{
+	flex: 1;
+}
 
- 	/* #top_wrap{
-		position: fixed;
-	} */ 
 
-	/*--------------------------------------- 상단 카테고리 바------------------------------------- */	
-		#mainnav {
-		    background: #424242;
-		    color: #fff;
-		    font-weight: bold;
-		    text-transform:uppercase;
-		    letter-spacing: .05em;
-		}
+	
+/* ---------------------------------------------------------------------------텍스트 설정--------------------------------------------------------------  */
+
+
+a:link {
+    text-decoration: none;
+    color: black;
+}
+
+a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #fc942c;
+}
+
+a:active {
+    text-decoration: none;
+}	
+
+
+/*------------------------------------------------------------- 상단 카테고리 바------------------------------------- */	
+#mainnav {
+	background: #424242;
+	color: #fff;
+	font-weight: bold;
+	text-transform:uppercase;
+	letter-spacing: .05em;
+}
 		
-		#mainnav #menu {
-		    display: none;
-		    padding: .8em 1.5em;
-		    cursor: pointer;
-		}
+#mainnav #menu {
+	display: none;
+	padding: .8em 1.5em;
+	cursor: pointer;
+}
 		
 		
 		#mainnav ul {
@@ -160,7 +186,7 @@ html body {
 		tr { display: block; float: left; }
 		th, td { display: block; }	
      	
-   /* --------------------------------------------글자 설정------------------------------------------ */ 
+/* --------------------------------------------글자 설정------------------------------------------ */ 
      	 
      	 td{
      	 	font-size: 0.8rem;
@@ -173,7 +199,7 @@ html body {
      	 }
      	 
      	 
-     /*------------------------------------------유저 이미지 설정-------------------------------------  */	 
+/*------------------------------------------유저 이미지 설정-------------------------------------  */	 
      	 
      	 #ch_img{
      	 	font-size: 2.5rem;
@@ -182,7 +208,7 @@ html body {
      	 }
      	 
      	 
-     /* -----------------------------------------캐러셀 설정------------------------------------------ */  	 
+/* -----------------------------------------캐러셀 설정------------------------------------------ */  	 
 		
 		#slide{
 			 z-index: 10;
@@ -214,7 +240,6 @@ html body {
 		#next:focus {
    		 outline: none;
 		}
-		
 		
 		#next:hover{
 			color: #fc942c;
@@ -312,18 +337,17 @@ html body {
 		  top: 20em;
 		} 
 		
-		     	
-		
-   /* ------------------------------------------------추천 동영상 라벨-------------------------------------------------  */
+		     		
+/* ------------------------------------------------추천 동영상 라벨-------------------------------------------------  */
    
-	  button {
-	  margin: 20px; 
-	   }
+button {
+	margin: 20px; 
+}
 	   
-	   #re_label{
-	  	margin-top: -30px;
-	  	margin-left: 3.1%;
-	  }
+#re_label{
+	margin-top: -30px;
+	margin-left: 3.1%;
+}
 	  
 	.custom-btn {
 	  width: 130px;
@@ -370,19 +394,21 @@ html body {
 	  transition: all 0.3s ease;
 	  outline: none;
 	}
+	
 	.re_btn:hover {
 	  color: #fff;
 	}
+	
 	.re_btn:hover:after {
 	  left: 0;
 	  width: 100%;
 	}
+	
 	.re_btn:active {
 	  top: 2px;
 	}
 	   
-	   
-	/*---------------------------------------------- 신규 동영상 버튼 --------------------------------------------------*/
+/*---------------------------------------------- 신규 동영상 버튼 --------------------------------------------------*/
 	
 	.up_btn {
 	  margin-left: 1%;
@@ -420,3 +446,101 @@ html body {
 	.up_btn:active {
 	  top: 2px;
 	}
+	
+	
+/*-------------------------------------------------------------------무한 스크롤 로딩 이벤트 css-------------------------------------------------------- */
+
+.loading_list {
+  margin-top: 30px;
+  width: 100%;
+  height: 50px;
+}
+
+.loading_list > div {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  left: 50%;
+  margin-left: -30px;
+  margin-top: -30px;
+}
+
+
+.loading_list > div > div {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #ff8c00;
+  top: 10px;
+  left: 10px;
+  transform-origin: 20px 20px;
+  border-radius: 8px;
+  animation: spin-a 2s infinite cubic-bezier(0.5, 0, 0.5, 1);
+}
+
+.loading_list > div > .c2 {
+  top: 10px;
+  left: auto;
+  right: 10px;
+  transform-origin: -4px 20px;
+  animation: spin-b 2s infinite cubic-bezier(0.5, 0, 0.5, 1);
+}
+.loading_list > div > .c3 {
+  top: auto;
+  left: auto;
+  right: 10px;
+  bottom: 10px;
+  transform-origin: -4px -4px;
+  animation: spin-c 2s infinite cubic-bezier(0.5, 0, 0.5, 1);
+}
+.loading_list > div > .c4 {
+  top: auto;
+  bottom: 10px;
+  transform-origin: 20px -4px;
+  animation: spin-d 2s infinite cubic-bezier(0.5, 0, 0.5, 1);
+}
+
+@keyframes spin-a {
+  0%   { transform: rotate(90deg); }
+  0%  { transform: rotate(90deg); }
+  50%  { transform: rotate(180deg); }
+  75%  { transform: rotate(270deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes spin-b {
+  0%   { transform: rotate(90deg); }
+  25%  { transform: rotate(90deg); }
+  25%  { transform: rotate(180deg); }
+  75%  { transform: rotate(270deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes spin-c {
+  0%   { transform: rotate(90deg); }
+  25%  { transform: rotate(90deg); }
+  50%  { transform: rotate(180deg); }
+  50%  { transform: rotate(270deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes spin-d {
+  0%   { transform: rotate(90deg); }
+  25%  { transform: rotate(90deg); }
+  50%  { transform: rotate(180deg); }
+  75%  { transform: rotate(270deg); }
+  75% { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.loading_list > span {
+  width: 100px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: 30px;
+  color: #ff8c00;
+  font-size: 12px;
+  text-align: center;
+}
+ 	
