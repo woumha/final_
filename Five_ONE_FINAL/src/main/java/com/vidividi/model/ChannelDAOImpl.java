@@ -56,4 +56,9 @@ public class ChannelDAOImpl implements ChannelDAO {
 //	public int setVideoUpload(VideoPlayDTO playDTO) {
 //		return this.session.insert("video_update", playDTO);
 //	}
+	
+	@Override
+	public int setChangeChannelProfil(String channelCode) {
+		return this.session.update("profil_update", channelCode);
+	}
 }

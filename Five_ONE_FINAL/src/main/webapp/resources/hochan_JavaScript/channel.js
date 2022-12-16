@@ -17,5 +17,7 @@ $(function() {
 	});
 	
 	
-	
+	$(".div_upload_btn").on("click", function() {
+		$("#video_upload_btn").click();
+	});
 });

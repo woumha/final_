@@ -26,4 +26,7 @@ public interface ChannelDAO {
 	// 제이님 끝
   
 	//public int setVideoUpload(VideoPlayDTO playDTO);
+	
+	// 채널 프로필 수정
+	public int setChangeChannelProfil(String channelCode);
 }

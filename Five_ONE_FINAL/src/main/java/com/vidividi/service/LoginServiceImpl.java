@@ -58,6 +58,7 @@ public class LoginServiceImpl implements LoginService {
 		return idCheck;
 	}
 	
+	// 멤버 코드
 	@Override
 	public String generateMembercode() {
 		String result = "";
@@ -92,7 +93,7 @@ public class LoginServiceImpl implements LoginService {
 		
 		return result;
 	}
-	
+
 	@Override
 	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName) {
 		

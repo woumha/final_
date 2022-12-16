@@ -281,6 +281,7 @@ imgInputTag.addEventListener("change", function() {
 			
     fileReader.readAsDataURL(file);
  }
+
  
 // 이미지 업로드 스크립트 시작
 
