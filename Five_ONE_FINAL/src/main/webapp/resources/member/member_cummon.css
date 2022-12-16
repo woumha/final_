@@ -1,0 +1,173 @@
+@charset "UTF-8";
+
+
+	/* 인풋태그 자동완성 배경색 없애기*/
+	
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active {
+		-webkit-text-fill-color: #000;
+	    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+	    box-shadow: 0 0 0px 1000px #fff inset;
+	    transition: background-color 5000s ease-in-out 0s;
+	}
+	
+	input:autofill,
+	input:autofill:hover,
+	input:autofill:focus,
+	input:autofill:active {
+		-webkit-text-fill-color: #000;
+	    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+	    box-shadow: 0 0 0px 1000px #fff inset;
+	    transition: background-color 5000s ease-in-out 0s;
+	}
+	
+	/* 부트스트랩 토스트창 배경색 중복 수정 */
+	div.toast {
+		background-color: unset;
+	}
+	
+	div.toast-success {
+		background-color: #51A351;
+	}
+	div.toast-warning {
+		background-color: #f89406;
+	}
+	div.toast-info {
+		background-color: #2F96B4;
+	}
+	div.toast-error {
+		background-color: #BD362F;
+	}
+	
+	/* password 클래스를 가진 input 태그 비밀번호 안보이게 처리 */
+	input.password{
+		-webkit-text-security:disc;
+	}
+	
+	
+	
+	span.small-title-span {
+		font-size: 1.1em;
+		color: #fc942c;
+	}
+	
+	span.small-span, span.small-span i {
+		font-size: 0.8em;
+		color: gray;
+	}
+	
+	.small-content-span-1 {
+		font-weight: bold;
+		color: rgb(100, 100, 100);
+	}
+	
+	.small-content-span-2 {
+		font-size: 0.9em;
+		color: rgb(120, 120, 120);
+	}
+	
+	#info-channel-table th {
+		width: 15%;
+	}
+	
+	
+	
+	.date-empty:before{
+	 	content: attr(data-placeholder);
+	 	width: 100%;
+	 }
+	input.form-input {
+		width: 100%;
+		padding: 15px;
+		padding-top: 20px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	
+	input.form-btn {
+		width : 100%;
+		margin: 5px;
+		padding: 10px;
+		border: 0px;
+		border-radius: 10px;
+		background-color: #fc942c;
+		color: white;
+		font-weight: bold;
+	}
+	
+	hr.vertical-hr {
+		width: 1px;
+		height: 40%;
+		background-color: lightgray;
+	}
+	
+	hr.horizontal-hr {
+		background-color: gray;
+	}
+	
+	div.login-menu {
+		text-align: center;
+	}
+	
+	a.form-a {
+		text-decoration: none;
+	}
+	
+	a.form-a:hover {
+		text-decoration: none;
+	}
+	
+	span.form-text {
+		display: inline;
+		color: gray;
+	}
+	
+	span.form-link {
+		display: inline;
+		color: gray;
+	}
+	span.form-link:hover {
+		color: black;
+	}
+	
+	span.form-text.alert {
+		color: red;
+	}
+	
+	
+	div.label-input {
+		display: inline;
+		position: absolute;
+	    color: gray;
+	    transition: all 0.5s;
+	    margin-left: 20px;
+	    margin-top: 18px;
+	    text-align: initial;
+	}
+	
+	
+	.member-input{
+		display: block;
+		border-radius: 10px;
+		border: 1px solid gray;
+		background-color: transparent;
+		font-size: 1em;
+	}
+	
+	.member-input:focus{
+		outline: none;
+		box-shadow: none;
+	}
+	
+	.onfocus{
+		font-size: 0.6em;
+		margin-left:12px !important;
+		margin-top:8px !important;
+	}
+	
+	.disabled{
+		background-color: lightgray !important;
+		color: gray !important; 
+	}

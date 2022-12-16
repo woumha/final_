@@ -407,6 +407,8 @@ button{
 .side_container {
 	flex: 1;
 	background-color: blue;
+	width: 20rem;
+	margin-right: 2rem;
 }
 
 
@@ -424,29 +426,56 @@ button{
 }
 
 /* 네비게이션 CSS */
-.video_lsit_nav{
-	position: absolute;
+/* .video_list_nav_box{
+	position: relative;
 	width: 5rem;
 	min-width: 3rem;
 	margin: 0 auto;
 	overflow: hidden;
+} */
+
+.menu_container {
+  position: relative;
 }
 
-.nav_item{
-	position: relative;
-	left: 0;
-	top: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	
-
+.scrollmenu {
+  background-color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+ 
 }
 
-.nav_item{
-	
+.scrollmenu a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+.scrollmenu a:first-of-type { margin-left: 1em; }
+.scrollmenu a:last-of-type { margin-right: 1em; }
+.scrollmenu a:hover {
+  background-color: #777;
 }
 
+.button_container:first-of-type{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.button_container:last-of-type {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 
 /* 비디오리스트 CSS */
 .video_list_wrap{

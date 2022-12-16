@@ -36,4 +36,6 @@ public interface MyPageDAO {
 	int updateSequence_s(int num);
 	/* ajax */
 	List<VideoPlayDTO> history_list(String code);
+	List<VideoPlayDTO> getHistoryListCount(String code, int startNo, int endNo);
+	
 }

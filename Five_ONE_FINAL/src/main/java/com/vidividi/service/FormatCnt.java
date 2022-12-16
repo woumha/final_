@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 public class FormatCnt {
 	
-	public String format(int no) {
+	public static String format(int no) {
 		
 		String result = "";
 		

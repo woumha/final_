@@ -287,37 +287,46 @@
 			
 			
 			<div class="video_list_wrap card_c">
-				<div class="video_list_nav card_a">
-					<div class="nav_item"><button class="nav_btn" value="all">모두</button></div>
-					<div class="nav_item"><button class="nav_btn" value="category">관련 콘텐츠</button></div>
-					<div class="nav_item"><button class="nav_btn" value="current">최근 업로드된 동영상</button></div>
-					<div class="nav_item"><button class="nav_btn" value="history">감상한 동영상</button></div>
+				<div class="menu_container">
+				  <div class="button_container">
+				    <button id="slide_left"><</button>
+				  </div>
+				  <div class="scrollmenu">
+				    <a href="#home" data-value="">모두</a>
+				    <a href="#news" data-value="${video_dto.getCategory_code()}">관련 콘텐츠</a>
+				    <a href="#contact">최근에 업로드된 영상</a>
+				    <a href="#about">감상한 동영상</a>
+				  </div> 
+				  <div class="button_container">
+				    <button id="slide_right">></button>
+				  </div>
 				</div>
-				
-				<div class="video_list_box card_a">
-				
-					<div class="video_list_thumbnail">
-						<a>
-							<img class="video_list_img" src="${pageContext.request.contextPath}/resources/watch/watch_img/render_icon.png">
-						</a>
-					</div>
+				<div id="input_video_list">
+					<div class="video_list_box card_a">
 					
-					<div class="video_list_info card_c">
-						<div class="video_list_title">title</div>
-						<div class="video_list_channel_name">name</div>
-						<div class="video_list_view_cnt">cnt</div>
-						<div class="video_list_date">date</div>
-					</div>
-					
-					<div class="render_box">
-						<div class="render_wrap">
-							<button class="render">
-								<img class="render_icon" src="${pageContext.request.contextPath}/resources/watch/watch_img/render_icon.png">
-							</button>
+						<div class="video_list_thumbnail">
+							<a>
+								<img class="video_list_img" src="${pageContext.request.contextPath}/resources/watch/watch_img/render_icon.png">
+							</a>
 						</div>
-					</div>
-					
-				</div><!-- video_list_box end -->
+						
+						<div class="video_list_info card_c">
+							<div class="video_list_title">title</div>
+							<div class="video_list_channel_name">name</div>
+							<div class="video_list_view_cnt">cnt</div>
+							<div class="video_list_date">date</div>
+						</div>
+						
+						<div class="render_box">
+							<div class="render_wrap">
+								<button class="render">
+									<img class="render_icon" src="${pageContext.request.contextPath}/resources/watch/watch_img/render_icon.png">
+								</button>
+							</div>
+						</div>
+						
+					</div><!-- video_list_box end -->
+				</div>
 			</div><!-- video_list_wrap end -->
 						
 		</div> <!-- side_box end -->

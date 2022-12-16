@@ -15,4 +15,5 @@ public interface LoginService {
 	String generateChannelCode();
 	String generateVideoCode();
 	ChannelDTO newChannel(String memberCode, String channelCode, String memberName);
+	int getAge(String date);
 }
