@@ -22,7 +22,11 @@ public interface WatchDAO {
 	public List<ReplyDTO> getComment(String video_code, String reply_group, int startNo, int endNo);
 	
 	public List<VideoPlayDTO> getPlayList(String playList_code);
+
+	public List<VideoPlayDTO> getNavList(int startNo, int endNo);
 	
+	public List<VideoPlayDTO> getNavList(int startNo, int endNo, String navOption);
+
 	public int getVideoCount(String channel_code);
 	
 }

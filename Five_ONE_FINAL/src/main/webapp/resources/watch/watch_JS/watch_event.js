@@ -3,6 +3,8 @@
  */
  
  $(document).ready(function(){
+
+
  
   	 $(".reply_cont_box").each(function(){
 	        //var content = $(this).children('.content');
@@ -129,8 +131,17 @@
 
 
 		});
+
+		let scrollNav = document.querySelector('.scrollmenu');
 		
-		
+		$("#slide_right").on("click", function(){
+
+			scrollNav.scrollLeft += 250;
+		});
+
+		$("#slide_left").on("click", function(){
+			scrollNav.scrollLeft -= 250;
+		});
 		
  
  

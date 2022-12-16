@@ -206,6 +206,23 @@ public class WatchController{
 	}
 	
 	
+	@RequestMapping("nav_list.do")
+	public List<VideoPlayDTO> getNavList(@RequestParam(value="navOption", required = false) String navOption, @RequestParam("page") int page) {
+		
+		List<VideoPlayDTO> list;
+		
+		int rowsize = 10;
+		int startNo = (page * rowsize) - (rowsize - 1);
+		int endNo = (page * rowsize);
+		
+		if(navOption.equals("")) {
+			list = this.dao.getNavList(startNo, endNo);
+		}else {
+			list= this.dao.getNavList(startNo, endNo, navOption); 
+		}
+		
+		return list;
+	}
 	
 	
 	@RequestMapping("test.do")
@@ -230,22 +247,6 @@ public class WatchController{
 	
 
 	
-	public String format(int no) {
-		
-		String result = "";
-		
-		DecimalFormat df = new DecimalFormat("#.#");
-		
-		if(no >= 10000000) {
-			result = df.format(no/10000000.0) +"천 만";
-		}else if(no >= 10000) {
-			result = df.format(no/10000.0) +"만";
-		}else if(no >= 1000) {
-			result = df.format(no/1000.0) +"천";
-		}else {
-			result = String.valueOf(no);
-		}
-		return result;
-	}
+
 	
 }
