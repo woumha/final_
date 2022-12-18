@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
@@ -29,7 +29,7 @@
 		      <div class="col-md-3 ms-auto">
 		      	<div class="touch_img">
 		      		<div class="d-grid gap-2 d-md-block">
-					  <button class="btn btn-primary start_img_btn" type="button">영상 미리보기 이미지</button>
+					  <button class="btn btn-primary btn-sm start_img_btn" type="button">영상 미리보기 이미지</button>
 					  <input type="file" hidden name="upload_input_img" class="input_start_img">
 					  <div class="icon_img">
 					  	

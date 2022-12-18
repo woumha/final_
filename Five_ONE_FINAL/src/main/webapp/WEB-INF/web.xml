@@ -67,14 +67,5 @@
         <url-pattern>*.jsp</url-pattern>
         <url-pattern>*.jspx</url-pattern>
     </servlet-mapping>
-    
-	<!-- MultipartFilter -->
- 	<filter>
-		<filter-name>MultipartFilter</filter-name>
-	    <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>MultipartFilter</filter-name>
-	    <url-pattern>/*</url-pattern>
-	</filter-mapping>
+   
 </web-app>

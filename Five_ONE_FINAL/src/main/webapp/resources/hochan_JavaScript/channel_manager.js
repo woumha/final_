@@ -51,23 +51,6 @@ function showFile() {
 	 
 	let inputFile = $(".profil_input");
 	let formData = new FormData();
-	
-	Array.from(inputFile[0].files).map(e => formData.append('file', e));
-	
-	$.ajax({
-		url: getContextPath() + "/channel_profil.do",
-		processData: false,
-		contentType: false,
-		cache: false,
-		enctype: "multipart/form-data",
-		data: formData,
-		success: function() {
-			console.log("true");
-		},
-		error: function(e) {
-			console.log("false: " + e);
-		}
-	});
 }
 
 function modal(code) {

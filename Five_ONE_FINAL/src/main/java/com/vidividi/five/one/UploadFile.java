@@ -15,9 +15,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-@Service
 // 스프링에서 비지니스 로직을 수행할 때 붙이는 애노테이션
 // 해당 Upload라는 클래스는 비지니스 로직을 수행하는 클래스
+@Service
 public class UploadFile {
 	public String dynamicPath_r() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -34,10 +34,13 @@ public class UploadFile {
 
 		//String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + lastChannelCode + "/";
 		//String uploadVideoPath = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/"; // 집 PC
-		String uploadVideoPath = dynamicPath_r() + "/AllChannel/"; // MACBOOK
+		//String uploadVideoPath = dynamicPath_r() + "/AllChannel/";
+		
+		String uploadVideoPath = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/";
 		//thumbnail
 		Iterator<String> iterator = mRequest.getFileNames();
 		
+		System.out.println("uploadVideoPath: " + uploadVideoPath);
 		
 		// 들어오기 전부터 뭔가를 해야할듯...
 		String extMovieArr[] = { "mp4" };

@@ -129,6 +129,12 @@ let hashText = [];
  
  
  // 업로드 버튼 클릭시@@@@@@@@@@@@@@@@@@@@@@@@
+ function getContextPath(){
+	let path = location.href.indexOf(location.host)+location.host.length;
+	
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
  function upload_seccess() {
  	$.ajaxSetup({
 			ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
@@ -196,7 +202,7 @@ function upload_move() {
 	form.setAttribute("method", "post");
 	form.setAttribute("id", "send_form");
 	form.setAttribute("enctype", "multipart/form-data");
-	form.setAttribute("action", '/one/upload_success.do');
+	form.setAttribute("action", getContextPath() + '/upload_success.do');
 	
 	console.log(this.uploadtitle);
 	console.log(this.uploadCont);
@@ -271,7 +277,7 @@ imgInputTag.addEventListener("change", function() {
     reader.fileName = file.name;
     
 
-	fileReader.onload = function(e) {
+	fileReader.onload = function() {
         fileURL  = fileReader.result;
         let imgTag = `<img src="${fileURL}" class="save_img" />`;
      	imgIcon.innerHTML = imgTag;

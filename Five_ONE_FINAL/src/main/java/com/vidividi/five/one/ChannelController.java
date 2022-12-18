@@ -107,9 +107,8 @@ public class ChannelController {
 		// 취약점 찾았다... 다른 사람이 채널코드만 바꿔서 영상 올릴수가 있다..?
 		
 		String repChannelCode = (String)session.getAttribute("RepChannelCode");
-		
 		// 유효성 체크 한번 해야됨
-		
+	
 		ChannelDTO channelDTO = new ChannelDTO();
 		
 		channelDTO.setChannel_code(repChannelCode);
@@ -121,16 +120,21 @@ public class ChannelController {
 	
 	@RequestMapping("upload_success.do")
 	public void upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age, @RequestParam("5") String[] hash, MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
+		response.setContentType("text/html charset=UTF-8");
+		
 		String lastChannelCode = (String)session.getAttribute("RepChannelCode");
+		
 		
 		PrintWriter out = response.getWriter();
 		String allHashTag = "";
 		int count = 0;
 		String[] name = fileName(mRequest);
 		
-		for(int i=0; i<hash.length; i++) {
-			allHashTag += hash[i];
-		}
+//		if(!(hash.equals("null"))) {
+//			for(int i=0; i<hash.length; i++) {
+//				allHashTag += hash[i];
+//			}
+//		}
 		
 		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
 			System.out.println("성공");
@@ -138,6 +142,7 @@ public class ChannelController {
 			System.out.println("실패");
 		}
 		
+	
 		VideoPlayDTO playdto = new VideoPlayDTO();
 		playdto.setVideo_code(service.generateVideoCode());
 		playdto.setChannel_code(channelWorlddto.getChannel_code()); //rep_channel
@@ -152,11 +157,11 @@ public class ChannelController {
 		playdto.setChannel_like(channelWorlddto.getChannel_like());
 		
 		int check = this.dao.setVideoUpload(playdto);
-		
+		System.out.println("check: " + check);
 		if(check > 0 ) {
 			out.println("<script>"
 					+ "alert('업로드 완료');"
-					+ "location.href='" + request.getContextPath() +"/channel.do?cha='"+ channelWorlddto.getChannel_code() +";");
+					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelWorlddto.getChannel_code() +"';");
 			out.println("</script>");
 		} else {
 			out.println("<script>"
@@ -164,6 +169,7 @@ public class ChannelController {
 					+ "history.bakc();");
 			out.println("</script>");
 		}
+		
 		
 	}
 	
@@ -182,8 +188,8 @@ public class ChannelController {
 	
 	// 체널 프로필 이미지 업로드
 	@RequestMapping("channel_profil.do")
-	public void profilImg(Model model, MultipartHttpServletRequest mRequest, HttpServletResponse response) throws IOException {
-		System.out.println("mrequest: " + mRequest);
+	public void profilImg(Model model, HttpServletResponse response) throws IOException {
+		//System.out.println("mrequest: " + mRequest);
 		
 		
 		sendPosition = "profilChange";
