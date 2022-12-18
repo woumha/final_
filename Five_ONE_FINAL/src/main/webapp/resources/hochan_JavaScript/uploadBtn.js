@@ -214,6 +214,7 @@ function upload_move() {
 	hiddenField1.setAttribute('name', "1");
 	hiddenField1.setAttribute('value', this.uploadtitle);
 	
+	
 	var hiddenField2 = document.createElement('input');
 	hiddenField2.setAttribute('type', 'hidden');
 	hiddenField2.setAttribute('name', "2");
@@ -230,10 +231,14 @@ function upload_move() {
 	hiddenField4.setAttribute('value', this.selectAn.trim());
 	
 	
-	var request_text = hashText;
+	var request_text = hashText.join();
+	if(request_text == "") {
+		request_text = null;
+	}
+	console.log(request_text + " " +  hashText.join());
 	var hiddenField5 = document.createElement('input');
 	hiddenField5.setAttribute('type', 'hidden');
-	hiddenField5.setAttribute('name', "5");
+	hiddenField5.setAttribute('name', "hash");
 	hiddenField5.setAttribute('value', request_text);
 	
 	
@@ -305,7 +310,6 @@ $(function () {
 			if(event.keyCode == 32 || event.keyCode == 13) {
 				hashText.pop();
 				hashText.push(areaValue.match(word));
-				
 			}
 		}
 		/*
