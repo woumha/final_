@@ -119,8 +119,12 @@
 				  	
 				  	<div class="embed-responsive embed-responsive-16by9 col-lg-4" align="left">
 				  		<c:if test="${!empty lastUpVideo }">
+				  			<c:if test="${empty lastUpVideo.video_img }" >
+				  			</c:if>
+				  			<c:if test="${!empty lastUpVideo.video_img }" >
+				  			</c:if>
 				  			<video autoplay loop class="embed-responsive-item" width="400px" height="300px" controls>
-								<source src="${path }/resources/AllChannel/${owner.channel_code  }/${lastUpVideo.video_title}.mp4" type="video/mp4">
+									<source src="${path }/resources/AllChannel/${owner.channel_code  }/${lastUpVideo.video_title}.mp4" type="video/mp4">
 							</video>
 				  		</c:if>
 				  		<c:if test="${empty lastUpVideo }">

@@ -121,7 +121,7 @@ public class ChannelController {
 	
 	
 	@RequestMapping("upload_success.do")
-	public void upload(@RequestParam("1") String title, @RequestParam(value = "2", required = false) String context, @RequestParam("3") String playList, @RequestParam("4") String age, @RequestParam(value = "hash", required = false) String hash, MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
+	public void upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age, @RequestParam("5") String hash, MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html charset=UTF-8");
 		
 		String lastChannelCode = (String)session.getAttribute("RepChannelCode");
@@ -132,47 +132,46 @@ public class ChannelController {
 		int count = 0;
 		String[] name = fileName(mRequest);
 		
-		System.out.println(hash);
-		
+	
 //		if(!(hash.equals(null))) {
 //			for(int i=0; i<hash.length; i++) {
 //				allHashTag += hash[i];
 //			}
 //		} 
 		
-//		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
-//			System.out.println("성공");
-//		} else {
-//			System.out.println("실패");
-//		}
+		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
+			System.out.println("성공");
+		} else {
+			System.out.println("실패");
+		}
 		
 	
-//		VideoPlayDTO playdto = new VideoPlayDTO();
-//		playdto.setVideo_code(service.generateVideoCode());
-//		playdto.setChannel_code(channelWorlddto.getChannel_code()); //rep_channel
-//		playdto.setChannel_name(channelWorlddto.getChannel_name());
-//		playdto.setVideo_title(title);
-//		playdto.setVideo_cont(context);
-//		playdto.setVideo_img(name[0]);
-//		
-//		playdto.setVideo_hash(allHashTag);
-//		playdto.setVideo_open(0); // 기본 공개 (만들어야됨)
-//		playdto.setCategory_code(0);
-//		playdto.setChannel_like(channelWorlddto.getChannel_like());
-//		
-//		int check = this.dao.setVideoUpload(playdto);
-//		System.out.println("check: " + check);
-//		if(check > 0 ) {
-//			out.println("<script>"
-//					+ "alert('업로드 완료');"
-//					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelWorlddto.getChannel_code() +"';");
-//			out.println("</script>");
-//		} else {
-//			out.println("<script>"
-//					+ "alert('업로드 실패');"
-//					+ "history.bakc();");
-//			out.println("</script>");
-//		}
+		VideoPlayDTO playdto = new VideoPlayDTO();
+		playdto.setVideo_code(service.generateVideoCode());
+		playdto.setChannel_code(channelWorlddto.getChannel_code()); //rep_channel
+		playdto.setChannel_name(channelWorlddto.getChannel_name());
+		playdto.setVideo_title(title);
+		playdto.setVideo_cont(context);
+		playdto.setVideo_img(name[0]);
+		
+		playdto.setVideo_hash(allHashTag);
+		playdto.setVideo_open(0); // 기본 공개 (만들어야됨)
+		playdto.setCategory_code(0);
+		playdto.setChannel_like(channelWorlddto.getChannel_like());
+		
+		int check = this.dao.setVideoUpload(playdto);
+		System.out.println("check: " + check);
+		if(check > 0 ) {
+			out.println("<script>"
+					+ "alert('업로드 완료');"
+					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelWorlddto.getChannel_code() +"';");
+			out.println("</script>");
+		} else {
+			out.println("<script>"
+					+ "alert('업로드 실패');"
+					+ "history.bakc();");
+			out.println("</script>");
+		}
 		
 		
 	}
@@ -203,6 +202,8 @@ public class ChannelController {
 		//PrintWriter out =  response.getWriter();
 	}
 	
+	
+	// 영상 수정 모달창
 	@RequestMapping("video_update_modal.do")
 	public String setVideoUpdate(Model model, @RequestParam("video_code") String code, HttpServletResponse response) {
 		response.setContentType("text/html; charset=UTF-8");
@@ -215,6 +216,37 @@ public class ChannelController {
 		model.addAttribute("list", playdto);
 		return "channel/channel_update_modal";
 	}
+	
+	
+	// 영상 수정 완료
+	@RequestMapping("video_update_success.do")
+	public void setVideoUpdateSuccess(MultipartHttpServletRequest mRequest,
+			@RequestParam("video_code") String code, 
+			@RequestParam("video_title") String title, 
+			@RequestParam(value="video_cont", required = false) String cont,
+			@RequestParam("video_playList") String list,
+			@RequestParam("flexRadioDefault_age") String age,
+			@RequestParam("flexRadioDefault_openClose") String open,
+			@RequestParam("channel_code") String channelCode) {
+		
+		
+		String position = "uploadMVChange";
+		
+		VideoPlayDTO playdto = new VideoPlayDTO();
+		playdto.setVideo_code(code);
+		playdto.setVideo_title(title);
+		playdto.setVideo_cont(cont);
+		
+		if(uploadFile.fileChangeUpload(mRequest, position, channelCode)) {
+			System.out.println("성공");
+		} else {
+			System.out.println("실패");
+		}
+		
+		
+		
+	}
+	
 	
 	// 영상 이름 받아오기
 	public String[] fileName(MultipartHttpServletRequest mRequest) {

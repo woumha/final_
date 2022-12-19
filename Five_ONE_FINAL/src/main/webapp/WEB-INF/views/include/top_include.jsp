@@ -24,6 +24,11 @@
 #adv_box{
 	display: none;
 }
+
+<%-- 이호찬 --%>
+#user_popup {
+	z-index: 1000;
+}
 </style>
 
 <!-- 자동완성 기능 라이브러리 -->

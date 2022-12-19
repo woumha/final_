@@ -28,7 +28,7 @@
  	</insert>
  	
  	<select id="channel_video_list" parameterType="String" resultType="videoplayDTO">
- 		select * from video_play where channel_code = #{code}
+ 		select * from video_play where channel_code = #{code} order by video_regdate desc
  	</select>
  	
  	<select id="channel_new_video" parameterType="String" resultType="videoplayDTO">
