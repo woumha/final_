@@ -74,6 +74,7 @@ word-break:break-all;
 .content_title1 {
 font-size: 20px;
 margin-left: 15px;
+width: 200px;
 cursor: pointer;
 }
 .content_title1 a { text-decoration: none; }
@@ -108,12 +109,12 @@ margin-left: 10px;
 
 .info_hr { margin-top: 20px; margin-bottom: 20px; }
 
-#history_search_area {
+#search_area {
 position: relative;
 width: 200px;
 margin-bottom: 70px;
 }
-.history_search {
+.good_search {
 width: 100%;
 border: none;
 padding: 10px 12px;
@@ -126,14 +127,14 @@ top: 10px;
 right: 5px;
 margin: 0;
 }
-.video_history_d_img {
+.video_d_img {
 display: inline-block;
 width: 15px;
 vertical-align: top;
 margin-top: 10px;
 }
 
-.video_history_d_img:hover {cursor: pointer;}
+.video_d_img:hover {cursor: pointer;}
 
 /* 로그인 안했을 시 */
 #page_none {
