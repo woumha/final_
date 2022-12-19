@@ -1,9 +1,9 @@
 /* 채널 프사, 배너 배경 색 바꾸는 함수 */
 
- function changeBackColor(membercode){
- 	switch(membercode.charAt(3)){
+ function changeBackColor(channelcode){
+ 	switch(channelcode.charAt(3)){
 			case "1" :
-				$(".channel-backcolor").css("background-color","DarkSalmon");
+				$(".channel-backcolor").css("background-color",DarkSalmon);
 			break
 			
 			case "2" :
@@ -80,14 +80,17 @@
 		}else if ($(location).attr('pathname').indexOf('setting_channel.do') >= 0) {
 			$("ul.info-navi").children('li').eq(1).css('border', '4px solid #fc942c');
 			$("ul.info-navi").children('li').eq(1).css('background-color', '#fc942c');
+			$("ul.info-navi").children('li').eq(1).css('font-weight', 'bold');
 			$("ul.info-navi").children('li').eq(1).css('color', 'white');
 		}else if ($(location).attr('pathname').indexOf('setting_protect.do') >= 0) {
 			$("ul.info-navi").children('li').eq(2).css('border', '4px solid #fc942c');
 			$("ul.info-navi").children('li').eq(2).css('background-color', '#fc942c');
+			$("ul.info-navi").children('li').eq(2).css('font-weight', 'bold');
 			$("ul.info-navi").children('li').eq(2).css('color', 'white');
 		}else if ($(location).attr('pathname').indexOf('vidividi_premium.do') >= 0) {
 			$("ul.info-navi").children('li').eq(3).css('border', '4px solid #fc942c');
 			$("ul.info-navi").children('li').eq(3).css('background-color', '#fc942c');
+			$("ul.info-navi").children('li').eq(3).css('font-weight', 'bold');
 			$("ul.info-navi").children('li').eq(3).css('color', 'white');
 		}
 	}

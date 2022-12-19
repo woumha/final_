@@ -48,7 +48,7 @@
 	ul.info-navi li {
 		font-size: 1.3em;
 		color: gray;
-		transition: all 0.2s;
+		transition: all 0.4s;
 		border-bottom: 4px solid transparent;
 	}
 	

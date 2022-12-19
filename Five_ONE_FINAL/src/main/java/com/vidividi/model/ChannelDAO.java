@@ -23,6 +23,8 @@ public interface ChannelDAO {
 	public String getChannelPsa(String channelCode);
 	
 	public int insertChannel(ChannelDTO dto);
+	
+	public List<ChannelDTO> getChannelList(String memberCode);
 	// 제이님 끝
   
 	//public int setVideoUpload(VideoPlayDTO playDTO);

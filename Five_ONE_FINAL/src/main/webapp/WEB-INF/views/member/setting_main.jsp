@@ -19,9 +19,9 @@
 
 <script type="text/javascript">
 $(function(){
-	if ('${MemberDTO.getMember_rep_channel()}' != ''){
-		let memberCode = '${MemberDTO.getMember_rep_channel()}';
-		changeBackColor(memberCode);
+	if ('${MemberDTO.getMember_code()}' != ''){
+		let channelCode = '${MemberDTO.getMember_rep_channel()}';
+		changeBackColor(channelCode);
 	}
 	
 });
