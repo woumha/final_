@@ -53,8 +53,8 @@
 
 	$(function(){
 		if ('${RepChannelCode}' != ''){
-			let memberCode = '${RepChannelCode}';
-			changeBackColor(memberCode);
+			let channelCode = '${RepChannelCode}';
+			changeBackColor(channelCode);
 		}
 	});
 </script>

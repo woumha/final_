@@ -55,6 +55,9 @@
  	<update id="profil_update" parameterType="String">
  		update user_channel set channel_profil = #{channelCode}-profile.png where channel_code = #{channelCode}
  	</update>
+ 	<select id="getChannelList" parameterType="String" resultType="channeldto">
+ 		select * from user_channel where member_code = #{memberCode} order by channel_name
+ 	</select>
  </mapper>
   
  

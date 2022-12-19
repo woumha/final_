@@ -24,45 +24,16 @@ $(function(){
 	
 	$("#profile-submit-btn").attr("disabled", true);
 	
-	if ('${MemberDTO.getMember_rep_channel()}' != ''){
-		let memberCode = '${MemberDTO.getMember_rep_channel()}';
-		changeBackColor(memberCode);
+	if ('${MemberDTO.getMember_code()}' != ''){
+		let channelCode = '${MemberDTO.getMember_rep_channel()}';
+		changeBackColor(channelCode);
 	}
 		
 	inputPlaceholder();
 	naviCss();
 	noCalHolder(); 
-	
-	/* $("#file-input").on('change', function(event){
-		
-		event.preventDefault();
-		var files = event.originalEvent.dataTransfer.files;
-		var formData = new FormData();
-		formData.append('files', files[0]);
 
-	}); */
-		
 });
-
-<%-- function ajaxFileTest(){
-	
-	$.ajax({
-		url: "<%=request.getContextPath()%>/ajaxFileTest.do",
-		data: $("#fileTest").serialize(),
-		processData: false,
-		contentType: false,
-		type: 'POST',
-		success: function(data){
-			if (data == 'success'){
-				alert('success');
-			}
-		},
-		error : function(){
-			alert('fail');
-		}
-	});
-	
-} --%>
 
 </script>
 <style type="text/css">
@@ -99,16 +70,6 @@ $(function(){
 				</div>
 				<div id="info-wrap-bottom">
 					<div id="profile-input">
-						<div>
-							<span></span>
-						</div>
-<!-- 						<form id="fileTest">
-							<input name="test1">
-							<input name="test2">
-							<input type="file" id="file-input" name="file">
-							<input type="button" value="submit" onclick="ajaxFileTest();">
-						</form>
-						 -->
 						<form>
 							
 							<div class="label-input onfocus" >

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import java.io.PrintWriter;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -138,9 +139,7 @@ public class MemberController {
 		System.out.println(dto.getMember_birth());
 		System.out.println(dto.getMember_phone());
 		System.out.println(dto.getMember_addr());
-		
-		
-		
+
 		return dao.mebmerInfoUpdate(dto);
 	}
 	
@@ -193,13 +192,35 @@ public class MemberController {
 			model.addAttribute("MemberName", dto.getMember_name());
 			model.addAttribute("MemberDTO", dto);
 			
+			return "member/setting_profile";
+		}else {
+			model.addAttribute("msg", "로그인 하세요");
+			model.addAttribute("url", "login.do");
+			
+			return "redirect";
 		}
-		return "member/setting_profile";
+		
 	}
 		
 	@RequestMapping("setting_channel.do")
-	public String setChannel() {
-		return "member/setting_channel";
+	public String setChannel(HttpSession session, MemberDTO dto, Model model) {
+		if (session.getAttribute("MemberCode") != null) {
+			String memberCode = (String)session.getAttribute("MemberCode");
+			dto = dao.getMember(memberCode);
+			
+			model.addAttribute("MemberCode", memberCode);
+			model.addAttribute("MemberName", dto.getMember_name());
+			model.addAttribute("MemberDTO", dto);
+			
+			return "member/setting_channel";
+			
+		}else{
+			model.addAttribute("msg", "로그인 하세요");
+			model.addAttribute("url", "login.do");
+				
+			return "redirect";
+		}
+		
 	}
 	
 	@RequestMapping("setting_protect.do")
@@ -211,17 +232,15 @@ public class MemberController {
 	public String premium() {
 		return "member/vidividi_premium";
 	}
-	
-	/*
-	 * @ResponseBody
-	 * 
-	 * @RequestMapping("ajaxFileTest.do") public String testfile(TestDTO dto) {
-	 * 
-	 * String result ="fail";
-	 * 
-	 * if (dto.getFile() != null) { result = "success"; }
-	 * 
-	 * return result; }
-	 */
+
+	@RequestMapping("getChannelList.do")
+	public String getChannelList(@RequestParam("member_code") String memberCode, Model model, HttpSession session){
+		
+		List<ChannelDTO> channelList = channelDAO.getChannelList(memberCode);
+		MemberDTO dto = dao.getMember(memberCode);
+		model.addAttribute("RepChannelCode", dto.getMember_rep_channel());
+		model.addAttribute("ChannelList", channelList);
+		return "member/channel_list";
+	}
 
 }
