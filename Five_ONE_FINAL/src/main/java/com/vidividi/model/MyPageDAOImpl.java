@@ -64,21 +64,6 @@ public class MyPageDAOImpl implements MyPageDAO {
 	}
 
 	@Override
-	public List<VideoPlayDTO> searchHistory(Map<String, Object> map) {
-		return this.sqlSession.selectList("history_search", map);
-	}
-
-	@Override
-	public int history_one_delete(Map<String, Object> map) {
-		return this.sqlSession.delete("history_one_delete", map);
-	}
-
-	@Override
-	public int getHistory_num(Map<String, Object> map) {
-		return this.sqlSession.selectOne("getHistory_num", map);
-	}
-
-	@Override
 	public int updateSequence(int num) {
 		return this.sqlSession.update("updateSeq", num);
 	}
@@ -153,5 +138,19 @@ public class MyPageDAOImpl implements MyPageDAO {
 		return this.sqlSession.selectList("getHistory_list", map);
 	}
 
+	@Override
+	public List<VideoPlayDTO> getHistory_search(Map<String, Object> map) {
+		return this.sqlSession.selectList("history_search", map);
+	}
+	
+	@Override
+	public int getHistory_num(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getHistory_num", map);
+	}
+
+	@Override
+	public int history_search_one_delete(int num) {
+		return this.sqlSession.delete("history_search_one_delete", num);
+	}
 	
 }

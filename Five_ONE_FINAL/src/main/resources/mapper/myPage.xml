@@ -39,18 +39,6 @@
 		delete from history where channel_code = #{code}
 	</delete>
 	
-	<select id="history_search" parameterType="Map" resultType="videoplayDTO">
-		select * from video_play where video_code in (select video_code from history where channel_code = #{code}) and video_title like '%' || #{keyword} || '%' order by video_regdate desc
-	</select>
-	
-	<delete id="history_one_delete" parameterType="Map">
-		delete from history where channel_code = #{channel_code} and video_code = #{video_code}
-	</delete>
-	
-	<select id="getHistory_num" parameterType="Map" resultType="int">
-		select history_num from history where channel_code = #{channel_code} and video_code = #{video_code}
-	</select>
-	
 	<update id="updateSeq" parameterType="int">
 		<![CDATA[update history set history_num = history_num - 1 where history_num > #{num}]]>
 	</update>
@@ -95,12 +83,20 @@
 		<![CDATA[update subscribe set subscribe_num = subscribe_num - 1 where subscribe_num > #{num}]]>
 	</update>
 	
-	<select id="getHistory_list" resultType="videoplayDTO" parameterType="Map">
-		<![CDATA[select * from (select b.*, row_number()
-				 over(order by video_regdate desc) rnum from video_play b 
-				 where video_code in (select video_code from history where channel_code = #{code})) 
-				 where rnum >= #{startNo} and rnum <= #{endNo}]]>
+	<select id="getHistory_list" parameterType="Map" resultType="videoplayDTO">
+		<![CDATA[select * from (select b.*, row_number() over(order by history_date desc) rnum from (select * from video_play inner join history using(video_code) where history.channel_code = #{code}) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by history_date desc]]>
 	</select>
 	
+	<select id="history_search" parameterType="Map" resultType="videoplayDTO">
+		<![CDATA[select * from (select b.*, row_number() over(order by history_date desc) rnum from (select * from video_play inner join history using(video_code) where history.channel_code = #{code}) b where video_title like '%' || #{keyword} || '%') where rnum >= #{startNo} and rnum <= #{endNo} order by history_date desc]]>
+	</select>
+	
+	<select id="getHistory_num" parameterType="Map" resultType="int">
+		select history_num from history where channel_code = #{channel} and video_code = #{video}
+	</select>
+	
+	<delete id="history_search_one_delete" parameterType="Map">
+		delete from history where history_num = #{num}
+	</delete>
 </mapper>
 
