@@ -58,6 +58,9 @@
  	<select id="getChannelList" parameterType="String" resultType="channeldto">
  		select * from user_channel where member_code = #{memberCode} order by channel_name
  	</select>
+ 	<select id="countMemberChannel" parameterType="String" resultType="int">
+ 		select count(*) from user_channel where member_code = #{memberCode}
+ 	</select>
  </mapper>
   
  

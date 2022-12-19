@@ -233,6 +233,8 @@ public class MemberController {
 		return "member/vidividi_premium";
 	}
 
+	
+	// 에이젝스 -> 제3페이지로 반환
 	@RequestMapping("getChannelList.do")
 	public String getChannelList(@RequestParam("member_code") String memberCode, Model model, HttpSession session){
 		
@@ -242,5 +244,8 @@ public class MemberController {
 		model.addAttribute("ChannelList", channelList);
 		return "member/channel_list";
 	}
+	
+	
+	
 
 }
