@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.stereotype.Service;
 
+import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.LoginDTO;
@@ -20,6 +21,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Inject
 	private MemberDAO dao;
+	
+	@Inject
+	private ChannelDAO channelDAO;
 	
 	@Override
 	public String loginCheck(LoginDTO dto, HttpSession session) {
@@ -101,7 +105,10 @@ public class LoginServiceImpl implements LoginService {
 		
 		channelDTO.setMember_code(memberCode);
 		channelDTO.setChannel_code(channelCode);
-		String channelName = memberName + "님의 채널입니다.";
+		
+		int countChannel = channelDAO.countMemberChannel(memberCode);
+		
+		String channelName = memberName + "님의 "+(countChannel+1)+"번째 채널입니다.";
 		channelDTO.setChannel_name(channelName);
 		
 		return channelDTO;
