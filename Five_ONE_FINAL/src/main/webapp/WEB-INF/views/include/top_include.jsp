@@ -57,8 +57,6 @@
 			changeBackColor(memberCode);
 		}
 	});
-	
-
 </script>
 
 </head>
@@ -69,11 +67,13 @@
 <%--  로딩화면  --%>
 <div id="loading">
 	<div class="rabbit"></div>
-	<div class="clouds"></div>
-	<div class = "loading_logo">
-	<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png" width="230px" height="90px">
+		<div class="clouds"></div>
+		<div class = "loading_logo">
+		<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png" width="230px" height="90px">
 	</div>
 </div>
+
+
 <%--  전체 컨텐츠 화면  --%>
 		 <div id="wrap">
 		
@@ -85,10 +85,16 @@
 			<div id="search_div">
 			
 			<div class="search_select">
-			  <select name="field">
-			    <option value="video_title">동영상 제목</option>
-			    <option value="channel_name">채널명</option>
-			    <option value="video_hash">태그</option>
+			  <select name="field">			    
+			    <c:set var = "tag" value = "${field }" />
+					<option value="video_title"
+						<c:if test="${tag == 'video_title'}">selected</c:if>>동영상 제목</option>
+						
+					<option value="channel_name"
+						<c:if test="${tag == 'channel_name'}">selected</c:if>>채널명</option>
+					
+					<option value="video_hash"
+						<c:if test="${tag == 'video_hash'}">selected</c:if>>태그</option>					
 			  </select>
 			</div>
 			

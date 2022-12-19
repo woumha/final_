@@ -12,10 +12,10 @@ public interface VidividiDAO {
 	int getListCount();
 	
 	//리스트 인기순
-	List<VideoPlayDTO> mainVideo();
+	List<VideoPlayDTO> mainVideo(int startNo, int endNo);
 	
 	//리스트 최신순
-	List<VideoPlayDTO> mainVideo_up();
+	List<VideoPlayDTO> mainVideo_up(int startNo, int endNo);
 	
 	//검색 페이지 넘기기(인기순)
 	List<VideoPlayDTO> searchVideoList(String field, String keyword, String option, int startNo, int endNo);
