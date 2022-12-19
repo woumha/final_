@@ -60,7 +60,7 @@
 		     		동영상 업로드
 		     	</button>
 		     	<button role="button" id="video_manage_btn" class="btn btn-primary btn-blue" onclick="location.href='<%=request.getContextPath() %>/channel_manager.do?code=${owner.channel_code }'">
-		     		동영상 관리
+		     		채널 관리
 		     	</button>			
 			</c:if>	     	
 	     	

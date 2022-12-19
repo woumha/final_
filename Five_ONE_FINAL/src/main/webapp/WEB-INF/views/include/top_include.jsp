@@ -148,13 +148,13 @@
 					<hr>
 					<%-- 내 채널 이미지 //이호찬 --%>
           <c:set var="ccode" value="${RepChannelCode }" />
-					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'"> &nbsp;
-					<li>&nbsp;<i class="fa-regular fa-circle-user"></i>&nbsp;&nbsp;내 채널</li>
-					<li onclick="location.href='<%=request.getContextPath()%>'"> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
-					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
+					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'">
+					<i class="fa-regular fa-circle-user"></i>&nbsp;&nbsp;내 채널</li>
+					<li onclick="location.href='<%=request.getContextPath()%>'"> <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
+					<li><i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
-					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'">&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
-					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
+					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
+					<li><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
 				</ul>
 			</div>
 		</c:if>

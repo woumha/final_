@@ -129,6 +129,12 @@ let hashText = [];
  
  
  // 업로드 버튼 클릭시@@@@@@@@@@@@@@@@@@@@@@@@
+ function getContextPath(){
+	let path = location.href.indexOf(location.host)+location.host.length;
+	
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
  function upload_seccess() {
  	$.ajaxSetup({
 			ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
@@ -196,7 +202,7 @@ function upload_move() {
 	form.setAttribute("method", "post");
 	form.setAttribute("id", "send_form");
 	form.setAttribute("enctype", "multipart/form-data");
-	form.setAttribute("action", '/one/upload_success.do');
+	form.setAttribute("action", getContextPath() + '/upload_success.do');
 	
 	console.log(this.uploadtitle);
 	console.log(this.uploadCont);
@@ -207,6 +213,7 @@ function upload_move() {
 	hiddenField1.setAttribute('type', 'hidden');
 	hiddenField1.setAttribute('name', "1");
 	hiddenField1.setAttribute('value', this.uploadtitle);
+	
 	
 	var hiddenField2 = document.createElement('input');
 	hiddenField2.setAttribute('type', 'hidden');
@@ -224,10 +231,14 @@ function upload_move() {
 	hiddenField4.setAttribute('value', this.selectAn.trim());
 	
 	
-	var request_text = hashText;
+	var request_text = hashText.join();
+	if(request_text == "") {
+		request_text = null;
+	}
+	console.log(request_text + " " +  hashText.join());
 	var hiddenField5 = document.createElement('input');
 	hiddenField5.setAttribute('type', 'hidden');
-	hiddenField5.setAttribute('name', "5");
+	hiddenField5.setAttribute('name', "hash");
 	hiddenField5.setAttribute('value', request_text);
 	
 	
@@ -271,7 +282,7 @@ imgInputTag.addEventListener("change", function() {
     reader.fileName = file.name;
     
 
-	fileReader.onload = function(e) {
+	fileReader.onload = function() {
         fileURL  = fileReader.result;
         let imgTag = `<img src="${fileURL}" class="save_img" />`;
      	imgIcon.innerHTML = imgTag;
@@ -299,7 +310,6 @@ $(function () {
 			if(event.keyCode == 32 || event.keyCode == 13) {
 				hashText.pop();
 				hashText.push(areaValue.match(word));
-				
 			}
 		}
 		/*
