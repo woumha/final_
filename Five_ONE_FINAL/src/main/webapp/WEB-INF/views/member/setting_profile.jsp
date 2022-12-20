@@ -39,6 +39,8 @@ function authEmail(email){
 				$("#input-email").attr("disabled", true);
 				$("#email-auth-request-btn").css("display", "none");
 				$("#email-auth-request-btn").siblings().removeClass("info-hidden");
+				
+				
 			}else if(data == "fail"){
 				toastr.success("이메일을 확인하세요.","이메일 전송 실패");
 			}
