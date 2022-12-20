@@ -26,7 +26,9 @@
 	<c:set var="playList_dto" value="${playlist_dto }"/>
 	
 	
-	<input type="hidden" value="${video_dto.getVideo_code() }" name="video_code" id="video_code">
+	<input type="hidden" value="${video_dto.getVideo_code() }" id="video_code">
+	<input type="hidden" value="${video_dto.getChannel_code() }" id="channel_code">
+	<input type="hidden" value="${video_dto.getCategory_code() }" id="category_code">
 	
 	<jsp:include page="../include/top_include2.jsp"/>
 	<jsp:include page="../include/side_include.jsp"/>
@@ -88,8 +90,18 @@
 						<div class="card_e">
 							<div class="item_a btn_wrap">
 								<button class="watch_btn2 card_b">
-									<div class="subscribe"><div class="card_b"><img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good.svg"><div>좋아요</div></div></div>
-									<div class="subscribe"><div class="card_b"><img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad.svg"><div>싫어요</div></div></div>
+									<div class="subscribe">
+										<div class="card_b">
+											<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good.svg">
+												<div>좋아요</div>
+										</div>
+									</div>
+									<div class="subscribe">
+										<div class="card_b">
+											<img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad.svg">
+												<div>싫어요</div>
+										</div>
+									</div>
 								</button>
 							</div>
 							<div class="item_a btn_wrap">
@@ -142,7 +154,7 @@
 					</div>
 					
 					<div class="item_a">
-						<div id="card_a">
+						<div>
 							<div class="card_a">
 								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"></div>
 								<div class="write_box">
@@ -292,17 +304,17 @@
 				    <button id="slide_left"><</button>
 				  </div>
 				  <div class="scrollmenu">
-				    <a href="#home" data-value="">모두</a>
-				    <a href="#news" data-value="${video_dto.getCategory_code()}">관련 콘텐츠</a>
-				    <a href="#contact">최근에 업로드된 영상</a>
-				    <a href="#about">감상한 동영상</a>
+				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="all">모두</a>
+				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="category">관련 콘텐츠</a>
+				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="current">최근에 업로드된 영상</a>
+				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="history">감상한 동영상</a>
 				  </div> 
 				  <div class="button_container">
 				    <button id="slide_right">></button>
 				  </div>
 				</div>
 				<div id="input_video_list">
-					<div class="video_list_box card_a">
+					<%-- <div class="video_list_box card_a">
 					
 						<div class="video_list_thumbnail">
 							<a>
@@ -313,8 +325,11 @@
 						<div class="video_list_info card_c">
 							<div class="video_list_title">title</div>
 							<div class="video_list_channel_name">name</div>
-							<div class="video_list_view_cnt">cnt</div>
-							<div class="video_list_date">date</div>
+							<div class="video_list_meta_block">
+								<span class="video_list_view_cnt">cnt</span>
+								<span class="video_list_date">date</span> 
+							</div>
+								
 						</div>
 						
 						<div class="render_box">
@@ -324,9 +339,8 @@
 								</button>
 							</div>
 						</div>
-						
-					</div><!-- video_list_box end -->
-				</div>
+					</div><!-- video_list_box end --> --%>
+				</div> <!-- input_video_list end -->
 			</div><!-- video_list_wrap end -->
 						
 		</div> <!-- side_box end -->

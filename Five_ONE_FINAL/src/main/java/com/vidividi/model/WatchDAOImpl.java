@@ -92,22 +92,12 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 	@Override
-	public List<VideoPlayDTO> getNavList(int startNo, int endNo) {
+	public List<VideoPlayDTO> getNavList(String navOption, String channel_code, String category_code) {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
-		map.put("startNo", startNo);
-		map.put("endNo", endNo);
-		return this.sqlSession.selectList("getNavList", map);
-	}
-
-
-	@Override
-	public List<VideoPlayDTO> getNavList(int startNo, int endNo, String navOption) {
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		
-		map.put("startNo", startNo);
-		map.put("endNo", endNo);
-		map.put("navOption", navOption);
+		System.out.println("channel_code >> " +channel_code);
+		map.put("channel_code", channel_code);
+		map.put("category_code", category_code);
 		
 		return this.sqlSession.selectList(navOption, map);
 	}

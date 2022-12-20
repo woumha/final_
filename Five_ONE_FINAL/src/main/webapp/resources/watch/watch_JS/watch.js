@@ -11,15 +11,21 @@ $(document).ready(function() {
 	}
 
 	let video_code = $("#video_code").val();
-	
+	let channel_code = $("#channel_code").val();
+	let category_code = $("#category_code").val();
 
 	let reply_group = 'a1a1a1';
 	
 	let reply_option = "most";
 	let page_reply = 1;
 	let page_comment = 1;
+	let page_nav = 1;
+	let navOption = "all";
 	let loading_reply = true;
-	let loading_video = true;
+	let loading_nav = true;
+	
+
+	let nav_list;
 
 	function getReply(video_code, reply_option, page_reply){
 
@@ -128,6 +134,7 @@ $(document).ready(function() {
 
 				let comment = JSON.parse(data);
 
+
 				$(comment).each(function(){
 					
 					div += "<div class='comment_wrap card_a'>"; //card
@@ -174,7 +181,7 @@ $(document).ready(function() {
 
 				});
 
-				if(comment.length < 10){
+				if(comment.length == 10){
 					div += "<div class='comment_more'>";
 					div += "더보기ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ";
 
@@ -195,13 +202,94 @@ $(document).ready(function() {
 
 	} //getComment() end
 
+	function getNavList(navOption, channel_code, category_code, page_nav){
+
+
+		$.ajax({
+			url : getContextPath() +"/nav_list.do",
+			data : {
+				"navOption" : navOption,
+				"channel_code" : channel_code,
+				"category_code" : category_code
+			},
+			success : function(data){
+				console.log(data);
+				nav_list = data;
+				$("#input_video_list").empty();
+				getNavListSc(nav_list, page_nav);
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+		})
+
+	}// getNavList() end
+
+	function getNavListSc(nav_list, page_nav){
+		console.log('page_nav >>> ' +page_nav);
+		let rowsize = 10;
+		let startNo = ((page_nav * rowsize) - (rowsize - 1))-1;
+		let endNo = (page_nav * rowsize)-1;
+
+		let nav = "";
+		console.log('start >>> ' +startNo);
+		console.log('end>>> '+endNo);
+		console.log('leng >>> ' +nav_list.length);
+		if(nav_list.length==0){
+			console.log('자료없음');
+			nav += "<div class='video_list_none'>찾으시는 동영상이 없습니다.</div>";
+		}else{
+			console.log('자료있음');
+			for(let i=startNo; i<=endNo; i++){
+				if(nav_list.length-1 < i){
+					console.log('if i값>' +i);
+					$("#input_video_list").append(nav);
+					loading_nav = false;
+					return;
+				}else if(nav_list.length > i){
+					console.log('else i값>' +i);
+					nav += "<div class='video_list_box card_a'>";
+					// video_list_box(item1)
+					nav += "<div class='video_list_thumbnail'>";
+					nav += "<a><img class='video_list_img' src='" +getContextPath()+ "/resources/watch/watch_img/" +nav_list[i].video_img+ "'></a>";
+					nav += "</div>";
+					// video_list_box(item2)
+					nav += "<div class='video_list_info card_c'>";
+					nav += "<span class='video_list_title'>" +nav_list[i].video_title+ "</span>";
+					nav += "<span class='video_list_channel_name'>" +nav_list[i].channel_name+ "</span>";
+					nav += "<div class='video_list_meta_block'>";
+					nav += "<span class='video_list_view_cnt'>" +nav_list[i].video_view_cnt+ "</span>";
+					nav += "<span class='video_list_date'>" +nav_list[i].video_regdate+ "</span>";
+					nav += "</div>"; // video_list_mata_block end
+					nav += "</div>"; // video_list_info end
+					// video_list_box(item3)
+					nav += "<div class='render_box'>";
+					nav += "<div class='render_wrap'>";
+					nav += "<button class='render'><img class='render_icon' src='" +getContextPath()+ "/resources/watch/watch_img/render_icon.png'></button>";
+					nav += "</div>"; // .render_wrap end
+					nav += "</div>";// .render_box end
+
+					nav += "</div>"; // .video_list_box end
+
+					//console.log('nav>>> '+nav);
+				}
+				
+			}
+			
+		}
+		
+		$("#input_video_list").append(nav);
+	} // getNavListSc() end
+
 
 
  	 	
 	 
 	//  기본 실행 함수
-	 getReply(video_code, reply_option, page_reply);
-
+	getReply(video_code, reply_option, page_reply);
+	getNavList(navOption, channel_code, category_code, page_nav);
 
 
  		
@@ -244,6 +332,14 @@ $(document).ready(function() {
 	
 		});
 
+		// 스크롤 버튼 클릭
+		$(".scrollmenu_btn").on("click", function(){
+			page_nav = 1;
+			navOption = $(this).attr("data-value");
+			getNavList(navOption, channel_code, category_code, page_nav);
+
+		});
+
 		
 
 
@@ -253,7 +349,15 @@ $(document).ready(function() {
 			if($(window).scrollTop()>=$(document).height() - $(window).height()){
 				if(loading_reply){
 					page_reply++;
+					
 					getReply(video_code, reply_option, page_reply);
+					
+					
+				}
+
+				if(loading_nav){
+					page_nav++;
+					getNavListSc(nav_list, page_nav);
 				}
 			}
 			
