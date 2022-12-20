@@ -30,5 +30,11 @@
 		<!-- VideoPlay -->
 		<typeAlias type="com.vidividi.model.VideoPlayDAO" alias="videoplayDAO"/>
 		<typeAlias type="com.vidividi.variable.VideoPlayDTO" alias="videoplayDTO" />
+		
+		<!-- subscribe -->
+		<typeAlias type="com.vidividi.variable.SubscribeDTO" alias="subscribeDTO" />
+		
+		<!-- good -->
+		<typeAlias type="com.vidividi.variable.GoodDTO" alias="GoodDTO" />
 	</typeAliases>
 </configuration>

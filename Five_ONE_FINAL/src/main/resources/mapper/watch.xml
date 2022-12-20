@@ -85,5 +85,12 @@
  		select count(*) from video_play where channel_code = #{channel_code}
  	</select>
 
+	<select id="getSubscribe" parameterType="hashmap" resultType="subscribeDTO">
+		select * from subscribe where channel_code = #{channel_code} and member_code = #{repChannelCode}
+	</select>
+	
+	<select id="getGood" parameterType="hashmap" resultType="GoodDTO">
+		select * from good where video_code = #{video_code} and channel_code = #{repChannelCode}
+	</select>
 	
 </mapper>

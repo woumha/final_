@@ -11,7 +11,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ReplyDTO;
+import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.GoodDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Repository
@@ -34,12 +36,13 @@ public class WatchDAOImpl implements WatchDAO {
 	}
 
 	@Override
-	public List<ReplyDTO> getReply(String video_code, String reply_option, int startNo, int endNo) {
+	public List<ReplyDTO> getReply(String video_code, String reply_option, String channel_code, int startNo, int endNo) {
 		
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
 		map.put("video_code", video_code);
 		map.put("reply_option", reply_option);
+		map.put("channel_code", channel_code);
 		map.put("startNo", startNo);
 		map.put("endNo", endNo);
 		
@@ -95,10 +98,31 @@ public class WatchDAOImpl implements WatchDAO {
 	public List<VideoPlayDTO> getNavList(String navOption, String channel_code, String category_code) {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
-		System.out.println("channel_code >> " +channel_code);
 		map.put("channel_code", channel_code);
 		map.put("category_code", category_code);
 		
 		return this.sqlSession.selectList(navOption, map);
+	}
+
+
+	@Override
+	public SubscribeDTO getSubscribe(String channel_code, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("channel_code", channel_code);
+		map.put("repChannelCode", repChannelCode);
+		
+		return this.sqlSession.selectOne("getSubscribe", map);
+	}
+
+
+	@Override
+	public GoodDTO getGood(String video_code, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("repChannelCode", repChannelCode);
+		
+		return this.sqlSession.selectOne("getGood", map);
 	}
 }

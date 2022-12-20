@@ -13,14 +13,14 @@ public class VideoPlayDTO {
 	private String video_title;
 	private String video_cont;
 	private String video_img;
-	private int video_good;
+	private String video_good;
 	private int video_bad;
 	private String video_view_cnt;
 	private String video_hash;
 	private String video_regdate;
 	private int video_open;
 	private int category_code;
-	private int channel_like;
+	private String channel_like;
 	
 	public String getVideo_code() {
 		return video_code;
@@ -58,11 +58,11 @@ public class VideoPlayDTO {
 	public void setVideo_img(String video_img) {
 		this.video_img = video_img;
 	}
-	public int getVideo_good() {
+	public String getVideo_good() {
 		return video_good;
 	}
 	public void setVideo_good(int video_good) {
-		this.video_good = video_good;
+		this.video_good = FormatCnt.format(video_good);
 	}
 	public int getVideo_bad() {
 		return video_bad;
@@ -100,11 +100,11 @@ public class VideoPlayDTO {
 	public void setCategory_code(int category_code) {
 		this.category_code = category_code;
 	}
-	public int getChannel_like() {
+	public String getChannel_like() {
 		return channel_like;
 	}
 	public void setChannel_like(int channel_like) {
-		this.channel_like = channel_like;
+		this.channel_like = FormatCnt.format(channel_like);
 	}
 	
 	
