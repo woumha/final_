@@ -37,6 +37,7 @@ import com.vidividi.model.VideoPlayDAOImpl;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 import lombok.NonNull;
@@ -52,8 +53,11 @@ public class ChannelController {
 	@Inject
 	private VideoPlayDAO videodao;
 	
+	
 	@Autowired
 	private LoginService service;
+	
+	
 	
 	
 	@Autowired
@@ -105,16 +109,23 @@ public class ChannelController {
 	}
 	
 	@RequestMapping("movie_upload.do")
-	public String modalUploadPage(HttpServletRequest request, HttpSession session, Model model) {
-		// 취약점 찾았다... 다른 사람이 채널코드만 바꿔서 영상 올릴수가 있다..?
+	public String modalUploadPage(HttpServletRequest request, HttpSession session, Model model, @RequestParam("code") String ownerCode) {
+		// 업로드 모달창
 		
 		String repChannelCode = (String)session.getAttribute("RepChannelCode");
 		// 유효성 체크 한번 해야됨
-	
-		ChannelDTO channelDTO = new ChannelDTO();
 		
+		
+		ChannelDTO channelDTO = new ChannelDTO();
 		channelDTO.setChannel_code(repChannelCode);
+		
+		List<PlaylistDTO> playListTitle = this.dao.getPlayList(ownerCode); // 재생목록 리스트
+		
+		System.out.println(playListTitle);
+		
 		model.addAttribute("uploadOwner", channelDTO);
+		model.addAttribute("list", playListTitle);
+		
 		
 		return "channel/movie_upload";
 	}
@@ -236,12 +247,16 @@ public class ChannelController {
 		playdto.setVideo_code(code);
 		playdto.setVideo_title(title);
 		playdto.setVideo_cont(cont);
+		// list는 재생목록에
 		
-		if(uploadFile.fileChangeUpload(mRequest, position, channelCode)) {
-			System.out.println("성공");
-		} else {
-			System.out.println("실패");
-		}
+		
+		
+		
+//		if(uploadFile.fileChangeUpload(mRequest, position, channelCode)) {
+//			System.out.println("성공");
+//		} else {
+//			System.out.println("실패");
+//		}
 		
 		
 		

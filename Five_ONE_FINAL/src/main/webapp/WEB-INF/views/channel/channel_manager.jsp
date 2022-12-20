@@ -42,6 +42,12 @@
 			    	<div>${channelOwner.channel_date.substring(0, 10) }</div>
 			    </p>
 			  </div>
+			  
+			</div>
+			<div class="card left_card" style="width: 18rem;">
+				<div class="card-body">
+				  	<button type="button" class="btn btn-success" id="listmake" data-toggle="modal" data-target="#playListModal">재생목록 추가하기</button>				
+				</div>
 			</div>
 	    </div>
 	    <div class="col-6 col-xl-7">
@@ -73,10 +79,10 @@
 					  	<tr onclick="modal('${mvdto.video_code}')" data-toggle="modal" data-target="#MoaModal"> <!-- data-toggle="modal" data-target="#MoaModal" -->
 					  		<td>
 					  			<c:if test="${empty mvdto.video_img }">
-							    	<div><video class="show_file"><source src="${path }/resources/AllChannel/${channelOwner.channel_code}/${mvdto.video_title }.mp4"></video></div>
+					   				<div><video class="show_file"><source src="${path }/resources/AllChannel/${channelOwner.channel_code}/${mvdto.video_title }.mp4"></video></div>
 					   			</c:if>
 					   			<c:if test="${!empty mvdto.video_img }">
-					   				<img class="show_file" src="${path }/resources/AllChannel/${channelOwner.channel_code}/thumbnail/${mvdto.video_img }">
+							    	<div><img class="show_file" src="${path }/resources/AllChannel/${channelOwner.channel_code}/thumbnail/${mvdto.video_img }"></div>					   				
 					   			</c:if>
 					  		</td>
 					  		<td>
@@ -128,6 +134,16 @@
 	    </div>
 	  </div>
 	</div>
+	<!-- 재생목록 모달 -->
+	<div class="modal fade" id="playListModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-sm" role="document">
+	    <div class="modal-content-list">
+	    	
+	    </div>
+	  </div>
+	</div>
+	
+	
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel_manager.js"></script>
 	<!-- member js -->
 	<script src="${path}/resources/member/member_js.js"></script>

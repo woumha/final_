@@ -22,6 +22,9 @@ public class VideoPlayDTO {
 	private int category_code;
 	private int channel_like;
 	
+	
+	private String playList_title; // 재생목록
+	
 	public String getVideo_code() {
 		return video_code;
 	}
@@ -107,6 +110,13 @@ public class VideoPlayDTO {
 		this.channel_like = channel_like;
 	}
 	
+	public String getPlayList_title() {
+		return playList_title;
+	}
+	
+	public void setPlayList_title(String playList_title) {
+		this.playList_title = playList_title;
+	}
 	
 	
 }

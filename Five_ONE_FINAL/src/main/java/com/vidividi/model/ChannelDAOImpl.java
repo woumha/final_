@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
@@ -23,6 +24,12 @@ public class ChannelDAOImpl implements ChannelDAO {
 	@Override
 	public ChannelDTO getChannelOwner(MemberDTO memberDTO) {
 		return this.session.selectOne("owner", memberDTO);
+	}
+	
+	// 재생목록 리스트
+	@Override
+	public List<PlaylistDTO> getPlayList(String code) {
+		return this.session.selectList("member_playlist", code);
 	}
 	
 	// 영상 업로드

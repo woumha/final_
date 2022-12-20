@@ -67,11 +67,17 @@
 		  		<strong>재생목록</strong>
 		  	</div>
 		  	<div class="col-12">
-		  		<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
-				  <option selected value="1">one</option>
-				  <option value="2">Two</option>
-				  <option value="3">Three</option>
-				</select>
+		  		
+		  		<c:if test="${empty playList }">
+		  			<a href="#" class="text-decoration-none">재생목록이 없어요</a>
+		  		</c:if>
+		  		<c:if test="${!empty playList }">
+		  			<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
+					  <c:forEach items="${playList }" var="play">
+					      	<option value="${play.playlist_title }">${play.playlist_title }</option>
+					  </c:forEach>
+					</select>
+		  		</c:if>
 		  	</div>
 		  </div>
 		  <hr>
@@ -117,9 +123,9 @@
 				</div>
 		  	</div>
 		  	<div class="col-2 ">
-		  		<button type="submit" class="btn btn-primary up_btn">수 정</button> <!-- submit_btn -->
+		  		<button type="button" class="btn btn-primary up_btn">수 정</button> <!-- submit_btn -->
 		  		&nbsp;
-		  		<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">종 료</button>
+		  		<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">취 소</button>
 		  	</div>
 		  </div>
 		  <hr>
