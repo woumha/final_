@@ -24,6 +24,8 @@ $(function(){
 		changeBackColor(channelCode);
 	}
 	
+	naviCSS();
+	
 });
 
 </script>
@@ -32,7 +34,6 @@ $(function(){
 <body>
 	<div id="info-page-wrap">
 		<jsp:include page="../include/top_include.jsp"/>
-		
 		<div id="info-wrap">
 			<div id="info-side-bar">
 				<jsp:include page="../include/side_include.jsp"></jsp:include>
@@ -40,14 +41,24 @@ $(function(){
 			<div id="info-content">
 				<div id="info-wrap-top">
 					<div id="info-logo">
-						<span class="info-logo">${MemberName }님, 반가워요.</span>
+						<span class="info-logo"><a href='<%=request.getContextPath() %>/setting.do'>${MemberName }님, 반가워요.</a></span>
 					</div>
 					<div id="info-navi-wrap">
 						<ul class="info-navi">
-							<li onclick="location.href='setting_profile.do'">프로필</li>
-							<li onclick="location.href='setting_channel.do'">채널</li>
-							<li onclick="location.href='setting_protect.do'">계정 보안</li> <!-- 이메일 로그인, 로그인 기록  -->
-							<li onclick="location.href='vidividi_premium.do'">비디비디 프리미엄</li>
+							<li onclick="location.href='setting_profile.do'" id="info-menu-1" class="navi-not-page">프로필</li>
+							<li onclick="location.href='setting_channel.do'" id="info-menu-2" class="navi-not-page">채널</li>
+							<li onclick="location.href='setting_protect.do'" id="info-menu-3" class="navi-not-page">계정 보안
+								<ul id="info-submenu-3">
+									<li>이메일 로그인</li>
+									<li>로그인 기록</li>
+								</ul>
+							</li> <!-- 이메일 로그인, 로그인 기록  -->
+							<li onclick="location.href='vidividi_premium.do'" id="info-menu-4" class="navi-not-page">비디비디 프리미엄
+								<ul id="info-submenu-4">
+									<li>프리미엄 가입하기</li>
+									<li>결제 내역</li>
+								</ul>
+							</li>
 						</ul>
 					</div>
 				</div>

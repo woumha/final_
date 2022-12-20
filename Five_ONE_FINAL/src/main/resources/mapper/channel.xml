@@ -61,6 +61,9 @@
  	<select id="countMemberChannel" parameterType="String" resultType="int">
  		select count(*) from user_channel where member_code = #{memberCode}
  	</select>
+ 	<delete id="deleteChannel" parameterType="String">
+ 		delete from user_channel where channel_code = #{channelCode}
+ 	</delete>
  </mapper>
   
  

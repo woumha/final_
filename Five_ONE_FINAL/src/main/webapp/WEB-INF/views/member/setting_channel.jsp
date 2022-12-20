@@ -24,40 +24,17 @@
 
 <script type="text/javascript">
 
-function getChannelList(code){
-	
-	$.ajaxSetup({
-		ContentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		type : "post"								
-	});
-	
-	console.log('ajax로 보낼 멤버 코드 : '+code);
-	
-	$.ajax({
-		url : '<%=request.getContextPath()%>/getChannelList.do',
-		data: { member_code : code },
-		dataType: "html",
-		success : function(data) {
-			$("#setting-channel-content").html(data);
-		},
-		error : function(){
-			toastr.error('채널 목록 불러오기 실패!');
-		}
-	});
-	
-}
-
 
 $(function(){
 	
-	if ('${MemberDTO.getMember_code()}' != ''){
+	if ('${MemberCode}' != ''){
 		let channelCode = '${MemberDTO.getMember_rep_channel()}';
 		let memberCode = '${MemberCode}';
 		changeBackColor(channelCode);
 		getChannelList(memberCode);
 	}
 	
-	naviCss();
+	naviCSS();
 	
 });
 
@@ -113,14 +90,13 @@ $(function(){
 		display: block;
 		position: relative;
 		z-index: -1;
+		border-top-left-radius: 10px;
+    	border-top-right-radius: 10px;
 	}
 	
 	.channel-card-content {
 		border-top: 1px solid lightgray;
 		padding:10px;
-		background-color: white;
-		position: relative;
-		z-index: -1;
 	}
 	
 	.channel-card-content-top {
@@ -129,16 +105,14 @@ $(function(){
 		align-items: center;
 	}
 	
-	.channel-card-content-top input[type=button] {
+	.channel-card-content-top button {
 		height: 35px;
 		color: rgb(50, 50, 50);
 		border: 1px solid lightgray;
 		border-radius: 10px;
 		background-color: rgb(240, 240, 240);
-		position: relative;
-		z-index: 100;
 	}
-	.channel-card-content-top input[type=button]:hover {
+	.channel-card-content-top button:hover {
 		cursor: pointer;
 	}
 	
@@ -146,6 +120,7 @@ $(function(){
 		display: flex;
 		align-items: center;
 		background-color: white;
+		cursor: pointer;
 	}
 	
 	#channel-add:hover {
@@ -175,7 +150,6 @@ $(function(){
 <body>
 	<div id="info-page-wrap">
 		<jsp:include page="../include/top_include.jsp"/>
-		
 		<div id="info-wrap">
 			<div id="info-side-bar">
 				<jsp:include page="../include/side_include.jsp"></jsp:include>
@@ -183,14 +157,24 @@ $(function(){
 			<div id="info-content">
 				<div id="info-wrap-top">
 					<div id="info-logo">
-						<span class="info-logo">${MemberName }님, 반가워요.</span>
+						<span class="info-logo"><a href='<%=request.getContextPath() %>/setting.do'>${MemberName }님, 반가워요.</a></span>
 					</div>
 					<div id="info-navi-wrap">
 						<ul class="info-navi">
-							<li onclick="location.href='setting_profile.do'">프로필</li>
-							<li onclick="location.href='setting_channel.do'">채널</li>
-							<li onclick="location.href='setting_protect.do'">계정 보안</li> <!-- 이메일 로그인, 로그인 기록  -->
-							<li onclick="location.href='vidividi_premium.do'">비디비디 프리미엄</li>
+							<li onclick="location.href='setting_profile.do'" id="info-menu-1" class="navi-not-page">프로필</li>
+							<li onclick="location.href='setting_channel.do'" id="info-menu-2" class="navi-this-page info-navi-selected">채널</li>
+							<li onclick="location.href='setting_protect.do'" id="info-menu-3" class="navi-not-page">계정 보안
+								<ul id="info-submenu-3">
+									<li>이메일 로그인</li>
+									<li>로그인 기록</li>
+								</ul>
+							</li> <!-- 이메일 로그인, 로그인 기록  -->
+							<li onclick="location.href='vidividi_premium.do'" id="info-menu-4" class="navi-not-page">비디비디 프리미엄
+								<ul id="info-submenu-4">
+									<li>프리미엄 가입하기</li>
+									<li>결제 내역</li>
+								</ul>
+							</li>
 						</ul>
 					</div>
 				</div>

@@ -28,6 +28,8 @@ public interface ChannelDAO {
 	
 	public List<ChannelDTO> getChannelList(String memberCode);
 	
+	public int deleteChannel(String channelCode);
+	
 	// 제이님 끝
   
 	//public int setVideoUpload(VideoPlayDTO playDTO);

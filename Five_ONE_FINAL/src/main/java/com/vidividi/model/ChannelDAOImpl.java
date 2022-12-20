@@ -58,6 +58,11 @@ public class ChannelDAOImpl implements ChannelDAO {
 	}
 	
 	@Override
+	public int deleteChannel(String channelCode) {
+		return this.session.delete("deleteChannel", channelCode);
+	}
+	
+	@Override
 	public List<ChannelDTO> getChannelList(String memberCode) {
 		return this.session.selectList("getChannelList", memberCode);
 	}
