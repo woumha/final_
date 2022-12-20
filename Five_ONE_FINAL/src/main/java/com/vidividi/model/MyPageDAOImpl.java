@@ -148,10 +148,38 @@ public class MyPageDAOImpl implements MyPageDAO {
 		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
 		return this.sqlSession.selectList("getGood_list_most", map); }
 	@Override
+	public List<VideoPlayDTO> getGoodList_bad(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getGood_list_bad", map); }
+	@Override
 	public List<VideoPlayDTO> getGood_search_date(Map<String, Object> map) {
-		return this.sqlSession.selectList("good_search", map); }
+		return this.sqlSession.selectList("good_search_date", map); }
 	@Override
 	public List<VideoPlayDTO> getGood_search_most(Map<String, Object> map) {
-		return this.sqlSession.selectList("good_search", map); }
+		return this.sqlSession.selectList("good_search_most", map); }
+	@Override
+	public List<VideoPlayDTO> getGood_search_bad(Map<String, Object> map) {
+		return this.sqlSession.selectList("good_search_bad", map); }
+	@Override
+	public int getGood_num(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getGood_num", map); }
+	@Override
+	public int getGood_bad(int num) {
+		return this.sqlSession.selectOne("getGood_bad", num); }
+	@Override
+	public int good_search_one_delete(int num) {
+		return this.sqlSession.delete("good_search_one_delete", num); }
+	@Override
+	public int updateSequence_g(int num) {
+		return this.sqlSession.update("updateSeq_g", num); }
+
+	@Override
+	public int removeGood(String video) {
+		return this.sqlSession.update("removeGood", video); }
+	@Override
+	public int removeBad(String video) {
+		return this.sqlSession.update("removeBad", video); }
+
 	
 }

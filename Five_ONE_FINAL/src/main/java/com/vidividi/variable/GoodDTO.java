@@ -9,4 +9,5 @@ public class GoodDTO {
 	private String channel_code;
 	private String video_code;
 	private String good_date;
+	private int good_bad;
 }

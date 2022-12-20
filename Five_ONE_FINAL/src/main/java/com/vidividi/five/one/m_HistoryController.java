@@ -1,14 +1,13 @@
 package com.vidividi.five.one;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 import javax.inject.*;
 import javax.servlet.http.*;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.*;
-import org.springframework.ui.Model;
+import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 import com.vidividi.model.*;
 import com.vidividi.variable.*;
@@ -109,10 +108,12 @@ public class m_HistoryController {
 			json.put("video_open", dto.getVideo_open());
 			json.put("category_code", dto.getCategory_code());
 			jArray.add(json);
-		} return jArray.toString(); }
+		}
+		return jArray.toString();
+	}
 
 	@RequestMapping("history_one_delete.do")
-	public void delete_history(@RequestParam("video_code") int video,
+	public void delete_history(@RequestParam("video_code") String video,
 								@RequestParam("channel_code") String channel,
 								@RequestParam("search") int search,
 								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,

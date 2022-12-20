@@ -25,16 +25,20 @@ public class m_GoodController {
 							@RequestParam(value="keyword",  required=false, defaultValue= "none") String keyword,
 							@RequestParam(value="option",  required=false, defaultValue= "date") String option, Model model) {
 		model.addAttribute("channel_code", code);
-		model.addAttribute("keyword", keyword);
+		/* model.addAttribute("keyword", keyword); */
 		model.addAttribute("search", search);
 		model.addAttribute("option", option);
 		return "myPage/good";
 	}
 	
-	@RequestMapping("good_search.do")
+	/*
+	 * @RequestParam(value="keyword", required=false, defaultValue= "none") String keyword,
+	 */
+	
+	@RequestMapping("good_searchs.do")
 	public String history_search(@RequestParam("channel_code") String code,
 								@RequestParam("keyword") String keyword,
-								@RequestParam("option") String option,
+								@RequestParam(value="option",  required=false, defaultValue= "date") String option,
 								Model model) {
 		int search = 2;
 		model.addAttribute("channel_code", code);
@@ -64,6 +68,8 @@ public class m_GoodController {
 			list = this.dao.getGoodList_date(code, startNo, endNo);
 		}else if(option.equals("most")) {
 			list = this.dao.getGoodList_most(code, startNo, endNo);
+		}else if(option.equals("bad")) {
+			list = this.dao.getGoodList_bad(code, startNo, endNo);
 		}
 		for(VideoPlayDTO dto : list) {
 			JSONObject json = new JSONObject();
@@ -89,8 +95,11 @@ public class m_GoodController {
 	public String history_search(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
 								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								@RequestParam(value="option",  required=false, defaultValue="date") String option,
-								int page, HttpServletResponse response) {
+								int page, HttpServletResponse response, Model model) {
 		response.setContentType("text/html; charset=UTF-8");
+		
+		System.out.println("vvvvv good_search.do vvvvv");
+		System.out.println("keyword >>> " + keyword);
 		
 		int rowsize = 5;
 		int startNo = (page * rowsize) - (rowsize - 1);
@@ -104,10 +113,25 @@ public class m_GoodController {
 		map.put("code", code);map.put("keyword", keyword);map.put("startNo", startNo);map.put("endNo", endNo);
 		
 		if(option.equals("date")) {
-			list = this.dao.getGood_search_date(map);
+			if(keyword=="none") {
+				list = this.dao.getGoodList_date(code, startNo, endNo);
+			} else {
+				list = this.dao.getGood_search_date(map);
+			}
 		}else if(option.equals("most")) {
-			list = this.dao.getGood_search_most(map);
+			if(keyword=="none") {
+				list = this.dao.getGoodList_most(code, startNo, endNo);
+			} else {
+				list = this.dao.getGood_search_most(map);
+			}
+		}else if(option.equals("bad")) {
+			if(keyword=="none") {
+				list = this.dao.getGoodList_bad(code, startNo, endNo);
+			} else {
+				list = this.dao.getGood_search_bad(map);
+			}
 		}
+
 		for(VideoPlayDTO dto : list) {
 			JSONObject json = new JSONObject();
 			json.put("video_code", dto.getVideo_code());
@@ -124,36 +148,50 @@ public class m_GoodController {
 			json.put("video_open", dto.getVideo_open());
 			json.put("category_code", dto.getCategory_code());
 			jArray.add(json);
-		} return jArray.toString(); }
+			
+		}
+		return jArray.toString();
+	}
 
 	@RequestMapping("good_one_delete.do")
-	public void delete_history(@RequestParam("video_code") int video,
+	public void delete_history(@RequestParam("video_code") String video,
 								@RequestParam("channel_code") String channel,
 								@RequestParam("search") int search,
 								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
+								@RequestParam("option") String option,
 								HttpServletResponse response) throws IOException {
 		Map<String,Object>map = new HashMap<String,Object>();
 		map.put("video", video); map.put("channel", channel);
 		
-		// 선택된 history_num 가져오기
-		int history_num = this.dao.getHistory_num(map);
+		// 선택된 good_num 가져오기
+		int good_num = this.dao.getGood_num(map);
 		
-		// 선택된 history 데이터 지우기
-		int check = this.dao.history_search_one_delete(history_num);
+		// 선택된 good_num이 좋아요(1) or 싫어요(2) 확인하기
+		int good_bad = this.dao.getGood_bad(good_num);
+		
+		// 선택된 good_num 데이터 지우기
+		int check = this.dao.good_search_one_delete(good_num);
 		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
 		if(check > 0) {
-			this.dao.updateSequence(history_num);
+			
+			// 동영상 좋아요 싫어요 수치 변화 주기
+			if(good_bad == 1) {
+				this.dao.removeGood(video);
+			}else {
+				this.dao.removeBad(video);
+			}
+			this.dao.updateSequence_g(good_num);
 			// search라면
 			if(search == 2) {
 				out.println("<script>");
-				out.println("location.href='history_list.do?channel_code="+channel+"&search=2&keyword="+keyword+"'");
+				out.println("location.href='good_list.do?channel_code="+channel+"&search=2&keyword="+keyword+"&option="+option+"'");
 				out.println("</script>");
 			} else if(search == 1) {
 				out.println("<script>");
-				out.println("location.href='history_list.do?channel_code="+channel+"&search=1&keyword="+keyword+"'");
+				out.println("location.href='good_list.do?channel_code="+channel+"&search=1&keyword="+keyword+"&option="+option+"'");
 				out.println("</script>");
 			}
 		}else {
@@ -164,20 +202,20 @@ public class m_GoodController {
 		}
 	}
 	
-	@RequestMapping("good_history.do")
-	public void delete_history(@RequestParam("channel_code") String code, HttpServletResponse response) throws IOException {
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		int check = this.dao.delete_history(code);
-		if(check > 0) {
-			out.println("<script>");
-			out.println("location.href='history_list.do?channel_code="+code+"'");
-			out.println("</script>");
-		}else {
-			out.println("<script>");
-			out.println("alert('전체 시청기록 삭제 중 오류 발생')");
-			out.println("history.back()");
-			out.println("</script>");
-		}
-	}
+	/*
+	 * @RequestMapping("delete_good.do") public void
+	 * delete_history(@RequestParam("channel_code") String code, HttpServletResponse
+	 * response) throws IOException {
+	 * 
+	 * response.setContentType("text/html; charset=UTF-8");
+	 * 
+	 * // 좋아요 싫어요 갯수 확인
+	 * 
+	 * PrintWriter out = response.getWriter(); int check =
+	 * this.dao.delete_history(code); if(check > 0) { out.println("<script>");
+	 * out.println("location.href='myPage_go.do?channel_code="+code+"'");
+	 * out.println("</script>"); }else { out.println("<script>");
+	 * out.println("alert('전체 시청기록 삭제 중 오류 발생')"); out.println("history.back()");
+	 * out.println("</script>"); } }
+	 */
 }

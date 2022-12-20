@@ -86,22 +86,45 @@
 	<select id="getHistory_num" parameterType="Map" resultType="int">
 		select history_num from history where channel_code = #{channel} and video_code = #{video}
 	</select>
-	<delete id="history_search_one_delete" parameterType="Map">
+	<delete id="history_search_one_delete" parameterType="int">
 		delete from history where history_num = #{num}
 	</delete>
 	<!-- ================================================== good 페이지 ================================================== -->
 	<select id="getGood_list_date" parameterType="Map" resultType="videoplayDTO">
-		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code}) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by good_date desc]]>
+		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 1) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by good_date desc]]>
 	</select>
 	<select id="getGood_list_most" parameterType="Map" resultType="videoplayDTO">
-		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code}) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by video_good desc]]>
+		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 1) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by video_good desc]]>
+	</select>
+	<select id="getGood_list_bad" parameterType="Map" resultType="videoplayDTO">
+		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 2) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by good_date desc]]>
 	</select>
 	<select id="good_search_date" parameterType="Map" resultType="videoplayDTO">
-		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code}) b where video_title like '%' || #{keyword} || '%') where rnum >= #{startNo} and rnum <= #{endNo} order by good_date desc]]>
+		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 1) b where video_title like '%' || #{keyword} || '%') where rnum >= #{startNo} and rnum <= #{endNo} order by good_date desc]]>
 	</select>
 	<select id="good_search_most" parameterType="Map" resultType="videoplayDTO">
-		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code}) b where video_title like '%' || #{keyword} || '%') where rnum >= #{startNo} and rnum <= #{endNo} order by video_good desc]]>
+		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 1) b where video_title like '%' || #{keyword} || '%') where rnum >= #{startNo} and rnum <= #{endNo} order by video_good desc]]>
 	</select>
-	
+	<select id="good_search_bad" parameterType="Map" resultType="videoplayDTO">
+		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 2) b where video_title like '%' || #{keyword} || '%') where rnum >= #{startNo} and rnum <= #{endNo} order by video_good desc]]>
+	</select>
+	<select id="getGood_num" parameterType="Map" resultType="int">
+		select good_num from good where channel_code = #{channel} and video_code = #{video}
+	</select>
+	<select id="getGood_bad" parameterType="int" resultType="int">
+		select good_bad from good where good_num = #{num}
+	</select>
+	<delete id="good_search_one_delete" parameterType="int">
+		delete from good where good_num = #{num}
+	</delete>
+	<update id="updateSeq_g" parameterType="int">
+		<![CDATA[update good set good_num = good_num - 1 where good_num > #{num}]]>
+	</update>
+	<update id="removeGood" parameterType="String">
+		<![CDATA[update video_play set video_good = video_good - 1 where video_code = #{video}]]>
+	</update>
+	<update id="removeBad" parameterType="String">
+		<![CDATA[update video_play set video_bad = video_bad - 1 where video_code = #{video}]]>
+	</update>
 </mapper>
 

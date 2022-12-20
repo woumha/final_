@@ -20,10 +20,11 @@ function getContextPath(){
 }
 
 /* 넘어온 기본 값 */
-let channel_code = ${channel_code};
-let search = ${search};
+let channel_code = "${channel_code}";
+let search = "${search}";
 /* search가 1이면 search 아님,
- * search가 2이면 search 임.       */
+ * search가 2이면 search 임.
+ */
 let option = "${option}";
 /* option가 "date" 이면 좋아요 누른 날짜 순,
  * option가 "most" 이면 좋아요 높은 순      */
@@ -33,8 +34,14 @@ console.log("default option >>> " + option);
 
 let page_good = 1;
 let page_search = 1;
-let loading_good = true;
-let loading_search = true;
+
+let loading_good = false;
+let loading_search = false;
+if(search == 1) {
+	loading_good = true;
+}else if(search == 2) {
+	loading_search = true;
+}
 
 function getGood_new(channel_code, page_good, option){
 	console.log("new ajax안에 option 값 >>> " + option);
@@ -54,9 +61,13 @@ function getGood_new(channel_code, page_good, option){
 			if(str == "[]"){
 				loading_good = false;
 				
+				$(".search_no_area").css('display', 'none');
+				
 			}else{
 				let good = JSON.parse(data);
-				let div = "";  
+				let div = "";
+				div += "<div class='video_boxs'>"
+					
 				$(good).each(function(){
 					div += "<div class='video_box'>";
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
@@ -70,9 +81,13 @@ function getGood_new(channel_code, page_good, option){
 					div += "</a>";
 					div += "</div>";
 				});
+				div += "</div>"
 				loading_saerch = false;
 				loading_good = true;
 				$("#ajax_area").append(div);
+				$(".search_no_area").css('display', 'none');
+				$(".new_no_area").css('display', 'none');
+				
 			}
 		},
 		error : function(){
@@ -84,6 +99,7 @@ function getGood_new(channel_code, page_good, option){
 function getGood_search(channel_code, page_search, option) {
 	var keyword = "${keyword}";
 	console.log("search ajax안에 option 값 >>> " + option);
+	console.log("search ajax안에 keyword 값 >>> " + keyword);
     $.ajax({
   		url : getContextPath() +"/good_search.do",
   		data : {
@@ -98,10 +114,13 @@ function getGood_search(channel_code, page_search, option) {
 			let str = data;
 			if(str == "[]"){
 				loading_search = false;
+				$(".new_no_area").css('display', 'none');
 				
 			}else{
 				let good_search = JSON.parse(data);
-				let div = "";  
+				let div = "";
+				
+				div += "<div class='video_boxs'>"
 				$(good_search).each(function(){
 					div += "<div class='video_box'>";
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
@@ -115,6 +134,7 @@ function getGood_search(channel_code, page_search, option) {
 					div += "</a>";
 					div += "</div>";
 				});
+				div += "</div>"
 				loading_good = false;
 				loading_search = true;
 				$("#search_area").append(div);
@@ -126,45 +146,129 @@ function getGood_search(channel_code, page_search, option) {
 	}); 
 };	
 
+let value = 'none';
+
+function input_option(value) {
+	console.log("input_option 실행! 및 value 값 >>> " + value);
+	if(value == "date") {
+		console.log("최신순 실행!!!");
+		$("#option_date").css('display', 'block');
+		$("#option_most").css('display', 'none');
+		$("#option_bad").css('display', 'none');
+	}else if(value == "most") {
+		console.log("좋아요순 실행!!!");
+		$("#option_date").css('display', 'none');
+		$("#option_most").css('display', 'block');
+		$("#option_bad").css('display', 'none');		
+	}else if(value == "bad") {
+		console.log("싫어요순 실행!!!");
+		$("#option_date").css('display', 'none');
+		$("#option_most").css('display', 'none');
+		$("#option_bad").css('display', 'block');
+	}
+}
+
 
 
 //기본 실행 함수
 if(search == 1) {
+	// list_option 실행
+	console.log("기본 실행 함수 option값 >>> " + "${option}");
+	input_option("${option}");
 	getGood_new(channel_code, page_good, option);	
+	
 } else if(search != 1){
-	getGood_search(channel_code, page_search, option);
+
+	if("${keyword}" == '') {
+		// list_option 실행
+		search = 1;
+		page_good = 1;
+		page_search = 1;
+		console.log("기본 실행 함수 option값 >>> " + "${option}");
+		$(".new_no_area").css('display', 'none');
+		input_option("${option}");
+		getGood_new(channel_code, page_good, option);	
+	} else {
+		// list_option 실행
+		input_option("${option}");
+		getGood_search(channel_code, page_search, option);
+	}
 }
 
-//검색 버튼을 클릭했을 때
-$(document).on("click", "#search_img", function(){		
-	getGood_search(channel_code, page_search, option);
-});
-//날짜순, 좋아요 순 버튼을 클릭했을때 (일단 <p>태그임)
+//날짜순, 좋아요순, 싫어요 버튼을 클릭했을때 (일단 <p>태그임)
 $(document).on("click", "#good_date", function(){
-	console.log("날짜순 눌렀을때 option1 >>> " + option);
 	var option = "date";
-	console.log("날짜순 눌렀을때 option2 >>> " + option);
-	getGood_search(channel_code, page_search, option);
+	console.log("날짜순 눌렀을때 option >>> " + option);
+	
+	input_option(option);
+	
+	if(search == 1) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_new(channel_code, page_search, option);
+		
+	}else if(search == 2) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_search(channel_code, page_search, option);
+	}
 });
+
 $(document).on("click", "#good_most", function(){
-	console.log("날짜순 눌렀을때 option1 >>> " + option);
 	var option = "most";
-	console.log("날짜순 눌렀을때 option2 >>> " + option);
-	getGood_search(channel_code, page_search, option);
+	console.log("좋아요순 눌렀을때 option >>> " + option);
+	
+	input_option(option);
+	
+	if(search == 1) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_new(channel_code, page_search, option);
+		
+	}else if(search == 2) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_search(channel_code, page_search, option);
+	}
 });
+
+$(document).on("click", "#good_bad", function(){
+	var option = "bad";
+	console.log("싫어요순 눌렀을때 option >>> " + option);
+	input_option(option);
+	
+	if(search == 1) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_new(channel_code, page_search, option);
+		
+	}else if(search == 2) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_search(channel_code, page_search, option);
+	}
+});
+
 //무한 스크롤
 $(window).scroll(function(){
 	if($(window).scrollTop()>=$(document).height() - $(window).height()){
 		
 		console.log("무한스크롤 함수 실행!!! ");
 		console.log("무한스크롤 함수 안에 loading_good >>> " + loading_good);
+		console.log("무한스크롤 함수 안에 loading_search >>> " + loading_search);
 		
 		if(loading_good == true){
 			page_good++;
-			getGood_new(channel_code, page_good);
+			getGood_new(channel_code, page_good, option);
 		} else if(loading_search == true){
 			page_search++;
-			getGood_search(channel_code, page_search);
+			getGood_search(channel_code, page_search, option);
 		}
 	}
 }); //scroll end
@@ -182,10 +286,17 @@ $(window).scroll(function(){
 
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
 	<div id="channel_area" class="area_style">
-		<div id="search_area">
-			<form action="<%=request.getContextPath()%>/good_search.do">
+		<div id="search_box">
+			<form action="<%=request.getContextPath()%>/good_searchs.do">
 				<input type="hidden" name="channel_code" value="${channel_code }">
-				<input type="text" class="good_search" name="keyword" placeholder="좋아요 누른 동영상 검색">
+				<input class="good_search" name="keyword" placeholder="좋아요 누른 동영상 검색"
+					<c:if test="${keyword ne ''}">
+						value="${keyword}"
+					</c:if>
+					<c:if test="${keyword eq ''}">
+						value=""
+					</c:if>
+				>
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
 			</form>
 		</div>
@@ -198,20 +309,12 @@ $(window).scroll(function(){
 			</div>
 			
 			<hr class="info_hr">
-			
+
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="#good_delete"><span>🗑</span>&nbsp;좋아요 목록 지우기</a></p>
-				</div>
-			</div>
-			
-			<hr class="info_hr">
-			
-			<div class="info_box">
-				<div class="info_title">
-					<p><a class="btn" href="#good_stop"><span>✂</span>&nbsp;다른기능 or 삭제</a></p>
-					<p id="good_date"> 좋아요 누른 날짜 순</p>
-					<p id="good_most"> 좋아요 많은 영상 순</p>					
+					<p id="good_date"><a class="btn"><span>아이콘</span>&nbsp;좋아요 누른 날짜 순</a></p>
+					<p id="good_most"><a class="btn"><span>아이콘</span>&nbsp;좋아요 많은 영상 순</a></p>
+					<p id="good_bad"><a class="btn"><span>아이콘</span>&nbsp;싫어요 누른 동영상 보기</a></p>			
 				</div>
 			</div>
 		</div>
@@ -227,17 +330,39 @@ $(window).scroll(function(){
 			<div class="test">
 				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/good_list.do?channel_code=${channel_code }'">좋아요 누른 동영상</p>
 			</div>
+			<div id="option_date" class="list_option">최신순</div>
+			<div id="option_most" class="list_option">좋아요순</div>
+			<div id="option_bad" class="list_option">싫어요 동영상</div>
+				
 			<div id="ajax_area"></div>
 			<div id="search_area"></div>
-			</c:if>
+			
+			<div class="new_no_area">
+				<div class="page_none">
+					<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
+					<p class="none_title">리스트가 없습니다....</p>
+				</div>
+			</div>
+			
+			<div class="search_no_area">
+			<div class="search_keyword">검색어 : ${keyword }</div>
+				<div class="page_none">
+					<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
+					<p class="none_title">검색결과가 없습니다....</p>
+				</div>
+			</div>
+			
+			</c:if> <!-- !empty code 끝 -->
+			
+			
 			
 			<!-- 로그인이 되어있지 않으면 출력하는 영역 -->
 			<c:if test="${empty code}">
-			<div id="page_none">
-				<img id="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
-				<p id="none_title">좋아하는 동영상을 감상해 보세요.</p>
-				<p id="none_text">저장하거나 좋아요 표시한 동영상을 보려면 로그인하세요.</p>
-				<button id="none_btn" onclick="location.href='<%=request.getContextPath() %>/login.do'">로그인</button>
+			<div class="page_none">
+				<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
+				<p class="none_title">좋아하는 동영상을 감상해 보세요.</p>
+				<p class="none_text">저장하거나 좋아요 표시한 동영상을 보려면 로그인하세요.</p>
+				<button class="none_btn" onclick="location.href='<%=request.getContextPath() %>/login.do'">로그인</button>
 			</div>
 			</c:if>
 		</div>

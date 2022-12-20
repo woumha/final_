@@ -21,17 +21,30 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-let channel_code = ${channel_code};
-let search = ${search};
+let channel_code = "${channel_code}";
+let search = "${search}";
 
-console.log("default channel_code >>> "+channel_code);
-console.log("default search >>> "+search);
+
 
 
 let page_history = 1;
 let page_search = 1;
-let loading_history = true;
-let loading_search = true;
+
+let loading_history = false;
+let loading_search = false;
+if(search == 1) {
+	loading_history = true;
+}else if(search == 2) {
+	loading_search = true;
+}
+
+console.log("=============== 페이지 시작시 확인용 코드 ========================");
+console.log("default channel_code >>> "+channel_code);
+console.log("default search >>> "+search);
+console.log("default loading_history >>> " + loading_history);
+console.log("default loading_search >>> " + loading_search);
+console.log("===========================================================");
+
 
 
 
@@ -54,13 +67,11 @@ function getHistory_new(channel_code, page_history, video_loction){
 				loading_history = false;
 				
 			}else{
-				let history = JSON.parse(data);
 				
-				let div = "";  
-
-
+				let history = JSON.parse(data);
+				let div = "";
+				
 				$(history).each(function(){
-					/* div += "<div>Hello</div>"; */
 					div += "<div class='video_box'>";
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 					div += "<div class='video_pbox'>";
@@ -100,11 +111,17 @@ function getHistory_search(channel_code, page_search) {
   		contentType : "application/json; charset=UTF-8",
   		success : function(data){
 			let str = data;
+			
+			console.log("data >>> " + data);
+			
 			if(str == "[]"){
 				loading_search = false;
 				
 			}else{
 				let history_search = JSON.parse(data);
+				
+				console.log();
+				
 				let div = "";  
 				$(history_search).each(function(){
 					div += "<div class='video_box'>";
@@ -137,24 +154,21 @@ if(search == 1) {
 	getHistory_new(channel_code, page_history);	
 } else if(search != 1){
 	getHistory_search(channel_code, page_search);
-}
+};
 
 //검색 버튼을 클릭했을 때
-$(document).on("click", "#search_img", function(){		
+/* $(document).on("click", "#search_img", function(){		
 	getHistory_search(channel_code, page_search);
-});
-
-$(document).on("click", "#search_img", function(){		
-	getHistory_search(channel_code, page_search);
-});
-
+}); */
 
 //무한 스크롤
 $(window).scroll(function(){
 	if($(window).scrollTop()>=$(document).height() - $(window).height()){
-		
+		console.log("==================================================================");
 		console.log("무한스크롤 함수 실행!!! ");
 		console.log("무한스크롤 함수 안에 loading_hisory >>> " + loading_history);
+		console.log("무한스크롤 함수 안에 loading_search >>> " + loading_search);
+		console.log("==================================================================");
 		
 		if(loading_history == true){
 			page_history++;
@@ -180,7 +194,7 @@ $(window).scroll(function(){
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
 	<div id="channel_area" class="area_style">
 		<div id="history_search_area">
-			<form action="<%=request.getContextPath()%>/history_search.do">
+			<form action="<%=request.getContextPath()%>/history_searchs.do">
 				<input type="hidden" name="channel_code" value="${channel_code }">
 				<input type="text" class="history_search" name="keyword" placeholder="시청 기록 검색">
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
