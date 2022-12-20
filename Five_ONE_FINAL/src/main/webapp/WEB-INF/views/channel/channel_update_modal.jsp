@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="path" value="${pageContext.request.contextPath }" />
 <c:set var="playList" value="${list }" />
 <!DOCTYPE html>
 <html>
@@ -16,17 +17,122 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
 	<!-- Vertically centered scrollable modal -->
-	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-		코드: ${playList.video_code }
-	  	가나다바
-	  		  	가나다바
-	  		  		  	가나다바
-	  		  		  		  	가나다바
-	  		  		  		  		  	가나다바
-	  		  		  		  		  	ㅍㅍ	  	가나다바	  	가나다바
-	  		  		  		  		  		  	가나다바	  	가나다바
-	  		  		  		  		  		  		  	가나다바
-	  		  		  		  		  		  		  	
+	<div class="modal-body">
+		<form method="post" id="formData" enctype="multipart/form-data" action="<%=request.getContextPath() %>/video_update_success.do">
+	  	<div class="container text-center">
+	  		<input type="hidden" id="mvcode" name="video_code" value="${playList.video_code }">
+	  		<input type="hidden" name="channel_code" value="${playList.video_code }">
+	  	  <div class="row">
+		      <div class="col-md-2">
+		      	<div class="upload-font">V I D I D I</div>
+		      </div>
+		      <div class="col-md-2 ms-auto">
+		      	<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		   </div>
+		   
+		  <div class="row">
+		    <div class="col-6">
+		     <div id="file_area">
+		     	<div>동 영 상</div>
+		      <video id="upload_file_btn" class="update_modal">
+		      	<source class="source_tag" src="${path }/resources/AllChannel/${playList.channel_code}/${playList.video_title}.mp4" type="video/mp4">
+		      </video>
+		     </div> 
+		      <input id="input_file" hidden type="file" name="file_mv">
+		    </div>
+		    
+		    <div class="col-6">
+		      <div class="row">
+		     	<div align="left">제 목</div>
+		      	<input class="form-control" name="video_title" list="datalistOptions" id="exampleDataList" placeholder="변경할 제목을 알려주세요" value="${playList.video_title }">
+		      </div>
+		      <div class="row">
+				<div class="form-floating">
+				<c:if test="${playList.video_cont eq 'null'}">
+				  <textarea class="form-control" name="video_cont" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 250px; width: 100%;"></textarea>
+				  <label for="floatingTextarea2">영상을 설명해주세요</label>
+				</c:if>
+				<c:if test="${playList.video_cont ne 'null' }">
+				  <textarea class="form-control" name="video_cont" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 250px; width: 100%;">${playList.video_cont }</textarea>
+				  <label for="floatingTextarea2">영상을 설명해주세요</label>
+				</c:if> 
+				</div>
+		      </div>
+		    </div>
+		  </div>
+		  <hr>
+		  <div class="row">
+		  	<div class="col-12" align="left">
+		  		<strong>재생목록</strong>
+		  	</div>
+		  	<div class="col-12">
+		  		<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
+				  <option selected value="1">one</option>
+				  <option value="2">Two</option>
+				  <option value="3">Three</option>
+				</select>
+		  	</div>
+		  </div>
+		  <hr>
+		  
+		  <div class="row">
+		  	<div class="col-8" align="left">
+		  		<h5>시청자층*</h5>
+				이 동영상이 아동용으로 설정됨 크리에이터가 설정함<br>
+				모든 크리에이터는 위치에 상관없이 아동 온라인 개인정보 보호법(COPPA) 및 기타 법률을 준수해야 할 법적인 의무가 있습니다. 아동용 동영상인지 여부는 크리에이터가 지정해야 합니다.
+		  	</div>
+		  	<div class="col-4" align="left">
+		  		<br>
+		  		<div class="form-check age_select" >
+					  <input class="form-check-input" type="radio" name="flexRadioDefault_age" id="flexRadioDefault1" checked>
+					  <label class="form-check-label" for="flexRadioDefault1">
+					    예 아동용 입니다
+					  </label>
+					</div>
+					<div class="form-check age_select">
+					  <input class="form-check-input" type="radio" name="flexRadioDefault_age" id="flexRadioDefault2">
+					  <label class="form-check-label" for="flexRadioDefault2">
+					    아니요 성인용 입니다
+					  </label>
+				</div>
+		  	</div>
+		  </div>
+		  <hr>
+		  <div class="row" align="left">
+		  	<strong>공개 여부</strong>
+		  	<div class="col-10 open_check">
+		  		<div class="form-check">
+				  <input class="form-check-input" type="radio" name="flexRadioDefault_openClose" id="flexRadioDefault3" checked>
+				  <label class="form-check-label" for="flexRadioDefault3">
+				   	시청자들과 같이 보기
+				  </label>
+				</div>
+				&nbsp; &nbsp;
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="flexRadioDefault_openClose" id="flexRadioDefault4">
+				  <label class="form-check-label" for="flexRadioDefault4">
+				   	나만 보기
+				  </label>
+				</div>
+		  	</div>
+		  	<div class="col-2 ">
+		  		<button type="submit" class="btn btn-primary up_btn">수 정</button> <!-- submit_btn -->
+		  		&nbsp;
+		  		<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">종 료</button>
+		  	</div>
+		  </div>
+		  <hr>
+		  <div class="row">
+			<strong>영상 첫이미지 선택하기</strong>
+			<div class="input-group mb-3">
+			  <input type="file" id="input_img" name="file_img" class="form-control" id="inputGroupFile02">
+			</div>		  
+		  </div>
+		</div> 	
+		</form>		  		  		  		  	
 	</div>
+	
+	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel_manager.js"></script>
 </body>
 </html>

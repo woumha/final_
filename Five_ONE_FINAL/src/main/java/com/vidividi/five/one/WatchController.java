@@ -205,24 +205,15 @@ public class WatchController{
 		return jArray.toJSONString();
 	}
 	
-	
+	@ResponseBody
 	@RequestMapping("nav_list.do")
-	public List<VideoPlayDTO> getNavList(@RequestParam(value="navOption", required = false) String navOption, @RequestParam("page") int page) {
+	public List<VideoPlayDTO> getNavListAll(@RequestParam(value="navOption", required = false) String navOption, @RequestParam(value="channel_code", required = false) String channel_code, @RequestParam(value="category_code", required = false) String category_code) {
 		
-		List<VideoPlayDTO> list;
-		
-		int rowsize = 10;
-		int startNo = (page * rowsize) - (rowsize - 1);
-		int endNo = (page * rowsize);
-		
-		if(navOption.equals("")) {
-			list = this.dao.getNavList(startNo, endNo);
-		}else {
-			list= this.dao.getNavList(startNo, endNo, navOption); 
-		}
+		List<VideoPlayDTO> list = this.dao.getNavList(navOption, channel_code, category_code);
 		
 		return list;
 	}
+	
 	
 	
 	@RequestMapping("test.do")
