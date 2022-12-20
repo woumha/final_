@@ -23,7 +23,7 @@
 	<input type="hidden" id="chaName" value="${channelOwner.channel_name }">
 	<div class="container col-xl-12 align-middle" style="margin-top: 0.5%;">
 	  <div class="row justify-content-center">
-	    <div class="col-4 col-xl-3 d-none d-xl-block d-xxl-none">
+	    <div class="col-4 col-xl-3 d-xl-block d-xxl-none">
 	      	<div class="card left_card" style="width: 18rem;">
 			  <img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" class="card-img-top left_img channel-backcolor" onload="changeBackColor('${channelOwner.getChannel_code()}')" alt="...">
 			  <button class="btn btn-primary profil_settings">
@@ -84,10 +84,10 @@
 					  		</td>
 					  		<td>
 					  			<c:if test="${mvdto.video_open == 1}">
-									공개
+									비공개
 								</c:if>
 								<c:if test="${mvdto.video_open == 0}">
-									비공개
+									공개
 								</c:if>
 					  		</td>
 					  		<td>
@@ -121,7 +121,7 @@
 	  </div>
 	</div>
 	<!-- 모달창 -->
-	<div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+	<div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true" data-backdrop="static">
 	  <div class="modal-dialog modal-xl" role="document">
 	    <div class="modal-content">
 	    	

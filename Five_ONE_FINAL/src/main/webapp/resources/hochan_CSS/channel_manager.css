@@ -14,3 +14,26 @@
 .font_setting {
 	font-size: 16px;
 }
+
+.update_modal {
+	width: 100%;
+	height: 100%;
+}
+
+.form-control {
+	resize: none;
+	margin-top: 8px;
+	display: flex;
+}
+
+.upload-font {
+	color: orange;
+	font-weight: bold;
+	font-size: 22px;
+	padding: 5px;
+}
+
+.open_check {
+	display: flex;
+	text-align: right;
+}
