@@ -59,8 +59,8 @@
 		     	<button data-toggle="modal" data-target="#exampleModal" role="button" id="video_upload_btn" class="btn btn-primary btn-blue">
 		     		동영상 업로드
 		     	</button>
-		     	<button role="button" id="video_manage_btn" class="btn btn-primary btn-blue" onclick="locaton.href='<%=request.getContextPath() %>/channel_manager.do?code=${owner.channel_code }'">
-		     		동영상 관리
+		     	<button role="button" id="video_manage_btn" class="btn btn-primary btn-blue" onclick="location.href='<%=request.getContextPath() %>/channel_manager.do?code=${owner.channel_code }'">
+		     		채널 관리
 		     	</button>			
 			</c:if>	     	
 	     	
@@ -74,8 +74,11 @@
 	    </div>
 	  </div>
 	   <c:if test="${empty current}">
-	    	<div class="col-lg-12 align-self-center">
-	    		영상을 올려주세요!
+	    	<div class="col-lg-12 align-self-center div_upload_btn">
+	    		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle arrow upload_btn" viewBox="0 0 16 16">
+				  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+				</svg>
+				<div class="arrow upload_font">시청자들에게 영상 보여주기</div>
 	    	</div>
 	    </c:if>
 		<c:if test="${!empty current }">
@@ -116,8 +119,12 @@
 				  	
 				  	<div class="embed-responsive embed-responsive-16by9 col-lg-4" align="left">
 				  		<c:if test="${!empty lastUpVideo }">
+				  			<c:if test="${empty lastUpVideo.video_img }" >
+				  			</c:if>
+				  			<c:if test="${!empty lastUpVideo.video_img }" >
+				  			</c:if>
 				  			<video autoplay loop class="embed-responsive-item" width="400px" height="300px" controls>
-								<source src="${path }/resources/AllChannel/${owner.channel_code  }/${lastUpVideo.video_title}" type="video/mp4">
+									<source src="${path }/resources/AllChannel/${owner.channel_code  }/${lastUpVideo.video_title}.mp4" type="video/mp4">
 							</video>
 				  		</c:if>
 				  		<c:if test="${empty lastUpVideo }">
@@ -134,46 +141,21 @@
 				</div><!-- 메인 배너 영상 -->
 				<%-- 다음 재생목록 영상 --%>
 				<hr width="100%" color="gary">
-				<div class="play_list_title">재생목록 제목</div>
+				<div class="play_list_title">최근 업로드한 영상</div>
 				<div class="play_list_title">▶모두재생</div>
 				<div class="container text-center"> <!-- 그리드 시작 -->
 				  <div class="row">
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
+				  	<c:forEach items="${current }" var="currentList">
+					    <div class="col-12 col-sm-6 col-lg-3">
+					    	<div class="m-1 ratio ratio-4x3">
+						      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
+									<source src="${path }/resources/AllChannel/${owner.channel_code}/${currentList.video_title}.mp4" type="video/mp4">
+								</video>
+						    </div>
+						    <div class="video-title">${currentList.video_title }</div>
+						    <div class="video-up">${currentList.video_view_cnt }회 . ${currentList.video_regdate }</div>
+					    </div>				  		
+				  	</c:forEach>
 				  </div>
 				</div><!-- 그리드 -->
 				

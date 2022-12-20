@@ -1,5 +1,6 @@
 package com.vidividi.service;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.stereotype.Service;
 
+import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.LoginDTO;
@@ -19,6 +21,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Inject
 	private MemberDAO dao;
+	
+	@Inject
+	private ChannelDAO channelDAO;
 	
 	@Override
 	public String loginCheck(LoginDTO dto, HttpSession session) {
@@ -57,6 +62,7 @@ public class LoginServiceImpl implements LoginService {
 		return idCheck;
 	}
 	
+	// 멤버 코드
 	@Override
 	public String generateMembercode() {
 		String result = "";
@@ -68,9 +74,9 @@ public class LoginServiceImpl implements LoginService {
 		return result;
 	}
 
-	// 비디오 코드
+	// 채널 코드
 	@Override
-	public String videoCodeMaking() {
+	public String generateChannelCode() {
 		String result = "";
 		UUID uuid = UUID.randomUUID();
 		result = "CH-"+uuid.toString();
@@ -80,6 +86,18 @@ public class LoginServiceImpl implements LoginService {
 		return result;
 	}
 	
+	// 비디오 코드
+	@Override
+	public String generateVideoCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "MV-"+uuid.toString();
+		
+		System.out.println("새로 생성된 비디오 코드 : "+result);
+		
+		return result;
+	}
+
 	@Override
 	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName) {
 		
@@ -87,9 +105,38 @@ public class LoginServiceImpl implements LoginService {
 		
 		channelDTO.setMember_code(memberCode);
 		channelDTO.setChannel_code(channelCode);
-		String channelName = memberName + "님의 채널입니다.";
+		
+		int countChannel = channelDAO.countMemberChannel(memberCode);
+		
+		String channelName = memberName + "님의 "+(countChannel+1)+"번째 채널입니다.";
 		channelDTO.setChannel_name(channelName);
 		
 		return channelDTO;
 	}
+	
+	
+	@Override
+	public int getAge(String date) {
+		
+		String temp = date.substring(0, 10);
+		String birth[] = temp.split("-");
+		
+		int birthYear = Integer.parseInt(birth[0]);
+		int birthMonth = Integer.parseInt(birth[1]);
+		int birthDay = Integer.parseInt(birth[2]);
+		
+		Calendar today = Calendar.getInstance();
+		
+		int todayYear = today.get(Calendar.YEAR);
+		int todayMonth = today.get(Calendar.MONTH);
+		int todayDay = today.get(Calendar.DAY_OF_MONTH);
+		
+		int age = todayYear - birthYear;
+		if (birthMonth * 100 + birthDay > todayMonth * 100 + todayDay) {
+			age = age - 1;
+		}
+		
+		return age;
+	}
+	
 }

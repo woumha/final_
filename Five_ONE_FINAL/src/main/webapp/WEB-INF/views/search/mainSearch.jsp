@@ -16,11 +16,9 @@
 
 <!-- 스타일 시트 -->
 <link rel="stylesheet" href="${path }/resources/eunji_CSS/search.css">	
-
 </head>
-<body>
 
-<%-- <c:set var="list" value="${Search }" /> --%>
+<body>
 
 <div id="all_content">
 
@@ -38,29 +36,47 @@
 	
 
 <%-- 정렬 변환 스위치 영역 --%>
-<div class="centerer">
-    <div class="switcher">
-      <input type="radio" name="balance" value="yin" id="yin" class="switcher__input switcher__input--yin" checked="">
-      <label for="yin" class="switcher__label" id="popular">
-      	<i class="fa-solid fa-ranking-star"></i> 인기순</label>
-      
-      <input type="radio" name="balance" value="yang" id="yang" class="switcher__input switcher__input--yang">
-      <label for="yang" class="switcher__label" id="recent">
-      	<i class="fa-solid fa-star"></i> 최신순</label>
-      
-      <span class="switcher__toggle"></span>
-    </div>
-</div>
-	
+	<div class="centerer">
+	    <div class="switcher">
+	      <input type="radio" name="balance" value="yin" id="yin" class="switcher__input switcher__input--yin" checked="">
+	      <label for="yin" class="switcher__label" id="popular">
+	      	<i class="fa-solid fa-ranking-star"></i> 인기순</label>
+	      
+	      <input type="radio" name="balance" value="yang" id="yang" class="switcher__input switcher__input--yang">
+	      <label for="yang" class="switcher__label" id="recent">
+	      	<i class="fa-solid fa-star"></i> 최신순</label>
+	      
+	      <span class="switcher__toggle"></span>
+	    </div>
+	</div>
+
 
 <%-- 검색 페이지 출력 영역 --%>
 	<div id="search_result"></div>
+
 	
-</div> <!-- 전체 div end -->
-	
+<%-- 무한 스크롤 중 로딩... --%>
+ <div class="loading_list">
+  <div>
+    <div class="c1"></div>
+    <div class="c2"></div>
+    <div class="c3"></div>
+    <div class="c4"></div>
+  </div>
+  <span>loading · · ·</span>
+</div>
+
+
+<%-- 광고 배너 이미지 영역 --%>	
+	<div id="adv_box">
+		<img alt="경로 못찾음" id="adv" src="${path }/resources/eunji_IMG/test_banner.png">
+	</div>
+
+<%-- 넘어온 값 받기 --%>
 	<input type="hidden" value="${keyword }" id="keyword" >
 	<input type="hidden" value="${field }" id="field" >
-	
+
+</div> <!-- 전체 div end -->
 </body> 
 
 
@@ -69,12 +85,15 @@
 
 let keyword = $("#keyword").val();
 let field = $("#field").val();
+let page = 1;
 let option = "video_regdate";
+let loading = true;
 
 console.log("필드값>>>" + field);
 console.log("키워드값>>>" + keyword);
+console.log("페이지값>>>" + page);
 
-function getSearchVideoList_popular(keyword, field, option){
+function getSearchVideoList_popular(keyword, field, option, page){
 	
 	$.ajax({
 		url : "search_result.do",
@@ -82,7 +101,8 @@ function getSearchVideoList_popular(keyword, field, option){
 		data : {
 			field : field,
 			keyword : keyword,
-			option : option
+			option : option,
+			page : page
 		},
 		success: function(data){
 			
@@ -97,11 +117,15 @@ function getSearchVideoList_popular(keyword, field, option){
 			div += "<div class='video_box'>";
 			div += "<video width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 				div += "<div class='video_pbox'>";
-					div += "<p class = 'video_title_p'>" +  "<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title;
-					div += "<p class = 'video_channel_p'>" + this.channel_name;
-					div += "<p class = 'video_view_date_p'>" + "조회수 : &nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate;
+				
+					div += "<p class = 'video_title_p'>" +  "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
+							"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title;
+					
+					div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name;
+					
+					div += "<p class = 'video_view_date_p'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate;
 					div += "<p class = 'video_views_p'>" + this.video_cont;
-					div += "<p class = 'video_hash_p'>" + '#비디오_해시 #태그_들어갑니다~';
+					div += "<p class = 'video_hash_p'>" + '#비디오_해시 #태그_들어갑니다~ ';
 				div += "</div>"; //video pbox end
 			div += "</div>"; //video box end
 			div += "</div>"; //watch box end
@@ -109,7 +133,7 @@ function getSearchVideoList_popular(keyword, field, option){
 			
 			div += "</div>";
 			
-			$("#search_result").html(div);		
+			$("#search_result").append(div);		
 			
 		},
 		
@@ -121,12 +145,14 @@ function getSearchVideoList_popular(keyword, field, option){
 	});
 }
 
-getSearchVideoList_popular(keyword, field, option);
+	getSearchVideoList_popular(keyword, field, option, page);
 
 
 /*-----------------------------------------------------검색결과 최신순 ajax----------------------------------------------------------------  */
 	
- function getSearchVideoList_recent(keyword, field, option){
+let vicode = this.video_code;
+
+ function getSearchVideoList_recent(keyword, field, option, page){
 	
 	$.ajax({
 		url : "search_result_new.do",
@@ -134,7 +160,8 @@ getSearchVideoList_popular(keyword, field, option);
 		data : {
 			field : field,
 			keyword : keyword,
-			option : option
+			option : option,
+			page : page
 		},
 		success: function(data){
 			
@@ -149,11 +176,12 @@ getSearchVideoList_popular(keyword, field, option);
 			div += "<div class='video_box'>";
 			div += "<video width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 				div += "<div class='video_pbox'>";
-					div += "<p class = 'video_title_p'>" +  "<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title;
-					div += "<p class = 'video_channel_p'>" + this.channel_name;
-					div += "<p class = 'video_view_date_p'>" + "조회수 : &nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate;
+					div += "<p class = 'video_title_p'>" +  "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
+						"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title;
+					div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name;
+					div += "<p class = 'video_view_date_p'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate;
 					div += "<p class = 'video_views_p'>" + this.video_cont;
-					div += "<p class = 'video_hash_p'>" + '#비디오_해시 #태그_들어갑니다~';
+					div += "<p class = 'video_hash_p'>" + '#비디오_해시 #태그_들어갑니다~ #태그1 #태그2 #태그3';
 				div += "</div>"; //video pbox end
 			div += "</div>"; //video box end
 			div += "</div>"; //watch box end
@@ -161,14 +189,14 @@ getSearchVideoList_popular(keyword, field, option);
 			
 			div += "</div>";
 			
-			$("#search_result").html(div);		
+			
+			$("#search_result").append(div);		
 			
 		},
 		
 		error: function(){
 			console.log(data);
-			alert("검색 비디오 리스트 인기 ajax 오류입니다.");
-			
+			alert("검색 비디오 리스트 최신 ajax 오류입니다.");
 		}
 	});
 }
@@ -180,13 +208,61 @@ getSearchVideoList_popular(keyword, field, option);
 	//인기순 버튼을 클릭했을 때
 	$(document).on("click", ".switcher__input--yin", function(){		
 		option = "video_good";
-		getSearchVideoList_popular(keyword, field, option);
+		$("#search_table").remove();
+		getSearchVideoList_popular(keyword, field, option, page);
 	});
 	
 	//최신순 버튼을 클릭했을 때
-	$(document).on("click", ".switcher__input--yang", function(){		
-		getSearchVideoList_recent(keyword, field, option);
+	$(document).on("click", ".switcher__input--yang", function(){
+		$("#search_table").remove();
+		getSearchVideoList_recent(keyword, field, option, page);
 	});
+	
+	
+//---------------------------------------------------------------- 배너 스크롤 따라 이동 ---------------------------------------------------------------------	
+
+	// 기본 위치(top)값
+		var floatPosition = parseInt($("#adv_box").css('top'))
+	
+	// scroll 인식
+		$(window).scroll(function() {
+				  
+	// 현재 스크롤 위치
+		var currentTop = $(window).scrollTop();
+		var bannerTop = currentTop + floatPosition + "px";
+	
+	//이동 애니메이션
+		$("#adv_box").stop().animate({
+			"top" : bannerTop
+		}, 750);
+
+		}).scroll();
+		
+//-----------------------------------------------------------------무한 스크롤------------------------------------------
+
+$(window).scroll(function(){
+
+    if(loading){
+        if($(window).scrollTop()>=$(document).height() - $(window).height()){
+
+           page++;
+                 	
+           getSearchVideoList_popular(keyword, field, option, page);
+           getSearchVideoList_recent(keyword, field, option, page);
+        	
+        }else{
+    		//alert("페이지 로딩 중입니다.");
+
+        }
+    }else{
+    	$(".loading_list").css("display", "none");
+    }
+});
+
+
+//------------------------------------------------------무한 스크롤 애니메이션------------------------------------------
+
+
 
 
 </script>

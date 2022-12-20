@@ -9,84 +9,176 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
 <script type="text/javascript">
-window.onload = function() {
 
-	let channel_code = ${channel_code };
-	console.log('channel_code >>> ' + channel_code);
+$("link[rel=stylesheet][href*='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css']").remove();
+
+function getContextPath(){
 	
-	let video_location = 'https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4';
+	let path = location.href.indexOf(location.host)+location.host.length;
 	
-/* 	$.ajax({
-		console.log('==================================');
-		console.log('channel_code >>> ' + channel_code);
-		
-		type: "get",
-		url: getContextPath()+"/history.do?channel_code"+channel_code,
-		dataType: "json",
-		success:function(data){
-			var s= "";
-				let list = data.datas;
-				$(list).each(function(i,item){
-				s+= "<div class='video_box'>"
-				s+= "<video class='test_video' src="+item.video_location+" controls></video>";
-				s+= "<div class='video_pbox'>";
-				s+= "<p class='video_title_p'>"+item.video_title+"<p>";
-				s+= "<p class='video_channel_p'>"+item.channel_name+" • 조회수 "+item.video_view_cnt+"회<p>";
-				s+= "<p class='video_views_p'>"+item.video_cont+"<p>";
-				s+= "</div>";
-				s+= "<a href='+"{path}"+/history_one_delete.do?video_code="+item.video_code+"&channel_code="+channel_code+"'>";
-				s+= "<img class='video_history_d_img' src='+"{path}+"/resources/img/x.png'>";
-				s+= "</a>";
-				s+= "</div>";
-				});
-			
-			$("#ajax_area").html(s)
-		}
-	});
-}; 
-*/
-/* 
-function history_list() {
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
+let channel_code = ${channel_code};
+let option = ${option};
+
+console.log("default channel_code >>> "+channel_code);
+console.log("default option >>> "+option);
+
+
+let page_history = 1;
+let page_search = 1;
+let loading_history = true;
+let loading_search = true;
+
+
+
+function getHistory_new(channel_code, page_history, video_loction){
+
 	$.ajax({
-		url : getContextPath()+"/history_test.do?channel_code="+channel_code,
-		type : "get",
-		dataType : "json",
-		success : history_list,
-		error : function () {alert("error");}
-	});
+
+		url : getContextPath() +"/history_new.do",
+		data : {
+			"channel_code" : channel_code,
+			"page" : page_history 
+		},
+		datatype : 'JSON',
+		contentType : "application/json; charset=UTF-8",
+		success : function(data){
+			
+			let str = data;
+
+			if(str == "[]"){
+				loading_history = false;
+				
+				let s = "";
+				
+				s += "<div id='none_list'>";
+				s += "목록에 리스트가 없습니다.";
+				s += "</div>";
+				$("#ajax_area").append(s);
+				
+			}else{
+				let history = JSON.parse(data);
+				
+				let div = "";  
+
+
+				$(history).each(function(){
+					/* div += "<div>Hello</div>"; */
+					div += "<div class='video_box'>";
+					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<div class='video_pbox'>";
+					div += "<p class='video_title_p'>"+this.video_title+"<p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
+					div += "</div>";
+					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&option="+option+"'>";
+					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "</a>";
+					div += "</div>";
+				});
+				loading_saerch = false;
+				loading_history = true;
+				$("#ajax_area").append(div);
+			}
+		},
+		error : function(){
+			alert('히스토리_new 불러오기 오류!!!!!!!!!');
+		}
+	}); 
 }
 
-function history_list(data) {
-	var result = "";
-	$.each(data, (i,item)){
-		result+= "<div class='video_box'>"
-		result+= "<video class='test_video' src="+item.video_location+" controls></video>";
-		result+= "<div class='video_pbox'>";
-		result+= "<p class='video_title_p'>"+item.video_title+"<p>";
-		result+= "<p class='video_channel_p'>"+item.channel_name+" • 조회수 "+item.video_view_cnt+"회<p>";
-		result+= "<p class='video_views_p'>"+item.video_cont+"<p>";
-		result+= "</div>";
-		result+= "<a href='+"{path}"+/history_one_delete.do?video_code="+item.video_code+"&channel_code="+channel_code+"'>";
-		result+= "<img class='video_history_d_img' src='"+{path}+"/resources/img/x.png'>";
-		result+= "</a>";
-		result+= "</div>";
-	});
-}
- */
+function getHistory_search(channel_code, page_search) {
+	var keyword = "${keyword}";
+	console.log("search channel_code >>> "+channel_code);
+	console.log("search keyword >>> "+keyword);
+	console.log("search page_search >>> "+page_search);
+    $.ajax({
+  		url : getContextPath() +"/history_search.do",
+  		data : {
+  			"channel_code" : channel_code,
+			"page" : page_search,
+			"keyword" : keyword
+  		}, 
+  		datatype : 'JSON',
+  		contentType : "application/json; charset=UTF-8",
+  		success : function(data){
+			let str = data;
+			if(str == "[]"){
+				loading_search = false;
+				
+				let s = "";
+				
+				s += "<div id='none_list'>";
+				s += "목록에 리스트가 없습니다.";
+				s += "</div>";
+				$("#ajax_area").append(s);
+				
+			}else{
+				let history_search = JSON.parse(data);
+				let div = "";  
+				$(history_search).each(function(){
+					div += "<div class='video_box'>";
+					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<div class='video_pbox'>";
+					div += "<p class='video_title_p'>"+this.video_title+"<p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
+					div += "</div>";
+					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&keyword="+keyword+"&option="+option+"'>";
+					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "</a>";
+					div += "</div>";
+				});
+				loading_history = false;
+				loading_search = true;
+				$("#search_area").append(div);
+			}
+		},
+		error : function(){
+			alert('히스토리_search 불러오기 오류!!!!!!!!!');
+		}
+	}); 
+};	
 
+
+
+//기본 실행 함수
+if(option == 1) {
+	getHistory_new(channel_code, page_history);	
+} else if(option != 1){
+	getHistory_search(channel_code, page_search);
+}
+
+//검색 버튼을 클릭했을 때
+$(document).on("click", "#search_img", function(){		
+	getHistory_search(channel_code, page_search);
+});
+
+$(document).on("click", "#search_img", function(){		
+	getHistory_search(channel_code, page_search);
+});
+
+
+//무한 스크롤
+$(window).scroll(function(){
+	if($(window).scrollTop()>=$(document).height() - $(window).height()){
+		if(loading_history == true){
+			page_history++;
+			getHistory_new(channel_code, page_history);
+		} else if(loading_search == true){
+			page_search++;
+			getHistory_search(channel_code, page_search);
+		}
+	}
+}); //scroll end
 </script>
-
 </head>
 <body>
-
-<ul id="list"></ul>
-<div id="observer"></div>
-
-
 <div id="wrap_myPage">
-
 	<!-- top 영역 -->
 	<jsp:include page="../include/top_include.jsp"/>
 	<jsp:include page="../include/side_include.jsp"/>
@@ -98,8 +190,8 @@ function history_list(data) {
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
 	<div id="channel_area" class="area_style">
 		<div id="history_search_area">
-			<form action="<%=request.getContextPath()%>/history_search.do">
-				<input type="hidden" name="channel_code" value="995">
+			<form action="<%=request.getContextPath()%>/history_searchs.do">
+				<input type="hidden" name="channel_code" value="${channel_code }">
 				<input type="text" class="history_search" name="keyword" placeholder="시청 기록 검색">
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
 			</form>
@@ -136,54 +228,10 @@ function history_list(data) {
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
 			<div class="test">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">시청 기록</a></p>
+				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }'">시청 기록</p>
 			</div>
-			
-			<c:set var="endValue" value="200"/>
-			
-			<c:set var="history" value="${h_list }" />
-			<c:if test="${!empty history }">
 			<div id="ajax_area"></div>
-			<c:forEach items="${history }" var="h_dto" begin="0" end="${endValue }">
-			
-			<!-- ============================= forEach 반복 시작 ============================= -->
-			<div class="video_box">
-				<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<div class="video_pbox">
-					<p class="video_title_p">${h_dto.getVideo_title() }<p>
-					<p class="video_channel_p">
-					${h_dto.getChannel_name() } • 조회수
-					<%-- 조회수 출력 영역 --%>
-					<c:set var="cnt" value="${h_dto.getVideo_view_cnt() }" />
-					<c:if test="${cnt < 1000 }">${cnt }회</c:if>
-					<c:if test="${cnt >= 1000 && cnt < 10000 }">
-						<fmt:formatNumber value="${cnt / 1000 }" pattern=".0" />천회
-					</c:if>
-					<c:if test="${cnt >= 10000 && cnt < 100000 }">
-						<fmt:formatNumber value="${cnt / 10000 }" pattern=".0" />만회
-					</c:if>
-					<c:if test="${cnt >= 100000 && cnt < 100000000 }">
-						<fmt:formatNumber value="${cnt / 10000 }" pattern="0" />만회
-					</c:if>
-					<c:if test="${cnt >= 100000000 }">
-						<fmt:formatNumber value="${cnt / 100000000 }" pattern=".00" />억회
-					</c:if>
-					<%-- 구독자 출력 영역 끝 --%>
-					<p>
-					<p class="video_views_p">${h_dto.getVideo_cont() }<p>
-				</div>
-				<a href="<%=request.getContextPath() %>/history_one_delete.do?video_code=${h_dto.getVideo_code() }&channel_code=${channel_code }">
-					<img class="video_history_d_img" src="${pageContext.request.contextPath}/resources/img/x.png">
-				</a>
-			</div>
-			<!-- ============================= forEach 반복 end ============================= -->
-			</c:forEach>
-			</c:if>
-			
-			<p id="sentinel"></p>
-			<c:if test="${empty history }">
-				목록에 동영상이 없습니다.
-			</c:if>
+			<div id="search_area"></div>
 		</div>
 	</div>
 </div>

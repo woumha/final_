@@ -19,9 +19,7 @@ public interface MyPageDAO {
 	List<SubscribeDTO> getChannel_sub(String code); 
 	List<ReplyDTO> getReply_list(String code);
 	int delete_history(String code);
-	List<VideoPlayDTO> searchHistory(Map<String, Object> map);
-	int history_one_delete(Map<String, Object> map);
-	int getHistory_num(Map<String, Object> map);
+	
 	int updateSequence(int num);
 	List<VideoPlayDTO> getPlaylist_no(Map<String, Object> map);
 	List<VideoPlayDTO> searchPlaylist(Map<String, Object> map);
@@ -36,4 +34,9 @@ public interface MyPageDAO {
 	int updateSequence_s(int num);
 	/* ajax */
 	List<VideoPlayDTO> history_list(String code);
+	List<VideoPlayDTO> getHistoryListCount(String code, int startNo, int endNo);
+	List<VideoPlayDTO> getHistory_search(Map<String, Object> map);
+	
+	int getHistory_num(Map<String, Object> map);
+	int history_search_one_delete(int num);
 }

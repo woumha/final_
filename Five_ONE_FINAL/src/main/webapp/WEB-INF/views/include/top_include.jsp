@@ -15,21 +15,40 @@
 <!-- 스타일 시트 -->
 <link rel="stylesheet" href="${path }/resources/eunji_CSS/top.css">	
 
+<style type="text/css">
+
+#side_wrap{
+	display: none;
+}
+
+#adv_box{
+	display: none;
+}
+
+<%-- 이호찬 --%>
+#user_popup {
+	z-index: 1000;
+}
+</style>
+
 <!-- 자동완성 기능 라이브러리 -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
 
 <title>Insert title here</title>
 <style type="text/css">
 
-	img.channel-psa{
+	img.channel-backcolor{
 		border-radius: 100%;
 	}
 
-	#user_popup img.channel-psa{
+	#user_popup img.channel-backcolor{
 		width: 22px;
 	}
 	
-	#user_div img.channel-psa{
+	#user_div img.channel-backcolor{
 		width: 40px;
 		height: 40px;
 	}
@@ -40,55 +59,9 @@
 	$(function(){
 		if ('${RepChannelCode}' != ''){
 			let channelCode = '${RepChannelCode}';
-			switch(channelCode.charAt(3)){
-				case "1" :
-					$(".channel-psa").css("background-color","darkred");
-				break
-				
-				case "2" :
-					$(".channel-psa").css("background-color","orange");
-				break
-				
-				case "3" :
-					$(".channel-psa").css("background-color","darkyellow");
-				break
-				
-				case "4" :
-					$(".channel-psa").css("background-color","lightpink");
-				break
-				
-				case "5" :
-					$(".channel-psa").css("background-color","darkgreen");
-				break
-				
-				case "6" :
-					$(".channel-psa").css("background-color","lightblue");
-				break
-				
-				case "7" :
-					$(".channel-psa").css("background-color","darkblue");
-				break
-				
-				case "8" :
-					$(".channel-psa").css("background-color","purple");
-				break
-				
-				case "9" :
-					$(".channel-psa").css("background-color","gray");
-				break
-				
-				case "0" :
-					$(".channel-psa").css("background-color","lightgreen");
-				break
-				default:
-					$(".channel-psa").css("background-color","#fc942c");
-				break
-			} 
+			changeBackColor(channelCode);
 		}
-		
 	});
-	
-
 </script>
 
 </head>
@@ -96,6 +69,17 @@
 
 <body id="body">
 
+<%--  로딩화면  --%>
+<div id="loading">
+	<div class="rabbit"></div>
+		<div class="clouds"></div>
+		<div class = "loading_logo">
+		<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png" width="230px" height="90px">
+	</div>
+</div>
+
+
+<%--  전체 컨텐츠 화면  --%>
 		 <div id="wrap">
 		
 			<img src="${pageContext.request.contextPath}/resources/img/vidividi_logo.png"  
@@ -106,14 +90,27 @@
 			<div id="search_div">
 			
 			<div class="search_select">
-			  <select name="field">
-			    <option value="video_title">동영상 제목</option>
-			    <option value="channel_name">채널명</option>
-			    <option value="video_hash">태그</option>
+			  <select name="field">			    
+			    <c:set var = "tag" value = "${field }" />
+					<option value="video_title"
+						<c:if test="${tag == 'video_title'}">selected</c:if>>동영상 제목</option>
+						
+					<option value="channel_name"
+						<c:if test="${tag == 'channel_name'}">selected</c:if>>채널명</option>
+					
+					<option value="video_hash"
+						<c:if test="${tag == 'video_hash'}">selected</c:if>>태그</option>					
 			  </select>
 			</div>
 			
+			<c:if test="${empty keyword }">
 				<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="검색어를 입력하세요." required> &nbsp;&nbsp;
+			</c:if>
+			
+			<c:if test="${! empty keyword }">
+				<input id="search_input" class="search_input" name="auto_search" type="text" placeholder="${keyword }" required> &nbsp;&nbsp;
+			</c:if>
+			
 				<button id="search_btn" type="submit"><i class="fas fa-search"></i></button>	
 				
 				<div class = "rel_search">
@@ -130,10 +127,10 @@
 				
 				<c:if test="${!empty MemberCode }">
 					<c:if test="${RepChannelPsa == default_channel_profile.png}">
-						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/default_channel_profile.png" class="channel-psa">
+						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/default_channel_profile.png" class="channel-backcolor">
 					</c:if>
 					<c:if test="${RepChannelPsa != default_channel_profile.png}">
-						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/${RepChannelPsa }" class="channel-psa">
+						<img id="user_icon" src="<%=request.getContextPath()%>/resources/img/channel_profile/${RepChannelPsa }" class="channel-backcolor">
 					</c:if>
 				</c:if>
 				
@@ -156,13 +153,13 @@
 					<hr>
 					<%-- 내 채널 이미지 //이호찬 --%>
           <c:set var="ccode" value="${RepChannelCode }" />
-					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'"> &nbsp;
-					<i class="bi bi-camera-reels"></i>&nbsp;&nbsp;내 채널</li>
-					<li onclick="location.href='<%=request.getContextPath()%>'"> &nbsp;<i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
-					<li> &nbsp;<i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
+					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'">
+					<i class="fa-regular fa-circle-user"></i>&nbsp;&nbsp;내 채널</li>
+					<li onclick="location.href='<%=request.getContextPath()%>'"> <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
+					<li><i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
-					<li onclick="location.href='<%=request.getContextPath()%>/info.do'">&nbsp;<i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
-					<li>&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
+					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
+					<li><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
 				</ul>
 			</div>
 		</c:if>
@@ -171,7 +168,14 @@
 
 
 <script type="text/javascript">		
- 
+
+//로딩 완료 시 로딩 관련 div 사라지게 하기 / 사이드바 + 광고 나타나게 하기
+$(window).on('load', function () {
+	$("#loading").fadeOut();
+	$("#side_wrap").css("display", "block");
+	$("#adv_box").css("display", "block");
+}); 
+
 //------------------------------------------------------마이페이지 팝업--------------------------------------------------
 	
 //마이페이지 팝업
@@ -265,7 +269,6 @@
 	// autoList에서 search_input 노드...
 	//this.parentElement.parentElement.parentElement.firstElementChild.nextElementSibling
 	
-
 	var ul2 = document.getElementById('pop_rel_keywords');
 	var liSelected;
 	var index = -1;
@@ -286,7 +289,7 @@
 	        liSelected = ul2.getElementsByTagName('li')[0];
 	      }
 	      addClass(liSelected, 'selected');
-	      //$(".search_input").val(($('.selected').text())); 
+	      $(".search_input").val(($('.selected').text())); 
 	      
 	    } else {
 	      index = 0;
@@ -300,7 +303,6 @@
 	    if (liSelected) {
 	      removeClass(liSelected, 'selected');
 	      index--;
-	      
 	      $(".search_input").val(($('.selected').text())); 
 	      
 	      next = ul2.getElementsByTagName('li')[index];

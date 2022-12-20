@@ -60,8 +60,8 @@
 		<div id="history_box" class="content_box">
 			<div class="content_title_box">
 				<img id="history_logo" src="${pageContext.request.contextPath}/resources/img/history.png">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=995">기록</a></p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=995">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">기록</a></p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">모두보기</a></p>
 			</div>
 			
 			<c:set var="history" value="${h_list }" />
@@ -70,25 +70,9 @@
 					<div class="video_box">
 						<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
 						<p class="video_title_p_his">${h_dto.getVideo_title() }</p>
+						<%-- <img class="more_img${h_dto.getVideo_code() }" src="${pageContext.request.contextPath}/resources/img/more.png"> --%>
 						<p class="video_channel_p">${h_dto.getChannel_name() }<p>
-						<p class="video_views_p">조회수 
-						<%-- 조회수 출력 영역 --%>
-						<c:set var="cnt" value="${h_dto.getVideo_view_cnt() }" />
-						<c:if test="${cnt < 1000 }">${cnt }회</c:if>
-						<c:if test="${cnt >= 1000 && cnt < 10000 }">
-							<fmt:formatNumber value="${cnt / 1000 }" pattern=".0" />천회
-						</c:if>
-						<c:if test="${cnt >= 10000 && cnt < 100000 }">
-							<fmt:formatNumber value="${cnt / 10000 }" pattern=".0" />만회
-						</c:if>
-						<c:if test="${cnt >= 100000 && cnt < 100000000 }">
-							<fmt:formatNumber value="${cnt / 10000 }" pattern="0" />만회
-						</c:if>
-						<c:if test="${cnt >= 100000000 }">
-							<fmt:formatNumber value="${cnt / 100000000 }" pattern=".00" />억회
-						</c:if>
-						<%-- 구독자 출력 영역 끝 --%>
-						• ${h_dto.getVideo_regdate().substring(0,10) }<p>
+						<p class="video_views_p">조회수 ${h_dto.getVideo_view_cnt() }회 • ${h_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
 			</c:if>
@@ -148,24 +132,7 @@
 						<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
 						<p class="video_title_p">${g_dto.getVideo_title() }<p>
 						<p class="video_channel_p">${g_dto.getChannel_name() }<p>
-						<p class="video_views_p">조회수
-						<%-- 조회수 출력 영역 --%>
-						<c:set var="g_cnt" value="${g_dto.getVideo_view_cnt() }" />
-						<c:if test="${g_cnt < 1000 }">${g_cnt }회</c:if>
-						<c:if test="${g_cnt >= 1000 && g_cnt < 10000 }">
-							<fmt:formatNumber value="${g_cnt / 1000 }" pattern=".0" />천회
-						</c:if>
-						<c:if test="${g_cnt >= 10000 && g_cnt < 100000 }">
-							<fmt:formatNumber value="${g_cnt / 10000 }" pattern=".0" />만회
-						</c:if>
-						<c:if test="${g_cnt >= 100000 && g_cnt < 100000000 }">
-							<fmt:formatNumber value="${g_cnt / 10000 }" pattern="0" />만회
-						</c:if>
-						<c:if test="${g_cnt >= 100000000 }">
-							<fmt:formatNumber value="${g_cnt / 100000000 }" pattern=".00" />억회
-						</c:if>
-						<%-- 구독자 출력 영역 끝 --%>
-						• ${g_dto.getVideo_regdate().substring(0,10) }<p>
+						<p class="video_views_p">조회수 ${g_dto.getVideo_view_cnt() }회 • ${g_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
 			</c:if>
@@ -191,11 +158,11 @@
 						<p class="reply_list_writer">${c_info.getChannel_name() }</p>
 						<p class="reply_list_cont">${r_dto.getReply_cont() }</p>
 						<c:if test="${r_dto.getReply_regdate() ne null }">
-							<p class="reply_list_date">작성일 ${r_dto.getReply_regdate().substring(0,10) }</p>
+							<p class="reply_list_date">작성일 ${r_dto.getReply_regdate() }</p>
 						</c:if>
-						<c:if test="${r_dto.getReply_regdate() eq null }">
+						<%-- <c:if test="${r_dto.getReply_regdate() eq null }">
 							<p class="reply_list_date">${r_dto.getReply_update().substring(0,10) }•수정됨 </p>
-						</c:if>
+						</c:if> --%>
 					</div>
 				</c:forEach>
 			</c:if>

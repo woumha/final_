@@ -8,14 +8,20 @@
 	<select id="getVideo" parameterType="String" resultType="videoplayDTO">
 		select r.* from (select * from video_play inner join user_channel using(channel_code)) r where video_code = #{video_code}
 	</select>
-
+<!-- 
+	<select id="getMyReply" parameterType="hashmap" resultType="replyDTO">
+		select * 
+		from reply inner join user_channel using(channel_code)
+		where video_code='101010' and reply_comment in(0,1) and channel_code = #{channel_code};
+	</select> -->
+	
 	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
 	<![CDATA[
 		select * 
 		from (select row_number() over(order by a.${reply_option} desc) rnum, a.* 
 		from (select b.*, (b.reply_good - b.reply_bad) most 
 		from (select * from reply inner join user_channel using(channel_code) where video_code = #{video_code} and reply_comment in(0,1)) b) a) 
-		where rnum >= #{startNo} and rnum <= #{endNo}
+		where rnum >= #{startNo} and rnum <= #{endNo} and channel_code != #{channel_code}
 	]]>
 	</select>
 
@@ -43,5 +49,41 @@
 		on p.video_code = v.video_code
 		where playlist_code = #{playlist_code}
 	</select>
+	
+	<select id="all" parameterType="hashmap" resultType="videoplayDTO">
+		<![CDATA[
+		select * from video_play inner join user_channel using(channel_code) where rownum <= 40 order by dbms_random.random
+		]]>
+	</select>
+	
+	<select id="category" parameterType="hashmap" resultType="videoplayDTO">
+		<![CDATA[
+		select * from video_play inner join user_channel using(channel_code) where category_code = #{category_code} and rownum <= 40 order by dbms_random.random
+		]]>
+	</select>
+	
+	<select id="current" parameterType="hashmap" resultType="videoplayDTO">
+		<![CDATA[
+		select channel_code, a.channel_name, channel_profil, video_img, video_view_cnt, max(video_regdate)as video_regdate
+		from video_play a inner join user_channel using(channel_code) 
+		where channel_code != #{channel_code} and rownum <= 40
+		group by channel_code, a.channel_name, channel_profil, video_img, video_view_cnt
+		order by dbms_random.random
+		]]>
+	</select>
+	
+	<select id="history" parameterType="hashmap" resultType="videoplayDTO">
+		<![CDATA[
+		select * 
+		from history a inner join (select * from video_play inner join user_channel using(channel_code)) b using(video_code)
+		where a.channel_code = #{channel_code} and rownum <= 40
+		order by dbms_random.random
+		]]>
+	</select>
+	
+	<select id="getVideoCount" parameterType="String" resultType="int">
+ 		select count(*) from video_play where channel_code = #{channel_code}
+ 	</select>
+
 	
 </mapper>

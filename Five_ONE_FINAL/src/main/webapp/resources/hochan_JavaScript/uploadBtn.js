@@ -129,6 +129,12 @@ let hashText = [];
  
  
  // 업로드 버튼 클릭시@@@@@@@@@@@@@@@@@@@@@@@@
+ function getContextPath(){
+	let path = location.href.indexOf(location.host)+location.host.length;
+	
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
  function upload_seccess() {
  	$.ajaxSetup({
 			ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
@@ -143,10 +149,12 @@ let hashText = [];
 			if($("#floatingTextarea3").val().trim() == "") { // 영상 내용
 				//제목
 				this.uploadtitle = $("#floatingTextarea2").val();
-
+				
+				if($("#floatingTextarea3").val().replace(/\s| /gi, "").length == 0) {
+					$("#floatingTextarea3").val("null");
+				}
 				//내용
 				this.uploadCont = $("#floatingTextarea3").val();
-				
 
 				// 재생목록
 				//console.log($("#play_List option:selected").val());
@@ -196,7 +204,7 @@ function upload_move() {
 	form.setAttribute("method", "post");
 	form.setAttribute("id", "send_form");
 	form.setAttribute("enctype", "multipart/form-data");
-	form.setAttribute("action", '/one/upload_success.do');
+	form.setAttribute("action", getContextPath() + '/upload_success.do');
 	
 	console.log(this.uploadtitle);
 	console.log(this.uploadCont);
@@ -223,13 +231,14 @@ function upload_move() {
 	hiddenField4.setAttribute('name', "4");
 	hiddenField4.setAttribute('value', this.selectAn.trim());
 	
-	
-	var request_text = hashText;
+	if(hashText.length == 0) {
+		hashText.push("null");
+	}
+	console.log(hashText.join());
 	var hiddenField5 = document.createElement('input');
 	hiddenField5.setAttribute('type', 'hidden');
 	hiddenField5.setAttribute('name', "5");
-	hiddenField5.setAttribute('value', request_text);
-	
+	hiddenField5.setAttribute('value', hashText.join());
 	
 	$(".container-fluid").wrap(form);
 	
@@ -271,7 +280,7 @@ imgInputTag.addEventListener("change", function() {
     reader.fileName = file.name;
     
 
-	fileReader.onload = function(e) {
+	fileReader.onload = function() {
         fileURL  = fileReader.result;
         let imgTag = `<img src="${fileURL}" class="save_img" />`;
      	imgIcon.innerHTML = imgTag;
@@ -281,6 +290,7 @@ imgInputTag.addEventListener("change", function() {
 			
     fileReader.readAsDataURL(file);
  }
+
  
 // 이미지 업로드 스크립트 시작
 
@@ -298,7 +308,6 @@ $(function () {
 			if(event.keyCode == 32 || event.keyCode == 13) {
 				hashText.pop();
 				hashText.push(areaValue.match(word));
-				
 			}
 		}
 		/*

@@ -28,7 +28,7 @@
  	</insert>
  	
  	<select id="channel_video_list" parameterType="String" resultType="videoplayDTO">
- 		select * from video_play where channel_code = #{code}
+ 		select * from video_play where channel_code = #{code} order by video_regdate desc
  	</select>
  	
  	<select id="channel_new_video" parameterType="String" resultType="videoplayDTO">
@@ -51,6 +51,16 @@
  			#{member_code} 		
  		)
  	</insert>
+ 	
+ 	<update id="profil_update" parameterType="String">
+ 		update user_channel set channel_profil = #{channelCode}-profile.png where channel_code = #{channelCode}
+ 	</update>
+ 	<select id="getChannelList" parameterType="String" resultType="channeldto">
+ 		select * from user_channel where member_code = #{memberCode} order by channel_name
+ 	</select>
+ 	<select id="countMemberChannel" parameterType="String" resultType="int">
+ 		select count(*) from user_channel where member_code = #{memberCode}
+ 	</select>
  </mapper>
   
  

@@ -2,6 +2,7 @@ package com.vidividi.variable;
 
 import java.util.Date;
 
+import com.vidividi.service.FormatCnt;
 import com.vidividi.service.Time;
 
 public class VideoPlayDTO {
@@ -14,7 +15,7 @@ public class VideoPlayDTO {
 	private String video_img;
 	private int video_good;
 	private int video_bad;
-	private int video_view_cnt;
+	private String video_view_cnt;
 	private String video_hash;
 	private String video_regdate;
 	private int video_open;
@@ -69,11 +70,11 @@ public class VideoPlayDTO {
 	public void setVideo_bad(int video_bad) {
 		this.video_bad = video_bad;
 	}
-	public int getVideo_view_cnt() {
+	public String getVideo_view_cnt() {
 		return video_view_cnt;
 	}
 	public void setVideo_view_cnt(int video_view_cnt) {
-		this.video_view_cnt = video_view_cnt;
+		this.video_view_cnt = FormatCnt.format(video_view_cnt);
 	}
 	public String getVideo_hash() {
 		return video_hash;

@@ -1,5 +1,6 @@
 package com.vidividi.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,21 +64,6 @@ public class MyPageDAOImpl implements MyPageDAO {
 	}
 
 	@Override
-	public List<VideoPlayDTO> searchHistory(Map<String, Object> map) {
-		return this.sqlSession.selectList("history_search", map);
-	}
-
-	@Override
-	public int history_one_delete(Map<String, Object> map) {
-		return this.sqlSession.delete("history_one_delete", map);
-	}
-
-	@Override
-	public int getHistory_num(Map<String, Object> map) {
-		return this.sqlSession.selectOne("getHistory_num", map);
-	}
-
-	@Override
 	public int updateSequence(int num) {
 		return this.sqlSession.update("updateSeq", num);
 	}
@@ -136,4 +122,35 @@ public class MyPageDAOImpl implements MyPageDAO {
 	public int updateSequence_s(int num) {
 		return this.sqlSession.update("updateSeq_s", num);
 	}
+
+	@Override
+	public List<VideoPlayDTO> getHistoryListCount(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		System.out.println("code >>> "+code);
+		System.out.println("startNo >>> "+startNo);
+		System.out.println("endNo >>> "+endNo);
+		
+		map.put("code", code);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		
+		return this.sqlSession.selectList("getHistory_list", map);
+	}
+
+	@Override
+	public List<VideoPlayDTO> getHistory_search(Map<String, Object> map) {
+		return this.sqlSession.selectList("history_search", map);
+	}
+	
+	@Override
+	public int getHistory_num(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getHistory_num", map);
+	}
+
+	@Override
+	public int history_search_one_delete(int num) {
+		return this.sqlSession.delete("history_search_one_delete", num);
+	}
+	
 }

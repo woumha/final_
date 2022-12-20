@@ -1,157 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<c:set var="path" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>  
+<script src="https://code.jquery.com/jquery-latest.min.js"></script> 
+<!-- member css -->
+<link rel="stylesheet" href="${path}/resources/member/member_login.css">
+<link rel="stylesheet" href="${path}/resources/member/member_cummon.css"> 
 <!-- toast -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style type="text/css">
-
-	/* 인풋태그 자동완성 배경색 없애기*/
-	
-	input:-webkit-autofill,
-	input:-webkit-autofill:hover,
-	input:-webkit-autofill:focus,
-	input:-webkit-autofill:active {
-		-webkit-text-fill-color: #000;
-	    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-	    box-shadow: 0 0 0px 1000px #fff inset;
-	    transition: background-color 5000s ease-in-out 0s;
-	}
-	
-	input:autofill,
-	input:autofill:hover,
-	input:autofill:focus,
-	input:autofill:active {
-		-webkit-text-fill-color: #000;
-	    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-	    box-shadow: 0 0 0px 1000px #fff inset;
-	    transition: background-color 5000s ease-in-out 0s;
-	}
-	
-	/* 페이지 수직 값 받아오기*/
-	html, body, #login-page-wrap {
-		height: 100%;
-	}
-
-	#login-wrap {
-		display: flex;
-		flex-direction: column;
-		height: 80%;
-		width: 50%;
-		margin:auto;
-	}
-	
-	#login-wrap-top {
-		flex: 1;
-		display: flex;
-		align-items: center;
-	}
-	
-	#login-wrap-bottom {
-		flex: 9;
-		display: flex;
-		align-items: center;
-	}
-	
-	#login-logo {
-		margin: auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-	
-	#login-component-left {
-		flex: 5;
-		padding-right: 50px;
-	}
-	#login-component-right {
-		flex: 5;
-		padding-left: 50px;
-	}
-	
-	input.form-input {
-		width : 100%;
-		margin: 5px;
-		padding: 10px;
-	}
-	
-	input.form-btn {
-		width : 100%;
-		margin: 5px;
-		padding: 10px;
-	}
-	
-	hr.vertical-hr {
-		width: 1px;
-		height: 40%;
-		background-color: lightgray;
-	}
-	
-	hr.horizontal-hr {
-		background-color: gray;
-	}
-	
-	div.login-menu {
-		text-align: center;
-	}
-	
-	a.form-a {
-		text-decoration: none;
-	}
-	
-	a.form-a:hover {
-		text-decoration: none;
-	}
-	
-	span.form-text {
-		display: inline;
-		color: gray;
-	}
-	
-	span.form-link {
-		display: inline;
-		color: gray;
-	}
-	span.form-link:hover {
-		color: black;
-	}
-	
-	span.form-text.alert {
-		color: red;
-	}
-	
-	/* 부트스트랩 토스트창 배경색 중복 수정 */
-	div.toast {
-		background-color: unset;
-	}
-	
-	div.toast-success {
-		background-color: #51A351;
-	}
-	div.toast-warning {
-		background-color: #f89406;
-	}
-	div.toast-info {
-		background-color: #2F96B4;
-	}
-	div.toast-error {
-		background-color: #BD362F;
-	}
-	
-	/* password 클래스를 가진 input 태그 비밀번호 안보이게 처리 */
-	input.password{
-		-webkit-text-security:disc;
-	}
-
 
 </style>
 <script type="text/javascript">

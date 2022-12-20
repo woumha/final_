@@ -48,12 +48,27 @@ public class ChannelDAOImpl implements ChannelDAO {
 	}
 	
 	@Override
+	public int countMemberChannel(String memberCode) {
+		return this.session.selectOne("countMemberChannel", memberCode);
+	}
+	
+	@Override
 	public int insertChannel(ChannelDTO dto) {
 		return this.session.insert("insertChannel", dto);
+	}
+	
+	@Override
+	public List<ChannelDTO> getChannelList(String memberCode) {
+		return this.session.selectList("getChannelList", memberCode);
 	}
 	
 //	@Override
 //	public int setVideoUpload(VideoPlayDTO playDTO) {
 //		return this.session.insert("video_update", playDTO);
 //	}
+	
+	@Override
+	public int setChangeChannelProfil(String channelCode) {
+		return this.session.update("profil_update", channelCode);
+	}
 }
