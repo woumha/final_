@@ -126,8 +126,17 @@ $(function() {
 	
 	$(".up_btn").on("click", function() {
 		let cont = $("#floatingTextarea2").val();
-		if(cont == "") {
-			$("#floatingTextarea2").val("null");
+		if($("#exampleDataList").val().trim() != "") {
+			if(cont == "") {
+				$("#floatingTextarea2").val("null");
+			}
+			
+			$("#formData").submit();
+		} else {
+			alert("제목을 입력해주세요.")
+			let problem = document.createElement("span");
+			
+			
 		}
 	});
 	
