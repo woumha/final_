@@ -35,12 +35,14 @@ public class SearchController {
 	  public List<VideoPlayDTO> search(@RequestParam("field") String field, @RequestParam("keyword") String keyword,
 			  			@RequestParam("option") String option, int page) {
 
-		 	int rowsize = 5;
+		 	int rowsize = 10;
 			int startNo = (page * rowsize) - (rowsize - 1);
 			int endNo = (page * rowsize);
 		 
 			List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword, option, startNo, endNo);
 					
+			System.out.println("인기순 리스트>>>" + searchList);
+			
 			return searchList; 
 	  }
 	 
@@ -51,12 +53,14 @@ public class SearchController {
 	  public List<VideoPlayDTO> search_new(@RequestParam("field") String field, @RequestParam("keyword") String keyword, 
 			  @RequestParam("option") String option, int page) {
 
-		 	int rowsize = 5;
+		 	int rowsize = 10;
 			int startNo = (page * rowsize) - (rowsize - 1);
 			int endNo = (page * rowsize);
 		 
 			List<VideoPlayDTO> searchList2 = this.dao.searchVideoList_new(field, keyword, option, startNo, endNo);
 					
+			System.out.println("최신순 리스트>>>" + searchList2);
+			
 			return searchList2; 
 		 
 	  }
