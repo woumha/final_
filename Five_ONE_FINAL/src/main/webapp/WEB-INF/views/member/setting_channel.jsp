@@ -52,7 +52,7 @@ $(function(){
 
 	#setting-channel-content {
 		display: grid;
-		width: 50%;
+		width: 48%;
 		margin: auto;
 		height: 80%;
 		grid-template-columns: 1fr 1fr;
@@ -179,6 +179,13 @@ $(function(){
 					</div>
 				</div>
 				<div id="info-wrap-bottom">
+					<div id="info-info">
+						<h4>채널</h4>
+						<hr>
+						<span>채널을 추가하거나 삭제하고, 대표채널을 변경합니다.</span>
+						<br>
+						<span>채널을 관리하려면 관리 페이지로 이동하세요.</span>
+					</div>
 					<div id="setting-channel-content">
 						
 					</div>

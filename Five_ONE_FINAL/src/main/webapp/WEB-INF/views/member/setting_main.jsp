@@ -47,10 +47,10 @@ $(function(){
 						<ul class="info-navi">
 							<li onclick="location.href='setting_profile.do'" id="info-menu-1" class="navi-not-page">프로필</li>
 							<li onclick="location.href='setting_channel.do'" id="info-menu-2" class="navi-not-page">채널</li>
-							<li onclick="location.href='setting_protect.do'" id="info-menu-3" class="navi-not-page">계정 보안
+							<li id="info-menu-3" class="navi-not-page">계정 보안
 								<ul id="info-submenu-3">
-									<li>이메일 로그인</li>
-									<li>로그인 기록</li>
+									<li onclick="location.href='setting_protect.do'">이메일 로그인</li>
+									<li onclick="location.href='setting_login_history.do'">로그인 기록</li>
 								</ul>
 							</li> <!-- 이메일 로그인, 로그인 기록  -->
 							<li onclick="location.href='vidividi_premium.do'" id="info-menu-4" class="navi-not-page">비디비디 프리미엄
@@ -101,10 +101,10 @@ $(function(){
 									</tr>
 									<tr>
 										<th class="small-content-span-1">나이</th>
-										<c:if test="${empty MemberDTO.getMember_birth()}" >
+										<c:if test="${MemberAge == -1}" >
 											<td class="small-content-span-2">미입력</td>
 										</c:if>
-										<c:if test="${!empty MemberDTO.getMember_email()}" >
+										<c:if test="${MemberAge != -1}" >
 											<td class="small-content-span-2">
 												만 ${MemberAge }세
 											</td>											
@@ -125,7 +125,7 @@ $(function(){
 						<div id="info-channel-card">
 							<div id="info-channel-card-title">
 								<span class="small-title-span">채널</span>
-								<span class="small-span">채널 관리<i class="bi bi-chevron-double-right"></i></span>
+								<span class="small-span" onclick="location.href='setting_channel.do'" style="cursor: pointer;">채널 관리<i class="bi bi-chevron-double-right"></i></span>
 							</div>
 							<hr>
 							<div id="info-channel-card-content">
@@ -166,7 +166,7 @@ $(function(){
 								</div>
 								<hr>
 								<div id="info-protect-card-content">
-									<div class="card-in-card" id="email-protect-card">
+									<div class="card-in-card" id="email-protect-card" onclick="location.href='setting_protect.do'">
 										<div><span class="small-content-span-1">이메일 로그인 설정</span></div>
 										<div style="display: flex; align-items: center;">
 											<div>
@@ -177,7 +177,7 @@ $(function(){
 											</div>
 										</div>
 									</div>
-									<div class="card-in-card" id="login-history-card">
+									<div class="card-in-card" id="login-history-card" onclick="location.href='setting_login_history.do'">
 										<div><span class="small-content-span-1">로그인 기록</span></div>
 										<div style="display: flex; align-items: center;">
 										<div><img src="<%=request.getContextPath() %>/resources/img/login_history.png" width="80px"></div>

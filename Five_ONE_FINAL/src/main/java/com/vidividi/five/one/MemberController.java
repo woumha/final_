@@ -1,9 +1,12 @@
 package com.vidividi.five.one;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -156,7 +162,13 @@ public class MemberController {
 			String memberCode = (String)session.getAttribute("MemberCode");
 			
 			dto = dao.getMember(memberCode);
-			int age = service.getAge(dto.getMember_birth());
+			
+			int age= 0;
+			if (dto.getMember_birth() != null) {
+				age = service.getAge(dto.getMember_birth());
+			}else {
+				age = -1;
+			}
 			
 			ChannelDTO channelDTO = channelDAO.getChannelOwner(dto);
 			
@@ -313,18 +325,94 @@ public class MemberController {
 	
 	@ResponseBody
 	@RequestMapping("sendEmail.do")
-	public String sendEmail(@RequestParam("member_email") String email) {
+	public String sendEmail(
+			@RequestParam("member_code") String memberCode,
+			@RequestParam("member_email") String email) {
 		
-		String authKey = emailservice.sendAuthEmail(email);
+
+		String db_email = dao.alreadyEmail(memberCode);
 		
-		if(authKey != null) {
-			System.out.println("전송된 인증 코드 : "+authKey);
-			return authKey;			
+		if (email == db_email) {
+			System.out.println("이미 인증된 이메일입니다 : " + email);
+			return "already";
+		}else {
+			String authKey = emailservice.sendAuthEmail(email);
+			
+			if(authKey != null) {
+				System.out.println("전송된 인증 코드 : "+authKey);
+				return authKey;			
+			}else {
+				return "fail";
+			}
+		}
+		
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("changeAuthStatus.do")
+	public String changeAuthStatus(
+			@RequestParam("member_code") String memberCode,
+			@RequestParam("member_email") String email) {
+		MemberDTO dto = new MemberDTO();
+		dto.setMember_code(memberCode);
+		dto.setMember_email(email);
+		
+		int check = dao.changeAuthStatus(dto);
+		
+		if(check > 0) {
+			return "success";
 		}else {
 			return "fail";
 		}
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping("toggleEmailLogin.do")
+	public String toggleEmailLogin(@RequestParam("member_code") String memberCode) {
+		dao.toggleEmailLogin(memberCode);
+		return "done";
+	}
+	
+	
+	@RequestMapping("setting_login_history.do")
+	public String loginHistory(HttpSession session, MemberDTO dto, Model model) throws Exception {
+		
+		if (session.getAttribute("MemberCode") != null) {
+			String memberCode = (String)session.getAttribute("MemberCode");
+			dto = dao.getMember(memberCode);
+			
+			model.addAttribute("MemberCode", memberCode);
+			model.addAttribute("MemberName", dto.getMember_name());
+			model.addAttribute("MemberDTO", dto);
+			
+			Reader reader = new FileReader("http://ip-api.com/json");
+			
+			JSONParser parser = new JSONParser(reader);
+			
+			JSONObject obj = (JSONObject)parser.parse();
+			
+			String login_country = (String) obj.get("country");
+			String login_region = (String) obj.getString("regionName");
+			String login_city = (String) obj.getString("city");
+			String login_query = (String) obj.getString("query");
+			
+			model.addAttribute("Country", login_country);
+			model.addAttribute("Region", login_region);
+			model.addAttribute("City", login_city);
+			model.addAttribute("IP", login_query);
+			
+			return "member/setting_login_history";
+			
+		}else{
+			model.addAttribute("msg", "로그인 하세요");
+			model.addAttribute("url", "login.do");
+				
+			return "redirect";
+		}
+		
+	}
 	
 
 }
