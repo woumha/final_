@@ -70,10 +70,12 @@ word-break:break-all;
 }
 
 .test { width: 100%; display: inline-block; }
+.test_bad { width: 100%; display: inline-block; }
 
 .content_title1 {
 font-size: 20px;
 margin-left: 15px;
+width: 200px;
 cursor: pointer;
 }
 .content_title1 a { text-decoration: none; }
@@ -108,14 +110,15 @@ margin-left: 10px;
 
 .info_hr { margin-top: 20px; margin-bottom: 20px; }
 
-#history_search_area {
+#search_box {
 position: relative;
-width: 200px;
+width: 220px;
 margin-bottom: 70px;
 }
-.history_search {
+.good_search {
 width: 100%;
 border: none;
+border-bottom: solid;
 padding: 10px 12px;
 font-size: 14px;
 }
@@ -126,36 +129,54 @@ top: 10px;
 right: 5px;
 margin: 0;
 }
-.video_history_d_img {
+.video_d_img {
 display: inline-block;
 width: 15px;
 vertical-align: top;
 margin-top: 10px;
 }
 
-.video_history_d_img:hover {cursor: pointer;}
+.video_d_img:hover {cursor: pointer;}
+
+
+
+/* 옵션 영역 스타일 */
+.list_option {
+margin-left: 8px;
+font-size: 15px;
+display: none;
+}
+#option_date {
+display: block;
+}
+.search_no_area {
+display: none;
+}
+.new_no_area {
+display: none;
+}
 
 /* 로그인 안했을 시 */
-#page_none {
+.page_none {
 width: 100%;
 height: 800px;
 text-align: center;
 }
-#none_img { margin-top: 12%; }
-#none_title {
+.none_img { margin-top: 12%; }
+.none_title {
 font-size: 30px;
 font-weight: bold;
 }
-#none_text { font-size: 17px; }
-#none_btn {  }
-#none_btn {
+.none_text { font-size: 17px; }
+.none_btn {  }
+.none_btn {
 border: 0; outline: 0;
 font-size: 12px;
 width: 60px; height: 32px;
 border-radius: 30px;
 margin-top: 12px;
 }
-#none_btn:hover { background-color: #FB8703; }
+.none_btn:hover { background-color: #FB8703; }
 
 
 /* ====================== 모달창 스타일 수정 영역 ====================== */

@@ -3,279 +3,318 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-    
+<c:set var="path" value="${pageContext.request.contextPath }"/>   
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
+<script type="text/javascript">
 
-<style type="text/css">
+$("link[rel=stylesheet][href*='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css']").remove();
 
-body {
-margin: 0;
-padding: 0;
+function getContextPath(){
+	let path = location.href.indexOf(location.host)+location.host.length;
+	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-#wrap_myPage {
-/* background-color: yellow; */
-width: 100%;
-height: 1080px;
+/* 넘어온 기본 값 */
+let channel_code = "${channel_code}";
+let search = "${search}";
+/* search가 1이면 search 아님,
+ * search가 2이면 search 임.
+ */
+let option = "${option}";
+/* option가 "date" 이면 좋아요 누른 날짜 순,
+ * option가 "most" 이면 좋아요 높은 순      */
+console.log("default channel_code >>> " + channel_code);
+console.log("default search >>> " + search);
+console.log("default option >>> " + option);
+
+let page_good = 1;
+let page_search = 1;
+
+let loading_good = false;
+let loading_search = false;
+if(search == 1) {
+	loading_good = true;
+}else if(search == 2) {
+	loading_search = true;
 }
 
+function getGood_new(channel_code, page_good, option){
+	console.log("new ajax안에 option 값 >>> " + option);
+	$.ajax({
+		url : getContextPath() +"/good_new.do",
+		data : {
+			"channel_code" : channel_code,
+			"page" : page_good,
+			"option" : option
+		},
+		datatype : 'JSON',
+		contentType : "application/json; charset=UTF-8",
+		success : function(data){
+			
+			let str = data;
 
-/* area 공통 스타일 */
-.area_style{
-}
-/* 왼쪽 사이드 서브 메뉴 영역 */
-#sub_menu_area{
-background-color: gray;
-width: 100px;
-height: 1080px;
-
-float: left;
-}
-
-/* 중앙 메인 컨텐츠 영역 */
-#content_area {
-/* background-color: blue; */
-width: 60%;
-height: auto;
-margin-top: 30px;
-float: right;
-}
-
-/* 오른쪽 사이드 채널 정보 영역 */
-#chanel_area {
-/* background-color: orange; */
-width: 10%;
-height: 1000px;
-text-align: center;
-margin-right: 8%;
-margin-left: 1%;
-float: right;
-}
-/* 컨텐츠 박스 공통 스타일 */
-.content_box {
-background-color: white;
-width: 100%;
-height: auto;
-}
-
-/* 각 컨텐츠 박스 스타일 */
-#watch_box {}
-#playlist_box {}
-#reply_box {}
-#good_box {}
-
-.tset_video {
-border-radius: 10px;
-width: 210px;
-margin-right: 2px;
-margin-left: 2px;
-}
-
-.video_box {
-display: inline-block;
-margin-right: 0px;
-margin-left: 0px;
-margin-bottom: 30px;
+			if(str == "[]"){
+				loading_good = false;
+				
+				$(".search_no_area").css('display', 'none');
+				
+			}else{
+				let good = JSON.parse(data);
+				let div = "";
+				div += "<div class='video_boxs'>"
+					
+				$(good).each(function(){
+					div += "<div class='video_box'>";
+					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<div class='video_pbox'>";
+					div += "<p class='video_title_p'>"+this.video_title+"<p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
+					div += "</div>";
+					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&search="+search+"&option="+option+"'>";
+					div += "<img class='video_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "</a>";
+					div += "</div>";
+				});
+				div += "</div>"
+				loading_saerch = false;
+				loading_good = true;
+				$("#ajax_area").append(div);
+				$(".search_no_area").css('display', 'none');
+				$(".new_no_area").css('display', 'none');
+				
+			}
+		},
+		error : function(){
+			alert('good_new 불러오기 오류!!!!!!!!!');
+		}
+	}); 
 }
 
-.video_box p {
-margin-top: 0px;
-/* margin-bottom: 0px; */
-}
+function getGood_search(channel_code, page_search, option) {
+	var keyword = "${keyword}";
+	console.log("search ajax안에 option 값 >>> " + option);
+	console.log("search ajax안에 keyword 값 >>> " + keyword);
+    $.ajax({
+  		url : getContextPath() +"/good_search.do",
+  		data : {
+  			"channel_code" : channel_code,
+			"page" : page_search,
+			"keyword" : keyword,
+			"option" : option
+  		}, 
+  		datatype : 'JSON',
+  		contentType : "application/json; charset=UTF-8",
+  		success : function(data){
+			let str = data;
+			if(str == "[]"){
+				loading_search = false;
+				$(".new_no_area").css('display', 'none');
+				
+			}else{
+				let good_search = JSON.parse(data);
+				let div = "";
+				
+				div += "<div class='video_boxs'>"
+				$(good_search).each(function(){
+					div += "<div class='video_box'>";
+					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<div class='video_pbox'>";
+					div += "<p class='video_title_p'>"+this.video_title+"<p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
+					div += "</div>";
+					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&keyword="+keyword+"&search="+search+"&option="+option+"'>";
+					div += "<img class='video_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "</a>";
+					div += "</div>";
+				});
+				div += "</div>"
+				loading_good = false;
+				loading_search = true;
+				$("#search_area").append(div);
+			}
+		},
+		error : function(){
+			alert('good_search 불러오기 오류!!!!!!!!!');
+		}
+	}); 
+};	
 
-.test {
-width: 100%;
-display: inline-block;
-}
+let value = 'none';
 
-.content_title1 {
-font-size: 20px;
-margin-left: 15px;
-float: left;
-}
-
-.content_title2 {
-margin-right: 40px;
-float: right;
-text-decoration: none;
-vertical-align: middle
-}
-.content_title1 a { text-decoration: none; }
-.content_title2 a { text-decoration: none; vertical-align: middle; }
-
-.hr_style { width: 95%; margin-top: 10px; margin-bottom: 10px;}
-.video_title_p { font-size: 15px; margin-bottom: -5px;}
-.video_channel_p { font-size: 10px; margin-bottom: -15px;}
-.video_views_p { font-size: 10px; margin-bottom: -15px;}
-.video_upload_p { font-size: 10px; margin-bottom: -10px;}
-
-.info_box {
-display: inline-block;
-width: 90%;
-margin-top: 10px;
-margin-bottom: 7px;
-}
-.info_title {float: left;}
-.info_cont {float: right;}
-.info_title p { margin: 0px; font-size: 12px;}
-.info_cont p { margin: 0px; font-size: 12px;}
-
-
-#profile_icon {
-margin-top: 90px;
-overflow: hidden;
-}
-
-#profile_icon img{
-width: 70px;
-height: 70px;
-border-radius: 50%;
-object-fit: cover;
-margin-bottom: 10px;
-}
-.channel_hr {
-width: 90%;
-}
-
-#profile_box {
-margin-bottom: 30px;
-}
-
-/* ======================= 미디어 쿼리 스타일 영역 ======================= */
-@media screen and (max-width: 1105px) {
-	#chanel_area {
-		display: none;
+function input_option(value) {
+	console.log("input_option 실행! 및 value 값 >>> " + value);
+	if(value == "date") {
+		console.log("최신순 실행!!!");
+		$("#option_date").css('display', 'block');
+		$("#option_most").css('display', 'none');
+		$("#option_bad").css('display', 'none');
+	}else if(value == "most") {
+		console.log("좋아요순 실행!!!");
+		$("#option_date").css('display', 'none');
+		$("#option_most").css('display', 'block');
+		$("#option_bad").css('display', 'none');		
+	}else if(value == "bad") {
+		console.log("싫어요순 실행!!!");
+		$("#option_date").css('display', 'none');
+		$("#option_most").css('display', 'none');
+		$("#option_bad").css('display', 'block');
 	}
-	/* .content_title2 a {
-		margin-right: 150px;
-	} */
 }
-@media screen and (max-width: 600px) {
+
+
+
+//기본 실행 함수
+if(search == 1) {
+	// list_option 실행
+	console.log("기본 실행 함수 option값 >>> " + "${option}");
+	input_option("${option}");
+	getGood_new(channel_code, page_good, option);	
 	
-	.content_title2 a {
-		margin-right: 0px;
+} else if(search != 1){
+
+	if("${keyword}" == '') {
+		// list_option 실행
+		search = 1;
+		page_good = 1;
+		page_search = 1;
+		console.log("기본 실행 함수 option값 >>> " + "${option}");
+		$(".new_no_area").css('display', 'none');
+		input_option("${option}");
+		getGood_new(channel_code, page_good, option);	
+	} else {
+		// list_option 실행
+		input_option("${option}");
+		getGood_search(channel_code, page_search, option);
 	}
 }
 
-/* ========================= 미디어 쿼리 end ========================= */
-/* ========================= 사이드바 스타일 ========================= */
+//날짜순, 좋아요순, 싫어요 버튼을 클릭했을때 (일단 <p>태그임)
+$(document).on("click", "#good_date", function(){
+	var option = "date";
+	console.log("날짜순 눌렀을때 option >>> " + option);
+	
+	input_option(option);
+	
+	if(search == 1) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_new(channel_code, page_search, option);
+		
+	}else if(search == 2) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_search(channel_code, page_search, option);
+	}
+});
 
-/* ======================= 사이드바 스타일 end ======================= */
+$(document).on("click", "#good_most", function(){
+	var option = "most";
+	console.log("좋아요순 눌렀을때 option >>> " + option);
+	
+	input_option(option);
+	
+	if(search == 1) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_new(channel_code, page_search, option);
+		
+	}else if(search == 2) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_search(channel_code, page_search, option);
+	}
+});
 
-</style>
+$(document).on("click", "#good_bad", function(){
+	var option = "bad";
+	console.log("싫어요순 눌렀을때 option >>> " + option);
+	input_option(option);
+	
+	if(search == 1) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_new(channel_code, page_search, option);
+		
+	}else if(search == 2) {
+		$(".video_boxs").remove();
+		page_good = 1;
+		page_search = 1;
+		getGood_search(channel_code, page_search, option);
+	}
+});
 
+//무한 스크롤
+$(window).scroll(function(){
+	if($(window).scrollTop()>=$(document).height() - $(window).height()){
+		
+		console.log("무한스크롤 함수 실행!!! ");
+		console.log("무한스크롤 함수 안에 loading_good >>> " + loading_good);
+		console.log("무한스크롤 함수 안에 loading_search >>> " + loading_search);
+		
+		if(loading_good == true){
+			page_good++;
+			getGood_new(channel_code, page_good, option);
+		} else if(loading_search == true){
+			page_search++;
+			getGood_search(channel_code, page_search, option);
+		}
+	}
+}); //scroll end
+</script>
 </head>
 <body>
-
 <div id="wrap_myPage">
-
 	<!-- top 영역 -->
 	<jsp:include page="../include/top_include.jsp"/>
+	<jsp:include page="../include/side_include.jsp"/>
 
+	<!-- 모달창 관련 링크 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/myPage/myPage_CSS/good.css">
 
-	<!-- 왼쪽 사이드 서브 메뉴 영역 -->
-	<div id="sub_menu_area" class="area_style">
-		<!-- <nav class="nav">
-            <div>
-                <div class="nav__brand">
-                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-                    <a href="#" class="nav__logo">Bedimcode</a>
-                </div>
-                <div class="nav__list">
-                    <a href="#" class="nav__link active">
-                        <ion-icon name="home-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Dashboard</span>
-                    </a>
-                    <a href="#" class="nav__link">
-                        <ion-icon name="chatbubbles-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Messenger</span>
-                    </a>
-
-                    <div href="#" class="nav__link collapse">
-                        <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Projects</span>
-
-                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
-
-                        <ul class="collapse__menu">
-                            <a href="#" class="collapse__sublink">Data</a>
-                            <a href="#" class="collapse__sublink">Group</a>
-                            <a href="#" class="collapse__sublink">Members</a>
-                        </ul>
-                    </div>
-
-                    <a href="#" class="nav__link">
-                        <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Analytics</span>
-                    </a>
-
-                    <div href="#" class="nav__link collapse">
-                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Team</span>
-
-                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
-
-                        <ul class="collapse__menu">
-                            <a href="#" class="collapse__sublink">Data</a>
-                            <a href="#" class="collapse__sublink">Group</a>
-                            <a href="#" class="collapse__sublink">Members</a>
-                        </ul>
-                    </div>
-
-                    <a href="#" class="nav__link">
-                        <ion-icon name="settings-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Settings</span>
-                    </a>
-                </div>
-                <a href="#" class="nav__link">
-                    <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
-                    <span class="nav_name">Log out</span>
-                </a>
-            </div>
-        </nav> -->
-	</div>
-	
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
-	<div id="chanel_area" class="area_style">
-		<div id="profile_box">
-			<div id="profile_icon">
-				<img src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"> 
-			</div>
-			<div id="profile_name">
-			채널 이름
+	<div id="channel_area" class="area_style">
+		<div id="search_box">
+			<form action="<%=request.getContextPath()%>/good_searchs.do">
+				<input type="hidden" name="channel_code" value="${channel_code }">
+				<input class="good_search" name="keyword" placeholder="좋아요 누른 동영상 검색"
+					<c:if test="${keyword ne ''}">
+						value="${keyword}"
+					</c:if>
+					<c:if test="${keyword eq ''}">
+						value=""
+					</c:if>
+				>
+				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
+			</form>
 		</div>
-		</div>
-		
+	
 		<div id="profile_info">
-			<hr class="channel_hr">
 			<div class="info_box">
 				<div class="info_title">
-					<p>구독</p>
-				</div>
-				<div class="info_cont">
-					<p>0</p>
+					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=${channel_code }"><span>🗃</span> 내 보관함</a></p>
 				</div>
 			</div>
-			<hr class="channel_hr">
+			
+			<hr class="info_hr">
+
 			<div class="info_box">
 				<div class="info_title">
-					<p>업로드</p>
-				</div>
-				<div class="info_cont">
-					<p>0</p>
-				</div>
-			</div>
-			<hr class="channel_hr">
-			<div class="info_box">
-				<div class="info_title">
-					<p>좋아요</p>
-				</div>
-				<div class="info_cont">
-					<p>0</p>
+					<p id="good_date"><a class="btn"><span>아이콘</span>&nbsp;좋아요 누른 날짜 순</a></p>
+					<p id="good_most"><a class="btn"><span>아이콘</span>&nbsp;좋아요 많은 영상 순</a></p>
+					<p id="good_bad"><a class="btn"><span>아이콘</span>&nbsp;싫어요 누른 동영상 보기</a></p>			
 				</div>
 			</div>
 		</div>
@@ -283,169 +322,74 @@ margin-bottom: 30px;
 	
 	<!-- 중앙 메인컨텐츠 영역 -->
 	<div id="content_area" class="area_style">
+	<c:set var="code" value="${channel_code }" />
 		
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
+			<c:if test="${!empty code}">
 			<div class="test">
-				<p class="content_title1"><a href="#">기록</a></p>
-				<p class="content_title2"><a href="#">모두보기</a></p>
+				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/good_list.do?channel_code=${channel_code }'">좋아요 누른 동영상</p>
+			</div>
+			<div id="option_date" class="list_option">최신순</div>
+			<div id="option_most" class="list_option">좋아요순</div>
+			<div id="option_bad" class="list_option">싫어요 동영상</div>
+				
+			<div id="ajax_area"></div>
+			<div id="search_area"></div>
+			
+			<div class="new_no_area">
+				<div class="page_none">
+					<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
+					<p class="none_title">리스트가 없습니다....</p>
+				</div>
 			</div>
 			
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
-			</div>
-			<div class="video_box">
-				<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-				<p class="video_title_p">동영상 제목<p>
-				<p class="video_channel_p">업로더 채널명<p>
-				<p class="video_views_p">조회수 • 업로드 날짜<p>
+			<div class="search_no_area">
+			<div class="search_keyword">검색어 : ${keyword }</div>
+				<div class="page_none">
+					<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
+					<p class="none_title">검색결과가 없습니다....</p>
+				</div>
 			</div>
 			
+			</c:if> <!-- !empty code 끝 -->
+			
+			
+			
+			<!-- 로그인이 되어있지 않으면 출력하는 영역 -->
+			<c:if test="${empty code}">
+			<div class="page_none">
+				<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
+				<p class="none_title">좋아하는 동영상을 감상해 보세요.</p>
+				<p class="none_text">저장하거나 좋아요 표시한 동영상을 보려면 로그인하세요.</p>
+				<button class="none_btn" onclick="location.href='<%=request.getContextPath() %>/login.do'">로그인</button>
+			</div>
+			</c:if>
 		</div>
 		
-		<hr class="hr_style">
-		
-		<!-- [재생목록] 박스 -->
-		<div id="playlist_box" class="content_box">
-			<div class="test">
-				<p class="content_title1"><a href="#">재생목록</a></p>
-				<p class="content_title2"><a href="#">모두보기</a></p>
-			</div>
-			<div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-			</div>
-		</div>
-	
-		<hr class="hr_style">
-		
-		<!-- [작성한 댓글 리스트] 박스 -->
-		<div id="reply_box" class="content_box">
-			<div class="test">
-				<p class="content_title1"><a href="#">작성한 댓글</a> [갯수]</p>
-				<p class="content_title2"><a href="#">모두보기</a></p>
-			</div>
-			<div></div>
-		</div>
-		
-		<hr class="hr_style">
-		
-		<!-- [좋아요 표시한 동영상] 박스 -->
-		<div id="good_box" class="content_box">
-			<div class="test">
-				<p class="content_title1"><a href="#">좋아요 표시한 동영상</a> [갯수]</p>
-				<p class="content_title2"><a href="#">모두보기</a></p>
-			</div>
-			<div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-				<div class="video_box">
-					<video class="tset_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-					<p class="video_title_p">동영상 제목<p>
-					<p class="video_channel_p">업로더 채널명<p>
-					<p class="video_views_p">조회수 • 업로드 날짜<p>
-				</div>
-			</div>
-		</div>
 	</div>
-
 </div>
-	
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<!-- ======================================== 모달창 관련 영역 ========================================  -->
+<div id="good_delete" class="modal">
+	<p class="model_title">좋아요를 해제 할까요?</p>
+	<br>
+	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
+	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
+	<br>
+	<button class="model_btn" onclick="location.href='delete_good.do?channel_code=${channel_code }'">시청 기록 지우기</button>
+</div>
+<div id="good_stop" class="modal">
+	<p class="model_title">시청 기록을 중지할까요?</p>
+	<br>
+	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 기록 중지됩니다.(임시 내용입니다)</p>
+	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
+	<br>
+	<button class="model_btn" onclick="location.href='dont_save_history.do?member_code=VD00002'">시청 기록 중지하기</button>
+</div>
+<!-- ====================================== 모달창 자바 스크립트 영역 ====================================== -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/myPage/myPage_JavaScript/history.js"></script>
+<!-- ======================= 모달창 관련 영역 end =======================  -->
 </body>
 </html>
