@@ -91,7 +91,7 @@ let hashText = [];
 			
  });
  
- // 파일을 클릭, 업로드 했을때 발생
+ // 파일을 클릭, 드롭 했을때 발생
  function showFile() {
 	let fileReader = new FileReader();
     let reader = new FileReader();
@@ -122,18 +122,50 @@ let hashText = [];
     fileReader.readAsDataURL(file);
  }
  
- $(function() {
- 	
- });
- 
- 
- 
  // 업로드 버튼 클릭시@@@@@@@@@@@@@@@@@@@@@@@@
  function getContextPath(){
 	let path = location.href.indexOf(location.host)+location.host.length;
 	
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
+
+// form 태그 보내는곳@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$(function() {
+	$(".icon_change").on("click", function() {
+		$(".upload_input_file").click();
+	});
+	
+	$(".video_upload_btn").on('click', function() {
+		if($("#upload_input_file").val().trim() != "") {
+			if($("#floatingTextarea2").val().trim() != "") {
+				if($("#floatingTextarea3").val().trim() == "") {
+					$("#floatingTextarea3").val("null");
+				}
+				
+				let radioOpenId = $('input[name=flexRadioDefault_openClose]:checked').attr("id");
+				let radioOpen = $("label[for='" + radioOpenId + "']").text();
+				
+				let radioAgeId = $("input[name=flexRadioDefault_age]:checked").attr("id");
+				let radioAge = $("label[for='" + radioAgeId + "']").text();
+				
+				$("#selectOpen").val(radioOpen);
+				$("#selectAge").val(radioAge);
+				
+				let bundle = $("#update_playList").text();
+				$('#bundleText').val(bundle);
+				
+				$("#send_form").submit();
+			} else {
+				alert("제목을 입력 안하셨어요 :)");
+			}	
+		} else {
+			alert("영상을 넣어주세요 :)");
+		}
+	});
+});
+
+
+
 
  function upload_seccess() {
  	$.ajaxSetup({
@@ -159,7 +191,8 @@ let hashText = [];
 				// 재생목록
 				//console.log($("#play_List option:selected").val());
 				this.selectPlayList = $("#play_List option:selected").text();
-				
+			 	console.log("selectPlayList: " + selectPlayList);
+			 	
 				// 시청자층
 				selectRadio = $('input[name=flexRadioDefault]:checked').attr("id");
 				this.selectAn = $("label[for='"+selectRadio+"']").text();
@@ -174,7 +207,7 @@ let hashText = [];
 
 				// 재생목록
 				//console.log($("#play_List option:selected").val());
-				this.selectPlayList = $("#play_List option:selected").text();
+				this.selectPlayList = $("#update_playList option:selected").text();
 				
 				// 시청자층
 				selectRadio = $('input[name=flexRadioDefault]:checked').attr("id");
@@ -226,6 +259,8 @@ function upload_move() {
 	hiddenField3.setAttribute('name', "3");
 	hiddenField3.setAttribute('value', this.selectPlayList);
 
+	console.log("3: " + this.selectPlayList);
+
 	var hiddenField4 = document.createElement('input');
 	hiddenField4.setAttribute('type', 'hidden');
 	hiddenField4.setAttribute('name', "4");
@@ -247,7 +282,7 @@ function upload_move() {
 	$(".container-fluid").append(hiddenField3);
 	$(".container-fluid").append(hiddenField4);
 	$(".container-fluid").append(hiddenField5);
-	$("#send_form").submit();
+	//$("#send_form").submit();
 }
 
 // 영상 업로드 자바스크립트 끝
@@ -279,7 +314,6 @@ imgInputTag.addEventListener("change", function() {
 
     reader.fileName = file.name;
     
-
 	fileReader.onload = function() {
         fileURL  = fileReader.result;
         let imgTag = `<img src="${fileURL}" class="save_img" />`;

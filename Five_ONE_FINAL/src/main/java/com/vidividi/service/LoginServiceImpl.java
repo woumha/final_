@@ -97,7 +97,19 @@ public class LoginServiceImpl implements LoginService {
 		
 		return result;
 	}
-
+	
+	//재생목록 코드
+	@Override
+	public String generateBundleCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "BC-" + uuid.toString(); // Bundle Code
+		
+		System.out.println("새로 생성된 재생목록 코드: " + result);
+		
+		return result;
+	}
+	
 	@Override
 	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName) {
 		
