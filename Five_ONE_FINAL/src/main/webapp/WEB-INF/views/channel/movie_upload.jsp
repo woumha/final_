@@ -85,19 +85,18 @@
 				<div class="col-12" align="left">
 		  		<strong>재생목록</strong>
 			  	</div>
-			  	<div class="col-12">
+			  	<div class="col-12 bundleDiv">
 			  		<c:if test="${empty bundleList }">
 			  			<a href="#" class="text-decoration-none" style="display: flex;">재생목록이 없어요. 재생목록을 추가해보세요!</a>
 			  		</c:if>
 			  		<c:if test="${!empty bundleList }">
-			  			<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
+			  			<select id="bundleCheck" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
 						  <c:forEach items="${bundleList }" var="bundle" varStatus="index">
 						      	<option value="${bundle.bundle_code }" <c:if test="${index.first }">selected</c:if>>${bundle.bundle_title }</option>
 						  </c:forEach>
 						</select>
 			  		</c:if>
 			  	</div>
-			  	<input type="hidden" name="bundleText" id="bundleText" value="">
 			</div>
 			<hr>
 			<div class="row">

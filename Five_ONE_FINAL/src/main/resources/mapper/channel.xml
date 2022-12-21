@@ -13,7 +13,7 @@
  		select playlist_title, playlist_code from playlist where channel_code = #{code} order by PLAYLIST_REGDATE asc
  	</select>
  	
- 	<insert id="video_update" parameterType="videoplayDTO">
+ 	<insert id="videoInsert" parameterType="videoplayDTO">
  		insert into video_play values (
 	 		#{video_code}, 
 	 		#{channel_code}, 

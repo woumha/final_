@@ -84,33 +84,29 @@ public class ChannelController {
 		String memCode = (String)session.getAttribute("MemberCode"); // 유저 코드
 		
 		
-		MemberDTO memberDTO = new MemberDTO();
+		if(memCode != null) {
+			MemberDTO memberDTO = new MemberDTO();
+			
+			memberDTO.setMember_code(memCode);
+			
+			memberDTO.setMember_rep_channel(repCcode);
+			
+			
+			channelWorlddto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값
+			
+			List<VideoPlayDTO> channelVideoDto = this.dao.getVideoList(repCcode); // 비디오 영상
+			
+			VideoPlayDTO newVideo = this.dao.getNewVideo(repCcode); // 가장 최근에 올린 영상
+			
+			model.addAttribute("currentOwner", channelWorlddto);
+			model.addAttribute("currentVideo", channelVideoDto);
+			model.addAttribute("currentNewVideo", newVideo);
+			
+			return "channel/channel_main";
+		} else {
+			return "main";
+		}
 		
-		memberDTO.setMember_code(memCode);
-
-		memberDTO.setMember_rep_channel(repCcode);
-		//System.out.println("memCode: " + memCode);
-		
-		//System.out.println("memberCode: " +memCode); // VD~~
-		//System.out.println("RepChannelCode: " + repCcode); // 888
-    
-		channelWorlddto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값
-		//System.out.println("channelWorlddto: " + channelWorlddto);
-		
-		List<VideoPlayDTO> channelVideoDto = this.dao.getVideoList(repCcode);
-		//System.out.println("channelVideoDto: " + channelVideoDto);
-		
-		
-		VideoPlayDTO newVideo = this.dao.getNewVideo(repCcode);
-		//System.out.println("newVideo: " + newVideo);
-		
-		
-		
-		model.addAttribute("currentOwner", channelWorlddto);
-		model.addAttribute("currentVideo", channelVideoDto);
-		model.addAttribute("currentNewVideo", newVideo);
-		
-		return "channel/channel_main";
 	}
 	
 	@RequestMapping("movie_upload.do")
@@ -143,14 +139,19 @@ public class ChannelController {
 			@RequestParam("title_field") String title, 
 			@RequestParam("cont_area") String context,
 			@RequestParam("category_List") String categoryList,
-			@RequestParam("video_playList") String bundleList, 
+			@RequestParam("video_playList") String bundleCode, 
 			@RequestParam("select_Age") String age, 
 			@RequestParam("select_openClose") String open,
-			@RequestParam("bundleText") String bundletext,
+			@RequestParam("bundleText") String bundleText,
 			MultipartHttpServletRequest mRequest, 
 			Model model, 
 			HttpServletRequest request, HttpSession session, 
 			HttpServletResponse response) throws IOException {
+		
+		
+		// categoryList: 메인 상단 카테코리
+		// bundleCode: 재생 목록 코드
+		// bundleText: 재생 목록 이름
 		
 		response.setContentType("text/html charset=UTF-8");
 		
@@ -161,11 +162,11 @@ public class ChannelController {
 		
 		String[] name = fileName(mRequest); // 파일명 가져오기
 		
-		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
-			System.out.println("성공");
-		} else {
-			System.out.println("실패");
-		}
+//		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
+//			System.out.println("성공");
+//		} else {
+//			System.out.println("실패");
+//		}
 		
 		String cookingVideoCode = service.generateVideoCode(); // 비디오코드
 		int category = Integer.parseInt(categoryList);
@@ -183,10 +184,10 @@ public class ChannelController {
 		
 		// playlist 테이블
 		PlaylistDTO playbundledto = new PlaylistDTO();
-		playbundledto.setChannel_code(channelCode);
-		playbundledto.setPlaylist_code(bundleList); // 재생목록 코드
-		playbundledto.setPlaylist_title(bundletext);
-		playbundledto.setVideo_code(cookingVideoCode);
+		playbundledto.setChannel_code(channelCode.trim());
+		playbundledto.setPlaylist_code(bundleCode.trim()); // 재생목록 코드
+		playbundledto.setPlaylist_title(bundleText.trim()); // 재생목록 이름
+		playbundledto.setVideo_code(cookingVideoCode.trim());
 		
 		
 		
@@ -214,9 +215,10 @@ public class ChannelController {
 					+ "</script>");
 		}
 		
-		System.out.println(bundleList);
-		System.out.println(playdto);
+		System.out.println("playdto: " + playdto);
 		int check = this.dao.setVideoUpload(playdto);
+		
+		
 		System.out.println("check: " + check);
 		if(check > 0 ) {
 			out.println("<script>"

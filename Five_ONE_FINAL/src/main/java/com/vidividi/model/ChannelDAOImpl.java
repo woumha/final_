@@ -35,7 +35,10 @@ public class ChannelDAOImpl implements ChannelDAO {
 	// 영상 업로드
 	@Override
 	public int setVideoUpload(VideoPlayDTO playDTO) {
-		return this.session.insert("video_update", playDTO);
+		if(this.session.insert("videoInsert", playDTO) > 0) {
+			// PlaylistDTO Insert 해야함
+		}
+		return this.session.insert("videoInsert", playDTO);
 	}
 	
 	// 영상 전체 목록
@@ -74,13 +77,10 @@ public class ChannelDAOImpl implements ChannelDAO {
 		return this.session.selectList("getChannelList", memberCode);
 	}
 	
-//	@Override
-//	public int setVideoUpload(VideoPlayDTO playDTO) {
-//		return this.session.insert("video_update", playDTO);
-//	}
-	
 	@Override
 	public int setChangeChannelProfil(String channelCode) {
 		return this.session.update("profil_update", channelCode);
 	}
+	
+	
 }

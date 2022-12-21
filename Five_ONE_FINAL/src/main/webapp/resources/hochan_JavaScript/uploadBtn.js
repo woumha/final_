@@ -151,8 +151,11 @@ $(function() {
 				$("#selectOpen").val(radioOpen);
 				$("#selectAge").val(radioAge);
 				
-				let bundle = $("#update_playList").text();
-				$('#bundleText').val(bundle);
+				
+				let bundle = $("#bundleCheck option:selected").text();
+				let bundleTag = `<input type="hidden" name="bundleText" value=${bundle}>`;
+				$(".bundleDiv").append(bundleTag);
+				//$(".bundleDiv").html(bundleTag);
 				
 				$("#send_form").submit();
 			} else {
@@ -163,127 +166,6 @@ $(function() {
 		}
 	});
 });
-
-
-
-
- function upload_seccess() {
- 	$.ajaxSetup({
-			ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
-			type: "post"
-	});
-	
-	let selectRadio; // input radio의 id값 가져오기
-	video = $("#upload_input_file").val();
-	
-	if(!video == "") {
-		if(!$("#floatingTextarea2").val().trim() == "") { //제목 공백
-			if($("#floatingTextarea3").val().trim() == "") { // 영상 내용
-				//제목
-				this.uploadtitle = $("#floatingTextarea2").val();
-				
-				if($("#floatingTextarea3").val().replace(/\s| /gi, "").length == 0) {
-					$("#floatingTextarea3").val("null");
-				}
-				//내용
-				this.uploadCont = $("#floatingTextarea3").val();
-
-				// 재생목록
-				//console.log($("#play_List option:selected").val());
-				this.selectPlayList = $("#play_List option:selected").text();
-			 	console.log("selectPlayList: " + selectPlayList);
-			 	
-				// 시청자층
-				selectRadio = $('input[name=flexRadioDefault]:checked').attr("id");
-				this.selectAn = $("label[for='"+selectRadio+"']").text();
-			
-				upload_move();
-			} else {
-				//제목
-				this.uploadtitle = $("#floatingTextarea2").val();
-
-				//내용
-				this.uploadCont = $("#floatingTextarea3").val();
-
-				// 재생목록
-				//console.log($("#play_List option:selected").val());
-				this.selectPlayList = $("#update_playList option:selected").text();
-				
-				// 시청자층
-				selectRadio = $('input[name=flexRadioDefault]:checked').attr("id");
-				this.selectAn = $("label[for='"+selectRadio+"']").text();
-				
-				upload_move();
-			}
-		} else {
-			alert("제목을 작성해주세요");
-		}
-	} else {
-		alert("업로드할 영상이 없어요!");
-	} 
- }
- // 업로드 버튼 종료
-
- // 업로드 하기
-function upload_move() {
-	$.ajaxSetup({
-		ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
-		type: "post"
-	});
-
-	var form = document.createElement('form');
-	const url= "'<%=request.getContextpath() %>/upload_success.do'";
-	
-	form.setAttribute("method", "post");
-	form.setAttribute("id", "send_form");
-	form.setAttribute("enctype", "multipart/form-data");
-	form.setAttribute("action", getContextPath() + '/upload_success.do');
-	
-	console.log(this.uploadtitle);
-	console.log(this.uploadCont);
-	console.log(this.selectPlayList);
-	console.log(this.selectAn.trim());
-	
-	var hiddenField1 = document.createElement('input');
-	hiddenField1.setAttribute('type', 'hidden');
-	hiddenField1.setAttribute('name', "1");
-	hiddenField1.setAttribute('value', this.uploadtitle);
-	
-	var hiddenField2 = document.createElement('input');
-	hiddenField2.setAttribute('type', 'hidden');
-	hiddenField2.setAttribute('name', "2");
-	hiddenField2.setAttribute('value', this.uploadCont);
-
-	var hiddenField3 = document.createElement('input');
-	hiddenField3.setAttribute('type', 'hidden');
-	hiddenField3.setAttribute('name', "3");
-	hiddenField3.setAttribute('value', this.selectPlayList);
-
-	console.log("3: " + this.selectPlayList);
-
-	var hiddenField4 = document.createElement('input');
-	hiddenField4.setAttribute('type', 'hidden');
-	hiddenField4.setAttribute('name', "4");
-	hiddenField4.setAttribute('value', this.selectAn.trim());
-	
-	if(hashText.length == 0) {
-		hashText.push("null");
-	}
-	console.log(hashText.join());
-	var hiddenField5 = document.createElement('input');
-	hiddenField5.setAttribute('type', 'hidden');
-	hiddenField5.setAttribute('name', "5");
-	hiddenField5.setAttribute('value', hashText.join());
-	
-	$(".container-fluid").wrap(form);
-	
-	$(".container-fluid").append(hiddenField1);
-	$(".container-fluid").append(hiddenField2);
-	$(".container-fluid").append(hiddenField3);
-	$(".container-fluid").append(hiddenField4);
-	$(".container-fluid").append(hiddenField5);
-	//$("#send_form").submit();
-}
 
 // 영상 업로드 자바스크립트 끝
 
@@ -327,30 +209,4 @@ imgInputTag.addEventListener("change", function() {
 
  
 // 이미지 업로드 스크립트 시작
-
-
-// hastTag 판별 스크립트 시작
-const word = /#[^\s#]+/gi;
-/////////////////////
-// tag안에 있는 값을 array type으로 만들어서 넘긴다.
-$(function () {
-	$("#floatingTextarea3").on("keyup", function(event) {
-		let areaValue = $(this).val();
-		key = word.test(areaValue);
-		
-		if(key) {
-			if(event.keyCode == 32 || event.keyCode == 13) {
-				hashText.pop();
-				hashText.push(areaValue.match(word));
-			}
-		}
-		/*
-		for(var i=0; i<hashText.length; i++) {
-			console.log("해시태그: " + hashText[i]);
-			
-		}
-		*/
-	});
-});
-// hashTag판별 끝
  
