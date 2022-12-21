@@ -88,7 +88,6 @@
 	
 	input.form-btn {
 		width : 100%;
-		margin: 5px;
 		padding: 10px;
 		border: 0px;
 		border-radius: 10px;
@@ -170,4 +169,77 @@
 	.disabled{
 		background-color: lightgray !important;
 		color: gray !important; 
+	}
+	
+	
+	.member-modal {
+		position: absolute;
+		top: 0;
+		left : 0;
+		
+		width: 100%;
+		height: 100%;
+		
+		display: none;
+		background-color: rgba(0, 0, 0, 0.4);
+		
+		z-index: 1000;
+
+	}
+	
+	.member-modal-body{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		
+		padding: 40px;
+		
+		background-color: rgb(255, 255, 255);
+		border-radius: 10px;
+		box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+		
+		transform: translateX(-50%) translateY(-50%);
+		
+	}
+	
+	.member-modal-title span{
+		font-size: 1.3em;
+		color: gray;
+	}
+	
+	.member-modal-title.member-alert span::before{
+		content: "⚠";
+	}
+	
+	.member-modal-content {
+		font-size: 0.9em;
+		text-align: center;
+	}
+	
+	.member-modal-content.member-alert span {
+		color: #ea0008;
+	}
+	
+	.member-modal-content.member-alert input[type=button] {
+		margin: 5px;
+		margin-top: 10px;
+		padding: 10px;
+		color: gray;
+		background-color: lightgray;
+		border-radius: 10px;
+		border: 1px solid lightgray;
+	}
+	.member-modal-content.member-alert input[type=button]:hover {
+		filter: brightness(1.1);
+	}
+	
+	
+	.member-modal-content.member-alert input[type=button].member-emp {
+		color: white;
+		background-color: #fc942c;
+		border: 1px solid #fc942c;
+	}
+	
+	.info-hidden {
+		display: none;
 	}

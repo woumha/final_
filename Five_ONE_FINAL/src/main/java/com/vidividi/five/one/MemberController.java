@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
 import com.vidividi.model.WatchDAO;
+import com.vidividi.service.EmailSendService;
 import com.vidividi.service.FormatCnt;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.ChannelDTO;
@@ -46,6 +47,10 @@ public class MemberController {
 	
 	@Autowired
 	private LoginService service;
+	
+	@Autowired
+	private EmailSendService emailservice;
+	
 	
 	@RequestMapping("login.do")
 	public String login() {
@@ -224,8 +229,24 @@ public class MemberController {
 	}
 	
 	@RequestMapping("setting_protect.do")
-	public String setProtect() {
-		return "member/setting_email_protect";
+	public String setProtect(HttpSession session, MemberDTO dto, Model model) {
+		if (session.getAttribute("MemberCode") != null) {
+			String memberCode = (String)session.getAttribute("MemberCode");
+			dto = dao.getMember(memberCode);
+			
+			model.addAttribute("MemberCode", memberCode);
+			model.addAttribute("MemberName", dto.getMember_name());
+			model.addAttribute("MemberDTO", dto);
+			
+			return "member/setting_email_protect";
+			
+		}else{
+			model.addAttribute("msg", "로그인 하세요");
+			model.addAttribute("url", "login.do");
+				
+			return "redirect";
+		}
+		
 	}
 	
 	@RequestMapping("vidividi_premium.do")
@@ -240,11 +261,69 @@ public class MemberController {
 		
 		List<ChannelDTO> channelList = channelDAO.getChannelList(memberCode);
 		MemberDTO dto = dao.getMember(memberCode);
+		model.addAttribute("MemberDTO", dto);
 		model.addAttribute("RepChannelCode", dto.getMember_rep_channel());
 		model.addAttribute("ChannelList", channelList);
 		return "member/channel_list";
 	}
 	
+	@ResponseBody
+	@RequestMapping("newChannel.do")
+	public String newChannel(@RequestParam("member_code") String memberCode) {
+		
+		String channelCode = service.generateChannelCode();
+		MemberDTO dto = dao.getMember(memberCode);
+		System.out.println(memberCode);
+		System.out.println(channelCode);
+		System.out.println(dto.getMember_name());
+		ChannelDTO channelDTO = service.newChannel(memberCode, channelCode, dto.getMember_name());
+		int check = channelDAO.insertChannel(channelDTO);
+		
+		if (check > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping("delete_channel.do")
+	public String deleteChannel(
+			@RequestParam("member_code") String memberCode,
+			@RequestParam("channel_code") String channelCode) {
+		
+		
+		int count = channelDAO.countMemberChannel(memberCode);
+		int check = 0;
+		
+		if (count > 1) {
+			check = channelDAO.deleteChannel(channelCode);
+			
+			if (check > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+			
+		}else {
+			return "essential";
+		}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("sendEmail.do")
+	public String sendEmail(@RequestParam("member_email") String email) {
+		
+		String authKey = emailservice.sendAuthEmail(email);
+		
+		if(authKey != null) {
+			System.out.println("전송된 인증 코드 : "+authKey);
+			return authKey;			
+		}else {
+			return "fail";
+		}
+	}
 	
 	
 
