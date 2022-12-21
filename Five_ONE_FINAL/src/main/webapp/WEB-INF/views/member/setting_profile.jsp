@@ -34,12 +34,9 @@ function authEmail(email){
 		url : '<%=request.getContextPath()%>/sendEmail.do',
 		data: { member_email : email },
 		success : function(data) {
-			if (data != "fail"){
+			if (data != "fail"){ 
 				toastr.success("이메일이 전송되었습니다.");
 				$("#input-email").attr("disabled", true);
-				$("#email-auth-request-btn").css("display", "none");
-				$("#email-auth-request-btn").siblings().removeClass("info-hidden");
-				
 				
 			}else if(data == "fail"){
 				toastr.success("이메일을 확인하세요.","이메일 전송 실패");
@@ -54,10 +51,12 @@ function authEmail(email){
 }
 
 $(function(){
+	
 	if ('${MemberDTO.getMember_code()}' != ''){
 		let channelCode = '${MemberDTO.getMember_rep_channel()}';
 		changeBackColor(channelCode);
 	}
+	
 	$("body").css("position","fixed");
 	inputPlaceholder();
 	$("body").css("position","");
