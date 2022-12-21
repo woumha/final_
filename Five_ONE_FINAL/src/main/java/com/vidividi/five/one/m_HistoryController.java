@@ -23,7 +23,7 @@ public class m_HistoryController {
 							@RequestParam(value="search",  required=false, defaultValue= "1") int search,
 							@RequestParam(value="keyword",  required=false, defaultValue= "none") String keyword, Model model) {
 		model.addAttribute("channel_code", code);
-		model.addAttribute("keyword", keyword);
+		/* model.addAttribute("keyword", keyword); */
 		model.addAttribute("search", search);
 		return "myPage/history";
 	}
@@ -77,7 +77,7 @@ public class m_HistoryController {
 	@ResponseBody
 	@RequestMapping(value = "history_search.do" , produces = "application/text; charset=UTF-8")
 	public String history_search(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
-								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
+								@RequestParam("keyword") String keyword,
 								int page, HttpServletResponse response) {
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -116,7 +116,7 @@ public class m_HistoryController {
 	public void delete_history(@RequestParam("video_code") String video,
 								@RequestParam("channel_code") String channel,
 								@RequestParam("search") int search,
-								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
+								@RequestParam("keyword") String keyword,
 								HttpServletResponse response) throws IOException {
 		Map<String,Object>map = new HashMap<String,Object>();
 		map.put("video", video); map.put("channel", channel);

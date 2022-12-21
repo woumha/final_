@@ -164,7 +164,7 @@ public class m_GoodController {
 		map.put("video", video); map.put("channel", channel);
 		
 		// 선택된 good_num 가져오기
-		int good_num = this.dao.getGood_num(map);
+		String good_num = this.dao.getGood_num(map);
 		
 		// 선택된 good_num이 좋아요(1) or 싫어요(2) 확인하기
 		int good_bad = this.dao.getGood_bad(good_num);
@@ -183,7 +183,7 @@ public class m_GoodController {
 			}else {
 				this.dao.removeBad(video);
 			}
-			this.dao.updateSequence_g(good_num);
+			/* this.dao.updateSequence_g(good_num); */
 			// search라면
 			if(search == 2) {
 				out.println("<script>");

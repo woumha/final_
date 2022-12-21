@@ -13,3 +13,12 @@ $('a[href="#history_stop"]').click(function(event) {
 		fadeDuration: 250
 	});
 });
+
+/* 동영상에 마우스 오버시 자동재생 */
+$(document).on("mouseover", ".test_video", function(){
+	 $(this).get(0).play();
+});
+
+$(document).on("mouseout", ".test_video", function(){
+	 $(this).get(0).pause();
+});	

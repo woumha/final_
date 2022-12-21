@@ -9,6 +9,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- 아이콘 관련 링크 -->
+<script src="https://kit.fontawesome.com/ccf3e996b8.js" crossorigin="anonymous"></script>
+
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
 <script type="text/javascript">
 
@@ -76,7 +79,7 @@ function getHistory_new(channel_code, page_history, video_loction){
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
 					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&search="+search+"'>";
@@ -128,7 +131,7 @@ function getHistory_search(channel_code, page_search) {
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
 					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&keyword="+keyword+"&search="+search+"'>";
@@ -196,7 +199,14 @@ $(window).scroll(function(){
 		<div id="history_search_area">
 			<form action="<%=request.getContextPath()%>/history_searchs.do">
 				<input type="hidden" name="channel_code" value="${channel_code }">
-				<input type="text" class="history_search" name="keyword" placeholder="시청 기록 검색">
+				<input type="text" class="history_search" name="keyword" placeholder="시청 기록 검색"
+					<c:if test="${keyword ne ''}">
+						value="${keyword}"
+					</c:if>
+					<c:if test="${keyword eq ''}">
+						value=""
+					</c:if>
+				>
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
 			</form>
 		</div>
@@ -204,7 +214,7 @@ $(window).scroll(function(){
 		<div id="profile_info">
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=${channel_code }"><span>🗃</span> 내 보관함</a></p>
+					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=${channel_code }"><i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;내 보관함</a></p>
 				</div>
 			</div>
 			
@@ -212,7 +222,7 @@ $(window).scroll(function(){
 			
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="#history_delete"><span>🗑</span>&nbsp;시청 기록 지우기</a></p>
+					<p><a class="btn" href="#history_delete"><i class="fa-solid fa-trash"></i>&nbsp;&nbsp;시청 기록 지우기</a></p>
 				</div>
 			</div>
 			
@@ -220,7 +230,7 @@ $(window).scroll(function(){
 			
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="#history_stop"><span>✂</span>&nbsp;시청 기록 일시정지</a></p>
+					<p><a class="btn" href="#history_stop"><i class="fa-solid fa-circle-stop"></i>&nbsp;&nbsp;시청 기록 일시정지</a></p>
 				</div>
 			</div>
 		</div>
@@ -234,7 +244,9 @@ $(window).scroll(function(){
 		<div id="watch_box" class="content_box">
 			<c:if test="${!empty code}">
 			<div class="test">
-				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }'">시청 기록</p>
+				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }'">
+					<img id="history_logo" src="${pageContext.request.contextPath}/resources/img/history.png">&nbsp;시청 기록
+				</p>
 			</div>
 			<div id="ajax_area"></div>
 			<div id="search_area"></div>
@@ -262,7 +274,7 @@ $(window).scroll(function(){
 	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
-	<button class="model_btn" onclick="location.href='delete_history.do?channel_code=${channel_code }'">시청 기록 지우기</button>
+	<button class="model_btn" onclick="location.href='delete_history.do?channel_code=${channel_code }'"><i class="fa-solid fa-square-check" style="font-size: 30px"></i></button>
 </div>
 <div id="history_stop" class="modal">
 	<p class="model_title">시청 기록을 중지할까요?</p>
@@ -270,7 +282,7 @@ $(window).scroll(function(){
 	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 기록 중지됩니다.(임시 내용입니다)</p>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
-	<button class="model_btn" onclick="location.href='dont_save_history.do?member_code=VD00002'">시청 기록 중지하기</button>
+	<button class="model_btn" onclick="location.href='dont_save_history.do?member_code=VD00002'"><i class="fa-solid fa-square-check" style="font-size: 30px"></i></button>
 </div>
 <!-- ====================================== 모달창 자바 스크립트 영역 ====================================== -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/myPage/myPage_JavaScript/history.js"></script>
