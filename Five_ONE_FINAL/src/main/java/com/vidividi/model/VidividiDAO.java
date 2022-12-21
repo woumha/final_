@@ -17,6 +17,9 @@ public interface VidividiDAO {
 	//리스트 최신순
 	List<VideoPlayDTO> mainVideo_up(int startNo, int endNo);
 	
+	//리스트 소트 정렬
+	List<VideoPlayDTO> mainVideo_sort_music(int startNo, int endNo);
+	
 	//검색 페이지 넘기기(인기순)
 	List<VideoPlayDTO> searchVideoList(String field, String keyword, String option, int startNo, int endNo);
 	

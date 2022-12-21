@@ -32,7 +32,7 @@
 		<div id="sidebar">
 			<jsp:include page="../include/side_include.jsp"/>
 		</div>
-	</div>
+	</div> 
 	
 
 <%-- 정렬 변환 스위치 영역 --%>
@@ -69,7 +69,7 @@
 
 <%-- 광고 배너 이미지 영역 --%>	
 	<div id="adv_box">
-		<img alt="경로 못찾음" id="adv" src="${path }/resources/eunji_IMG/test_banner.png">
+		<img alt="경로 못찾음" id="adv" src="${path }/resources/eunji_IMG/side_banner1.png">
 	</div>
 
 <%-- 넘어온 값 받기 --%>

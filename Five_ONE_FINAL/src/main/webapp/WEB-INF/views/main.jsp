@@ -101,8 +101,9 @@
 	
 	
 <%-- 동영상 리스트 영역 --%>
+<div id = "video_wrap">
 	<div id="video_list"> </div> 
-
+</div> 
 	
 <%-- 무한 스크롤 중 로딩... --%>
  <div class="loading_list">
@@ -117,7 +118,7 @@
 
 
 <%-- 하단 영역 --%>	  
-<%-- 	<div id="bottom_wrap">
+	<%-- <div id="bottom_wrap">
 		<jsp:include page="./include/bottom_include.jsp"/>
 	</div> --%>
 	
@@ -131,6 +132,7 @@
 //-------------------------------------------------------------동영상 리스트 ajax(인기도순)--------------------------------------------------------
 
 let loading = true;
+console.log("start>>>" + loading);
 let page = 1;
 
 function getContextPath(){
@@ -141,51 +143,65 @@ function getContextPath(){
 }
 
 
+
+
 	//좋아요 순 정렬
 	function getMainVideoList_popular(page){
 		$.ajax({
 			url : "mainVideoList.do",
 			type: "post",
+			async : false,
 			data: {
 				page : page
 			},
-			success: function(data){				
-				var table = "";
+			success: function(data){
 				
-				table += "<table id='video_table'>"
-				
-				$(data).each(function(){
-				
-				table += "<tr>";
-				table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
-				
-				table += "<td id = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-							"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
+				//console.log(data);
 
-				table += "<td id = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
-							"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
+				if(data.length == 0){
+					$(".loading_list").css("display", "none");
+					loading = false;
 				
-				table += "<td id = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
-				table += "</tr>";
-				table += "<tr>";
-				table += "<td>" + "</td>";
-				table += "</tr>";
-				table += "<tr>";
-				table += "<td>" + "</td>";
-				table += "</tr>";
-				table += "<tr>";
-				table += "<td>" + "</td>";
-				table += "</tr>";
-				table += "<tr>";
-				table += "<td>" + "</td>";
-				table += "</tr>";
-				
-				}); //each end
-				
-				table += "</table>";
-				
-				$("#video_list").append(table);			
-				
+				}else{
+
+					var table = "";
+					
+					table += "<table id='video_table'>"
+					
+					$(data).each(function(){
+					
+					table += "<tr>";
+					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
+					
+					table += "<td id = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
+								"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
+
+					table += "<td id = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+								"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
+					
+					table += "<td id = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+					table += "</tr>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
+					table += "</tr>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
+					table += "</tr>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
+					table += "</tr>";
+					table += "<tr>";
+					table += "<td>" + "</td>";
+					table += "</tr>";
+					
+					}); //each end
+					
+					table += "</table>";
+					
+					$("#video_list").append(table);			
+					
+					
+				}	
 			},
 			
 			error: function(){
@@ -199,18 +215,23 @@ function getContextPath(){
 	getMainVideoList_popular(page);
 	
 //----------------------------------------------------------------동영상 리스트 ajax(최신순)-------------------------------------------------------------------------
-
  
 //최신순 정렬
 function getMainVideoList_recent(page){
 		$.ajax({
 			url : "mainVideoList_up.do",
 			type: "post",
+			async : false,
 			data: {
 				page : page
 			},
 			success: function(data){
 				
+				if(data.length == 0){
+					$(".loading_list").css("display", "none");
+					loading = false;
+				
+				}else {
 				var table = "";
 				
 				table += "<table id='video_table'>"
@@ -218,7 +239,7 @@ function getMainVideoList_recent(page){
 				$(data).each(function(){
 				
 					table += "<tr>";
-					table += "<td colspan='2'>" + "<video controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
+					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
 
 					table += "<td id = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 								"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
@@ -243,8 +264,9 @@ function getMainVideoList_recent(page){
 				
 				table += "</table>";
 				
-				$("#video_list").append(table);			
+				$("#video_list").append(table);		
 				
+				}	
 			},
 			
 			error: function(){
@@ -254,31 +276,134 @@ function getMainVideoList_recent(page){
 		});
 	} //최신순 정렬 end
 
-
+ 
 	//인기순 버튼을 클릭했을 때
-	$(document).on("click", ".re_btn", function(){
-		$("#video_table").remove();
+	$(document).on("click", ".re_btn", function(e){
+		$("#video_table").remove("*");
 		getMainVideoList_popular(page);
 	});
 	
 	//최신순 버튼을 클릭했을 때
-	$(document).on("click", ".up_btn", function(){
-		$("#video_table").remove();
+	$(document).on("click", ".up_btn", function(e){
+		$("#video_table").remove("*");
 		getMainVideoList_recent(page);
 	});
 	
+	
+	
+//-----------------------------------------------------------------무한 스크롤------------------------------------------
+
+ 	let scroll_check = false;
+
+	   $(window).scroll(function(){
+	   scroll_check = true;
+	  });
+	  
+	   setInterval(function() {
+	       if (scroll_check) {
+	           scroll_check = false;
+
+	           if($(window).scrollTop()>=$(document).height() - $(window).height()){
+	        	   if(loading){
+	        	 	   page++;
+		            	
+		               getMainVideoList_popular(page);
+		               getMainVideoList_recent(page);
+	        		   
+	        	   }
+	           }
+	       }
+	   }, 250); // 무한 스크롤 end
+		  
+/* 
+	 $(window).scroll(function(){
+
+	    if(loading){
+	        if($(window).scrollTop()>=$(document).height() - $(window).height()){
+
+	           page++;
+	                 	
+	           getMainVideoList_popular(page);
+	           getMainVideoList_recent(page);
+	        	
+	        }else{
+	    		//alert("페이지 로딩 중입니다.");
+
+	        }
+	    }else{
+	    	alert("데이터 없음");
+	    	$(".loading_list").css("display", "none");
+	    }
+	}); */
+	 
+		
+	
+//--------------------------------------------------------------비디오 hover시 자동재생--------------------------------------
+	 
+	$(document).on("mouseover", ".test_video", function(){
+		 $(this).get(0).play();
+	});
+	
+	$(document).on("mouseout", ".test_video", function(){
+		 $(this).get(0).pause();
+	});	
 
 	
-//mouse over시 비디오 자동재생 + mouseout 시 멈춤
-const video = document.getElementsByClassName("test_video")
-	video.onmouseover = function(){
-		  video.play()
-	}
-	
-	video.onmouseout = function(){
-	   video.pause()
-	}
+//----------------------------------------------------------------동영상 리스트 ajax(상단 내비 소트 정렬)-------------------------------------------------------------------------
+	 
+	//소트 정렬 (music)
+	function getMainVideoList_sort_music(page){
+			$.ajax({
+				url : "mainVideoList_sort_cook.do",
+				type: "post",
+				data: {
+					page : page
+				},
+				success: function(data){
+					
+					var table = "";
+					
+					table += "<table id='video_table'>"
+					
+					$(data).each(function(){
+					
+						table += "<tr>";
+						table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
 
+						table += "<td id = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
+									"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
+
+						table += "<td id = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+									"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
+						
+						table += "<td id = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+						table += "<tr>";
+						table += "<td>" + "</td>";
+						table += "</tr>";
+						table += "<tr>";
+						table += "<td>" + "</td>";
+						table += "</tr>";
+						table += "<tr>";
+						table += "<td>" + "</td>";
+						table += "</tr>";
+						table += "<tr>";
+						table += "<td>" + "</td>";
+						table += "</tr>"
+					}); //each end
+					
+					table += "</table>";
+					
+					$("#video_list").append(table);			
+					
+				},
+				
+				error: function(){
+					alert("소트 정렬 비디오 리스트 ajax 오류입니다.");
+					
+				}
+			});
+		} //소트 정렬 end
+	
 	
 	
 //-----------------------------------------------------------------상단 내비 소트-------------------------------------------------
@@ -301,6 +426,9 @@ const video = document.getElementsByClassName("test_video")
 	
 	//음악 카테고리 선택
 	$(document).on("click", "#music", function(){
+		$('.video_table ').empty();
+		getMainVideoList_sort_music(page);
+		
 		$("#slide_wrap").css("display", "none");
 		$("#re_label").css("display", "none");
 		$("#all").css("background-color", "#424242");
@@ -398,30 +526,7 @@ const video = document.getElementsByClassName("test_video")
 		$("#education").css("background-color", "#424242");
 		$("#kids").css("background-color", "#fc942c");
 	});	
-	
-//-----------------------------------------------------------------무한 스크롤------------------------------------------
 
-$(window).scroll(function(){
-
-    if(loading){
-        if($(window).scrollTop()>=$(document).height() - $(window).height()){
-
-           page++;
-                 	
-           getMainVideoList_popular(page);
-           getMainVideoList_recent(page);
-        	
-        }else{
-    		//alert("페이지 로딩 중입니다.");
-
-        }
-    }else{
-    	
-    	$(".loading_list").css("display", "none");
-    }
-});
-
-	
 
 //----------------------------------------------------------------------카테고리------------------------------------------------------------------------
 	$(document).ready(function() {
