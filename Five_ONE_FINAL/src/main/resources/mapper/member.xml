@@ -41,7 +41,8 @@
 			default,
 			default,
 			#{member_rep_channel},
-			default			
+			default,
+			default	
 		)
 	</insert>
 	
