@@ -25,14 +25,36 @@ public class VidividiDAOImpl implements VidividiDAO {
 
 	//비디오 인기순(메인 페이지)
 	@Override
-	public List<VideoPlayDTO> mainVideo() {
-		return this.sqlSession.selectList("video_list");
+	public List<VideoPlayDTO> mainVideo(int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+        map.put("startNo", startNo);
+        map.put("endNo", endNo);
+		
+		return this.sqlSession.selectList("video_list", map);
 	}
 	
 	//비디오 최신순(메인 페이지)
 	@Override
-	public List<VideoPlayDTO> mainVideo_up() {
-		return this.sqlSession.selectList("video_list_up");
+	public List<VideoPlayDTO> mainVideo_up(int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		 map.put("startNo", startNo);
+	     map.put("endNo", endNo);
+		
+		return this.sqlSession.selectList("video_list_up", map);
+	}
+	
+	//비디오 메인 소트 정렬
+	@Override
+	public List<VideoPlayDTO> mainVideo_sort_music(int startNo, int endNo) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("startNo", startNo);
+        map.put("endNo", endNo);
+  
+		return sqlSession.selectList("video_list_sort_cook", map);
 	}
 	
 	//인기순 검색

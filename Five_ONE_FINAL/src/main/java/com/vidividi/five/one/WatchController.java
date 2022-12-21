@@ -13,6 +13,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -30,13 +31,16 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.view.AbstractView;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.vidividi.model.WatchDAO;
 import com.vidividi.service.FormatCnt;
 import com.vidividi.variable.ReplyDTO;
+import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.GoodDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -89,11 +93,12 @@ public class WatchController{
 	
 	
 	@RequestMapping("watch.do")
-	public String watch(@RequestParam("video_code") String video_code,@RequestParam(value="playlist_code", required = false) String playList_code, Model model) {
+	public String watch(@RequestParam("video_code") String video_code,@RequestParam(value="playlist_code", required = false) String playList_code,
+			Model model, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
 		
+		// 재생목록 체크
 		if(playList_code == null) {
-			System.out.println("플레이리스트 없음");
 		}else {
 			List<VideoPlayDTO> playList = this.dao.getPlayList(playList_code);
 			model.addAttribute("playList_dto", playList);
@@ -101,19 +106,23 @@ public class WatchController{
 		
 		VideoPlayDTO video_dto = this.dao.getVideo(video_code);
 		
+		// 로그인 체크
+		if(repChannelCode == null) {
+			System.out.println("로그인 null");
+		}else {
+			SubscribeDTO subscribe_dto = this.dao.getSubscribe(video_dto.getChannel_code() , repChannelCode);
+			GoodDTO good_dto = this.dao.getGood(video_code, repChannelCode);
+			model.addAttribute("subscribe_dto", subscribe_dto);
+			model.addAttribute("good_dto", good_dto);
+		}
+		
+		
+		
 		int reply_count = this.dao.getReplyCount(video_code);
-		
-		//String channel_good = format(video_dto.getChannel_like());
-		
-		FormatCnt format = new FormatCnt();
-		
-		String channel_good = format.format(video_dto.getChannel_like());
 		
 		
 		model.addAttribute("video_dto", video_dto);
-		model.addAttribute("channel_good", channel_good);
 		model.addAttribute("reply_count", reply_count);
-		
 		
 		return "/watch/watch";
 	}
@@ -121,7 +130,7 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping(value = "reply.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("reply_option") String reply_option, int page, HttpServletResponse response) {
+	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("reply_option") String reply_option, @RequestParam(value="channel_code", required = false) String channel_code, int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -133,7 +142,7 @@ public class WatchController{
 		JSONArray jArray = new JSONArray();
 		
 		
-		List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, startNo, endNo);
+		List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, channel_code, startNo, endNo);
 		
 		for(ReplyDTO dto : list) {
 			
@@ -190,7 +199,7 @@ public class WatchController{
 			json.put("channel_code", dto.getChannel_code());
 			json.put("channel_name", dto.getChannel_name());
 			json.put("channel_profil", dto.getChannel_profil());
-			json.put("reply_no", dto.getReply_no());
+			json.put("reply_code", dto.getReply_no());
 			json.put("reply_cont", dto.getReply_cont());
 			json.put("reply_comment", dto.getReply_comment());
 			json.put("reply_regdate", dto.getReply_regdate());
@@ -205,24 +214,15 @@ public class WatchController{
 		return jArray.toJSONString();
 	}
 	
-	
+	@ResponseBody
 	@RequestMapping("nav_list.do")
-	public List<VideoPlayDTO> getNavList(@RequestParam(value="navOption", required = false) String navOption, @RequestParam("page") int page) {
+	public List<VideoPlayDTO> getNavListAll(@RequestParam(value="navOption", required = false) String navOption, @RequestParam(value="channel_code", required = false) String channel_code, @RequestParam(value="category_code", required = false) String category_code) {
 		
-		List<VideoPlayDTO> list;
-		
-		int rowsize = 10;
-		int startNo = (page * rowsize) - (rowsize - 1);
-		int endNo = (page * rowsize);
-		
-		if(navOption.equals("")) {
-			list = this.dao.getNavList(startNo, endNo);
-		}else {
-			list= this.dao.getNavList(startNo, endNo, navOption); 
-		}
+		List<VideoPlayDTO> list = this.dao.getNavList(navOption, channel_code, category_code);
 		
 		return list;
 	}
+	
 	
 	
 	@RequestMapping("test.do")

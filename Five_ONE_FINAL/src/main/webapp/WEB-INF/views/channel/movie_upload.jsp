@@ -1,8 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <c:set var="channelcode" value="${uploadOwner }" />
+<c:set var="playList" value="${list }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +30,7 @@
 		      <div class="col-md-3 ms-auto">
 		      	<div class="touch_img">
 		      		<div class="d-grid gap-2 d-md-block">
-					  <button class="btn btn-primary start_img_btn" type="button">영상 미리보기 이미지</button>
+					  <button class="btn btn-primary btn-sm start_img_btn" type="button">영상 미리보기 이미지</button>
 					  <input type="file" hidden name="upload_input_img" class="input_start_img">
 					  <div class="icon_img">
 					  	
@@ -75,12 +76,16 @@
 			    <div class="row">
 			      <div class="col-sm-9" align="left">
 			        <label for="validationServer04" class="form-label">재생목록</label>
-				    <select id="play_List" class="form-select" name="play_List" aria-label="Default select example">
-					  <option selected value="0">기본 목록</option>
-					  <option value="1">One</option>
-					  <option value="2">Two</option>
-					  <option value="3">Three</option>
-					</select>
+					   <c:if test="${empty playList }">
+			  			<a href="#" class="text-decoration-none">재생목록이 없어요</a>
+			  		</c:if>
+			  		<c:if test="${!empty playList }">
+			  			<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
+						  <c:forEach items="${playList }" var="play">
+						      	<option value="${play.playlist_title }">${play.playlist_title }</option>
+						  </c:forEach>
+						</select>
+			  		</c:if>
 					</div>
 					<p>
 					<hr>

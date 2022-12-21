@@ -4,13 +4,17 @@ import java.util.List;
 
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 public interface ChannelDAO {
 	// 채널 정보
 	public ChannelDTO getChannelOwner(MemberDTO memberDTO);
   
-	// 비디오 업로
+	// 재생목록 리스트
+	public List<PlaylistDTO> getPlayList(String code);
+	
+	// 비디오 업로드
 	public int setVideoUpload(VideoPlayDTO playDTO);
 	
 	// 채널 , 비디오 관리 페이지

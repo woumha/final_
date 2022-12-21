@@ -132,7 +132,12 @@
 }
 
 .save_img {
-	max-height: 50%;
-	max-width: 100%;
-	padding-top: 15px;
+	padding: 15px;
+	height: 100%;
+	width: 100%;
+}
+
+.icon_img {
+	background-size: contain;
+	max-height: 150px;
 }

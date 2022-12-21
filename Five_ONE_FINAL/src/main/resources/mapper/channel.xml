@@ -9,6 +9,10 @@
  		select * from user_channel where member_code = #{member_code} and channel_code = #{member_rep_channel}
  	</select>
  	
+ 	<select id="member_playlist" parameterType="String" resultType="playlistDTO">
+ 		select playlist_title from playlist where channel_code = #{code} order by PLAYLIST_REGDATE asc
+ 	</select>
+ 	
  	<insert id="video_update" parameterType="videoplayDTO">
  		insert into video_play values (
 	 		#{video_code}, 
@@ -28,7 +32,7 @@
  	</insert>
  	
  	<select id="channel_video_list" parameterType="String" resultType="videoplayDTO">
- 		select * from video_play where channel_code = #{code}
+ 		select * from video_play where channel_code = #{code} order by video_regdate desc
  	</select>
  	
  	<select id="channel_new_video" parameterType="String" resultType="videoplayDTO">
@@ -61,9 +65,11 @@
  	<select id="countMemberChannel" parameterType="String" resultType="int">
  		select count(*) from user_channel where member_code = #{memberCode}
  	</select>
+
  	<delete id="deleteChannel" parameterType="String">
  		delete from user_channel where channel_code = #{channelCode}
  	</delete>
+
  </mapper>
   
  

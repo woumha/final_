@@ -71,7 +71,11 @@ word-break:break-all;
 
 .test { width: 100%; display: inline-block; }
 
-.content_title1 { font-size: 20px; margin-left: 15px; }
+.content_title1 {
+font-size: 20px;
+margin-left: 15px;
+cursor: pointer;
+}
 .content_title1 a { text-decoration: none; }
 
 .video_title_p {
@@ -130,6 +134,29 @@ margin-top: 10px;
 }
 
 .video_history_d_img:hover {cursor: pointer;}
+
+/* 로그인 안했을 시 */
+#page_none {
+width: 100%;
+height: 800px;
+text-align: center;
+}
+#none_img { margin-top: 12%; }
+#none_title {
+font-size: 30px;
+font-weight: bold;
+}
+#none_text { font-size: 17px; }
+#none_btn {  }
+#none_btn {
+border: 0; outline: 0;
+font-size: 12px;
+width: 60px; height: 32px;
+border-radius: 30px;
+margin-top: 12px;
+}
+#none_btn:hover { background-color: #FB8703; }
+
 
 /* ====================== 모달창 스타일 수정 영역 ====================== */
 .modal { max-width: 780px; height: 300px; }

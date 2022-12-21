@@ -15,12 +15,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-@Service
 // 스프링에서 비지니스 로직을 수행할 때 붙이는 애노테이션
 // 해당 Upload라는 클래스는 비지니스 로직을 수행하는 클래스
+@Service
 public class UploadFile {
 	public String dynamicPath_r() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		request.getContextPath();
 		return request.getServletContext().getRealPath("resources");
 	}
 	
@@ -34,10 +35,13 @@ public class UploadFile {
 
 		//String uploadVideoPath = "C:/final/GitHub/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + lastChannelCode + "/";
 		//String uploadVideoPath = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/"; // 집 PC
-		String uploadVideoPath = dynamicPath_r() + "/AllChannel/"; // MACBOOK
+		//String uploadVideoPath = dynamicPath_r() + "/AllChannel/";
+		
+		String uploadVideoPath = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/";
 		//thumbnail
 		Iterator<String> iterator = mRequest.getFileNames();
 		
+		System.out.println("uploadVideoPath: " + uploadVideoPath);
 		
 		// 들어오기 전부터 뭔가를 해야할듯...
 		String extMovieArr[] = { "mp4" };
@@ -125,14 +129,18 @@ public class UploadFile {
 	
 	
 	// 파일이 변경될때 사용하는 메소드
-	public boolean fileChangeUpload(MultipartHttpServletRequest mRequest, String sendPosition, String channelCode, String dynamicPath) {
+	public boolean fileChangeUpload(MultipartHttpServletRequest mRequest, String sendPosition, String channelCode) {
 		boolean isUpload = false;
 		
-		String uploadVideoPath = dynamicPath + "/AllChannel/"; // MACBOOK
+		String uploadVideoPath = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/"; // MACBOOK
 		
 		// 채널 코드 또는 채널 이름, 영상 제목 
 		String saveFileName = "";
 		String dateFolder = "";
+		
+		
+		
+		
 					
 		if(sendPosition.equals("profilChange")) { // 프로필 업로드
 			//thumbnail
@@ -177,7 +185,24 @@ public class UploadFile {
 					e.printStackTrace();
 				}
 			} //while
-		} else { //다른 파일 업로드
+		} else if(sendPosition.equals(sendPosition)){ //다른 파일 업로드
+			
+			uploadVideoPath = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/";
+			
+			Iterator<String> iterator = mRequest.getFileNames();
+			String extMovieArr[] = {"mp4" };
+			String extImgArr[] = {"png"};
+			
+			while(iterator.hasNext()) {
+				String uploadFileName = iterator.next();
+				MultipartFile mFile = mRequest.getFile(uploadFileName);
+				String originalFileName = mFile.getOriginalFilename();
+				
+				dateFolder = uploadVideoPath + channelCode;
+				File path1 = new File(dateFolder);
+				
+				File pathCheck = new File(dateFolder + "/" + originalFileName);
+			}
 			
 		}
 		return isUpload;

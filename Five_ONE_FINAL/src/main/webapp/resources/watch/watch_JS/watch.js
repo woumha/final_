@@ -11,17 +11,26 @@ $(document).ready(function() {
 	}
 
 	let video_code = $("#video_code").val();
-	
+	let channel_code = $("#channel_code").val();
+	let category_code = $("#category_code").val();
 
 	let reply_group = 'a1a1a1';
-	
+	let navOption = "all";
 	let reply_option = "most";
+
 	let page_reply = 1;
 	let page_comment = 1;
+	let page_nav = 1;
+	
 	let loading_reply = true;
-	let loading_video = true;
+	let loading_nav = true;
+	
+	let nav_list;
 
-	function getReply(video_code, reply_option, page_reply){
+	let scroll_check = false;
+
+
+	function getReply(video_code, reply_option, channel_code, page_reply){
 
 		$.ajax({
 
@@ -29,6 +38,7 @@ $(document).ready(function() {
 			data : {
 				"video_code" : video_code,
 				"reply_option" : reply_option,
+				"channel_code" : channel_code,
 				"page" : page_reply 
 			},
 			datatype : 'JSON',
@@ -39,7 +49,7 @@ $(document).ready(function() {
 
 				if(str == "[]"){
 					loading_reply = false;
-					
+					return;
 				}else{
 					let reply = JSON.parse(data);
 					
@@ -67,8 +77,8 @@ $(document).ready(function() {
 
 						div += "<div class='reply_action_box'>";
 						div += "<div class='toolbar_wrap card_a'>";
-						div += "<div class='reply_good_btn'><div class='card_b'><img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good.svg'><div>" +this.reply_good+ "</div></div></div>";
-						div += "<div class='reply_bad_btn'><img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad.svg'></div>";
+						div += "<div class='reply_good_btn'><div class='card_b'><img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'><div>" +this.reply_good+ "</div></div></div>";
+						div += "<div class='reply_bad_btn'><img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'></div>";
 						div += "<div class='reply_comment_btn'>답글</div>";
 						div += "</div>"; // .toolbar_wrap
 						div += "</div>"; // .reply_action
@@ -128,6 +138,7 @@ $(document).ready(function() {
 
 				let comment = JSON.parse(data);
 
+
 				$(comment).each(function(){
 					
 					div += "<div class='comment_wrap card_a'>"; //card
@@ -151,12 +162,12 @@ $(document).ready(function() {
 					div += "<div class='toolbar_wrap card_a'>" //card
 					// toolbar(item1)
 					div += "<div class='reply_good_btn'><div class='card_b'>"; 
-					div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good.svg'>";
+					div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'>";
 					div += "<div>" +this.reply_good+ "</div>";
 					div += "</div></div>"; //.reply_good_btn, .card_b
 					// toolbar(item2)
 					div += "<div class='reply_bad_btn'>"; 
-					div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad.svg'>";
+					div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'>";
 					div += "</div>"; // .reply_bad_btn end
 					div += "</div>"; //.toolbar_wrap end
 					div += "</div>"; //.reply_action_box end
@@ -174,7 +185,7 @@ $(document).ready(function() {
 
 				});
 
-				if(comment.length < 10){
+				if(comment.length == 10){
 					div += "<div class='comment_more'>";
 					div += "더보기ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ";
 
@@ -195,13 +206,91 @@ $(document).ready(function() {
 
 	} //getComment() end
 
+	function getNavList(navOption, channel_code, category_code, page_nav){
+
+
+		$.ajax({
+			url : getContextPath() +"/nav_list.do",
+			data : {
+				"navOption" : navOption,
+				"channel_code" : channel_code,
+				"category_code" : category_code
+			},
+			success : function(data){
+				nav_list = data;
+				$("#input_video_list").empty();
+				getNavListSc(nav_list, navOption, page_nav);
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+		})
+
+	}// getNavList() end
+
+	function getNavListSc(nav_list, navOption, page_nav){
+		let rowsize = 10;
+		let startNo = ((page_nav * rowsize) - (rowsize - 1))-1;
+		let endNo = (page_nav * rowsize)-1;
+
+
+		let nav = "";
+		if(nav_list.length == 0){
+			nav += "<div class='video_list_none'>찾으시는 동영상이 없습니다.</div>";
+			loading_nav = false;
+			$("#input_video_list").append(nav);
+			return;
+		}else{
+			for(let i=startNo; i<=endNo; i++){
+				if(nav_list.length-1 < i){
+					$("#input_video_list").append(nav);
+					loading_nav = false;
+					return;
+				}else if(nav_list.length > i){
+					nav += "<div class='video_list_box card_a'>";
+					// video_list_box(item1)
+					nav += "<div class='video_list_thumbnail'>";
+					nav += "<a><img class='video_list_img' src='" +getContextPath()+ "/resources/watch/watch_img/" +nav_list[i].video_img+ "'></a>";
+					nav += "</div>";
+					// video_list_box(item2)
+					nav += "<div class='video_list_info card_c'>";
+					nav += "<span class='video_list_title'>" +nav_list[i].video_title+ "</span>";
+					nav += "<span class='video_list_channel_name'>" +nav_list[i].channel_name+ "</span>";
+					nav += "<div class='video_list_meta_block'>";
+					nav += "<span class='video_list_view_cnt'>" +nav_list[i].video_view_cnt+ "</span>";
+					nav += "<span class='video_list_date'>" +nav_list[i].video_regdate+ "</span>";
+					nav += "</div>"; // video_list_mata_block end
+					nav += "</div>"; // video_list_info end
+					// video_list_box(item3)
+					nav += "<div class='render_box'>";
+					nav += "<div class='render_wrap'>";
+					nav += "<button class='render'><img class='render_icon' src='" +getContextPath()+ "/resources/watch/watch_img/render_icon.png'></button>";
+					nav += "</div>"; // .render_wrap end
+					nav += "</div>";// .render_box end
+
+					nav += "</div>"; // .video_list_box end
+
+					//console.log('nav>>> '+nav);
+				}
+				
+			}
+			
+		}
+
+		$("#input_video_list").append(nav);
+
+		
+	} // getNavListSc() end
+
 
 
  	 	
 	 
 	//  기본 실행 함수
-	 getReply(video_code, reply_option, page_reply);
-
+	getReply(video_code, reply_option, channel_code, page_reply);
+	getNavList(navOption, channel_code, category_code, page_nav);
 
 
  		
@@ -214,7 +303,6 @@ $(document).ready(function() {
  	/* 대댓글 토글 버튼 */
 	$(document).on("click", ".comment_toggle", function(){
 		
-		console.log('대댓글 실행');
 
 		let toggle_img = $(this).find(".toggle");
 		let reply_group = $(this).val();
@@ -244,20 +332,39 @@ $(document).ready(function() {
 	
 		});
 
-		
+		// 스크롤 버튼 클릭
+		$(".scrollmenu_btn").on("click", function(){
+
+			loading_nav = true;
+			page_nav = 1;
+			navOption = $(this).attr("data-value");
+			getNavList(navOption, channel_code, category_code, page_nav);		
+
+		});
+
+		$(window).scroll(function(){			
+			scroll_check = true;
+		}); 
 
 
 		// 무한 스크롤
-		$(window).scroll(function(){
-	
-			if($(window).scrollTop()>=$(document).height() - $(window).height()){
-				if(loading_reply){
-					page_reply++;
-					getReply(video_code, reply_option, page_reply);
-				}
+		setInterval(function() {
+
+			if (scroll_check) {
+				scroll_check = false;
+
+				if($(window).scrollTop()>=$(document).height() - $(window).height()){
+					if(loading_reply){
+						page_reply++;						
+						getReply(video_code, reply_option, channel_code, page_reply);											
+					}	
+					if(loading_nav){
+						page_nav++;
+						getNavListSc(nav_list,navOption, page_nav);
+					}
+				}				
 			}
-			
-		}); //scroll end
+		}, 500); // 무한 스크롤 end
 
 
 

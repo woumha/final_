@@ -11,7 +11,6 @@
 		<typeAlias type="com.vidividi.variable.TestDTO" alias="TestDTO" />		
 		
 		<typeAlias type="com.vidividi.model.WatchDAO" alias="watchDAO" />
-		<typeAlias type="com.vidividi.variable.VideoPlayDTO" alias="videoplayDTO" />
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
 		
 		<!-- myPage 관련 -->
@@ -27,5 +26,15 @@
 		<!-- Channel -->
 		<typeAlias type="com.vidividi.model.ChannelDAO" alias="channeldao"/>
 		<typeAlias type="com.vidividi.variable.ChannelDTO" alias="channeldto"/>
+		
+		<!-- VideoPlay -->
+		<typeAlias type="com.vidividi.model.VideoPlayDAO" alias="videoplayDAO"/>
+		<typeAlias type="com.vidividi.variable.VideoPlayDTO" alias="videoplayDTO" />
+		
+		<!-- subscribe -->
+		<typeAlias type="com.vidividi.variable.SubscribeDTO" alias="subscribeDTO" />
+		
+		<!-- good -->
+		<typeAlias type="com.vidividi.variable.GoodDTO" alias="GoodDTO" />
 	</typeAliases>
 </configuration>

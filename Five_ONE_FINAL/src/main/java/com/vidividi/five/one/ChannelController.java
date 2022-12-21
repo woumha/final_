@@ -2,6 +2,7 @@ package com.vidividi.five.one;
 
 import java.io.IOException;
 
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,12 +17,14 @@ import javax.servlet.http.HttpSession;
 
 
 import org.apache.catalina.connector.Response;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,10 +32,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.vidividi.model.ChannelDAO;
+import com.vidividi.model.VideoPlayDAO;
+import com.vidividi.model.VideoPlayDAOImpl;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
+
+import lombok.NonNull;
 
 
 @Controller
@@ -42,9 +50,14 @@ public class ChannelController {
 	@Inject
 	private ChannelDAO dao;
 	
+	@Inject
+	private VideoPlayDAO videodao;
+	
 	
 	@Autowired
 	private LoginService service;
+	
+	
 	
 	
 	@Autowired
@@ -96,34 +109,46 @@ public class ChannelController {
 	}
 	
 	@RequestMapping("movie_upload.do")
-	public String modalUploadPage(HttpServletRequest request, HttpSession session, Model model) {
-		// 취약점 찾았다... 다른 사람이 채널코드만 바꿔서 영상 올릴수가 있다..?
+	public String modalUploadPage(HttpServletRequest request, HttpSession session, Model model, @RequestParam("code") String ownerCode) {
+		// 업로드 모달창
 		
 		String repChannelCode = (String)session.getAttribute("RepChannelCode");
-		
 		// 유효성 체크 한번 해야됨
 		
-		ChannelDTO channelDTO = new ChannelDTO();
 		
+		ChannelDTO channelDTO = new ChannelDTO();
 		channelDTO.setChannel_code(repChannelCode);
+		
+		List<PlaylistDTO> playListTitle = this.dao.getPlayList(ownerCode); // 재생목록 리스트
+		
+		System.out.println(playListTitle);
+		
 		model.addAttribute("uploadOwner", channelDTO);
+		model.addAttribute("list", playListTitle);
+		
 		
 		return "channel/movie_upload";
 	}
 	
 	
 	@RequestMapping("upload_success.do")
-	public void upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age, @RequestParam("5") String[] hash, MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
+	public void upload(@RequestParam("1") String title, @RequestParam("2") String context, @RequestParam("3") String playList, @RequestParam("4") String age, @RequestParam("5") String hash, MultipartHttpServletRequest mRequest, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
+		response.setContentType("text/html charset=UTF-8");
+		
 		String lastChannelCode = (String)session.getAttribute("RepChannelCode");
+		
 		
 		PrintWriter out = response.getWriter();
 		String allHashTag = "";
 		int count = 0;
 		String[] name = fileName(mRequest);
 		
-		for(int i=0; i<hash.length; i++) {
-			allHashTag += hash[i];
-		}
+	
+//		if(!(hash.equals(null))) {
+//			for(int i=0; i<hash.length; i++) {
+//				allHashTag += hash[i];
+//			}
+//		} 
 		
 		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
 			System.out.println("성공");
@@ -131,6 +156,7 @@ public class ChannelController {
 			System.out.println("실패");
 		}
 		
+	
 		VideoPlayDTO playdto = new VideoPlayDTO();
 		playdto.setVideo_code(service.generateVideoCode());
 		playdto.setChannel_code(channelWorlddto.getChannel_code()); //rep_channel
@@ -145,11 +171,11 @@ public class ChannelController {
 		playdto.setChannel_like(channelWorlddto.getChannel_like());
 		
 		int check = this.dao.setVideoUpload(playdto);
-		
+		System.out.println("check: " + check);
 		if(check > 0 ) {
 			out.println("<script>"
 					+ "alert('업로드 완료');"
-					+ "location.href='" + request.getContextPath() +"/channel.do?cha='"+ channelWorlddto.getChannel_code() +";");
+					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelWorlddto.getChannel_code() +"';");
 			out.println("</script>");
 		} else {
 			out.println("<script>"
@@ -158,33 +184,84 @@ public class ChannelController {
 			out.println("</script>");
 		}
 		
+		
 	}
 	
 	// 영상 관리 페이지
 	@RequestMapping("channel_manager.do")
-	public String manager(Model model, @RequestParam("code") String code) {
+	public String manager(Model model, @RequestParam("code") String code, HttpServletResponse response) {
+		response.setContentType("text/html charset=UTF-8");
+		
 		List<VideoPlayDTO> videoList = this.dao.getVideoList(code);
 		
-		
 		model.addAttribute("currentOwner", channelWorlddto);
-		model.addAttribute("list", videoList);
-		
+		model.addAttribute("mvList", videoList);
+	
 		return "channel/channel_manager";
 	}
 	
 	// 체널 프로필 이미지 업로드
 	@RequestMapping("channel_profil.do")
-	public void profilImg(Model model, MultipartHttpServletRequest mRequest , HttpServletResponse response) throws IOException {
-		System.out.println("mrequest: " + mRequest);
+	public void profilImg(Model model, HttpServletResponse response) throws IOException {
+		//System.out.println("mrequest: " + mRequest);
 		
-//		String[] name = fileName(mRequest);
-//		
-//		sendPosition = "profilChange";
-//		uploadFile.fileChangeUpload(mRequest, sendPosition, chCode, dynamicPath());
-//		
-//		int check = this.dao.setChangeChannelProfil(chCode);
-//		PrintWriter out =  response.getWriter();
+		
+		sendPosition = "profilChange";
+		//uploadFile.fileChangeUpload(mRequest, sendPosition, chCode, dynamicPath());
+		
+		//int check = this.dao.setChangeChannelProfil(chCode);
+		//PrintWriter out =  response.getWriter();
 	}
+	
+	
+	// 영상 수정 모달창
+	@RequestMapping("video_update_modal.do")
+	public String setVideoUpdate(Model model, @RequestParam("video_code") String code, HttpServletResponse response) {
+		response.setContentType("text/html; charset=UTF-8");
+		
+		VideoPlayDTO playdto = new VideoPlayDTO();
+		playdto.setVideo_code(code);
+		
+		playdto = this.videodao.getVideoOne(playdto.getVideo_code());
+		
+		model.addAttribute("list", playdto);
+		return "channel/channel_update_modal";
+	}
+	
+	
+	// 영상 수정 완료
+	@RequestMapping("video_update_success.do")
+	public void setVideoUpdateSuccess(MultipartHttpServletRequest mRequest,
+			@RequestParam("video_code") String code, 
+			@RequestParam("video_title") String title, 
+			@RequestParam(value="video_cont", required = false) String cont,
+			@RequestParam("video_playList") String list,
+			@RequestParam("flexRadioDefault_age") String age,
+			@RequestParam("flexRadioDefault_openClose") String open,
+			@RequestParam("channel_code") String channelCode) {
+		
+		
+		String position = "uploadMVChange";
+		
+		VideoPlayDTO playdto = new VideoPlayDTO();
+		playdto.setVideo_code(code);
+		playdto.setVideo_title(title);
+		playdto.setVideo_cont(cont);
+		// list는 재생목록에
+		
+		
+		
+		
+//		if(uploadFile.fileChangeUpload(mRequest, position, channelCode)) {
+//			System.out.println("성공");
+//		} else {
+//			System.out.println("실패");
+//		}
+		
+		
+		
+	}
+	
 	
 	// 영상 이름 받아오기
 	public String[] fileName(MultipartHttpServletRequest mRequest) {
