@@ -21,9 +21,11 @@
 <body>
 	
 	<c:set var="video_dto" value="${video_dto }" />
-	<c:set var="channel_good" value="${channel_good }" />
+<%-- 	<c:set var="channel_good" value="${channel_good }" /> --%>
 	<c:set var="reply_count" value="${reply_count }" />
 	<c:set var="playList_dto" value="${playlist_dto }"/>
+	<c:set var="subscribe_dto" value="${subscribe_dto }"/>
+	<c:set var="good_dto" value="${good_dto }"/>
 	
 	
 	<input type="hidden" value="${video_dto.getVideo_code() }" id="video_code">
@@ -31,7 +33,7 @@
 	<input type="hidden" value="${video_dto.getCategory_code() }" id="category_code">
 	
 	<jsp:include page="../include/top_include2.jsp"/>
-	<jsp:include page="../include/side_include.jsp"/>
+	<%-- <jsp:include page="../include/side_include.jsp"/> --%>
 <div class="all">
 	
 	<div class="watch_layer">
@@ -75,33 +77,50 @@
 							<div class="item_a">
 								<div class="channel_info card_c">
 									<div id="input_uploader">${video_dto.getChannel_name()}</div>
-									<div id="input_member">구독자 &nbsp; ${channel_good }명</div>
+									<div id="input_member">구독자 &nbsp; ${video_dto.getChannel_like() }명</div>
 								</div>
 							</div>
 							
 							<div class="item_a">
-								<button class="watch_btn">
-									<div class="subscribe">구독</div>
-								</button>
+							
+								<c:if test="${empty subscribe_dto }">
+									<button class="subscribe_false">
+										<div>구독</div>
+									</button>
+								</c:if>
+								<c:if test="${!empty subscribe_dto }">
+									<button class="subscribe_true">
+										<div>구독중</div>
+									</button>
+								</c:if>
+								
 							</div>
 						</div>
 					</div>
 					<div class="channel_wrap">
 						<div class="card_e">
-							<div class="item_a btn_wrap">
-								<button class="watch_btn2 card_b">
-									<div class="subscribe">
+							<div class="item_a btn_wrap card_a">
+								<button class="watch_good_btn card_b">
 										<div class="card_b">
-											<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good.svg">
+											<c:if test="${good_dto.getGood_bad() != 1}">
+												<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good_icon.svg">
+											</c:if>
+											<c:if test="${good_dto.getGood_bad() == 1}">
+												<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good_icon_selected.svg">
+											</c:if>
 												<div>좋아요</div>
 										</div>
-									</div>
-									<div class="subscribe">
+								</button>
+								<button class="watch_bad_btn card_b">
 										<div class="card_b">
-											<img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad.svg">
+											<c:if test="${good_dto.getGood_bad() != 2}">
+												<img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad_icon.svg">
+											</c:if>
+											<c:if test="${good_dto.getGood_bad() == 2}">
+												<img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad_icon_selected.svg">
+											</c:if>
 												<div>싫어요</div>
 										</div>
-									</div>
 								</button>
 							</div>
 							<div class="item_a btn_wrap">
@@ -313,7 +332,7 @@
 				    <button id="slide_right">></button>
 				  </div>
 				</div>
-				<div id="input_video_list">
+				<div id="input_video_list_all" class="input_video_list">
 					<%-- <div class="video_list_box card_a">
 					
 						<div class="video_list_thumbnail">
@@ -341,6 +360,8 @@
 						</div>
 					</div><!-- video_list_box end --> --%>
 				</div> <!-- input_video_list end -->
+				<div id="input_video_list" class="input_video_list">
+				</div>
 			</div><!-- video_list_wrap end -->
 						
 		</div> <!-- side_box end -->
