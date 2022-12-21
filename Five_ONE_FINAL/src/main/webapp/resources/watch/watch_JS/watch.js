@@ -14,6 +14,7 @@ $(document).ready(function() {
 	let channel_code = $("#channel_code").val();
 	let category_code = $("#category_code").val();
 
+
 	let reply_group = 'a1a1a1';
 	let navOption = "all";
 	let reply_option = "most";
@@ -28,6 +29,8 @@ $(document).ready(function() {
 	let nav_list;
 
 	let scroll_check = false;
+
+	
 
 
 	function getReply(video_code, reply_option, channel_code, page_reply){
@@ -77,11 +80,27 @@ $(document).ready(function() {
 
 						div += "<div class='reply_action_box'>";
 						div += "<div class='toolbar_wrap card_a'>";
-						div += "<div class='reply_good_btn'><div class='card_b'><img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'><div>" +this.reply_good+ "</div></div></div>";
-						div += "<div class='reply_bad_btn'><img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'></div>";
+
+						div += "<div class='reply_good_btn'><div class='card_b'>";
+						if(this.check_good == 1){
+							div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon_selected.svg'>";
+						}else{
+							div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'>";
+						}
+						div += "<div>" +this.reply_good+ "</div></div></div>" //reply_goodbtn;
+
+						div += "<div class='reply_bad_btn'>";
+						if(this.check_good == 2){
+							div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon_selected.svg'>";
+						}else{
+							div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'>";
+						}
+						div += "</div>"; // reply_bad_btn
+
 						div += "<div class='reply_comment_btn'>답글</div>";
 						div += "</div>"; // .toolbar_wrap
-						div += "</div>"; // .reply_action
+						div += "</div>"; // .reply_action_box
+						
 						div += "</div>"; // .input_reply
 
 
@@ -162,12 +181,20 @@ $(document).ready(function() {
 					div += "<div class='toolbar_wrap card_a'>" //card
 					// toolbar(item1)
 					div += "<div class='reply_good_btn'><div class='card_b'>"; 
-					div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'>";
+					if(this.check_good == 1){
+						div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon_selected.svg'>";
+					}else{
+						div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'>";
+					}
 					div += "<div>" +this.reply_good+ "</div>";
 					div += "</div></div>"; //.reply_good_btn, .card_b
 					// toolbar(item2)
 					div += "<div class='reply_bad_btn'>"; 
-					div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'>";
+					if(this.check_good == 2){
+						div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon_selected.svg'>";
+					}else{
+						div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'>";
+					}
 					div += "</div>"; // .reply_bad_btn end
 					div += "</div>"; //.toolbar_wrap end
 					div += "</div>"; //.reply_action_box end
@@ -234,6 +261,8 @@ $(document).ready(function() {
 		let rowsize = 10;
 		let startNo = ((page_nav * rowsize) - (rowsize - 1))-1;
 		let endNo = (page_nav * rowsize)-1;
+
+		console.log('nav > ' +nav_list.length);
 
 
 		let nav = "";
@@ -347,6 +376,9 @@ $(document).ready(function() {
 		}); 
 
 
+
+
+
 		// 무한 스크롤
 		setInterval(function() {
 
@@ -365,6 +397,8 @@ $(document).ready(function() {
 				}				
 			}
 		}, 500); // 무한 스크롤 end
+
+
 
 
 
