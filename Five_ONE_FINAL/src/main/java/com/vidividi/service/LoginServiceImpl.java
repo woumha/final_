@@ -105,6 +105,7 @@ public class LoginServiceImpl implements LoginService {
 		return result;
 	}
 	
+
 	@Override
 	public String generatePWD(int size) {
 		char[] charSet = new char[] {
@@ -159,6 +160,30 @@ public class LoginServiceImpl implements LoginService {
 		
 		return result;
 		
+
+	//재생목록 코드
+	@Override
+	public String generateBundleCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "BC-" + uuid.toString(); // Bundle Code
+		
+		System.out.println("새로 생성된 재생목록 코드: " + result);
+		
+		return result;
+	}
+	
+	// 비디오 좋아요 코드
+	@Override
+	public String generateGoodCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "GO-"+uuid.toString();
+		
+		System.out.println("새로 생성된 좋아요 코드 : "+result);
+		
+		return result;
+
 	}
 
 	@Override

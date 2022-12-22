@@ -53,6 +53,7 @@ width: 250px;
 margin-right: 10px;
 margin-left: 2px;
 }
+
 /* ----------- 동영상 설정 end ----------- */
 .video_box {
 display: inline-block;
@@ -77,6 +78,10 @@ margin-left: 15px;
 cursor: pointer;
 }
 .content_title1 a { text-decoration: none; }
+.content_title1 img {
+width: 30px;
+margin-bottom: 7px;
+}
 
 .video_title_p {
 font-size: 22px; margin-bottom: -10px; margin-top: 0px;
@@ -116,6 +121,7 @@ margin-bottom: 70px;
 .history_search {
 width: 100%;
 border: none;
+border-bottom: solid;
 padding: 10px 12px;
 font-size: 14px;
 }
@@ -163,7 +169,13 @@ margin-top: 12px;
 .modal a.close-modal { top: 5.5px; right: 5.5px; }
 
 .model_title { margin-top: 25px; font-size: 25px; }
-.model_btn { float: right; margin-right: 10px; margin-bottom: 10px; }
+.model_btn {
+float: right;
+margin-right: 40px;
+margin-bottom: 10px;
+border: none;
+background: white;
+}
 /* ====================== 모달창 스타일 수정 영역 끝 ====================== */
 
 /* ========================== 미디어 쿼리 영역 ========================== */

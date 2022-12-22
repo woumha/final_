@@ -40,4 +40,6 @@ public interface ChannelDAO {
 	
 	// 채널 프로필 수정
 	public int setChangeChannelProfil(String channelCode);
+	
+	
 }

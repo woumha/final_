@@ -10,10 +10,10 @@
  	</select>
  	
  	<select id="member_playlist" parameterType="String" resultType="playlistDTO">
- 		select playlist_title from playlist where channel_code = #{code} order by PLAYLIST_REGDATE asc
+ 		select playlist_title, playlist_code from playlist where channel_code = #{code} order by PLAYLIST_REGDATE asc
  	</select>
  	
- 	<insert id="video_update" parameterType="videoplayDTO">
+ 	<insert id="videoInsert" parameterType="videoplayDTO">
  		insert into video_play values (
 	 		#{video_code}, 
 	 		#{channel_code}, 
@@ -24,10 +24,11 @@
 	 		default, 
 	 		default, 
 	 		default, 
-	 		#{video_hash}, 
+	 		null, 
 	 		sysdate, 
-	 		#{video_open}, 
-	 		#{channel_like}
+	 		#{video_open},
+	 		#{video_age}
+	 		#{category_code}
  		) 
  	</insert>
  	
@@ -36,7 +37,7 @@
  	</select>
  	
  	<select id="channel_new_video" parameterType="String" resultType="videoplayDTO">
- 		select * from (select * from video_play where channel_code =#{new_code} order by video_regdate) where <![CDATA[rownum <= 1]]>
+ 		select * from (select * from video_play where channel_code =#{new_code} order by video_regdate desc) where <![CDATA[rownum <= 1]]>
  	</select>
  	<select id="channelPsa" parameterType="String" resultType="String">
 		select channel_profil from user_channel where channel_code = #{channelCode}

@@ -46,15 +46,15 @@ public interface MyPageDAO {
 	List<VideoPlayDTO> getGood_search_date(Map<String, Object> map);
 	List<VideoPlayDTO> getGood_search_most(Map<String, Object> map);
 	List<VideoPlayDTO> getGood_search_bad(Map<String, Object> map);
-	int getGood_num(Map<String, Object> map);
-	int getGood_bad(int num);
-	int good_search_one_delete(int num);
-	int updateSequence_g(int num);
+	String getGood_num(Map<String, Object> map);
+	int getGood_bad(String num);
+	int good_search_one_delete(String num);
+	/* int updateSequence_g(int num); */
 	int removeGood(String video);
 	int removeBad(String video);
 	
-	
-	
+	/* mainPage playlist 더보기 ajax */
+	List<VideoPlayDTO> getPlayList_list(String code, int startNo, int endNo);
 	
 	
 	

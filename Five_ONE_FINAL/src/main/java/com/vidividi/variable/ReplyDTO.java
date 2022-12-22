@@ -31,11 +31,11 @@ public class ReplyDTO {
 	public void setVideo_code(String video_code) {
 		this.video_code = video_code;
 	}
-	public String getReply_no() {
+	public String getReply_code() {
 		return reply_code;
 	}
-	public void setReply_no(String reply_no) {
-		this.reply_code = reply_no;
+	public void setReply_code(String reply_code) {
+		this.reply_code = reply_code;
 	}
 	public int getReply_comment() {
 		return reply_comment;

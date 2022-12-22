@@ -25,7 +25,7 @@
 	
 	<c:set var="s_list" value="${subscribe_list }" />
 	<c:if test="${!empty member_code }">
-	<div id="subscribe_title"><p>구독 목록</p></div>
+	<div id="subscribe_title"><p><i class="fa-solid fa-stamp"></i>&nbsp;&nbsp;구독 목록</p></div>
 	<c:if test="${!empty s_list }">
 	<c:forEach items="${s_list }" var="s_dto">
 	<div class="chanel_area">

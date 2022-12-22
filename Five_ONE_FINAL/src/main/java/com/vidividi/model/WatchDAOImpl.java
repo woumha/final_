@@ -7,12 +7,14 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.output.ThresholdingOutputStream;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
@@ -124,5 +126,50 @@ public class WatchDAOImpl implements WatchDAO {
 		map.put("repChannelCode", repChannelCode);
 		
 		return this.sqlSession.selectOne("getGood", map);
+	}
+
+
+	@Override
+	public List<FeedbackDTO> getFeedback(String video_code, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("repChannelCode", repChannelCode);
+		
+		return this.sqlSession.selectList("getFeedback", map);
+	}
+
+
+	@Override
+	public int insertGood(String video_code, String good_code, int good_bad, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		System.out.println("good>" +good_code);
+		
+		map.put("video_code", video_code);
+		map.put("repChannelCode", repChannelCode);
+		map.put("good_code", good_code);
+		map.put("good_bad", good_bad);
+		
+		return this.sqlSession.insert("insertGood", map);
+	}
+
+
+	@Override
+	public int deleteGood(String good_code) {
+		
+		return this.sqlSession.delete("deleteGood", good_code);
+	}
+
+
+	@Override
+	public int updateGood(String good_code, int good_bad) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("good_code", good_code);
+		map.put("good_bad", good_bad);
+		
+		return this.sqlSession.update("updateGood", map);
 	}
 }
