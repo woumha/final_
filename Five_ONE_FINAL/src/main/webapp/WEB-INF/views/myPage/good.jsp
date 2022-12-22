@@ -73,7 +73,7 @@ function getGood_new(channel_code, page_good, option){
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
 					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&search="+search+"&option="+option+"'>";
@@ -126,7 +126,7 @@ function getGood_search(channel_code, page_search, option) {
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" • 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
 					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&keyword="+keyword+"&search="+search+"&option="+option+"'>";
@@ -152,19 +152,19 @@ function input_option(value) {
 	console.log("input_option 실행! 및 value 값 >>> " + value);
 	if(value == "date") {
 		console.log("최신순 실행!!!");
-		$("#option_date").css('display', 'block');
-		$("#option_most").css('display', 'none');
-		$("#option_bad").css('display', 'none');
+		$("#date_button").css({'background-color':'black', 'color':'white'});
+		$("#most_button").css({'background-color':'white', 'color':'black'});
+		$("#bad_button").css({'background-color':'white', 'color':'black'});
 	}else if(value == "most") {
 		console.log("좋아요순 실행!!!");
-		$("#option_date").css('display', 'none');
-		$("#option_most").css('display', 'block');
-		$("#option_bad").css('display', 'none');		
+		$("#date_button").css({'background-color':'white', 'color':'black'});
+		$("#most_button").css({'background-color':'black', 'color':'white'});
+		$("#bad_button").css({'background-color':'white', 'color':'black'});	
 	}else if(value == "bad") {
 		console.log("싫어요순 실행!!!");
-		$("#option_date").css('display', 'none');
-		$("#option_most").css('display', 'none');
-		$("#option_bad").css('display', 'block');
+		$("#date_button").css({'background-color':'white', 'color':'black'});
+		$("#most_button").css({'background-color':'white', 'color':'black'});
+		$("#bad_button").css({'background-color':'black', 'color':'white'});
 	}
 }
 
@@ -272,6 +272,15 @@ $(window).scroll(function(){
 		}
 	}
 }); //scroll end
+
+$(document).on("mouseover", ".test_video", function(){
+	 $(this).get(0).play();
+});
+
+$(document).on("mouseout", ".test_video", function(){
+	 $(this).get(0).pause();
+});	
+
 </script>
 </head>
 <body>
@@ -304,7 +313,8 @@ $(window).scroll(function(){
 		<div id="profile_info">
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=${channel_code }"><span>🗃</span> 내 보관함</a></p>
+					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=${channel_code }">
+					<i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;내 보관함</a></p>
 				</div>
 			</div>
 			
@@ -312,9 +322,15 @@ $(window).scroll(function(){
 
 			<div class="info_box">
 				<div class="info_title">
-					<p id="good_date"><a class="btn"><span>아이콘</span>&nbsp;좋아요 누른 날짜 순</a></p>
-					<p id="good_most"><a class="btn"><span>아이콘</span>&nbsp;좋아요 많은 영상 순</a></p>
-					<p id="good_bad"><a class="btn"><span>아이콘</span>&nbsp;싫어요 누른 동영상 보기</a></p>			
+					<p id="good_date"><a class="btn" id="date_button">
+						<i class="fa-regular fa-calendar-days"></i>&nbsp;&nbsp;좋아요 누른 날짜 순</a>
+					</p>
+					<p id="good_most"><a class="btn" id="most_button">
+						<i class="fa-regular fa-thumbs-up"></i>&nbsp;&nbsp;좋아요 많은 영상 순</a>
+					</p>
+					<p id="good_bad"><a class="btn" id="bad_button">
+						<i class="fa-solid fa-thumbs-down"></i>&nbsp;&nbsp;싫어요 누른 동영상 보기</a>
+					</p>			
 				</div>
 			</div>
 		</div>
@@ -328,12 +344,11 @@ $(window).scroll(function(){
 		<div id="watch_box" class="content_box">
 			<c:if test="${!empty code}">
 			<div class="test">
-				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/good_list.do?channel_code=${channel_code }'">좋아요 누른 동영상</p>
+				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/good_list.do?channel_code=${channel_code }'">
+				<img id="good_logo" src="${pageContext.request.contextPath}/resources/img/good.png">&nbsp;좋아요 누른 동영상
+				</p>
 			</div>
-			<div id="option_date" class="list_option">최신순</div>
-			<div id="option_most" class="list_option">좋아요순</div>
-			<div id="option_bad" class="list_option">싫어요 동영상</div>
-				
+
 			<div id="ajax_area"></div>
 			<div id="search_area"></div>
 			
@@ -345,7 +360,6 @@ $(window).scroll(function(){
 			</div>
 			
 			<div class="search_no_area">
-			<div class="search_keyword">검색어 : ${keyword }</div>
 				<div class="page_none">
 					<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
 					<p class="none_title">검색결과가 없습니다....</p>

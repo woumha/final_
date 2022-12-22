@@ -45,7 +45,7 @@ public class VidividiDAOImpl implements VidividiDAO {
 		return this.sqlSession.selectList("video_list_up", map);
 	}
 	
-	//비디오 메인 소트 정렬
+	//비디오 메인 소트 정렬(음악)
 	@Override
 	public List<VideoPlayDTO> mainVideo_sort_music(int startNo, int endNo) {
 		

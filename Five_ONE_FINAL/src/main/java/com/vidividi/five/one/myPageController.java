@@ -1,14 +1,13 @@
 package com.vidividi.five.one;
 
 import java.io.*;
-import java.text.DecimalFormat;
+
 import java.util.*;
 import javax.inject.Inject;
 import javax.servlet.http.*;
 
-import org.apache.ibatis.reflection.SystemMetaObject;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +74,48 @@ public class myPageController {
 		
 		return "myPage/myPage";
 	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "getPlaylist_list.do" , produces = "application/text; charset=UTF-8")
+	public String getReplyList(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
+							   int page, HttpServletResponse response) {
+		
+		response.setContentType("text/html; charset=UTF-8");
+
+		int rowsize = 10;
+		int startNo = (page * rowsize) - (rowsize - 1);
+		int endNo = (page * rowsize);
+		
+		List<VideoPlayDTO> list = null;
+		
+		JSONArray jArray = new JSONArray();
+		
+		list = this.dao.getPlayList_list(code, startNo, endNo);
+
+		for(VideoPlayDTO dto : list) {
+			JSONObject json = new JSONObject();
+			json.put("video_code", dto.getVideo_code());
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("video_title", dto.getVideo_title());
+			json.put("video_cont", dto.getVideo_cont());
+			json.put("video_img", dto.getVideo_img());
+			json.put("video_good", dto.getVideo_good());
+			json.put("video_bad", dto.getVideo_bad());
+			json.put("video_view_cnt", dto.getVideo_view_cnt());
+			json.put("video_hash", dto.getVideo_hash());
+			json.put("video_regdate", dto.getVideo_regdate());
+			json.put("video_open", dto.getVideo_open());
+			json.put("category_code", dto.getCategory_code());
+			json.put("playlist_title", dto.getPlayList_title());
+			json.put("playlist_code", dto.getPlayList_code());
+			jArray.add(json);
+		}
+		return jArray.toString();
+	}
+	
 
 	@RequestMapping("playlist_list.do")
 	public String playlist_list(@RequestParam("channel_code") String code,
@@ -194,10 +235,6 @@ public class myPageController {
 			// 구독 리스트 불러오기
 			List<ChannelDTO> subscribe_list = this.dao.getSubscribe_list(code);
 			
-			// 테스트용 코드 (삭제예정)
-			/* String su = format(10000); */
-			/* System.out.println("su 확인 >>>" + su); */
-			
 			model.addAttribute("subscribe_list", subscribe_list);
 			model.addAttribute("member_code", code);
 		}
@@ -228,7 +265,6 @@ public class myPageController {
 		if(check > 0) {
 			this.dao.updateSequence_s(num);
 			out.println("<script>");
-			/* out.println("alert('구독 해제 완료')"); */
 			out.println("location.href='subscribe_list.do?member_code="+member+"'");
 			out.println("</script>");
 		}else {

@@ -17,5 +17,6 @@ public interface LoginService {
 	String generateBundleCode(); // 재생목록 코드
 	ChannelDTO newChannel(String memberCode, String channelCode, String memberName);
 	int getAge(String date);
-
+  
+	String generateGoodCode();
 }

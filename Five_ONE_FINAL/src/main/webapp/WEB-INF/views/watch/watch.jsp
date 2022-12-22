@@ -21,16 +21,15 @@
 <body>
 	
 	<c:set var="video_dto" value="${video_dto }" />
-<%-- 	<c:set var="channel_good" value="${channel_good }" /> --%>
 	<c:set var="reply_count" value="${reply_count }" />
 	<c:set var="playList_dto" value="${playlist_dto }"/>
 	<c:set var="subscribe_dto" value="${subscribe_dto }"/>
 	<c:set var="good_dto" value="${good_dto }"/>
 	
-	
 	<input type="hidden" value="${video_dto.getVideo_code() }" id="video_code">
 	<input type="hidden" value="${video_dto.getChannel_code() }" id="channel_code">
 	<input type="hidden" value="${video_dto.getCategory_code() }" id="category_code">
+	<input type="hidden" value="${good_dto.getGood_num()}" id ="good_num">
 	
 	<jsp:include page="../include/top_include2.jsp"/>
 	<%-- <jsp:include page="../include/side_include.jsp"/> --%>
@@ -100,7 +99,7 @@
 					<div class="channel_wrap">
 						<div class="card_e">
 							<div class="item_a btn_wrap card_a">
-								<button class="watch_good_btn card_b">
+								<button class="watch_good_btn card_b" data-value="${good_dto.getGood_bad() }">
 										<div class="card_b">
 											<c:if test="${good_dto.getGood_bad() != 1}">
 												<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good_icon.svg">
@@ -111,7 +110,7 @@
 												<div>좋아요</div>
 										</div>
 								</button>
-								<button class="watch_bad_btn card_b">
+								<button class="watch_bad_btn card_b" data-value="${good_dto.getGood_bad() }">
 										<div class="card_b">
 											<c:if test="${good_dto.getGood_bad() != 2}">
 												<img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad_icon.svg">
