@@ -39,5 +39,6 @@
 		
 		<!-- feedback -->
 		<typeAlias type="com.vidividi.variable.FeedbackDTO" alias="feedbackDTO" />
+		
 	</typeAliases>
 </configuration>
