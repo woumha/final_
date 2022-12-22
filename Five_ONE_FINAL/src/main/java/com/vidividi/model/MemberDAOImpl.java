@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.LoginDTO;
+import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
 
 @Repository
@@ -67,6 +68,16 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public void toggleEmailLogin(String memberCode) {
 		this.sqlSession.update("emailLogin", memberCode);
+	}
+	
+	@Override
+	public int insertLoginHistory(LoginHistoryDTO dto) {
+		return this.sqlSession.insert("insertLoginHistory", dto);
+	}
+	
+	@Override
+	public List<LoginHistoryDTO> getLoginHistroy(String memberCode) {
+		return this.sqlSession.selectList("getLoginHistory", memberCode);
 	}
 	
 }
