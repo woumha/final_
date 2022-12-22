@@ -127,6 +127,14 @@ object-fit: cover;
 margin-bottom: 10px;
 }
 
+.test_video  {
+  transition: all 0.2s linear;
+  overflow: hidden;
+}
+.test_video:hover {
+  transform: scale(1.2);
+}
+
 .channel_hr { width: 90%; }
 
 #profile_box { margin-bottom: 30px; }
@@ -188,6 +196,12 @@ display: -webkit-box;
 font-size: 10px;
 }
 
+/* 당근 아이콘 스타일 */
+.fa-solid fa-carrot {
+width: 15px;
+}
+
+
 /* 재생목록 동영상 스타일 */
 .video_play {
 position: absolute;
@@ -232,7 +246,7 @@ margin-bottom: 25px;
 margin-left: 20px;
 }
 
-#history_logo { margin-left: -80px; }
+#history_logo { margin-left: -105px; }
 #playlist_logo { margin-left: -120px; }
 #good_logo { margin-left: -194px; }
 #reply_logo { margin-left: -172px; }

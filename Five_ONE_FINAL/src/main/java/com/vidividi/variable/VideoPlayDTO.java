@@ -24,6 +24,7 @@ public class VideoPlayDTO {
 	
 	
 	private String playList_title; // 재생목록
+	private String playList_code; // 재생목록
 	
 	public String getVideo_code() {
 		return video_code;
@@ -116,6 +117,12 @@ public class VideoPlayDTO {
 	
 	public void setPlayList_title(String playList_title) {
 		this.playList_title = playList_title;
+	}
+	public String getPlayList_code() {
+		return playList_code;
+	}
+	public void setPlayList_code(String playList_code) {
+		this.playList_code = playList_code;
 	}
 	
 	

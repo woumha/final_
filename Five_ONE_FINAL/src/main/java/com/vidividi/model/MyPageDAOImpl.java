@@ -162,24 +162,33 @@ public class MyPageDAOImpl implements MyPageDAO {
 	public List<VideoPlayDTO> getGood_search_bad(Map<String, Object> map) {
 		return this.sqlSession.selectList("good_search_bad", map); }
 	@Override
-	public int getGood_num(Map<String, Object> map) {
+	public String getGood_num(Map<String, Object> map) {
 		return this.sqlSession.selectOne("getGood_num", map); }
 	@Override
-	public int getGood_bad(int num) {
+	public int getGood_bad(String num) {
 		return this.sqlSession.selectOne("getGood_bad", num); }
 	@Override
-	public int good_search_one_delete(int num) {
+	public int good_search_one_delete(String num) {
 		return this.sqlSession.delete("good_search_one_delete", num); }
-	@Override
-	public int updateSequence_g(int num) {
-		return this.sqlSession.update("updateSeq_g", num); }
 
+	/*
+	 * @Override public int updateSequence_g(int num) { return
+	 * this.sqlSession.update("updateSeq_g", num); }
+	 */
+	
 	@Override
 	public int removeGood(String video) {
 		return this.sqlSession.update("removeGood", video); }
 	@Override
 	public int removeBad(String video) {
 		return this.sqlSession.update("removeBad", video); }
+
+	/* mainPage playlist 더보기 ajax */
+	@Override
+	public List<VideoPlayDTO> getPlayList_list(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getPlaylist_list", map); }
 
 	
 }
