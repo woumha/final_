@@ -36,5 +36,8 @@
 		
 		<!-- good -->
 		<typeAlias type="com.vidividi.variable.GoodDTO" alias="GoodDTO" />
+		
+		<!-- feedback -->
+		<typeAlias type="com.vidividi.variable.FeedbackDTO" alias="feedbackDTO" />
 	</typeAliases>
 </configuration>
