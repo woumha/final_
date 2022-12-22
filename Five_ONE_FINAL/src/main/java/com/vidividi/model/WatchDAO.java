@@ -6,6 +6,7 @@ import java.util.List;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
@@ -32,5 +33,13 @@ public interface WatchDAO {
 	public SubscribeDTO getSubscribe(String channel_code, String repChannelCode);
 
 	public GoodDTO getGood(String video_code, String repChannelCode);
+
+	public List<FeedbackDTO> getFeedback(String video_code, String repChannelCode);
+
+	public int insertGood(String video_code, String good_code, int good_bad, String repChannelCode);
+
+	public int deleteGood(String good_code);
+
+	public int updateGood(String good_code, int good_bad);
 	
 }

@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -21,6 +22,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +39,11 @@ import org.springframework.web.servlet.view.AbstractView;
 import com.fasterxml.jackson.core.JsonParser;
 import com.vidividi.model.WatchDAO;
 import com.vidividi.service.FormatCnt;
+import com.vidividi.service.LoginService;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
@@ -52,6 +56,8 @@ public class WatchController{
 	@Inject
 	private WatchDAO dao;
 	
+	@Autowired
+	private LoginService service;
 	
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -112,6 +118,7 @@ public class WatchController{
 		}else {
 			SubscribeDTO subscribe_dto = this.dao.getSubscribe(video_dto.getChannel_code() , repChannelCode);
 			GoodDTO good_dto = this.dao.getGood(video_code, repChannelCode);
+			
 			model.addAttribute("subscribe_dto", subscribe_dto);
 			model.addAttribute("good_dto", good_dto);
 		}
@@ -130,10 +137,9 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping(value = "reply.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("reply_option") String reply_option, @RequestParam(value="channel_code", required = false) String channel_code, int page, HttpServletResponse response) {
+	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("reply_option") String reply_option, @RequestParam(value="channel_code", required = false) String channel_code, int page, HttpServletResponse response, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
 		response.setContentType("text/html; charset=UTF-8");
-		
 		
 		int rowsize = 5;
 		int startNo = (page * rowsize) - (rowsize - 1);
@@ -141,31 +147,39 @@ public class WatchController{
 		
 		JSONArray jArray = new JSONArray();
 		
-		
 		List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, channel_code, startNo, endNo);
 		
-		for(ReplyDTO dto : list) {
-			
-			JSONObject json = new JSONObject();
-			
-			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
-			
-			json.put("channel_code", dto.getChannel_code());
-			json.put("channel_name", dto.getChannel_name());
-			json.put("channel_profil", dto.getChannel_profil());
-			json.put("reply_no", dto.getReply_no());
-			json.put("reply_cont", dto.getReply_cont());
-			json.put("reply_comment", dto.getReply_comment());
-			json.put("reply_regdate", dto.getReply_regdate());
-			json.put("reply_update", dto.getReply_update());
-			json.put("reply_good", dto.getReply_good());
-			json.put("reply_bad", dto.getReply_bad());
-			json.put("reply_group", dto.getReply_group());
-			json.put("comment_count", comment_count);
-			
-			
-			jArray.add(json);
+		// 로그인 체크
+		if(repChannelCode == null) {
+			jArray = setReplyArray(list, video_code);
+		}else {
+			jArray = setReplyArray(list, video_code, repChannelCode);
 		}
+		
+
+		
+//		for(ReplyDTO dto : list) {
+//			
+//			JSONObject json = new JSONObject();
+//			
+//			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
+//			
+//			json.put("channel_code", dto.getChannel_code());
+//			json.put("channel_name", dto.getChannel_name());
+//			json.put("channel_profil", dto.getChannel_profil());
+//			json.put("reply_no", dto.getReply_no());
+//			json.put("reply_cont", dto.getReply_cont());
+//			json.put("reply_comment", dto.getReply_comment());
+//			json.put("reply_regdate", dto.getReply_regdate());
+//			json.put("reply_update", dto.getReply_update());
+//			json.put("reply_good", dto.getReply_good());
+//			json.put("reply_bad", dto.getReply_bad());
+//			json.put("reply_group", dto.getReply_group());
+//			json.put("comment_count", comment_count);
+//			
+//			
+//			jArray.add(json);
+//		}
 			
 		
 		
@@ -180,7 +194,7 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping(value = "comment.do" , produces = "application/text; charset=UTF-8")
-	public String getComment(String video_code, String reply_group, int page, HttpServletResponse response) {
+	public String getComment(String video_code, String reply_group, int page, HttpServletResponse response, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -192,22 +206,10 @@ public class WatchController{
 		
 		List<ReplyDTO> list = this.dao.getComment(video_code, reply_group, startNo, endNo);
 		
-		for(ReplyDTO dto : list) {
-			
-			JSONObject json = new JSONObject();
-			
-			json.put("channel_code", dto.getChannel_code());
-			json.put("channel_name", dto.getChannel_name());
-			json.put("channel_profil", dto.getChannel_profil());
-			json.put("reply_code", dto.getReply_no());
-			json.put("reply_cont", dto.getReply_cont());
-			json.put("reply_comment", dto.getReply_comment());
-			json.put("reply_regdate", dto.getReply_regdate());
-			json.put("reply_update", dto.getReply_update());
-			json.put("reply_good", dto.getReply_good());
-			json.put("reply_bad", dto.getReply_bad());
-
-			jArray.add(json);
+		if(repChannelCode == null) {
+			jArray = setCommentArray(list, video_code);
+		}else {
+			jArray = setCommentArray(list, video_code, repChannelCode);
 		}
 		
 		
@@ -223,6 +225,34 @@ public class WatchController{
 		return list;
 	}
 	
+	@ResponseBody
+	@RequestMapping("insertGood.do")
+	public int insertGood(@RequestParam("video_code") String video_code, @RequestParam(value="good_code", required = false) String good_code, @RequestParam("good_bad") int good_bad, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+		
+		System.out.println("rec > " +repChannelCode);
+		
+		if(good_code == null) {
+			good_code = service.generateGoodCode();
+		}
+		
+		System.out.println("goodcode> " +good_code);
+		
+		return this.dao.insertGood(video_code, good_code, good_bad, repChannelCode);
+	}
+	
+	@ResponseBody
+	@RequestMapping("deleteGood.do")
+	public int deleteGood(@RequestParam("good_code") String good_code) {
+		
+		return this.dao.deleteGood(good_code);
+	}
+	
+	@ResponseBody
+	@RequestMapping("updateGood.do")
+	public int updateGood(@RequestParam("good_code") String good_code, @RequestParam("good_bad") int good_bad) {
+		
+		return this.dao.updateGood(good_code, good_bad);
+	}
 	
 	
 	@RequestMapping("test.do")
@@ -243,10 +273,153 @@ public class WatchController{
 		return "/watch/test2";
 	}
 	
+	public JSONArray setReplyArray(List<ReplyDTO> list, String video_code) {
+		
+			JSONArray jArray = new JSONArray();
+		
+			for(ReplyDTO dto : list) {
+			
+			JSONObject json = new JSONObject();
+			
+			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
+			
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("channel_profil", dto.getChannel_profil());
+			json.put("reply_no", dto.getReply_code());
+			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_comment", dto.getReply_comment());
+			json.put("reply_regdate", dto.getReply_regdate());
+			json.put("reply_update", dto.getReply_update());
+			json.put("reply_good", dto.getReply_good());
+			json.put("reply_bad", dto.getReply_bad());
+			json.put("reply_group", dto.getReply_group());
+			json.put("comment_count", comment_count);
+			
+			jArray.add(json);
+		}
+			
+		return jArray;
+	}
 	
+	public JSONArray setReplyArray(List<ReplyDTO> list, String video_code, String repChannelCode) {
+		
+		int check_good =0;
+		
+		JSONArray jArray = new JSONArray();
+		
+		for(ReplyDTO dto : list) {
+			
+			JSONObject json = new JSONObject();
+			
+			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
+			List<FeedbackDTO> feedback_dto = this.dao.getFeedback(video_code, repChannelCode);
+			
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("channel_profil", dto.getChannel_profil());
+			json.put("reply_no", dto.getReply_code());
+			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_comment", dto.getReply_comment());
+			json.put("reply_regdate", dto.getReply_regdate());
+			json.put("reply_update", dto.getReply_update());
+			json.put("reply_good", dto.getReply_good());
+			json.put("reply_bad", dto.getReply_bad());
+			json.put("reply_group", dto.getReply_group());
+			json.put("comment_count", comment_count);
+			
+			for(FeedbackDTO feed : feedback_dto) {
+				if(dto.getReply_code().equals(feed.getReply_code())){
+					check_good = feed.getFeedback_good();
+				}
+			}
+			
+			json.put("check_good", check_good);
+			
+			
+			jArray.add(json);
+		}
+		
+		return jArray;
+	}
 	
+	public JSONArray setCommentArray(List<ReplyDTO> list, String video_code) {
+		
+		int check_good =0;
+		
+		JSONArray jArray = new JSONArray();
+		
+		for(ReplyDTO dto : list) {
+			
+			JSONObject json = new JSONObject();
+			
+			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
+			
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("channel_profil", dto.getChannel_profil());
+			json.put("reply_no", dto.getReply_code());
+			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_comment", dto.getReply_comment());
+			json.put("reply_regdate", dto.getReply_regdate());
+			json.put("reply_update", dto.getReply_update());
+			json.put("reply_good", dto.getReply_good());
+			json.put("reply_bad", dto.getReply_bad());
+			json.put("reply_group", dto.getReply_group());
+			json.put("comment_count", comment_count);
+			json.put("check_good", check_good);
+			
+			
+			jArray.add(json);
+		}
+		
+		return jArray;		
+		
+		
+	}
 
 	
-
+	public JSONArray setCommentArray(List<ReplyDTO> list, String video_code, String repChannelCode) {
+		
+		int check_good =0;
+		
+		JSONArray jArray = new JSONArray();
+		
+		for(ReplyDTO dto : list) {
+			
+			JSONObject json = new JSONObject();
+			
+			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
+			List<FeedbackDTO> feedback_dto = this.dao.getFeedback(video_code, repChannelCode);
+			
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("channel_profil", dto.getChannel_profil());
+			json.put("reply_no", dto.getReply_code());
+			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_comment", dto.getReply_comment());
+			json.put("reply_regdate", dto.getReply_regdate());
+			json.put("reply_update", dto.getReply_update());
+			json.put("reply_good", dto.getReply_good());
+			json.put("reply_bad", dto.getReply_bad());
+			json.put("reply_group", dto.getReply_group());
+			json.put("comment_count", comment_count);
+			
+			for(FeedbackDTO feed : feedback_dto) {
+				if(dto.getReply_code().equals(feed.getReply_code())){
+					check_good = feed.getFeedback_good();
+				}
+			}
+			
+			json.put("check_good", check_good);
+			
+			
+			jArray.add(json);
+		}
+		
+		return jArray;
+		
+	}
 	
 }
+
