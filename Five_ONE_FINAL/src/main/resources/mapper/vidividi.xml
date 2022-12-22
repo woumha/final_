@@ -31,7 +31,7 @@
 	</select>
 	
 	
-	<!-- main video list 소트(cook) 정렬 -->
+	<!-- main video list 소트(music) 정렬 -->
 	<select id="video_list_sort_cook" parameterType="hashmap" resultType="VideoPlayDTO">		
 		  <![CDATA[
 			select * from
