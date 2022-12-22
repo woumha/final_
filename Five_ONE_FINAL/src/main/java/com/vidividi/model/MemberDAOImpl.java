@@ -2,11 +2,13 @@ package com.vidividi.model;
 
 import java.util.List;
 
+
 import javax.inject.Inject;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.vidividi.variable.GoogleLoginDTO;
 import com.vidividi.variable.LoginDTO;
 import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
@@ -78,6 +80,11 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public List<LoginHistoryDTO> getLoginHistroy(String memberCode) {
 		return this.sqlSession.selectList("getLoginHistory", memberCode);
+	}
+	
+	@Override
+	public String isGoogleLinked(GoogleLoginDTO dto) {
+		return this.sqlSession.selectOne("isGoogleLinked", dto);
 	}
 	
 }

@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name ="google-signin-client_id" content="279446786317-1d8b3dusm3g9oc69uvskvd84p04eira1.apps.googleusercontent.com">
 <title>Insert title here</title>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
@@ -15,9 +16,10 @@
 <!-- toast -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<style type="text/css">
 
-</style>
+<!-- google signin api -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <script type="text/javascript">
 	$(function(){
 		
@@ -64,7 +66,37 @@
 		});
 		
 	}
+	
+<!-- 구글 로그인 -->
 
+	function getGoogleData(response){
+	 	console.log("Encoded JWT ID token: " + response.credential);
+	 	
+	 	$.ajax({
+	 		url : '<%=request.getContextPath()%>/googleLogin.do',
+			data: {
+				jwt : response.credential
+			},
+			success : function(data){
+				if (data == "joined"){
+					toastr.success("로그인 성공");
+					$(location).attr("href", "<%=request.getContextPath()%>");
+				}else if (data == "notlinked"){
+					
+				}
+			},
+			error: function(){
+				toastr.error("구글 로그인 데이터 통신 오류");
+			}
+	 		
+	 		
+	 	});
+	}
+	
+
+	
+      
+ 
 </script>
 
 </head>
@@ -99,7 +131,20 @@
 				</div>
 				<hr class="vertical-hr">
 				<div id="login-component-right">
-					<input type="button" value="구글 로그인" class="form-btn">
+				    <div id="g_id_onload"
+				         data-client_id="279446786317-1d8b3dusm3g9oc69uvskvd84p04eira1.apps.googleusercontent.com"
+				         data-callback="getGoogleData"
+				         data-auto_prompt="false"
+				         data-context="signin">
+				      </div>
+				      <div class="g_id_signin"
+				         data-type="standard"
+				         data-size="large"
+				         data-theme="outline"
+				         data-text="sign_in_with"
+				         data-shape="rectangular"
+				         data-logo_alignment="left">
+				      </div>
 					<input type="button" value="카카오 로그인" class="form-btn">
 					<input type="button" value="네이버 로그인" class="form-btn">
 					<hr class="horizontal-hr">

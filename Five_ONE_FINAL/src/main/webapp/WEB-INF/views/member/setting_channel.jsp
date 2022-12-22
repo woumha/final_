@@ -47,7 +47,7 @@ $(function(){
 	}
 	
 	#info-wrap-bottom{
-		height: 80%;
+		height: 90%;
 	}
 
 	#setting-channel-content {
@@ -163,10 +163,10 @@ $(function(){
 						<ul class="info-navi">
 							<li onclick="location.href='setting_profile.do'" id="info-menu-1" class="navi-not-page">프로필</li>
 							<li onclick="location.href='setting_channel.do'" id="info-menu-2" class="navi-this-page info-navi-selected">채널</li>
-							<li onclick="location.href='setting_protect.do'" id="info-menu-3" class="navi-not-page">계정 보안
+							<li id="info-menu-3" class="navi-not-page">계정 보안
 								<ul id="info-submenu-3">
-									<li>이메일 로그인</li>
-									<li>로그인 기록</li>
+									<li onclick="location.href='setting_protect.do'">이메일 로그인</li>
+									<li onclick="location.href='setting_login_history.do'">로그인 기록</li>
 								</ul>
 							</li> <!-- 이메일 로그인, 로그인 기록  -->
 							<li onclick="location.href='vidividi_premium.do'" id="info-menu-4" class="navi-not-page">비디비디 프리미엄
