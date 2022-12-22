@@ -8,13 +8,19 @@ import com.vidividi.variable.MemberDTO;
 
 public interface LoginService {
 	
-	String loginCheck(LoginDTO dto, HttpSession session);
+	String loginCheck(LoginDTO dto, HttpSession session) throws Exception;
 	void logout(HttpSession session);
 	int joinIdCheck(String id);
-	String generateMembercode(); // 멤버 코드
-	String generateChannelCode(); // 채널 코드
+
+	String generateMembercode();
+	String generateChannelCode();
+	String generateVideoCode();
+	String generatePWD(int size);
+	String insertMember(MemberDTO dto, String via);
+
 	String generateVideoCode(); // 비디오 코드
 	String generateBundleCode(); // 재생목록 코드
+
 	ChannelDTO newChannel(String memberCode, String channelCode, String memberName);
 	int getAge(String date);
   

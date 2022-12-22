@@ -76,7 +76,15 @@ $(function(){
 
 </script>
 <style type="text/css">
-
+	#info-profile-card table {
+		width: 100%;
+		text-align: center;	
+		color: gray;
+	}
+	#info-profile-card table th {
+		color: rgb(20,20,20);
+		border-bottom: 1px solid lightgray;
+	}
 	
 
 </style>
@@ -125,21 +133,24 @@ $(function(){
 							<div id="info-profile-card">
 								<table>
 									<tr>
-										<th>접속 국가</th>
-										<td>${Country }</td>
-									<tr>
-									<tr>
-										<th>접속 지역</th>
-										<td>${Region }</td>
-									<tr>
-									<tr>
-										<th>접속 도시</th>
-										<td>${City }</td>
-									<tr>
-									<tr>
+										<th>#</th>
+										<th>접속일시</th>
+										<th>국가</th>
+										<th>지역</th>
+										<th>도시</th>
 										<th>IP</th>
-										<td>${IP }</td>
 									<tr>
+									<c:forEach var="dto" items="${LoginHistoryList }" varStatus="status">
+									<tr>
+										<td>${status.count	 }</td>
+										<td>${dto.getLogin_date() }</td>
+										<td>${dto.getLogin_country() }</td>
+										<td>${dto.getLogin_region() }</td>
+										<td>${dto.getLogin_city() }</td>
+										<td>${dto.getLogin_ip() }</td>
+									<tr>
+									
+									</c:forEach>
 								</table>
 							</div>
 						<div>

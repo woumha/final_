@@ -49,7 +49,7 @@ $(function(){
 						<ul class="info-navi">
 							<li onclick="location.href='setting_profile.do'" id="info-menu-1" class="info-unselected">프로필</li>
 							<li onclick="location.href='setting_channel.do'" id="info-menu-2" class="info-unselected">채널</li>
-							<li onclick="location.href='setting_protect.do'" id="info-menu-3" class="info-selected">계정 보안
+							<li id="info-menu-3" class="info-selected">계정 보안
 								<ul id="info-submenu-3">
 									<li>이메일 로그인</li>
 									<li>로그인 기록</li>

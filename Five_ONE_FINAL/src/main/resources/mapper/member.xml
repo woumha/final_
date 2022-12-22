@@ -27,22 +27,23 @@
 		insert into members values(
 			#{member_code},
 			#{member_id},
-			#{member_id},
+			#{member_name},
 			#{member_pwd},
 			'',
 			'',
+			#{member_email},
 			'',
 			'',
-			'',
-			sysdate,
+			current_date,
 			default,
 			default,
-			sysdate,
+			current_date,
 			default,
 			default,
 			#{member_rep_channel},
 			default,
-			default	
+			default,
+			#{member_google_link}
 		)
 	</insert>
 	<update id="emailAuth" parameterType="memberdto">
@@ -77,5 +78,23 @@
 			END;
 		]]>
 	</update>
+	
+	<insert id="insertLoginHistory" parameterType="loginhistorydto">
+		insert into login_history values (
+			#{member_code},
+			#{login_country},
+			#{login_region},
+			#{login_city},
+			#{login_ip},
+			current_date
+		)
+	</insert>
+	
+	<select id="getLoginHistory" parameterType="String" resultType="loginhistorydto">
+		select * from login_history where member_code = #{memberCode} and login_date > (select to_char(sysdate-30, 'yyyy-mm-dd') from dual) order by login_date desc
+	</select>
+	<select id="isGoogleLinked" parameterType="googledto" resultType="String">
+		select member_google_link from members where member_email = #{google_email}
+	</select>
 	
 </mapper>

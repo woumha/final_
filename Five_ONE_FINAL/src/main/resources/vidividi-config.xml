@@ -22,6 +22,8 @@
 		<typeAlias type="com.vidividi.model.MemberDAO" alias="memberdao" />
 		<typeAlias type="com.vidividi.variable.MemberDTO" alias="memberdto" />
 		<typeAlias type="com.vidividi.variable.LoginDTO" alias="logindto" />
+		<typeAlias type="com.vidividi.variable.LoginHistoryDTO" alias="loginhistorydto" />
+		<typeAlias type="com.vidividi.variable.GoogleLoginDTO" alias="googledto" />
 		
 		<!-- Channel -->
 		<typeAlias type="com.vidividi.model.ChannelDAO" alias="channeldao"/>
