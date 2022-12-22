@@ -118,9 +118,11 @@ public class VideoPlayDTO {
 	public void setPlayList_title(String playList_title) {
 		this.playList_title = playList_title;
 	}
+	
 	public String getPlayList_code() {
 		return playList_code;
 	}
+	
 	public void setPlayList_code(String playList_code) {
 		this.playList_code = playList_code;
 	}

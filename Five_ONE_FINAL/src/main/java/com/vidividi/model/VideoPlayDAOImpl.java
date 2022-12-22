@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.vidividi.variable.CategoryDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 
@@ -24,5 +25,14 @@ public class VideoPlayDAOImpl implements VideoPlayDAO {
 	@Override
 	public List<CategoryDTO> getCategoryList() {
 		return this.session.selectList("category_list");
+	}
+	
+	@Override
+	public int updateUploadVideo(VideoPlayDTO videodto, PlaylistDTO playdto) {
+		int check = 0;
+		if(this.session.update("updateUpload", videodto) > 0) {
+			check = this.session.update("updatePlaylist", playdto);
+		}
+		return check;
 	}
 }

@@ -7,10 +7,28 @@
 
   <mapper namespace="videoplayDAO">
   	<select id="one_video" parameterType="String" resultType="videoplayDTO">
-  		select * from video_play where video_code = #{code}
+  		select * from video_play v join playlist p on v.video_code = p.video_code where v.video_code = #{code}
   	</select>
   	
   	<select id="category_list" resultType="categoryDTO">
   		select * from video_category
-  	</select>	
+  	</select>
+  	
+  	<update id="updateUpload" parameterType="videoplayDTO">
+  		update video_play set (
+  			video_title = #{video_title}, 
+  			video_cont = #{video_cont}, 
+  			category_code = #{category_code},
+  			video_img = #{video_img},
+  			video_open = #{video_open},
+  			video_age = #{video_age}) 
+  			where video_code = #{video_code} 
+  	</update>
+  	
+  	<update id="updatePlaylist" parameterType="playlistDTO">
+  		update playlist set (
+  			playlist_title = #{playlist_title},
+  			playlist_code = #{playlist_code}
+  		) where video_code = #{video_code}
+  	</update>
   </mapper>
