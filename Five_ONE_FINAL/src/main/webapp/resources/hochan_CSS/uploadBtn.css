@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+
+.upload-font {
+	color: orange;
+	font-weight: bold;
+	font-size: 22px;
+	padding: 5px;
+}
+
 /*
 	업로드 css 시작
 */
@@ -93,23 +101,12 @@
 	설명 css
 */
 
-#floatingTextarea2 {
-	display: flex;
-	height: 80px;
-	max-width: 100%;
-	resize: none;
-	font-size: 16px;
-}
 
 #floatingTextarea3 {
-	display: flex;
-	height: 165px;
-	max-width: 100%;
 	resize: none;
-	font-size: 16px;
+	margin-top: 8px;
+	display: flex;
 }
-
-
 
 .cont_area {
 	width: 100%;
@@ -141,3 +138,11 @@
 	background-size: contain;
 	max-height: 150px;
 }
+
+
+.open_check {
+	display: flex;
+	text-align: right;
+}
+
+

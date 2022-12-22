@@ -19,9 +19,9 @@ public class VideoPlayDTO {
 	private String video_hash;
 	private String video_regdate;
 	private int video_open;
-	private int category_code;
 	private String channel_like;
-	
+	private String video_age;
+	private int category_code;
 	
 	private String playList_title; // 재생목록
 	private String playList_code; // 재생목록
@@ -123,6 +123,14 @@ public class VideoPlayDTO {
 	}
 	public void setPlayList_code(String playList_code) {
 		this.playList_code = playList_code;
+	}
+	
+	public String getVideo_age() {
+		return video_age;
+	}
+	
+	public void setVideo_age(String video_age) {
+		this.video_age = video_age;
 	}
 	
 	
