@@ -29,7 +29,8 @@
 	<input type="hidden" value="${video_dto.getVideo_code() }" id="video_code">
 	<input type="hidden" value="${video_dto.getChannel_code() }" id="channel_code">
 	<input type="hidden" value="${video_dto.getCategory_code() }" id="category_code">
-	<input type="hidden" value="${good_dto.getGood_num()}" id ="good_num">
+	<input type="hidden" value="${good_dto.getGood_code()}" id ="good_code">
+	<input type="hidden" value="${subscribe_dto.getSubscribe_code() }" id="subscribe_code">
 	
 	<jsp:include page="../include/top_include2.jsp"/>
 	<%-- <jsp:include page="../include/side_include.jsp"/> --%>
@@ -80,15 +81,14 @@
 								</div>
 							</div>
 							
-							<div class="item_a">
-							
+							<div  class="item_a">
 								<c:if test="${empty subscribe_dto }">
-									<button class="subscribe_false">
+									<button id="subscribe_btn" class="subscribe_false">
 										<div>구독</div>
 									</button>
 								</c:if>
 								<c:if test="${!empty subscribe_dto }">
-									<button class="subscribe_true">
+									<button id="subscribe_btn" class="subscribe_true">
 										<div>구독중</div>
 									</button>
 								</c:if>
@@ -98,8 +98,13 @@
 					</div>
 					<div class="channel_wrap">
 						<div class="card_e">
-							<div class="item_a btn_wrap card_a">
-								<button class="watch_good_btn card_b" data-value="${good_dto.getGood_bad() }">
+							<c:if test="${empty good_dto.getGood_bad() }">
+								<div class="item_a btn_wrap card_a" data-value="0">
+							</c:if>
+							<c:if test="${!empty good_dto.getGood_bad() }">
+								<div class="item_a btn_wrap card_a" data-value="${good_dto.getGood_bad() }">
+							</c:if>
+									<button class="watch_good_btn card_b" >
 										<div class="card_b">
 											<c:if test="${good_dto.getGood_bad() != 1}">
 												<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good_icon.svg">
@@ -107,18 +112,17 @@
 											<c:if test="${good_dto.getGood_bad() == 1}">
 												<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good_icon_selected.svg">
 											</c:if>
-												<div>좋아요</div>
+												<div id="good_cnt">${videoGood_count }</div>
 										</div>
 								</button>
-								<button class="watch_bad_btn card_b" data-value="${good_dto.getGood_bad() }">
-										<div class="card_b">
+								<button class="watch_bad_btn" data-value="${good_dto.getGood_bad() }">
+										<div>
 											<c:if test="${good_dto.getGood_bad() != 2}">
 												<img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad_icon.svg">
 											</c:if>
 											<c:if test="${good_dto.getGood_bad() == 2}">
 												<img class="bad" src="${pageContext.request.contextPath}/resources/watch/watch_img/bad_icon_selected.svg">
 											</c:if>
-												<div>싫어요</div>
 										</div>
 								</button>
 							</div>

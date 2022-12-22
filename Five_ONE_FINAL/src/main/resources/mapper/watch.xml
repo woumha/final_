@@ -109,5 +109,16 @@
 		update good set good_bad = #{good_bad} where good_code = #{good_code}
 	</update>
 	
+	<insert id="insertSubscribe" parameterType="hashmap">
+		insert into subscribe values(#{subscribe_code}, #{channel_code}, #{repChannelCode})
+	</insert>
+	
+	<delete id="deleteSubscribe" parameterType="String">
+		delete from subscribe where subscribe_code = #{subscribe_code}
+	</delete>
+	
+	<select id="getVideoGoodCount" parameterType="String" resultType="int">
+		select video_good from video_play where video_code = #{video_code}
+	</select>
 	
 </mapper>
