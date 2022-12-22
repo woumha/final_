@@ -3,7 +3,7 @@ package com.vidividi.model;
 import java.util.List;
 
 import com.vidividi.variable.LoginDTO;
-
+import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
 
 public interface MemberDAO {
@@ -19,4 +19,6 @@ public interface MemberDAO {
 	int changeAuthStatus(MemberDTO dto);
 	String alreadyEmail(String memberCode);
 	void toggleEmailLogin(String memberCode);
+	int insertLoginHistory(LoginHistoryDTO dto);
+	List<LoginHistoryDTO> getLoginHistroy(String memberCode);
 }

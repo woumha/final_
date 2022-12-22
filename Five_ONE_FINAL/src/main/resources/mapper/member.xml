@@ -78,4 +78,19 @@
 		]]>
 	</update>
 	
+	<insert id="insertLoginHistory" parameterType="loginhistorydto">
+		insert into login_history values (
+			#{member_code},
+			#{login_country},
+			#{login_region},
+			#{login_city},
+			#{login_ip},
+			sysdate
+		)
+	</insert>
+	
+	<select id="getLoginHistory" parameterType="String" resultType="loginhistorydto">
+		select * from login_history where member_code = #{memberCode} and login_date > (select to_char(sysdate-30, 'yyyy-mm-dd') from dual)
+	</select>
+	
 </mapper>

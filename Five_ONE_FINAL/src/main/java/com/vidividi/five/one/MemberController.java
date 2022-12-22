@@ -1,12 +1,14 @@
 package com.vidividi.five.one;
 
+import java.io.BufferedReader;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.net.URL;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.json.JSONParser;
-import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,9 +34,11 @@ import com.vidividi.model.MemberDAO;
 import com.vidividi.model.WatchDAO;
 import com.vidividi.service.EmailSendService;
 import com.vidividi.service.FormatCnt;
+import com.vidividi.service.LoginHistoryService;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.LoginDTO;
+import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
 import com.vidividi.variable.TestDTO;
 
@@ -57,6 +60,9 @@ public class MemberController {
 	@Autowired
 	private EmailSendService emailservice;
 	
+	@Autowired
+	private LoginHistoryService loginHistoryService;
+	
 	
 	@RequestMapping("login.do")
 	public String login() {
@@ -65,12 +71,14 @@ public class MemberController {
 	
 	@ResponseBody
 	@RequestMapping("loginOk.do")
-	public String loginOk(Model model, LoginDTO loginDTO, HttpSession session) throws IOException {
+	public String loginOk(Model model, LoginDTO loginDTO, HttpSession session) throws Exception {
 		
 		String membercode = service.loginCheck(loginDTO, session);
 		
 		if (membercode != null) {
 			model.addAttribute("MemberCode", membercode);
+			loginHistoryService.setLoginData(membercode);
+			
 			return "success";
 		}else {
 			return "fail";
@@ -383,25 +391,13 @@ public class MemberController {
 			String memberCode = (String)session.getAttribute("MemberCode");
 			dto = dao.getMember(memberCode);
 			
+			List<LoginHistoryDTO> loginHistoryList = dao.getLoginHistroy(memberCode);
+			
 			model.addAttribute("MemberCode", memberCode);
 			model.addAttribute("MemberName", dto.getMember_name());
 			model.addAttribute("MemberDTO", dto);
 			
-			Reader reader = new FileReader("http://ip-api.com/json");
-			
-			JSONParser parser = new JSONParser(reader);
-			
-			JSONObject obj = (JSONObject)parser.parse();
-			
-			String login_country = (String) obj.get("country");
-			String login_region = (String) obj.getString("regionName");
-			String login_city = (String) obj.getString("city");
-			String login_query = (String) obj.getString("query");
-			
-			model.addAttribute("Country", login_country);
-			model.addAttribute("Region", login_region);
-			model.addAttribute("City", login_city);
-			model.addAttribute("IP", login_query);
+			model.addAttribute("LoginHistoryList", loginHistoryList);
 			
 			return "member/setting_login_history";
 			
