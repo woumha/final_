@@ -16,7 +16,8 @@ $(function() {
 		$.ajax({
 			url: getContextPath() + "/movie_upload.do",
 			data: {
-				"code": $("#ownerCode").val()
+				"code": $("#ownerCode").val(),
+				"name": $("#channel_code").val()
 			},
 			datatype: "html",
 			success: function(data) {

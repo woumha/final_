@@ -15,7 +15,7 @@ public interface ChannelDAO {
 	public List<PlaylistDTO> getPlayList(String code);
 	
 	// 비디오 업로드
-	public int setVideoUpload(VideoPlayDTO playDTO);
+	public int setVideoUpload(VideoPlayDTO playDTO, PlaylistDTO playlistDTO);
 	
 	// 채널 , 비디오 관리 페이지
 	public List<VideoPlayDTO> getVideoList(String code);

@@ -97,7 +97,13 @@
 								</c:if>
 					  		</td>
 					  		<td>
-					  			child? 
+					  			<c:if test="${mvdto.video_age eq 'true' }">
+					  				아동용
+					  			</c:if>
+					  			<c:if test="${mvdto.video_age ne 'true' }">
+					  				성인용
+					  			</c:if>
+					  			 
 					  		</td>
 					  		<td>
 					  			 ${mvdto.video_view_cnt }

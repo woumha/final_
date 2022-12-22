@@ -125,7 +125,7 @@ public class ChannelController {
 		
 		List<CategoryDTO> categoryList = this.videodao.getCategoryList(); // 카테고리 리스트
 		
-		model.addAttribute("uploadOwner", channelDTO);
+		model.addAttribute("uploadOwner", ownerCode);
 		model.addAttribute("list", bundleList);
 		model.addAttribute("cateList", categoryList);
 		
@@ -162,11 +162,11 @@ public class ChannelController {
 		
 		String[] name = fileName(mRequest); // 파일명 가져오기
 		
-//		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
-//			System.out.println("성공");
-//		} else {
-//			System.out.println("실패");
-//		}
+		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
+			System.out.println("성공");
+		} else {
+			System.out.println("실패");
+		}
 		
 		String cookingVideoCode = service.generateVideoCode(); // 비디오코드
 		int category = Integer.parseInt(categoryList);
@@ -175,8 +175,7 @@ public class ChannelController {
 		VideoPlayDTO playdto = new VideoPlayDTO();
 		playdto.setVideo_code(cookingVideoCode);
 		playdto.setChannel_code(channelCode); // 채널 코드
-		playdto.setChannel_name(channelWorlddto.getChannel_name());
-		playdto.setVideo_title(title + ".mp4");
+		playdto.setVideo_title(title);
 		playdto.setVideo_cont(context);
 		playdto.setVideo_img(name[0]);
 		playdto.setVideo_hash(null);
@@ -185,8 +184,8 @@ public class ChannelController {
 		// playlist 테이블
 		PlaylistDTO playbundledto = new PlaylistDTO();
 		playbundledto.setChannel_code(channelCode.trim());
-		playbundledto.setPlaylist_code(bundleCode.trim()); // 재생목록 코드
 		playbundledto.setPlaylist_title(bundleText.trim()); // 재생목록 이름
+		playbundledto.setPlaylist_code(bundleCode.trim()); // 재생목록 코드
 		playbundledto.setVideo_code(cookingVideoCode.trim());
 		
 		
@@ -204,10 +203,10 @@ public class ChannelController {
 		
 		if(open.trim().equals("시청자들과 같이 보기")) {
 			//bundledto.setPlaylist_open(1); // 재생목록 공개
-			playdto.setVideo_open(0); // 비디오 공개
+			playdto.setVideo_open(1); // 비디오 공개
 		} else if(open.trim().equals("나만 보기")) {
 			//bundledto.setPlaylist_open(0); // 재생목록 비공개
-			playdto.setVideo_open(1); // 비디오 비공개
+			playdto.setVideo_open(0); // 비디오 비공개
 		} else {
 			out.println("<script>"
 					+ "alert('스크립트 오류');");
@@ -215,15 +214,14 @@ public class ChannelController {
 					+ "</script>");
 		}
 		
-		System.out.println("playdto: " + playdto);
-		int check = this.dao.setVideoUpload(playdto);
+		int check = this.dao.setVideoUpload(playdto, playbundledto);
 		
 		
 		System.out.println("check: " + check);
 		if(check > 0 ) {
 			out.println("<script>"
 					+ "alert('업로드 완료');"
-					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelWorlddto.getChannel_code() +"';");
+					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelCode +"';");
 			out.println("</script>");
 		} else {
 			out.println("<script>"
@@ -270,13 +268,18 @@ public class ChannelController {
 		VideoPlayDTO playdto = new VideoPlayDTO();
 		
 		playdto = this.videodao.getVideoOne(code); // 비디오 코드
+		System.out.println("playdto: " + playdto.getChannel_code());
 		
-		// 영상 코드의 주인
-		List<PlaylistDTO> playListTitle = this.dao.getPlayList(playdto.getChannel_code()); // 재생목록 리스트
+		List<CategoryDTO> categoryList = this.videodao.getCategoryList(); // 카테고리 리스트
+		List<BundleDTO> bundleList = this.bundledao.getBundleList(playdto.getChannel_code()); // 재생목록 리스트
+		
+		System.out.println("bundleList: " + bundleList);
+		
 		
 		
 		model.addAttribute("list", playdto);
-		model.addAttribute("playBundle", playListTitle);
+		model.addAttribute("cateList", categoryList);
+		model.addAttribute("playBundle", bundleList);
 		
 		
 		return "channel/channel_update_modal";

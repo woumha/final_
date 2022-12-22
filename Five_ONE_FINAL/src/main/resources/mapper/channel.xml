@@ -16,20 +16,30 @@
  	<insert id="videoInsert" parameterType="videoplayDTO">
  		insert into video_play values (
 	 		#{video_code}, 
-	 		#{channel_code}, 
-	 		#{channel_name}, 
+	 		#{channel_code},
+	 		'', 
 	 		#{video_title}, 
 	 		#{video_cont}, 
 	 		#{video_img}, 
 	 		default, 
 	 		default, 
 	 		default, 
-	 		null, 
-	 		sysdate, 
+	 		'', 
+	 		sysdate,
 	 		#{video_open},
-	 		#{video_age}
+	 		#{video_age},
 	 		#{category_code}
  		) 
+ 	</insert>
+ 	
+ 	<insert id="playListInsert" parameterType="playlistDTO">
+ 		insert into playlist values (
+ 			#{channel_code},
+ 			#{playlist_title},
+ 			#{playlist_code},
+ 			#{video_code},
+ 			sysdate
+ 		)
  	</insert>
  	
  	<select id="channel_video_list" parameterType="String" resultType="videoplayDTO">
