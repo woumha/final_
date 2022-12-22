@@ -27,9 +27,10 @@ public interface MyPageDAO {
 	int delete_playlist(Map<String, Object> map);
 	
 	List<ChannelDTO> getSubscribe_list(String code);
-	int getSubscribe_num(Map<String, Object> map);
-	int subscribe_one_delete(int num);
-	int updateSequence_s(int num);
+
+	String getSubscribe_code(Map<String, Object> map);
+	int subscribe_one_delete(String code);
+	/* int updateSequence_s(int num); */
 	
 	/* history */
 	List<VideoPlayDTO> getHistoryList(String code, int startNo, int endNo);
@@ -54,12 +55,14 @@ public interface MyPageDAO {
 	int removeBad(String video);
 	
 	/* mainPage playlist 더보기 ajax */
-	List<VideoPlayDTO> getPlayList_list(String code, int startNo, int endNo);
+	List<PlaylistDTO> getPlayList_list(String code, int startNo, int endNo);
 	
-	
-	
-	
-	
+	/* playlist */
+	List<VideoPlayDTO> getPlaylist_new(String code, int startNo, int endNo);
+	List<VideoPlayDTO> getPlaylist_search(Map<String, Object> map);
+	int playlist_search_one_delete(Map<String, Object> map);
+	int delete_playlist(String p_code);
+	int delete_bundlelist(String p_code);
 	
 	
 	

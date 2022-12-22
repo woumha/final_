@@ -240,6 +240,20 @@ color: white;
 margin-top: 35px;
 margin-bottom: 5px;
 }
+/* 재생목록 더보기 버튼 */
+#playlist_more {
+margin-left: 45%;
+border: 0;
+background-color: white;
+border-radius: 15px;
+}
+
+#playlist_more:hover {
+background-color: #FB8703;
+color: white;
+border: 0;
+}
+
 .p_none {
 margin-top: 5px;
 margin-bottom: 25px;
