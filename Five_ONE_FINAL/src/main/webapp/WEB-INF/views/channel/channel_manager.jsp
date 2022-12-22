@@ -76,7 +76,7 @@
 					</thead>
 					<tbody>
 					  <c:forEach items="${mvlist }" var="mvdto">
-					  	<tr onclick="modal('${mvdto.video_code}')" data-toggle="modal" data-target="#MoaModal"> <!-- data-toggle="modal" data-target="#MoaModal" -->
+					  	<tr onclick="modal('${mvdto.video_code}')" data-toggle="modal" data-target="#MoaModal">
 					  		<td>
 					  			<c:if test="${empty mvdto.video_img }">
 					   				<div><video class="show_file"><source src="${path }/resources/AllChannel/${channelOwner.channel_code}/${mvdto.video_title }.mp4"></video></div>

@@ -16,4 +16,7 @@ public interface MemberDAO {
 	int joinIdCheck(String id);
 	int joinMember(MemberDTO dto);
 	int mebmerInfoUpdate(MemberDTO dto);
+	int changeAuthStatus(MemberDTO dto);
+	String alreadyEmail(String memberCode);
+	void toggleEmailLogin(String memberCode);
 }

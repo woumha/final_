@@ -136,7 +136,6 @@ $(function() {
 			alert("제목을 입력해주세요.")
 			let problem = document.createElement("span");
 			
-			
 		}
 	});
 	

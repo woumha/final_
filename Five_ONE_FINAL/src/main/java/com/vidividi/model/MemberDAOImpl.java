@@ -54,4 +54,19 @@ public class MemberDAOImpl implements MemberDAO {
 		return this.sqlSession.update("memberInfoUpdate", dto);
 	}
 	
+	@Override
+	public int changeAuthStatus(MemberDTO dto) {
+		return this.sqlSession.update("emailAuth", dto);
+	}
+	
+	@Override
+	public String alreadyEmail(String memberCode) {
+		return this.sqlSession.selectOne("alreadyEmail", memberCode);
+	}
+	
+	@Override
+	public void toggleEmailLogin(String memberCode) {
+		this.sqlSession.update("emailLogin", memberCode);
+	}
+	
 }

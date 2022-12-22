@@ -23,6 +23,72 @@
 
 <script type="text/javascript">
 
+function numberPad(n, width) {
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+}
+
+function authtimer() {
+	
+	let time = 180000;
+	let min = 3;
+	let sec = 60;
+	
+	$("#email-auth-span").text(min+":"+'00');
+	
+	CountDown = setInterval(function(){
+					time = time-1000;
+					min = time/(60*1000);
+					
+					if(sec > 0){
+						sec = sec-1;
+						$("#email-auth-span").text(Math.floor(min)+ ':' + numberPad(sec, 2));
+					}
+					if (sec == 0){
+						sec = 60;
+						$("#email-auth-span").text(Math.floor(min)+ ':' +'00');
+					}
+				},1000);
+	
+}
+
+
+function changeAuthStatus(email){
+	$.ajaxSetup({
+		ContentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		type : "post"								
+	});
+	
+	$.ajax({
+		url : '<%=request.getContextPath()%>/changeAuthStatus.do',
+		data: {
+			member_email : email,
+			member_code : "${MemberDTO.getMember_code()}"
+		},
+		success : function(data){
+			if(data=="success"){
+				toastr.success("이메일이 인증되었습니다.");
+				
+				$("#input-email").attr("disabled", false);
+				$("#input-email").removeClass("disabled");
+				$("#email-auth-input").attr("disabled", false);
+				$("#email-auth-request-btn").attr("disabled", false);
+				
+				$("#email-auth-complete").css("display", "block");
+				$("#email-auth-complete").siblings().css("display", "none");
+				
+			}else if(data == "fail"){
+				toastr.error("로그인 상태를 확인하세요.","이메일 인증 실패!");
+			}
+		},
+		error : function(){
+			toastr.error("인증상태 변경 통신 오류");
+		}
+		
+	});
+	
+}
+
 
 function authEmail(email){
 	$.ajaxSetup({
@@ -32,29 +98,75 @@ function authEmail(email){
 	
 	$.ajax({
 		url : '<%=request.getContextPath()%>/sendEmail.do',
-		data: { member_email : email },
+		data: { 
+			member_email : email, 
+			member_code : "${MemberDTO.getMember_code()}"
+		},
 		success : function(data) {
 			if (data != "fail"){ 
 				toastr.success("이메일이 전송되었습니다.");
 				$("#input-email").attr("disabled", true);
+				$("#input-email").addClass("disabled");
+				
+				authtimer();
+				setTimeout(function(){
+					clearInterval(CountDown);
+					data == "";
+					toastr.warning("다시 시도하세요.","인증 시간이 초과되었습니다.");
+					$("#input-email").attr("disabled", false);
+					$("#input-email").removeClass("disabled");
+					$("#email-auth-input").attr("disabled", false);
+					$("#email-auth-request-btn").attr("disabled", false);
+					$("#email-auth-request-btn").css("display", "block");
+					$("#email-auth-request-btn").siblings().css("display", "none");
+				}, 180000);
+				
+				$("#email-auth-confirm-btn").on("click", function(){
+					if ($("#email-auth-input").val() == data) {
+						clearInterval(CountDown);
+						changeAuthStatus(email);
+						
+					}else{
+						toastr.error("인증번호가 틀렸습니다.");
+					} 
+					
+				});
 				
 			}else if(data == "fail"){
 				toastr.success("이메일을 확인하세요.","이메일 전송 실패");
+				$("#email-auth-request-btn").attr("disabled", false);
+				$("#email-auth-request-btn").css("display", "block");
+				$("#email-auth-request-btn").siblings().css("display", "none");
+			}else if(data == "already"){
+				toastr.warning("다른 이메일을 입력해주세요.","이미 인증된 이메일입니다.");
+				
 			}
 		},
 		error : function(){
 			toastr.error('잠시 후 다시 시도하세요.','이메일 전송 오류');
+			$("#email-auth-request-btn").attr("disabled", false);
+			$("#email-auth-request-btn").css("display", "block");
+			$("#email-auth-request-btn").siblings().css("display", "none");
 		}
 		
 	});
 	
 }
 
+
+
 $(function(){
 	
 	if ('${MemberDTO.getMember_code()}' != ''){
 		let channelCode = '${MemberDTO.getMember_rep_channel()}';
 		changeBackColor(channelCode);
+	}
+	
+	if ('${MemberDTO.getMember_email()}' != ''){
+		if('${MemberDTO.getMember_email_auth()}' == 1){
+			$("#email-auth-complete").css("display", "block");
+			$("#email-auth-complete").siblings().css("display", "none");
+		}
 	}
 	
 	$("body").css("position","fixed");
@@ -67,16 +179,40 @@ $(function(){
 	
 	$("#email-auth-request-btn").on("click", function(){
 		authEmail($("#input-email").val());
+		$("#email-auth-span").css("color", "red");
+		$(this).css("display", "none");
+		$(this).siblings().css("display", "block");
+		$("#email-auth-complete").css("display","none");
+		$(this).attr("disabled", true);
+		
+	});
+	
+	
+	$("#input-email").on('keyup', function(){
+		
+		let keyupTimeout;
+		clearTimeout(keyupTimeout);
+		keyupTimeout = setTimeout(function(){
+			
+			if ($("#input-email").val() != "${MemberDTO.getMember_email()}"){
+				$("#email-auth-request-btn").css("display", "block");
+				$("#email-auth-request-btn").siblings().css("display", "none");
+			}
+		
+		}, 1000);
+		
 	});
 
+	
 });
+
 
 
 </script>
 <style type="text/css">
 
 	#profile-input {
-		width: 50%;
+		width: 48%;
 		margin: auto;	
 	}
 	
@@ -111,12 +247,18 @@ $(function(){
 		height: 60px;
 	    border-radius: 10px;
 	    border: 1px solid gray;
+	    padding-left: 20px;
 	}
 
 	#email-auth-span{
 		position:absolute;
-		left: 50%;
+		left: 57%;
 		top: 30%;
+	}
+	
+	#email-auth-complete{
+		color: green;
+		display: none;
 	}
 	
 	
@@ -141,10 +283,10 @@ $(function(){
 						<ul class="info-navi">
 							<li onclick="location.href='setting_profile.do'" id="info-menu-1" class="navi-this-page info-navi-selected">프로필</li>
 							<li onclick="location.href='setting_channel.do'" id="info-menu-2" class="navi-not-page">채널</li>
-							<li onclick="location.href='setting_protect.do'" id="info-menu-3" class="navi-not-page">계정 보안
+							<li id="info-menu-3" class="navi-not-page">계정 보안
 								<ul id="info-submenu-3">
-									<li>이메일 로그인</li>
-									<li>로그인 기록</li>
+									<li onclick="location.href='setting_protect.do'">이메일 로그인</li>
+									<li onclick="location.href='setting_login_history.do'">로그인 기록</li>
 								</ul>
 							</li> <!-- 이메일 로그인, 로그인 기록  -->
 							<li onclick="location.href='vidividi_premium.do'" id="info-menu-4" class="navi-not-page">비디비디 프리미엄
@@ -157,6 +299,13 @@ $(function(){
 					</div>
 				</div>
 				<div id="info-wrap-bottom">
+					<div id="info-info">
+						<h4>프로필</h4>
+						<hr>
+						<span>개인 정보를 추가하거나 수정합니다.</span>
+						<br>
+						<span>연령과 인증 정보에 따라 이용에 제한이 있을 수 있습니다.</span>
+					</div>
 					<div id="profile-input">
 						<form>
 							
@@ -194,9 +343,10 @@ $(function(){
 								</div>
 								<div id="email-auth-btn">
 									<input type="button" value="인증번호 받기" id="email-auth-request-btn" class="form-btn">
-									<input id="email-auth-input" class="info-hidden">
-									<span id="email-auth-span" class="info-hidden">남은시간</span>
+									<input id="email-auth-input" class="info-hidden" placeholder="인증번호">
+									<span id="email-auth-span" class="info-hidden">전송중</span>
 									<input type="button" value="입력" id="email-auth-confirm-btn" class="form-btn info-hidden">
+									<span id="email-auth-complete"><i class="bi bi-check2-circle"></i> 인증 완료</span>
 								</div>
 							</div>
 						

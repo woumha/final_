@@ -23,4 +23,5 @@ public class MemberDTO {
 	private int member_admin;
 	private String member_rep_channel;
 	private int member_historysave;
+	private int member_email_auth;
 }

@@ -9,4 +9,8 @@
   	<select id="one_video" parameterType="String" resultType="videoplayDTO">
   		select * from video_play where video_code = #{code}
   	</select>
+  	
+  	<select id="category_list" resultType="categoryDTO">
+  		select * from video_category
+  	</select>	
   </mapper>

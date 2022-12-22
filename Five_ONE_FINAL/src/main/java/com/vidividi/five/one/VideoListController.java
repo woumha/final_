@@ -22,15 +22,12 @@ public class VideoListController {
 	@RequestMapping("mainVideoList.do")
 	public List<VideoPlayDTO> mainList(int page){
 		
-	 	int rowsize = 20;
+	 	int rowsize = 12;
 		int startNo = (page * rowsize) - (rowsize - 1);
 		int endNo = (page * rowsize);
 		
 		List<VideoPlayDTO> list = this.dao.mainVideo(startNo, endNo);
-				
-		System.out.println("startno>>>" + startNo);
-		System.out.println("endNo>>>" + endNo);
-		System.out.println(list);
+
 		return list;
 	}
 	
@@ -39,7 +36,7 @@ public class VideoListController {
 	@RequestMapping("mainVideoList_up.do")
 	public List<VideoPlayDTO> mainList_up(int page){
 		
-		int rowsize = 20;
+		int rowsize = 12;
 		int startNo = (page * rowsize) - (rowsize - 1);
 		int endNo = (page * rowsize);
 		
@@ -53,7 +50,7 @@ public class VideoListController {
 	@RequestMapping("mainVideoList_sort_cook.do")
 	public List<VideoPlayDTO> mainList_sort(int page){
 		
-		int rowsize = 20;
+		int rowsize = 12;
 		int startNo = (page * rowsize) - (rowsize - 1);
 		int endNo = (page * rowsize);
 		

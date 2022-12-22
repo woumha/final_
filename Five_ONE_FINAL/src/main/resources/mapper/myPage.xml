@@ -13,7 +13,7 @@
 		select distinct playlist_code, playlist_title from playlist where channel_code = #{code}
 	</select>
 	<select id="m_good_list" resultType="videoplayDTO" parameterType="String">
-		select * from video_play where video_code in (select video_code from good where channel_code = #{code})
+		select * from video_play where video_code in (select video_code from good where channel_code = #{code} and good_bad = 1)
 	</select>
 	<select id="m_reply_list" resultType="replyDTO" parameterType="String">
 		select * from reply where channel_code = #{code}
@@ -108,23 +108,31 @@
 	<select id="good_search_bad" parameterType="Map" resultType="videoplayDTO">
 		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from video_play inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 2) b where video_title like '%' || #{keyword} || '%') where rnum >= #{startNo} and rnum <= #{endNo} order by video_good desc]]>
 	</select>
-	<select id="getGood_num" parameterType="Map" resultType="int">
-		select good_num from good where channel_code = #{channel} and video_code = #{video}
+	<select id="getGood_num" parameterType="Map" resultType="String">
+		select good_code from good where channel_code = #{channel} and video_code = #{video}
 	</select>
-	<select id="getGood_bad" parameterType="int" resultType="int">
-		select good_bad from good where good_num = #{num}
+	<select id="getGood_bad" parameterType="String" resultType="int">
+		select good_bad from good where good_code = #{num}
 	</select>
-	<delete id="good_search_one_delete" parameterType="int">
-		delete from good where good_num = #{num}
+	<delete id="good_search_one_delete" parameterType="String">
+		delete from good where good_code = #{num}
 	</delete>
-	<update id="updateSeq_g" parameterType="int">
+	<!-- <update id="updateSeq_g" parameterType="int">
 		<![CDATA[update good set good_num = good_num - 1 where good_num > #{num}]]>
-	</update>
+	</update> -->
 	<update id="removeGood" parameterType="String">
 		<![CDATA[update video_play set video_good = video_good - 1 where video_code = #{video}]]>
 	</update>
 	<update id="removeBad" parameterType="String">
 		<![CDATA[update video_play set video_bad = video_bad - 1 where video_code = #{video}]]>
 	</update>
+	<!-- ================================================== mainPage playlist 더보기 ================================================== -->
+	<select id="getPlaylist_list" parameterType="Map" resultType="videoplayDTO">
+		<![CDATA[select * from (select b.*, row_number() over(order by playlist_regdate desc)
+		 rnum from (select * from video_play join playlist using(video_code) where video_code in 
+		 (select max(video_code) from playlist where channel_code = #{code} group by playlist_title, 
+		 playlist_code)) b ) where rnum >= #{startNo} and rnum <= #{endNo}]]>
+	</select>
+	
 </mapper>
 

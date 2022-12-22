@@ -7,7 +7,7 @@
 }
 
 
-#video_table a:hover{
+.video_table a:hover{
 	color: #fc942c !important;
 }
 
@@ -26,7 +26,7 @@
 	
 body {
 	font-family: 'Noto Sans KR' !important;
-	cursor: url('../eunji_IMG/bunny.png'),auto;
+	cursor: url('../eunji_IMG/rabbit_cursor.png'),auto;
 }
 
 @media screen and (max-width: 992px) {
@@ -166,7 +166,7 @@ a:active {
 			background-color: #fc942c;
 		}
 		
-     	#video_table{
+     	.video_table{
      		width: 1500px;
      		display: flex;
 	      	flex: 3;
@@ -174,21 +174,20 @@ a:active {
 			justify-content: center;
 			align-items: center;
 			margin-left: 22%;
-			margin-top: 25px;
 			padding-left: 10px;
 			
      	}
      	
 		video{
 			border-radius: 10px;
+			margin-top: 0px;
 		}
 		
-		#video_view_ctn, #video_title, #video_channel{
+		.video_view_ctn, .video_title, .video_channel{
 			padding-left: 6px;
-			padding-top: 2px;
 		}
 		
-		#video_view_ctn{
+		.video_view_ctn{
 			padding-bottom: 5px;
 			margin-bottom: 10px;
 		}
@@ -203,7 +202,7 @@ a:active {
      	 	vertical-align: text-top;
      	 }
      	 
-     	 #video_title{
+     	 .video_title{
      		 font-size: 1.1rem;
      		 font-weight: bold;
      	 }
@@ -357,6 +356,7 @@ button {
 #re_label{
 	margin-top: -30px;
 	margin-left: 3.1%;
+	margin-bottom: 25px; 
 }
 	  
 	.custom-btn {
