@@ -53,7 +53,13 @@ width: 250px;
 margin-right: 10px;
 margin-left: 2px;
 }
-
+.test_video  {
+  transition: all 0.2s linear;
+  overflow: hidden;
+}
+.test_video:hover {
+  transform: scale(1.2);
+}
 /* ----------- 동영상 설정 end ----------- */
 .video_box {
 display: inline-block;
@@ -138,13 +144,7 @@ width: 15px;
 vertical-align: top;
 margin-top: 10px;
 }
-.test_video  {
-  transition: all 0.2s linear;
-  overflow: hidden;
-}
-.test_video:hover {
-  transform: scale(1.2);
-}
+
 .video_history_d_img:hover {cursor: pointer;}
 
 /* 로그인 안했을 시 */

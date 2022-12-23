@@ -28,15 +28,6 @@ public class m_HistoryController {
 		return "myPage/history";
 	}
 	
-	@RequestMapping("history_searchs.do")
-	public String history_searchs(@RequestParam("channel_code") String code,
-								@RequestParam("keyword") String keyword,     Model model) {
-		int search = 2;
-		model.addAttribute("channel_code", code);
-		model.addAttribute("keyword", keyword);
-		model.addAttribute("search", search);
-		return "myPage/history";
-	}
 	
 	@ResponseBody
 	@RequestMapping(value = "history_new.do" , produces = "application/text; charset=UTF-8")
@@ -77,7 +68,7 @@ public class m_HistoryController {
 	@ResponseBody
 	@RequestMapping(value = "history_search.do" , produces = "application/text; charset=UTF-8")
 	public String history_search(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
-								@RequestParam("keyword") String keyword,
+								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								int page, HttpServletResponse response) {
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -89,9 +80,14 @@ public class m_HistoryController {
 		
 		Map<String,Object>map = new HashMap<String,Object>();
 		map.put("code", code);map.put("keyword", keyword);map.put("startNo", startNo);map.put("endNo", endNo);
-			
-		List<VideoPlayDTO> list = this.dao.getHistory_search(map);
-
+		
+		List<VideoPlayDTO> list = null;
+		
+		if(keyword.equals("none")) {
+			list = this.dao.getHistoryList(code, startNo, endNo);
+		}else {
+			list = this.dao.getHistory_search(map);
+		}
 		for(VideoPlayDTO dto : list) {
 			JSONObject json = new JSONObject();
 			json.put("video_code", dto.getVideo_code());

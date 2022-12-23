@@ -26,7 +26,7 @@ function getContextPath(){
 
 let channel_code = "${channel_code}";
 let search = "${search}";
-
+let keyword = "none";
 
 
 
@@ -98,17 +98,15 @@ function getHistory_new(channel_code, page_history, video_loction){
 	}); 
 }
 
-function getHistory_search(channel_code, page_search) {
-	var keyword = "${keyword}";
-	console.log("search channel_code >>> "+channel_code);
-	console.log("search keyword >>> "+keyword);
-	console.log("search page_search >>> "+page_search);
+function getHistory_search(channel_code, page_search, keyword) {
+	search_keyword = keyword;
     $.ajax({
   		url : getContextPath() +"/history_search.do",
   		data : {
   			"channel_code" : channel_code,
 			"page" : page_search,
-			"keyword" : keyword
+			"keyword" : keyword,
+			"playlist_code" : playlist_code
   		}, 
   		datatype : 'JSON',
   		contentType : "application/json; charset=UTF-8",
@@ -125,7 +123,8 @@ function getHistory_search(channel_code, page_search) {
 				
 				console.log();
 				
-				let div = "";  
+				let div = ""; 
+				div += "<div class='video_boxs'>"
 				$(history_search).each(function(){
 					div += "<div class='video_box'>";
 					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
@@ -139,6 +138,7 @@ function getHistory_search(channel_code, page_search) {
 					div += "</a>";
 					div += "</div>";
 				});
+				div += "</div>";
 				loading_history = false;
 				loading_search = true;
 				$("#search_area").append(div);
@@ -160,9 +160,14 @@ if(search == 1) {
 };
 
 //검색 버튼을 클릭했을 때
-/* $(document).on("click", "#search_img", function(){		
-	getHistory_search(channel_code, page_search);
-}); */
+$(document).on("click", "#search_img", function(){	
+	keyword = $("#search_keyword").val();
+	console.log("keyword >>> " + keyword);
+	$(".video_boxs").remove();
+	page_history = 1;
+	page_search = 1;
+	getHistory_search(channel_code, page_search, keyword);
+});
 
 //무한 스크롤
 $(window).scroll(function(){
@@ -178,7 +183,7 @@ $(window).scroll(function(){
 			getHistory_new(channel_code, page_history);
 		} else if(loading_search == true){
 			page_search++;
-			getHistory_search(channel_code, page_search);
+			getHistory_search(channel_code, page_search, keyword);
 		}
 	}
 }); //scroll end
@@ -197,18 +202,11 @@ $(window).scroll(function(){
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
 	<div id="channel_area" class="area_style">
 		<div id="history_search_area">
-			<form action="<%=request.getContextPath()%>/history_searchs.do">
+
 				<input type="hidden" name="channel_code" value="${channel_code }">
-				<input type="text" class="history_search" name="keyword" placeholder="시청 기록 검색"
-					<c:if test="${keyword ne ''}">
-						value="${keyword}"
-					</c:if>
-					<c:if test="${keyword eq ''}">
-						value=""
-					</c:if>
-				>
+				<input type="text" class="history_search" name="keyword" id="search_keyword" placeholder="시청 기록 검색" value="">
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
-			</form>
+
 		</div>
 	
 		<div id="profile_info">

@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<c:set var="c_info" value="${m_channel }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,7 @@
 <script src="https://kit.fontawesome.com/ccf3e996b8.js" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
-<!--
+
 <script type="text/javascript">
 $(document).on("mouseover", ".test_video", function(){
 	 $(this).get(0).play();
@@ -24,6 +25,11 @@ $(document).on("mouseout", ".test_video", function(){
 	 $(this).get(0).pause();
 });	
 
+function getContextPath(){
+	let path = location.href.indexOf(location.host)+location.host.length;
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
 /* 넘어온 기본 값 */
 let channel_code = "${channel_code}";
 let page = 1;
@@ -31,6 +37,10 @@ let loading = false;
 
 /* 재생목록 ajax */
 function getPlaylist_list(channel_code, page){
+	
+	let channel_name = '${m_channel.getChannel_name() }';
+	console.log("channel_name >>> " + channel_name);
+	
 	$.ajax({
 		url : getContextPath() +"/getPlaylist_list.do",
 		data : {
@@ -46,26 +56,31 @@ function getPlaylist_list(channel_code, page){
 			if(str == "[]"){
 				loading = false;
 				
-				$("#playlist_more").css('display', 'none');
+				console.log("걸러짐");
 				
 			}else{
-				let good = JSON.parse(data);
+				let playlist = JSON.parse(data);
 				let div = "";
 				
-				$(good).each(function(){
+				console.log("data >>> " + data);
+				console.log("good >>> " + playlist);
+				$(playlist).each(function(){
 					div += "<div class='video_box'>";
 					div += "<div class='playlist_video_div'>";
-					div += "<div class='playlist_lid' onclick='location.href='"+getContextPath()+"/playlist_list.do?channel_code="+channel_code+"&playlist_code="+this.playlist_code+"'>";
-					div += "<p class='p_playlist_lid'>재생목록 보기</p>"
-					div += "<img class='playlist_lid_img' src='"+${pageContext.request.contextPath}+"/resources/img/playlist_lid1.png'>"
-					div += "</div>"
-					div += "<video class='video_play' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>"
-					div += "</div>"
-					div += "<p class='video_title_p' style='margin-top: 5px;'>"+this.playlist_title+"<p>"
-					div += "<p class='video_channel_p'>"+${c_info.getChannel_name() }+"<p>"
-					div += "</div>"
+					div += "<a href='"+getContextPath()+"/playlist_list.do?channel_code="+channel_code+"&playlist_code="+this.playlist_code+"'>";					
+					div += "<div class='playlist_lid'>";
+					
+					div += "<p class='p_playlist_lid'>재생목록 보기</p>";
+					div += "<img class='playlist_lid_img' src='"+getContextPath()+"/resources/img/playlist_lid1.png'>";
+					div += "</div>";
+					div += "</a>";
+					div += "<video class='video_play' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "</div>";
+					div += "<p class='video_title_p' style='margin-top: 5px;'>"+this.playlist_title+"<p>";
+					div += "<p class='video_channel_p'>"+channel_name+"<p>" ;
+					div += "</div>";
 				});
-
+				console.log("playlist >>> " + playlist);
 				$("#playlist_area").append(div);
 				
 			}
@@ -82,11 +97,15 @@ getPlaylist_list(channel_code, page);
 
 // 재생목록 더보기 클릭시
 $(document).on("click", "#playlist_more", function(){
-	console.log("재생목록 더보기 실행!!!!!");
-	getPlaylist_list(channel_code, page);
+	if(loading == true) {
+		console.log("재생목록 더보기 실행!!!!!");
+		getPlaylist_list(channel_code, page);
+	}else if(loading == false) {
+		$("#playlist_more").css('display', 'none');
+	}
 });
 </script>
- -->
+
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/myPage/myPage_CSS/myPage.css">
 </head>
 <body>
@@ -98,7 +117,7 @@ $(document).on("click", "#playlist_more", function(){
 	<jsp:include page="../include/side_include.jsp"/>
 
 	
-	<c:set var="c_info" value="${m_channel }" />
+	
 
 	<c:if test="${!empty channel_code }">
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
@@ -165,14 +184,14 @@ $(document).on("click", "#playlist_more", function(){
 			<div class="content_title_box">
 				<img id="playlist_logo" src="${pageContext.request.contextPath}/resources/img/playlist_lid.png">
 				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">재생목록</a></p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">모두보기</a></p>
+				<%-- <p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">모두보기</a></p> --%>
 			</div>
 			
 			<c:set var="playlist" value="${p_list }" />
 			<c:if test="${!empty playlist }">
 			
 				<div id="playlist_area"></div>
-				<button id="playlist_more">더보기</button>
+				<button id="playlist_more"><i class="fa-solid fa-caret-down"></i>&nbsp;더보기</button>
 			</c:if>
 			
 			<c:if test="${empty playlist }">
