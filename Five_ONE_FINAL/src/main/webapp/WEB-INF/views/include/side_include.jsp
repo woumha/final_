@@ -28,39 +28,39 @@
                         <i class="fa-solid fa-house nav__icon"></i>
                         <span class="nav_name"> &nbsp; Home</span>
                     </a>
-                    <a href="#" class="nav__link">
+                    <a href="#" class="nav__link" id="my_subscribe">
                         <i class="fa-solid fa-stamp"></i>
                         <span class="nav_name"> &nbsp;  구독</span>
                     </a>
 
-                    <a href="#" class="nav__link">
+                    <a href="#" class="nav__link" id="my_watch_record">
                         <i class="fa-solid fa-eye"></i>
                         <span class="nav_name"> &nbsp;  시청 기록</span>
                     </a>
                     
-                     <a href="#" class="nav__link">
+                     <a href="#" class="nav__link" id="my_like_video">
 	                    <i class="fa-brands fa-gratipay"></i>
 	                    <span class="nav_name"> &nbsp; 좋아요 표시한 동영상</span>
                		 </a>
                		 
-               		 <a href="#" class="nav__link">
+               		 <a href="#" class="nav__link" id="my_watch_later">
 	                    <i class="fa-solid fa-clock"></i>
 	                    <span class="nav_name"> &nbsp; 나중에 볼 동영상</span>
                		 </a>
                		 
-               		 <a href="#" class="nav__link">
+               		 <a href="#" class="nav__link" id="my_upload_video">
 	                    <i class="fa-solid fa-circle-user"></i>
 	                    <span class="nav_name"> &nbsp; 내 동영상</span>
                		 </a>
                		 
                		 <hr>
                		 
-               		 <a href="#" class="nav__link">
+               		 <a href="#" class="nav__link" id="my_setting">
 	                    <i class="fa-solid fa-gear"></i>
 	                    <span class="nav_name"> &nbsp; 설정 </span>
                		 </a>
                		 
-               		 <a href="#" class="nav__link">
+               		 <a href="#" class="nav__link" id="complain">
 	                    <i class="fa-solid fa-flag"></i></i>
 	                    <span class="nav_name"> &nbsp; 고객센터 </span>
                		 </a>
@@ -70,11 +70,21 @@
         </nav>
     </div>	
 
-
-
 </body>
 
 <script type="text/javascript">
+
+//구독버튼 클릭 시
+$(document).on("click", "#my_subscribe", function(){
+	if(${empty MemberCode }){
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}else{
+		alert("구독페이지 연결하기");
+	}
+});
+
+
+/* -------------------------------------------------------------------------------------------------------------------  */
 	
 	/* 사이드바 확장 */
 	const showMenu = (toggleId, navbarId, bodyId) => {

@@ -13,26 +13,26 @@ import com.vidividi.model.*;
 import com.vidividi.variable.*;
 
 @Controller
-public class m_PlaylistController {
+public class m_subscribeController {
 	
 	@Inject
     private MyPageDAO dao;
 	
-	@RequestMapping("playlist_list.do")
+	@RequestMapping("subscribe.do")
 	public String history_list(@RequestParam("channel_code") String code,
 							@RequestParam(value="search",  required=false, defaultValue= "1") int search,
-							@RequestParam(value="playlist_code",  required=false, defaultValue= "none") String playlist_code,
+							@RequestParam(value="member_code",  required=false, defaultValue= "none") String member_code,
 							@RequestParam(value="keyword",  required=false, defaultValue= "none") String keyword, Model model) {
 		model.addAttribute("channel_code", code);
 		/* model.addAttribute("keyword", keyword); */
 		model.addAttribute("search", search);
-		model.addAttribute("playlist_code", playlist_code);
-		return "myPage/playlist";
+		model.addAttribute("member_code", member_code);
+		return "myPage/subscrbe";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "playlist_new.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam("playlist_code") String code,
+	@RequestMapping(value = "getSubscribe_list.do" , produces = "application/text; charset=UTF-8")
+	public String getReplyList(@RequestParam("member_code") String code,
 								int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
@@ -46,25 +46,11 @@ public class m_PlaylistController {
 		if(code == "none") {
 			System.out.println("playlist_new.do >>> channel_code 없음!!!");
 		} else {
-			List<VideoPlayDTO> list = this.dao.getPlaylist_new(code, startNo, endNo);
-			for(VideoPlayDTO dto : list) {
+			List<ChannelDTO> list = this.dao.getChannel_list(code, startNo, endNo);
+			for(ChannelDTO dto : list) {
 				JSONObject json = new JSONObject();
-				json.put("video_code", dto.getVideo_code());
 				json.put("channel_code", dto.getChannel_code());
 				json.put("channel_name", dto.getChannel_name());
-				json.put("video_title", dto.getVideo_title());
-				json.put("video_cont", dto.getVideo_cont());
-				json.put("video_img", dto.getVideo_img());
-				json.put("video_good", dto.getVideo_good());
-				json.put("video_bad", dto.getVideo_bad());
-				json.put("video_view_cnt", dto.getVideo_view_cnt());
-				json.put("video_hash", dto.getVideo_hash());
-				json.put("video_regdate", dto.getVideo_regdate());
-				json.put("video_open", dto.getVideo_open());
-				json.put("category_code", dto.getCategory_code());
-				
-				json.put("playlist_code", dto.getPlayList_code());
-				json.put("playlist_title", dto.getPlayList_title());
 				
 				
 				jArray.add(json);

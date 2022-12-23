@@ -176,7 +176,6 @@
         -2em 2em 0 0;
 }
 
-
 	
 /* --------------------------------------------------------이것저것 --------------------------------------------------------------  */	
 
@@ -200,13 +199,6 @@
 		  display: none;
 		}
 		
-		.search_select select{
-		  display: none;
-		}
-		
-		.search_select{
-			display: none;
-		}
 		
 		#video_list{
 			margin-left: 28%;

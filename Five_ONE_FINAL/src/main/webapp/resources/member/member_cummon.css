@@ -264,7 +264,9 @@
 	
 	#info-info hr {
 		width: 15%;
-		border: 3px solid #fc942c;
+		border: none;
+		background-color: #fc942c;
+		height: 4px;
 		text-align: left;
 		margin-left: 0px;
 	}

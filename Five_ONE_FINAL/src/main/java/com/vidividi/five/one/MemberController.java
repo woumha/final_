@@ -11,23 +11,22 @@ import java.io.Reader;
 import java.net.URL;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
@@ -36,11 +35,19 @@ import com.vidividi.service.EmailSendService;
 import com.vidividi.service.FormatCnt;
 import com.vidividi.service.LoginHistoryService;
 import com.vidividi.service.LoginService;
+import com.vidividi.service.SocialLoginService;
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.GoogleLoginDTO;
 import com.vidividi.variable.LoginDTO;
 import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
 import com.vidividi.variable.TestDTO;
+
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 
 @Controller
 public class MemberController {
@@ -62,7 +69,9 @@ public class MemberController {
 	
 	@Autowired
 	private LoginHistoryService loginHistoryService;
-	
+  
+	@Autowired
+	private SocialLoginService socialservice;
 	
 	@RequestMapping("login.do")
 	public String login() {
@@ -77,7 +86,6 @@ public class MemberController {
 		
 		if (membercode != null) {
 			model.addAttribute("MemberCode", membercode);
-			loginHistoryService.setLoginData(membercode);
 			
 			return "success";
 		}else {
@@ -124,26 +132,7 @@ public class MemberController {
 	@ResponseBody
 	@RequestMapping("joinOk.do")
 	public String joinMember(MemberDTO memberDTO) {
-		
-		String result = "";
-		
-		memberDTO.setMember_code(service.generateMembercode());
-		memberDTO.setMember_rep_channel(service.generateChannelCode());
-		
-		int joinResult = dao.joinMember(memberDTO);
-		System.out.println("회원 가입 결과 : " +joinResult);
-		
-		ChannelDTO channelDTO = service.newChannel(memberDTO.getMember_code(), memberDTO.getMember_rep_channel(), memberDTO.getMember_id());
-		
-		int channelResult = channelDAO.insertChannel(channelDTO);
-				
-		if (joinResult != 0) {
-			result = memberDTO.getMember_code();
-			System.out.println("반환되는 멤버코드 : "+result);
-		}else if (joinResult == 0) {
-			result = "fail";
-		}
-		return result;
+		return service.insertMember(memberDTO, "joinForm");
 	}
 	
 	
@@ -407,6 +396,40 @@ public class MemberController {
 				
 			return "redirect";
 		}
+		
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("googleLogin.do")
+	public String googleLogin(@RequestParam("jwt") String jwt_token, HttpSession session) throws Exception {
+		
+		GoogleLoginDTO dto = socialservice.decodeGoogleJWT(jwt_token);
+		String check = dao.isGoogleLinked(dto);
+		if (check == "1") { // 회원인데 구글 링크 된 경우
+			
+			return "linked";
+		}else if (check == "0"){ // 회원인데 구글 링크 안된 경우
+			return "notlinked";
+		}else { // 아예 회원이 아닌 경우
+			
+			MemberDTO mdto = new MemberDTO();
+			
+			mdto.setMember_name(dto.getGoogle_name());
+			mdto.setMember_email(dto.getGoogle_email());
+			mdto.setMember_id(dto.getGoogle_id());
+			
+			service.insertMember(mdto, "google");
+			
+			LoginDTO ldto = new LoginDTO();
+			ldto.setId(mdto.getMember_id());
+			ldto.setPwd(mdto.getMember_pwd());
+			ldto.setCode(mdto.getMember_code());
+			String memberCode = service.loginCheck(ldto, session);
+			
+			return "joined";
+		}
+		
 		
 	}
 	

@@ -97,20 +97,20 @@ public class MyPageDAOImpl implements MyPageDAO {
 		return this.sqlSession.selectList("subscribe_list", code);
 	}
 
-	@Override
-	public int getSubscribe_num(Map<String, Object> map) {
-		return this.sqlSession.selectOne("getSubscribe_num", map);
-	}
+	
+	@Override public String getSubscribe_code(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getSubscribe_code", map); }
+	
 
 	@Override
-	public int subscribe_one_delete(int num) {
-		return this.sqlSession.delete("delete_one_subscribe", num);
+	public int subscribe_one_delete(String code) {
+		return this.sqlSession.delete("delete_one_subscribe", code);
 	}
 
-	@Override
-	public int updateSequence_s(int num) {
-		return this.sqlSession.update("updateSeq_s", num);
-	}
+	/*
+	 * @Override public int updateSequence_s(int num) { return
+	 * this.sqlSession.update("updateSeq_s", num); }
+	 */
 
 
 	
@@ -185,10 +185,34 @@ public class MyPageDAOImpl implements MyPageDAO {
 
 	/* mainPage playlist 더보기 ajax */
 	@Override
-	public List<VideoPlayDTO> getPlayList_list(String code, int startNo, int endNo) {
+	public List<PlaylistDTO> getPlayList_list(String code, int startNo, int endNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
 		return this.sqlSession.selectList("getPlaylist_list", map); }
+
+	
+	/* playlist */
+	@Override
+	public List<VideoPlayDTO> getPlaylist_new(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getPlaylist_new", map); }
+	@Override
+	public List<VideoPlayDTO> getPlaylist_search(Map<String, Object> map) {
+		return this.sqlSession.selectList("getPlaylist_search", map); }
+
+	@Override
+	public int playlist_search_one_delete(Map<String, Object> map) {
+		return this.sqlSession.delete("playlist_search_one_delete", map); }
+
+	@Override
+	public int delete_playlist(String p_code) {
+		return this.sqlSession.delete("delete_playlist", p_code);}
+
+	@Override
+	public int delete_bundlelist(String p_code) {
+		return this.sqlSession.delete("delete_bundlelist", p_code);}
+
 
 	
 }
