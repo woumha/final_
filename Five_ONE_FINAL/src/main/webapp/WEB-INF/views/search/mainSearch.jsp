@@ -51,6 +51,19 @@
 	</div>
 
 
+<%-- 모달창 출력 영역 --%>
+<div id="my_modal" align="center">
+  
+    <p>재생목록에 추가하기</p> 
+    
+    <!-- 재생목록 리스트 출력 영역 -->
+    <div class ="playList"></div>
+    <br>
+    <button id="add_playList">추가하기</button>
+     
+    <a class="modal_close_btn"><i class="fa-solid fa-xmark"></i></a>
+</div>
+
 <%-- 검색 페이지 출력 영역 --%>
 	<div id="search_result"></div>
 
@@ -75,6 +88,7 @@
 <%-- 넘어온 값 받기 --%>
 	<input type="hidden" value="${keyword }" id="keyword" >
 	<input type="hidden" value="${field }" id="field" >
+	<input type="hidden" value="${RepChannelCode}" id="code" >
 
 </div> <!-- 전체 div end -->
 </body> 
@@ -85,10 +99,13 @@
 
 let keyword = $("#keyword").val();
 let field = $("#field").val();
+let play_code = $("#code").val();
+
 let page_rec = 1;
 let page_pop = 1;
 let check = 0;
 let option = "video_regdate";
+
 let loading = true;
 
 function getContextPath(){
@@ -117,6 +134,10 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 			console.log("인기순 함수 실행");
 			let str = data;
 			
+			if(str.length == 0){
+				$(".loading_list").css("display", "none");
+			}
+			
 			if(str == "[]"){
 				loading = false;
 				
@@ -134,13 +155,12 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 					
 						div += "<p class = 'video_title_p'>" +  "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-								+ '&nbsp;' + this.video_title + "</p>";								
+								+ '&nbsp;' + this.video_title + "</p>" + "<p class='play_list_plus'>" + "<a href='#' />" + "<i class='fa-solid fa-plus'></i> </p>";
+								
+						div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</p>";
 						
-						div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</p>";
-						
-						div += "<p class = 'video_view_date_p'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate + "</p>";
-						div += "<p class = 'video_views_p'>" + this.video_cont + "</p>";
-
+						div += "<p class = 'video_view_date_p'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate + "</p>";
+						div += "<p class = 'video_views_p'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" + this.video_cont + "</p>";
 					div += "</div>"; //video pbox end
 					div += "<hr>"
 				div += "</div>"; //video box end
@@ -196,6 +216,10 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 			
 			let str = data;
 			
+			if(str.length == 0){
+				$(".loading_list").css("display", "none");
+			}
+			
 			if(str == "[]"){
 				loading = false;
 				
@@ -210,16 +234,18 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 			div += "<div class='video_box'>";
 			div += "<video class='test_video' width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 				div += "<div class='video_pbox'>";
-					div += "<p class = 'video_title_p'>" +  "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-							"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-							+ '&nbsp;' + this.video_title + "</p>";	
-						
-					div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</p>";
 					
-					div += "<p class = 'video_view_date_p'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate + "</p>";
-					div += "<p class = 'video_views_p'>" + this.video_cont + "</p>";
+				div += "<p class = 'video_title_p'>" +  "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
+						"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+						+ '&nbsp;' + this.video_title + "</p>";								
+		
+				div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</p>";
+		
+				div += "<p class = 'video_view_date_p'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate + "</p>";
+				div += "<p class = 'video_views_p'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" + this.video_cont + "</p>";
 					
 				div += "</div>"; //video pbox end
+				div += "<hr>";
 			div += "</div>"; //video box end
 			div += "</div>"; //watch box end
 			}); //each end
@@ -272,6 +298,140 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 	$(document).on("mouseout", ".test_video", function(){
 		 $(this).get(0).pause();
 	});	
+	
+	
+// -------------------------------------------------------모달 클릭 시 재생목록 리스트 불러오기 ---------------------------------------------
+
+$(document).on("click", ".play_list_plus", function(){
+	
+	if(${! empty MemberCode}){
+		$(".playList_table").empty();
+		getPlayList(play_code);	
+		
+	}else if(${empty MemberCode }){		
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}
+});
+
+
+//재생목록 가져오기 함수
+function getPlayList(play_code){
+	
+	$.ajax({
+		url : "playList_result.do",
+		type: "post",
+		data: {
+			play_code : play_code
+		},
+		success: function(data){
+			
+			console.log("리스트 함수 성공");
+			
+			if(data.length > 0){
+			
+				let table = "";
+				
+				table += "<table class='playList_table'>"
+				
+				$(data).each(function(){
+					table += "<tr>";
+					table += "<td>" + "<input type='radio' name='play_radio'>" + "&nbsp; &nbsp;" + this.playlist_title + "</td>";
+					table += "</tr>";
+					
+				}); //each end
+				
+				table += "</table>";
+					$(".playList").append($("<table>").html(table));	
+				
+			}else{
+				console.log("데이터 없음");
+			}
+					
+		},
+		
+		error: function(){
+			alert("재생 목록 리스트 ajax 오류입니다.");
+			console.log("data>>>" + data);
+		}
+	});
+		
+}//재생목록 end
+
+
+//-----------------------------------------------------------해당 영상 재생목록에 추가하기-------------------------------------------------
+
+/* function addPlayList(){
+	
+	$.ajax({
+		url : "playList_add.do",
+		type: "post",
+		data: {
+			play_code : play_code
+			play_title : 
+		},
+		success: function(data){
+			alert("재생목록 추가에 성공했습니다.");	
+		},
+		
+		error: function(){
+			alert("재생목록 추가에 실패했습니다.");
+			console.log("data>>>" + data);
+		}
+	});
+	
+} */
+
+
+
+//----------------------------------------------------------------모달창~~~--------------------------------------------
+function modal(id) {
+    var zIndex = 9999;
+    var modal = $('#' + id);
+
+    // 모달 div 뒤에 희끄무레한 레이어
+    var bg = $('<div>')
+        .css({
+            position: 'fixed',
+            zIndex: zIndex,
+            left: '0px',
+            top: '0px',
+            width: '100%',
+            height: '100%',
+            overflow: 'auto',
+            // 레이어 색 변경
+            backgroundColor: 'rgba(0,0,0,0.4)'
+        })
+        .appendTo('body');
+
+    modal
+        .css({
+            position: 'fixed',
+            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+
+            // 뒤쪽 레이어 보다 한칸 위에 보이기
+            zIndex: zIndex + 1,
+
+            // div center 정렬
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            msTransform: 'translate(-50%, -50%)',
+            webkitTransform: 'translate(-50%, -50%)'
+        })
+        .show()
+        // 닫기 버튼 처리, 뒤쪽 레이어와 모달 div 지우기
+        .find('.modal_close_btn')
+        .on('click', function() {
+            bg.remove();
+            modal.hide();
+        });
+}
+
+$('.play_list_plus').on('click', function() {
+    // 모달창 띄우기
+    modal('my_modal');
+});
+	
 	
 //---------------------------------------------------------------- 배너 스크롤 따라 이동 ---------------------------------------------------------------------	
 

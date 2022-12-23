@@ -61,7 +61,6 @@ body {
 }
 
 
-	
 /* ---------------------------------------------------------------------------텍스트 설정--------------------------------------------------------------  */
 
 
@@ -173,7 +172,7 @@ a:active {
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			margin-left: 18%;
+			margin-left: 20%;
 			padding-left: 10px;
 			
      	}
@@ -358,7 +357,7 @@ button {
 #re_label{
 	margin-top: -30px;
 	margin-bottom: 25px; 
-	margin-left: -2%;
+	margin-left: 1%;
 }
 	  
 	.custom-btn {
