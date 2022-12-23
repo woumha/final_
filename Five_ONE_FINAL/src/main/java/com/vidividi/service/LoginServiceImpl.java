@@ -121,6 +121,51 @@ public class LoginServiceImpl implements LoginService {
 		
 		return result;
 	}
+	
+	// 구독하기 코드
+	@Override
+	public String generateSubscribeCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "Su-"+uuid.toString();
+		
+		
+		return result;
+	}
+	
+	// 댓글 코드
+	@Override
+	public String generateReplyCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "Re-"+uuid.toString();
+		
+		
+		return result;
+	}
+	
+	// 댓글 그룹 코드
+	@Override
+	public String generateReplyGroupCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "RG-"+uuid.toString();
+		
+		
+		return result;
+	}	
+	
+	
+	// 댓글 좋아요 코드
+	@Override
+	public String generateFeedbackCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "Fe-"+uuid.toString();
+		
+		
+		return result;
+	}	
 
 	@Override
 	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName) {

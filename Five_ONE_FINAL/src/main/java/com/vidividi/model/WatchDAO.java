@@ -47,5 +47,23 @@ public interface WatchDAO {
 	public void deleteSubscribe(String subscribe_code);
 
 	public int getVideoGoodCount(String video_code);
+
+	public void insertFeedback(String feedback_code, String video_code, String reply_code, String repChannelCode,
+			int feedback_good);
+
+	public void deleteFeedback(String feedback_code);
+
+	public void updateFeedback(String feedback_code, int feedback_good);
+
+	public void plusVideoGood(String video_code, String option);
+
+	public void minusVideoGood(String video_code, String option);
+
+	public void changeGood(String video_code, String option);
+
+	public void inputReply(String video_code, String reply_code, String reply_cont, int reply_comment, String reply_group,
+			String repChannelCode);
+
+	public ReplyDTO getNewReply(String reply_code);
 	
 }

@@ -19,4 +19,8 @@ public interface LoginService {
 	int getAge(String date);
   
 	String generateGoodCode();
+	String generateSubscribeCode();
+	String generateFeedbackCode();
+	String generateReplyCode();
+	String generateReplyGroupCode();
 }

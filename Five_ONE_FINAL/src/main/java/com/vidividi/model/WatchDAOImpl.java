@@ -197,4 +197,95 @@ public class WatchDAOImpl implements WatchDAO {
 	public int getVideoGoodCount(String video_code) {
 		return this.sqlSession.selectOne("getVideoGoodCount", video_code);
 	}
+
+
+	@Override
+	public void insertFeedback(String feedback_code, String video_code, String reply_code, String repChannelCode,
+			int feedback_good) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("feedback_code", feedback_code);
+		map.put("video_code", video_code);
+		map.put("reply_code", reply_code);
+		map.put("repChannelCode", repChannelCode);
+		map.put("feedback_good", feedback_good);
+		
+		this.sqlSession.insert("insertFeedback", map);
+	}
+
+
+	@Override
+	public void deleteFeedback(String feedback_code) {
+		this.sqlSession.delete("deleteFeedback", feedback_code);
+	}
+
+
+	@Override
+	public void updateFeedback(String feedback_code, int feedback_good) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("feedback_code", feedback_code);
+		map.put("feedback_good", feedback_good);		
+		this.sqlSession.update("updateFeedback", map);
+	}
+
+
+	@Override
+	public void plusVideoGood(String video_code, String option) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("option", option);
+		map.put("video_code", video_code);
+		
+		System.out.println("플러스 실행");
+		System.out.println("op>" +option);
+		System.out.println("co> " +video_code);
+		
+		this.sqlSession.update("plusVideoGood", map);
+		
+	}
+
+
+	@Override
+	public void minusVideoGood(String video_code, String option) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("option", option);
+		map.put("video_code", video_code);
+		
+		this.sqlSession.update("miusVideoGood", map);
+		
+	}
+
+
+	@Override
+	public void changeGood(String video_code, String option) {
+		
+		this.sqlSession.update(option, video_code);
+		
+	}
+
+
+	@Override
+	public void inputReply(String video_code, String reply_code, String reply_cont, int reply_comment, String reply_group,
+			String repChannelCode) {
+		System.out.println("넘어옴");
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("video_code", video_code);
+		map.put("reply_code", reply_code);
+		map.put("reply_cont", reply_cont);
+		map.put("reply_comment", reply_comment);
+		map.put("reply_group", reply_group);
+		map.put("repChannelCode", repChannelCode);
+		
+		this.sqlSession.selectOne("inputReply", map);
+	}
+
+
+	@Override
+	public ReplyDTO getNewReply(String reply_code) {
+		return this.sqlSession.selectOne("getNewReply", reply_code);
+	}
 }
