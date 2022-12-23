@@ -12,6 +12,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+	<link rel="stylesheet" href="${path }/resources/hochan_CSS/channel_manager.css">
 </head>
 
 <body>
@@ -40,7 +41,8 @@
 		      <video id="upload_file_btn" class="update_modal">
 		      	<source class="source_tag" src="${path }/resources/AllChannel/${playList.channel_code}/${playList.video_title}.mp4" type="video/mp4">
 		      </video>
-		     </div> 
+		     </div>
+		      <input id="video_name" class="video_field" name="video_name" type="text" value="${playList.video_title}" hidden readonly>
 		      <input id="input_file" type="file" hidden name="file_mv">
 		    </div>
 		    
@@ -153,7 +155,24 @@
 		  <div class="row">
 			<strong>영상 첫이미지 수정하기</strong>
 			<div class="input-group mb-3">
-			  <input type="file" id="input_img" name="file_img" class="form-control" id="inputGroupFile02">
+				<div class="custom-file">
+					 <div class="input-group">
+				      <label class="input-group-text form-control" for="autoSizingInputGroup">
+				      	파일선택&nbsp;&nbsp;
+				      	<div class="vr"></div>
+				      	&nbsp;&nbsp;
+				      	<c:if test="${empty playList.video_img}">
+					      	<input type="text" name="img_name" class="img_field" value="파일을 선택해주세요" readonly>
+				      	</c:if>
+				      	<c:if test="${!empty playList.video_img}">
+				      		<input type="text" name="img_name" class="img_field" value="${playList.video_img }" readonly>
+				      	</c:if>
+				      </label>
+				      <div class="file_div">
+				      	<input class="form-control" type="file" id="autoSizingInputGroup" name="file_img" hidden>				      
+				      </div>
+				    </div>
+			  	</div>
 			</div>		  
 		  </div>
 		</div> 	

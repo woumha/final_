@@ -53,7 +53,7 @@
 	
 	/* NAV */
 	.nav {
-	    height: 800px;
+	    /* height: 800px; */
 	    display: flex;
 	    justify-content: space-between;
 	    overflow: hidden;

@@ -1,6 +1,7 @@
 package com.vidividi.service;
 
 import java.security.SecureRandom;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -159,7 +160,7 @@ public class LoginServiceImpl implements LoginService {
 		}
 		
 		return result;
-		
+	}	
 
 	//재생목록 코드
 	@Override

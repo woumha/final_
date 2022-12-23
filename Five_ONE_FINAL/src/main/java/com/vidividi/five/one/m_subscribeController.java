@@ -1,6 +1,7 @@
 package com.vidividi.five.one;
 
 import java.io.*;
+
 import java.util.*;
 import javax.inject.*;
 import javax.servlet.http.*;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.vidividi.model.*;
 import com.vidividi.variable.*;
 
-@Controller
+
 public class m_subscribeController {
 	
 	@Inject
@@ -47,6 +48,7 @@ public class m_subscribeController {
 			System.out.println("playlist_new.do >>> channel_code 없음!!!");
 		} else {
 			List<ChannelDTO> list = this.dao.getChannel_list(code, startNo, endNo);
+			
 			for(ChannelDTO dto : list) {
 				JSONObject json = new JSONObject();
 				json.put("channel_code", dto.getChannel_code());

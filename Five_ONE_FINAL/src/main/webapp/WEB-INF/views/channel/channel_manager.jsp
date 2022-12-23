@@ -5,6 +5,7 @@
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <c:set var="channelOwner" value="${currentOwner }" />
 <c:set var="mvlist" value="${mvList }" />
+<c:set var="bundle" value="${bundleList }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,7 @@
 			  		이미지 수정하기  				  	
 			  	</font>
 			   </button>
-		  		<input type="file" name="file" class="profil_input" />			   
+		  		<input type="file" name="file" hidden class="profil_input" />			   
 			 
 			  <div class="card-body">
 			    <h5 class="card-title">
@@ -46,7 +47,34 @@
 			</div>
 			<div class="card left_card" style="width: 18rem;">
 				<div class="card-body">
-				  	<button type="button" class="btn btn-success" id="listmake" data-toggle="modal" data-target="#playListModal">재생목록 추가하기</button>				
+					<div>
+					  	<button type="button" class="btn btn-success" id="listmake" data-toggle="modal" data-target="#playListModal">영상 업로드하기</button>
+					  	<button type="button" class="btn btn-success" id="listmake" data-toggle="modal" data-target="#playListModal">채널 수정하기</button>
+					</div>
+				  	
+				  	<hr color="green">
+				  	<div align="left">
+				  	<c:if test="${empty bundle }">
+						<a href="#" class="text-decoration-none" style="display: flex;">재생목록이 없어요. 재생목록을 추가해보세요!</a>	
+					</c:if>
+					<c:if test="${!empty bundle }">
+						<a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle atag">
+                    	<i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline atag">내 재생목록</span></a>
+                     	<ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                     	<c:forEach items="${bundle }" var="bundledto">
+                     		<li class="w-100">
+                     			<hr color="green">
+                             	<input type="hidden" value="${bundledto.bundle_code }">
+                             	<a href="" class="nav-link px-0"> <span class="d-none d-sm-inline child_bundle">${bundledto.bundle_title }</span></a>
+                         	</li>
+                     	</c:forEach>
+                     		<li>
+                     			<hr color="green">
+                             	<a href="" class="nav-link px-0"> <span class="d-none d-sm-inline child_bundle">재생목록 추가하기</span></a>
+                     		</li>
+                    	</ul>	
+					</c:if>				  	
+				  	</div>			
 				</div>
 			</div>
 	    </div>
@@ -78,10 +106,10 @@
 					  <c:forEach items="${mvlist }" var="mvdto">
 					  	<tr onclick="modal('${mvdto.video_code}')" data-toggle="modal" data-target="#MoaModal">
 					  		<td>
-					  			<c:if test="${empty mvdto.video_img }">
+					  			<c:if test="${empty mvdto.video_img}">
 					   				<div><video class="show_file"><source src="${path }/resources/AllChannel/${channelOwner.channel_code}/${mvdto.video_title }.mp4"></video></div>
 					   			</c:if>
-					   			<c:if test="${!empty mvdto.video_img }">
+					   			<c:if test="${!empty mvdto.video_img}">
 							    	<div><img class="show_file" src="${path }/resources/AllChannel/${channelOwner.channel_code}/thumbnail/${mvdto.video_img }"></div>					   				
 					   			</c:if>
 					  		</td>
