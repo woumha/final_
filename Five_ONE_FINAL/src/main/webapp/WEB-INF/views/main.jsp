@@ -98,7 +98,7 @@
 			<jsp:include page="./include/side_include.jsp"/>
 		</div>
 	</div>
-	
+	 
 	
 <%-- 동영상 리스트 영역 --%>
 <div id = "video_wrap">
@@ -134,21 +134,15 @@
 let loading = true;
 let page_rec = 1;
 let page_pop = 1;
+let page_sort = 1;
 let check = 0;
-
-let page_mu = 1;
+var option = "{$option}"; 
 
 function getContextPath(){
     let path = location.href.indexOf(location.host)+location.host.length;
     return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-function remove_table(){
-	$(".test_video").remove();
-	$(".video_title").remove();
-	$(".video_channel").remove();
-	$(".video_view_ctn").remove();
-}
 
 	//좋아요 순 정렬
 	function getMainVideoList_popular(page_pop){
@@ -165,10 +159,10 @@ function remove_table(){
 				console.log(data);
 				console.log(check);
 
-				if(data.length == 0){
-					$(".loading_list").css("display", "none");
+				let str = data;
+				if(str == "[]"){
 					loading = false;
-				
+					$(".loading_list").css("display", "none");
 				}else{
 
 					var table = "";
@@ -181,14 +175,15 @@ function remove_table(){
 					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
 					
 					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-								"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
-
+								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+								+ '&nbsp;' + this.video_title + "</td>";
+																	
 					table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 								"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
 					
 					table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
 					table += "</tr>";
-					
+									
 					table += "<tr>";
 					table += "<td>" + "</td>";
 					table += "</tr>";
@@ -216,8 +211,16 @@ function remove_table(){
 		});
 	}
 	
-	//기본적으로 인기순 정렬
-	getMainVideoList_popular(page_pop);
+	//기본 인기순	
+	if(check == 2) {
+        page_rec = 1;
+ 	    page_pop = 1;
+		getMainVideoList_recent(page_rec);
+	} else if(check != 2){
+        page_rec = 1;
+ 	    page_pop = 1;
+		getMainVideoList_popular(page_pop);
+	};
 	
 //----------------------------------------------------------------동영상 리스트 ajax(최신순)-------------------------------------------------------------------------
  
@@ -236,11 +239,13 @@ function getMainVideoList_recent(page_rec){
 				console.log(data);
 				console.log(check);
 				
-				if(data.length == 0){
-					$(".loading_list").css("display", "none");
+				let str = data;
+
+				if(str == "[]"){
 					loading = false;
-				
-				}else {
+					
+				}else{
+
 				var table = "";
 				
 				table += "<table class='video_table'>"
@@ -251,7 +256,8 @@ function getMainVideoList_recent(page_rec){
 					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
 
 					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-								"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
+								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+								+ '&nbsp;' + this.video_title + "</td>";
 
 					table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 								"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
@@ -291,14 +297,20 @@ function getMainVideoList_recent(page_rec){
 	//인기순 버튼을 클릭했을 때
 	$(document).on("click", ".re_btn", function(){
 		check = 1;
-		remove_table();
+        page_rec = 1;
+ 	    page_pop = 1;
+ 	    $(".video_table").remove();
 		getMainVideoList_popular(page_pop);
 	});
 	  
 	//최신순 버튼을 클릭했을 때
 	$(document).on("click", ".up_btn", function(){
 		check = 2;
-		remove_table();
+        page_rec = 1;
+ 	    page_pop = 1;
+ 	    console.log('버튼 클릭 시 최신 페이지' + page_rec);
+ 	    console.log('버튼 클릭 시 인기 페이지' + page_pop);
+		$(".video_table").remove();
 		getMainVideoList_recent(page_rec);
 	});
 
@@ -315,28 +327,33 @@ function getMainVideoList_recent(page_rec){
 	   setInterval(function() {
 	       if (scroll_check) {
 	           scroll_check = false;
-
+	           
 	           if($(window).scrollTop()>=$(document).height() - $(window).height()){
-	      
+	        	   
 	        	   if(loading){
-	        		   page_pop = 1;
-	        		   page_rec = 1;
 	        		   
-	        		   if(check == 1){
+	        		   if(check == 0){
 	        			   page_pop++;
 	        			   getMainVideoList_popular(page_pop);
+	        			   console.log('인기순 페이지' + page_pop);
+	        			   
+	        		   }else if(check == 1){
+	        			   page_pop++;
+	        			   getMainVideoList_popular(page_pop);
+	        			   console.log('인기순 페이지' + page_pop);
 	        			   
 	        		   }else if(check == 2){
 	        			   page_rec++;
 	        			   getMainVideoList_recent(page_rec);
-	        			   
-	        		   }else if(check == 0){
-	        			   page_pop++;
-	        			   getMainVideoList_popular(page_pop);
+	        			   console.log('최신순 페이지' +page_rec);
 	        			   
 	        		   }
 	        		   
-	        	   }
+	        	   }else{
+	        		   $(".loading_list").css("display", "none");
+	        	   }//loading end
+	           }else{
+	        	  // $(".loading_list").css("display", "none");
 	           }
 	       }
 	   }, 250); // 무한 스크롤 end
@@ -353,15 +370,18 @@ function getMainVideoList_recent(page_rec){
 
 //----------------------------------------------------------------동영상 리스트 ajax(상단 내비 소트 정렬)-------------------------------------------------------------------------
 	 
-	//소트 정렬 (music)
-	function getMainVideoList_sort_music(page_mu){
+	//소트 정렬
+	function getMainVideoList_sort(page_sort, option){
 			$.ajax({
-				url : "mainVideoList_sort_cook.do",
+				url : "mainVideoList_sort.do",
 				type: "post",
 				data: {
-					page : page_mu
+					option : option,
+					page : page_sort
 				},
 				success: function(data){
+					
+					console.log("소트 함수 실행");
 					
 					var table = "";
 					
@@ -373,7 +393,8 @@ function getMainVideoList_recent(page_rec){
 						table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
 
 						table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-									"<i class='fa-solid fa-circle-user' id='ch_img'></i>" + '&nbsp;' + this.video_title + "</td>";
+									"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+									+ '&nbsp;' + this.video_title + "</td>";
 
 						table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 									"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
@@ -415,7 +436,8 @@ function getMainVideoList_recent(page_rec){
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
 		
-		remove_table();
+		$(".video_table").remove();
+		check = 0;
 		getMainVideoList_popular(page_pop);
 	});
 	
@@ -427,8 +449,10 @@ function getMainVideoList_recent(page_rec){
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
 		
-		remove_table();
-		getMainVideoList_sort_music(page);
+		$(".video_table").remove();
+		var option = 100;
+		getMainVideoList_sort(page_sort, option);
+		$(".video_table").css("margin-left", "11%");
 	});
 	
 	//게임 카테고리 선택
@@ -438,7 +462,11 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#fc942c"); $("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
-		remove_table();
+		
+		$(".video_table").remove();
+		var option = 200;
+		getMainVideoList_sort(page_sort, option);
+		
 	});
 	
 	//요리 카테고리 선택
@@ -448,7 +476,10 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#424242"); $("#cook").css("background-color", "#fc942c");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
-		remove_table();
+
+		$(".video_table").remove();
+		var option = 300;
+		getMainVideoList_sort(page_sort, option);
 	});
 	
 	
@@ -459,7 +490,10 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#424242"); $("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#fc942c"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
-		remove_table();
+		
+		$(".video_table").remove();
+		var option = 400;
+		getMainVideoList_sort(page_sort, option);
 	});
 	
 	//뉴스 카테고리 선택
@@ -469,7 +503,10 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#424242"); $("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#fc942c");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
-		remove_table();
+		
+		$(".video_table").remove();
+		var option = 500;
+		getMainVideoList_sort(page_sort, option);
 	});
 	
 	
@@ -480,7 +517,10 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#424242");$("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#fc942c"); $("#kids").css("background-color", "#424242");
-		remove_table();
+		
+		$(".video_table").remove();
+		var option = 600;
+		getMainVideoList_sort(page_sort, option);
 	});
 	
 	//아동용 카테고리 선택
@@ -490,7 +530,10 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#424242"); $("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#fc942c");
-		remove_table();
+		
+		$(".video_table").remove();
+		var option = 700;
+		getMainVideoList_sort(page_sort, option);
 	});	
 
 
