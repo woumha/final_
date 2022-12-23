@@ -60,8 +60,9 @@ $(document).ready(function() {
 
 
 					$(reply).each(function(){
-
 						div += "<div class='reply_box card_a'>";
+						
+						div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>"
 
 						div += "<div class='item_a'>";
 						div += "<div class='reply_wrap'>";
@@ -79,7 +80,7 @@ $(document).ready(function() {
 						div += "</div>";
 
 						div += "<div class='reply_action_box'>";
-						div += "<div class='toolbar_wrap card_a'>";
+						div += "<div class='toolbar_wrap card_a' data-value='" +this.check_good+ "'>";
 
 						div += "<div class='reply_good_btn'><div class='card_b'>";
 						if(this.check_good == 1){
@@ -106,7 +107,7 @@ $(document).ready(function() {
 
 						div += "<div class='render_box'><div class='render_wrap'><button class='render'><img class='render_icon' src='" +getContextPath()+ "/resources/watch/watch_img/render_icon.png'></button></div></div>";
 						div += "</div>"; // .reply_box
-						
+
 						if(this.reply_comment == 1){
 
 							div += "<div class='comment_box'>";
@@ -117,6 +118,8 @@ $(document).ready(function() {
 							div += "<div class='input_comment'></div>";
 							div += "</div>"; //.comment_box
 						}
+
+						
 						
 						//div += "</div></div>";
 					});

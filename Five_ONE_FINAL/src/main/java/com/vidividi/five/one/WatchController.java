@@ -1,7 +1,7 @@
 package com.vidividi.five.one;
 
 import java.io.IOException;
-
+import java.security.PublicKey;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class WatchController{
 		
 		
 		// 재생목록 체크
-		if(playList_code == null) {
+		if(playList_code == null || playList_code.equals("")) {
 		}else {
 			List<VideoPlayDTO> playList = this.dao.getPlayList(playList_code);
 			model.addAttribute("playList_dto", playList);
@@ -113,9 +113,10 @@ public class WatchController{
 		VideoPlayDTO video_dto = this.dao.getVideo(video_code);
 		
 		// 로그인 체크
-		if(repChannelCode == null) {
+		if(repChannelCode == null || repChannelCode.equals("")) {
 			System.out.println("로그인 null");
 		}else {
+			System.out.println("로그인 완료");
 			SubscribeDTO subscribe_dto = this.dao.getSubscribe(video_dto.getChannel_code() , repChannelCode);
 			GoodDTO good_dto = this.dao.getGood(video_code, repChannelCode);
 			
@@ -126,10 +127,11 @@ public class WatchController{
 		
 		
 		int reply_count = this.dao.getReplyCount(video_code);
-		
+		int videoGood_count= this.dao.getVideoGoodCount(video_code);
 		
 		model.addAttribute("video_dto", video_dto);
-		model.addAttribute("reply_count", reply_count);
+		model.addAttribute("reply_count", FormatCnt.format(reply_count));
+		model.addAttribute("videoGood_count", FormatCnt.format(videoGood_count));
 		
 		return "/watch/watch";
 	}
@@ -150,7 +152,7 @@ public class WatchController{
 		List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, channel_code, startNo, endNo);
 		
 		// 로그인 체크
-		if(repChannelCode == null) {
+		if(repChannelCode == null || repChannelCode.equals("")) {
 			jArray = setReplyArray(list, video_code);
 		}else {
 			jArray = setReplyArray(list, video_code, repChannelCode);
@@ -167,7 +169,7 @@ public class WatchController{
 //			json.put("channel_code", dto.getChannel_code());
 //			json.put("channel_name", dto.getChannel_name());
 //			json.put("channel_profil", dto.getChannel_profil());
-//			json.put("reply_no", dto.getReply_no());
+//			json.put("reply_code", dto.getreply_code());
 //			json.put("reply_cont", dto.getReply_cont());
 //			json.put("reply_comment", dto.getReply_comment());
 //			json.put("reply_regdate", dto.getReply_regdate());
@@ -206,7 +208,7 @@ public class WatchController{
 		
 		List<ReplyDTO> list = this.dao.getComment(video_code, reply_group, startNo, endNo);
 		
-		if(repChannelCode == null) {
+		if(repChannelCode == null || repChannelCode.equals("")) {
 			jArray = setCommentArray(list, video_code);
 		}else {
 			jArray = setCommentArray(list, video_code, repChannelCode);
@@ -227,22 +229,20 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping("insertGood.do")
-	public int insertGood(@RequestParam("video_code") String video_code, @RequestParam(value="good_code", required = false) String good_code, @RequestParam("good_bad") int good_bad, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+	public String insertGood(@RequestParam("video_code") String video_code, @RequestParam("good_bad") int good_bad, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
-		System.out.println("rec > " +repChannelCode);
+		String good_code = service.generateGoodCode();
 		
-		if(good_code == null) {
-			good_code = service.generateGoodCode();
-		}
+		this.dao.insertGood(video_code, good_code, good_bad, repChannelCode);
 		
-		System.out.println("goodcode> " +good_code);
-		
-		return this.dao.insertGood(video_code, good_code, good_bad, repChannelCode);
+		return good_code;
 	}
 	
 	@ResponseBody
 	@RequestMapping("deleteGood.do")
 	public int deleteGood(@RequestParam("good_code") String good_code) {
+		
+		System.out.println("good_code 확인! > " +good_code);
 		
 		return this.dao.deleteGood(good_code);
 	}
@@ -254,6 +254,29 @@ public class WatchController{
 		return this.dao.updateGood(good_code, good_bad);
 	}
 	
+	@ResponseBody
+	@RequestMapping("getSession.do")
+	public String getSession(@SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+		
+		return repChannelCode;
+	}
+	
+	@ResponseBody
+	@RequestMapping("insertSubscribe.do")
+	public String insertSubscribe(@RequestParam("channel_code") String channel_code, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+		
+		String subscribe_code = service.generateGoodCode();
+		
+		this.dao.insertSubscribe(subscribe_code, channel_code, repChannelCode);
+		
+		return subscribe_code; 
+	}
+	
+	@ResponseBody
+	@RequestMapping("deleteSubscribe.do")
+	public void deleteSubscribe(@RequestParam("subscribe_code") String subscribe_code) {
+		this.dao.deleteSubscribe(subscribe_code);
+	}
 	
 	@RequestMapping("test.do")
 	public String test() {
@@ -286,7 +309,7 @@ public class WatchController{
 			json.put("channel_code", dto.getChannel_code());
 			json.put("channel_name", dto.getChannel_name());
 			json.put("channel_profil", dto.getChannel_profil());
-			json.put("reply_no", dto.getReply_code());
+			json.put("reply_code", dto.getReply_code());
 			json.put("reply_cont", dto.getReply_cont());
 			json.put("reply_comment", dto.getReply_comment());
 			json.put("reply_regdate", dto.getReply_regdate());
@@ -318,7 +341,7 @@ public class WatchController{
 			json.put("channel_code", dto.getChannel_code());
 			json.put("channel_name", dto.getChannel_name());
 			json.put("channel_profil", dto.getChannel_profil());
-			json.put("reply_no", dto.getReply_code());
+			json.put("reply_code", dto.getReply_code());
 			json.put("reply_cont", dto.getReply_cont());
 			json.put("reply_comment", dto.getReply_comment());
 			json.put("reply_regdate", dto.getReply_regdate());
@@ -358,7 +381,7 @@ public class WatchController{
 			json.put("channel_code", dto.getChannel_code());
 			json.put("channel_name", dto.getChannel_name());
 			json.put("channel_profil", dto.getChannel_profil());
-			json.put("reply_no", dto.getReply_code());
+			json.put("reply_code", dto.getReply_code());
 			json.put("reply_cont", dto.getReply_cont());
 			json.put("reply_comment", dto.getReply_comment());
 			json.put("reply_regdate", dto.getReply_regdate());
@@ -395,7 +418,7 @@ public class WatchController{
 			json.put("channel_code", dto.getChannel_code());
 			json.put("channel_name", dto.getChannel_name());
 			json.put("channel_profil", dto.getChannel_profil());
-			json.put("reply_no", dto.getReply_code());
+			json.put("reply_code", dto.getReply_code());
 			json.put("reply_cont", dto.getReply_cont());
 			json.put("reply_comment", dto.getReply_comment());
 			json.put("reply_regdate", dto.getReply_regdate());

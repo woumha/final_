@@ -1,13 +1,38 @@
 /**
  * 
  */
+
+function getSession(){
+
+	let res;
+	$.ajax({
+		url : getContextPath() +"/getSession.do",
+		contentType : "application/json; charset=UTF-8",
+		async : false,
+		success : function(data){
+			if(data){
+				res = data;
+			}
+		},
+		error : function(request, status, error){
+			console.log("code: " + request.status);
+			console.log("message: " + request.responseText);
+			console.log("error: " + error);
+		}
+
+	});
+	return res;
+}
  
- $(document).ready(function(){
+$(document).ready(function(){
+
+	let res = getSession();
 
 	let good_code = $("#good_code").val();
-	console.log('goodnum > ' +good_code);
 	let video_code = $("#video_code").val();
-
+	let channel_code = $("#channel_code").val();
+	let subscribe_code = $("#subscribe_code").val();
+	let check_good;
 
 	function getContextPath(){
 		
@@ -16,37 +41,115 @@
 		return location.href.substring(path, location.href.indexOf('/', path+1));
 	}
 
-	function changeImg(check){
-		if(check > 0){
-			alert('실행완료');
-		}else if(check = 0){
-			alert('실행 실패');
-		}else{
-			alert('오류');
+
+
+
+	function changeValue(tag, good_img, bad_img, name){
+		
+		let check = tag.attr("data-value");
+
+
+
+		if(name == "good"){
+			if(check == 1){ // 좋아요 취소
+				good_img.attr("src", getContextPath() +"/resources/watch/watch_img/good_icon.svg");
+				tag.attr("data-value", 0);
+			}else if(check == 2){ // 좋아요 수정
+				good_img.attr("src", getContextPath() +"/resources/watch/watch_img/good_icon_selected.svg");
+				bad_img.attr("src", getContextPath() +"/resources/watch/watch_img/bad_icon.svg");
+				tag.attr("data-value", 1);
+			}else{ // 좋아요 추가
+				good_img.attr("src", getContextPath() +"/resources/watch/watch_img/good_icon_selected.svg");
+				tag.attr("data-value", 1);
+			}
+		}else if(name == "bad"){
+			if(check == 2){ // 싫어요 취소
+				bad_img.attr("src", getContextPath() +"/resources/watch/watch_img/bad_icon.svg");
+				tag.attr("data-value", 0);
+			}else if(check == 1){ // 싫어요 수정
+				good_img.attr("src", getContextPath() +"/resources/watch/watch_img/good_icon.svg");
+				bad_img.attr("src", getContextPath() +"/resources/watch/watch_img/bad_icon_selected.svg");
+				tag.attr("data-value", 2);
+			}else{ // 싫어요 추가
+				bad_img.attr("src", getContextPath() +"/resources/watch/watch_img/bad_icon_selected.svg");
+				tag.attr("data-value", 2);
+			}
 		}
 	}
 
-	function insertGood(video_code, good_code, good_bad){
+	function insertSubscribe(channel_code){
+
 		$.ajax({
 
-			url :  getContextPath() +"/insertGood.do",
+			url :  getContextPath() +"/insertSubscribe.do",
 			contentType : "application/json; charset=UTF-8",
+			async : false,
 			data : {
-				"video_code" : video_code,
-				"good_code" : good_code,
-				"good_bad" : good_bad
+				"channel_code" : channel_code,
 			},
 			success : function(data){
-				console.log('insert성공');
-				changeImg(data);
+				console.log('구독성공');
+				res = data;
 			},
 			error : function(request, status, error){
 				console.log("code: " + request.status);
 				console.log("message: " + request.responseText);
 				console.log("error: " + error);
 			}
-
 		});
+
+		return res;
+	}
+
+	function deleteSubscribe(subscribe_code){
+		
+		$.ajax({
+
+			url :  getContextPath() +"/deleteSubscribe.do",
+			contentType : "application/json; charset=UTF-8",
+			async : false,
+			data : {
+				"subscribe_code" : subscribe_code,
+			},
+			success : function(data){
+				console.log('구독취소성공');
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+		});
+
+	}
+
+	function insertGood(good_code, good_bad){
+
+		let res;
+
+		$.ajax({
+
+			url :  getContextPath() +"/insertGood.do",
+			contentType : "application/json; charset=UTF-8",
+			async : false,
+			data : {
+				"good_code" : good_code,
+				"good_bad" : good_bad
+			},
+			success : function(data){
+				console.log('insert성공');
+				console.log('data> ' +data);
+
+				res = data;
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+		});
+
+		return res;
 	}
 
 	function deleteGood(good_code){
@@ -60,7 +163,7 @@
 			},
 			success : function(data){
 				console.log('delete성공');
-				changeImg(data);
+
 			},
 			error : function(request, status, error){
 				console.log("code: " + request.status);
@@ -83,7 +186,6 @@
 			},
 			success : function(data){
 				console.log('update성공');
-				changeImg(data);
 			},
 			error : function(request, status, error){
 				console.log("code: " + request.status);
@@ -238,29 +340,160 @@
 			scrollNav.scrollLeft(scrollNav - 250);
 		});
 		
+
+		// 구독버튼 클릭
+		$("#subscribe_btn").on("click", function(){
+
+			
+			if(res){
+				if($(this).attr("class") == "subscribe_true"){
+					deleteSubscribe(subscribe_code);
+					$(this).attr("class", "subscribe_false");
+				}else {
+					subscribe_code = insertSubscribe(channel_code);
+					$(this).attr("class", "subscribe_true");
+				}
+			}else{
+				alert('로그인 해주세요');
+			}
+		});
+
+
  
 		// 좋아요 클릭
 		$(".watch_good_btn").on("click", function(){
-			console.log('좋아요 클릭!')
-			if(good_code){
-				console.log('좋아요if');
-				let check = $(this).attr("data-value");
+
+			let res = getSession();
+			let check = $(this).parent().attr("data-value");
+			let good_img = $(this).find(".good");
+			let tag = $(this).parent();
+			let bad_img = tag.find(".bad");
+			let check_good = "good";
+			if(res){ // 로그인 체크
+					
 				if(check == 1){ // 좋아요 취소
-					console.log('좋아요 취소');
 					deleteGood(good_code);
+					changeValue(tag, good_img, bad_img, check_good);
+
 				}else if(check == 2){ // 좋아요 수정
-					console.log('좋아요 추가');
 					updateGood(good_code, '1');
+					changeValue(tag, good_img, bad_img, check_good);
+
 				}else{ // 좋아요 추가
-					console.log('좋아요 추가')
-					insertGood(video_code, good_code, '1');
+					good_code = insertGood(good_code, '1');
+					changeValue(tag, good_img, bad_img, check_good);
+
 				}	
-			}else{
-				insertGood(video_code, good_code, '1');
+
+			}else{ // 로그인 x
+				alert('로그인 해주세요');
 			}
+			
+	
+		});
+		// 싫어요 클릭
+		$(".watch_bad_btn").on("click", function(){
+
+			let check = $(this).parent().attr("data-value");
+			
+			let bad_img = $(this).find(".bad");
+			let tag = $(this).parent();
+			let good_img = tag.find(".good");
+			let check_good = "bad";
+			//changeImg(check, good_img);
+			if(res){ // 로그인 체크
+					
+				if(check == 2){ // 싫어요 취소
+					deleteGood(good_code);
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}else if(check == 1){ // 싫어요 수정
+					updateGood(good_code, '2');
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}else{ // 싫어요 추가
+					good_code = insertGood(good_code, '2');
+					console.log(good_code);
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}	
+
+			}else{ // 로그인 x
+				alert('로그인 해주세요');
+			}
+			
+	
+		});
+
+
+		// 댓글 좋아요
+		$(document).on("click", ".reply_good_btn", function(){
+
+			let feedback_code = $(this).parents().closest(".reply_box").find(".reply_code");
+
+			let res = getSession();
+			let check = $(this).parent().attr("data-value");
+			let tag = $(this).parent();
+
+			let check_good = "good";
+			if(res){ // 로그인 체크
+					
+				if(check == 1){ // 좋아요 취소
+					console.log('del');
+					deleteGoodFeedback(feedback_code);
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}else if(check == 2){ // 좋아요 수정
+					console.log('up');
+					updateGoodFeedback(feedback_code, '1');
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}else{ // 좋아요 추가
+					console.log('in');
+					good_code = insertGoodFeedback(feedback_code, '1');
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}	
+
+			}else{ // 로그인 x
+				alert('로그인 해주세요');
+			}
+			
 	
 		});
 		
+
+		// 댓글 싫어요
+		$(".reply_bad_btn").on("click", function(){
+
+			let res = getSession();
+			let check = $(this).parent().attr("data-value");
+			let tag = $(this).parent();
+			let bad_img = tag.find(".reply_bad");
+			let good_img = tag.find(".reply_good");
+			let check_good = "bad";
+			if(res){ // 로그인 체크
+					
+				if(check == 1){ // 좋아요 취소
+					deleteGood(good_code);
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}else if(check == 2){ // 좋아요 수정
+					updateGood(good_code, '1');
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}else{ // 좋아요 추가
+					good_code = insertGood(good_code, '1');
+					changeValue(tag, good_img, bad_img, check_good);
+
+				}	
+
+			}else{ // 로그인 x
+				alert('로그인 해주세요');
+			}
+			
+	
+		});		
  
  
  });

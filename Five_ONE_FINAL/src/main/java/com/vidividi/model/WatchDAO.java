@@ -41,5 +41,11 @@ public interface WatchDAO {
 	public int deleteGood(String good_code);
 
 	public int updateGood(String good_code, int good_bad);
+
+	public void insertSubscribe(String subscribe_code, String channel_code, String repChannelCode);
+
+	public void deleteSubscribe(String subscribe_code);
+
+	public int getVideoGoodCount(String video_code);
 	
 }

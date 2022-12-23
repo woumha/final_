@@ -172,4 +172,29 @@ public class WatchDAOImpl implements WatchDAO {
 		
 		return this.sqlSession.update("updateGood", map);
 	}
+
+
+	@Override
+	public void insertSubscribe(String subscribe_code, String channel_code, String repChannelCode) {
+
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("subscribe_code", subscribe_code);
+		map.put("channel_code", channel_code);
+		map.put("repChannelCode", repChannelCode);
+		
+		this.sqlSession.insert("insertSubscribe", map);
+	}
+
+
+	@Override
+	public void deleteSubscribe(String subscribe_code) {
+		this.sqlSession.delete("deleteSubscribe", subscribe_code);
+	}
+
+
+	@Override
+	public int getVideoGoodCount(String video_code) {
+		return this.sqlSession.selectOne("getVideoGoodCount", video_code);
+	}
 }
