@@ -18,7 +18,7 @@ $(function() {
 			ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
 			type: "post"
 	});
-		
+	
 	defaultProfil = profilFile.files[0];
 	
 	$(".profil_settings").on("click", function() {
@@ -67,75 +67,68 @@ $(function() {
 		}
 	});
 	
-	// 미사용
-	$(".submit_btn").on("click", function() {
-		$.ajaxSetup({
-			ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
-			type: "post"
-		});
-		
-		let code = $("#mvcode").val();
-		
-		let title = $("#exampleDataList").val();
-		
-		let cont = $("#floatingTextarea2").val();
-		
-		let selectPlayList = $("#update_playList option:selected").text();
-		
-		let radioAgeId = $('input[name=flexRadioDefault_age]:checked').attr("id");
-		let radioAge = $("label[for='" + radioAgeId + "']").text();
-		
-		let radioOpenId = $("input[name=flexRadioDefault_openClose]:checked").attr("id");
-		let radioOpen = $("label[for='" + radioOpenId + "']").text();
-		
-		let form_mv = $("#input_file");
-		let form_img = $("#input_img");
-		
-		let formData = new FormData();
-		formData.append("video_code", code);
-		formData.append("video_title", title.trim());
-		formData.append("video_cont", cont.trim());
-		formData.append("video_playList", selectPlayList.trim());
-		formData.append("flexRadioDefault_age", radioAge.trim());
-		formData.append("flexRadioDefault_openClose", radioOpen.trim());
-		formData.append("file_mv", form_mv[0].files[0]);
-		formData.append("file_img", form_img[0].files[0]);
-		
-		let values = formData.values();
-		for(const pair of values) {
-			console.log(pair);
-		}
-		
-		$.ajax({
-			url: getContextPath() + "/video_update_success.do",
-			enctype: "multipart/form-data",
-			type: 'GET',
-			processData: false,
-			contentType: false,
-			cache: false,
-			data: $("#formData").serialize(),
-			success: function() {
-				console.log("good");
-			},
-			error: function() {
-				console.log("bad");
-			}
-		});
+	// 영상을 변경했을시
+	let MVcheck = false;
+	let imgCheck = false;
+	
+	$("#input_file").on("change", function() {
+		MVcheck = true;
+	});
+	
+	// 이미지를 변경했을시
+	
+	$("#input_img").on("change", function() {
+		imgCheck = true;
 	});
 	
 	
+	// 수정 버튼 클릭시
 	$(".up_btn").on("click", function() {
-		let cont = $("#floatingTextarea2").val();
-		if($("#exampleDataList").val().trim() != "") {
-			if(cont == "") {
-				$("#floatingTextarea2").val("null");
+		if($("#input_file").val().trim() != "") {
+			if($("#exampleDataList").val().trim() != "") {
+				if($("#floatingTextarea2").val().trim() == "") {
+					$("#floatingTextarea2").val("null");
+				}
+				
+				// 공개 여부
+				const radioOpenId = $('input[name=flexRadioDefault_openClose]:checked').attr("id");
+				const radioOpen = $("label[for='" + radioOpenId + "']");
+				
+				// 아동용, 성인용
+				const radioAgeId = $('input[name=flexRadioDefault_age]:checked').attr("id");
+				const radioAge = $("label[for='" + radioAgeId + "']");
+				
+				const inputAge = `<input type='hidden' name='select_Age' value='${radioAge}' >`;
+				const inputOpen = `<input type='hidden' name='select_openClose' value='${radioOpen}'>`;
+				
+				const bundle = $("#bundleCheck option:selected").text();
+				const bundleTag = `<input type='hidden' name='bundleText' value='${bundle}'>`;
+				
+				
+				$(".age_select").append(inputAge);
+				$(".open_check").append(inputOpen);
+				$(".bundleDiv").append(bundleTag);
+				
+				console.log(MVcheck + " " + imgCheck);
+				
+				if(MVcheck == true || imgCheck == true) {
+					$("#formData").attr("action", getContextPath() + "/video_update_success.do?cp=3");
+					$("#formData").submit();
+				} else if(MVcheck == true && imgCheck == false) {
+					$("#formData").attr("action", getContextPath() + "/video_update_success.do?cp=2");
+				} else if(MVcheck == false && imgCheck == true) {
+					$("#formData").attr("action", getContextPath() + "/video_update_success.do?cp=1");
+				} else {
+					// 이미지 및 영상을 변경하지 않았을 때
+					$("#formData").attr("action", getContextPath() + "/video_update_success.do?cp=0");
+				}
+				$("#formData").submit();
+				
+			} else {
+				alert("제목을 입력 안하셨어요 :)");
 			}
-			
-			$("#formData").submit();
 		} else {
-			alert("제목을 입력해주세요.")
-			let problem = document.createElement("span");
-			
+			alert("영상을 넣어주세요 :)");
 		}
 	});
 	

@@ -23,7 +23,7 @@
 	<input type="hidden" id="chaName" value="${channelOwner.channel_name }">
 	<div class="container col-xl-12 align-middle" style="margin-top: 0.5%;">
 	  <div class="row justify-content-center">
-	    <div class="col-4 col-xl-3 d-xl-block d-xxl-none">
+	    <div class="col-4 col-xl-3 d-none d-xl-block d-xxl-none" align="center">
 	      	<div class="card left_card" style="width: 18rem;">
 			  <img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" class="card-img-top left_img channel-backcolor" onload="changeBackColor('${channelOwner.getChannel_code()}')" alt="...">
 			  <button class="btn btn-primary profil_settings">
@@ -31,7 +31,7 @@
 			  		이미지 수정하기  				  	
 			  	</font>
 			   </button>
-		  		<input type="file" name="file" class="profil_input" hidden />			   
+		  		<input type="file" name="file" class="profil_input" />			   
 			 
 			  <div class="card-body">
 			    <h5 class="card-title">
@@ -50,7 +50,7 @@
 				</div>
 			</div>
 	    </div>
-	    <div class="col-6 col-xl-7">
+	    <div class="col-12 col-xl-8">
 		    <div class="row">
 			    <c:if test="${empty mvlist }">
 			    	<div class="col-12 align-self-center div_upload_btn">
@@ -97,7 +97,13 @@
 								</c:if>
 					  		</td>
 					  		<td>
-					  			child? 
+					  			<c:if test="${mvdto.video_age eq 'true' }">
+					  				아동용
+					  			</c:if>
+					  			<c:if test="${mvdto.video_age ne 'true' }">
+					  				성인용
+					  			</c:if>
+					  			 
 					  		</td>
 					  		<td>
 					  			 ${mvdto.video_view_cnt }

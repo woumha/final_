@@ -1,12 +1,25 @@
 package com.vidividi.five.one;
 
+import java.io.BufferedReader;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.net.URL;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,10 +69,9 @@ public class MemberController {
 	
 	@Autowired
 	private LoginHistoryService loginHistoryService;
-	
+  
 	@Autowired
 	private SocialLoginService socialservice;
-	
 	
 	@RequestMapping("login.do")
 	public String login() {

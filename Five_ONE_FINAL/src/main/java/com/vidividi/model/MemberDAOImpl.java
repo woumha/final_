@@ -86,5 +86,5 @@ public class MemberDAOImpl implements MemberDAO {
 	public String isGoogleLinked(GoogleLoginDTO dto) {
 		return this.sqlSession.selectOne("isGoogleLinked", dto);
 	}
-	
+
 }

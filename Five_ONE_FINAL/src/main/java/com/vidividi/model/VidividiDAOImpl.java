@@ -92,6 +92,4 @@ public class VidividiDAOImpl implements VidividiDAO {
 	public int getListCount() {
 		return this.sqlSession.selectOne("count");
 	}
-
-
 }

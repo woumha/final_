@@ -26,4 +26,6 @@ public interface VidividiDAO {
 	
 	List<MainListDTO> searchVideoList_new(String field, String keyword, String option, int startNo, int endNo);
 	
+	
+	
 }

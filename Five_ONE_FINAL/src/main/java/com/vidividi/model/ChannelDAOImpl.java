@@ -34,11 +34,13 @@ public class ChannelDAOImpl implements ChannelDAO {
 	
 	// 영상 업로드
 	@Override
-	public int setVideoUpload(VideoPlayDTO playDTO) {
+	public int setVideoUpload(VideoPlayDTO playDTO, PlaylistDTO playlistDTO) {
+		int check = 0;
 		if(this.session.insert("videoInsert", playDTO) > 0) {
 			// PlaylistDTO Insert 해야함
+			check = this.session.insert("playListInsert", playlistDTO);
 		}
-		return this.session.insert("videoInsert", playDTO);
+		return check;
 	}
 	
 	// 영상 전체 목록

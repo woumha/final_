@@ -3,9 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
-<c:set var="playList" value="${list }" />
-<c:set var="bundle" value="${playBundle }" />
-<c:set var="mainCategory" value="${cateList }" />
+<c:set var="playList" value="${list }" /> <!-- videoplay -->
+<c:set var="mainCategory" value="${cateList }" /> <!-- category -->
+<c:set var="bundle" value="${playBundle }" /> <!-- bundle -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,10 +20,10 @@
 
 	<!-- Vertically centered scrollable modal -->
 	<div class="modal-body">
-		<form method="post" id="formData" enctype="multipart/form-data" action="<%=request.getContextPath() %>/video_update_success.do">
+		<form method="post" id="formData" enctype="multipart/form-data" action="<%=request.getContextPath() %>/video_update_success.do?videoCode=${playList.video_code }">
+		<input type="hidden" name="subVideoCode" value="${playList.video_code }">
+		<input type="hidden" name="channelCode" value="${playList.channel_code }">
 	  	<div class="container text-center">
-	  		<input type="hidden" id="mvcode" name="video_code" value="${playList.video_code }">
-	  		<input type="hidden" name="channel_code" value="${playList.video_code }">
 	  	  <div class="row">
 		      <div class="col-md-2">
 		      	<div class="upload-font">V I D I D I</div>
@@ -41,7 +41,7 @@
 		      	<source class="source_tag" src="${path }/resources/AllChannel/${playList.channel_code}/${playList.video_title}.mp4" type="video/mp4">
 		      </video>
 		     </div> 
-		      <input id="input_file" hidden type="file" name="file_mv">
+		      <input id="input_file" type="file" hidden name="file_mv">
 		    </div>
 		    
 		    <div class="col-6">
@@ -76,7 +76,7 @@
 		  		<c:if test="${!empty mainCategory }">
 		  			<select id="category_List" name="category_List" class="form-select" size="3" aria-label="size 3 select example">
 					  <c:forEach items="${mainCategory }" var="categoryList">
-					      	<option value="${categoryList.category_code }">${categoryList.category_title }</option>
+					      	<option value="${categoryList.category_code }" <c:if test="${playList.category_code eq categoryList.category_code}" >selected</c:if>>${categoryList.category_title }</option>
 					  </c:forEach>
 					</select>
 		  		</c:if>
@@ -88,15 +88,14 @@
 		  	<div class="col-12" align="left">
 		  		<strong>재생목록</strong>
 		  	</div>
-		  	<div class="col-12">
-		  		
+		  	<div class="col-12 bundleDiv">
 		  		<c:if test="${empty bundle }">
 		  			<a href="#" class="text-decoration-none" style="display: flex;">재생목록이 없어요. 재생목록을 추가해보세요!</a>
 		  		</c:if>
 		  		<c:if test="${!empty bundle }">
-		  			<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
-					  <c:forEach items="${bundle }" var="play">
-					      	<option value="${play.playlist_code }">${play.playlist_title }</option>
+		  			<select id="bundleCheck" name="bundleValue" class="form-select" size="3" aria-label="size 3 select example">
+					  <c:forEach items="${bundle }" var="bundlelist">
+					      	<option value="${bundlelist.bundle_code }" <c:if test="${bundlelist.bundle_code eq list.playList_code }">selected</c:if>>${bundlelist.bundle_title }</option>
 					  </c:forEach>
 					</select>
 		  		</c:if>
@@ -152,7 +151,7 @@
 		  </div>
 		  <hr>
 		  <div class="row">
-			<strong>영상 첫이미지 선택하기</strong>
+			<strong>영상 첫이미지 수정하기</strong>
 			<div class="input-group mb-3">
 			  <input type="file" id="input_img" name="file_img" class="form-control" id="inputGroupFile02">
 			</div>		  

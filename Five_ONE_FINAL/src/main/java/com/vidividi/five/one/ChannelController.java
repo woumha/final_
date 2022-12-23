@@ -1,11 +1,15 @@
 package com.vidividi.five.one;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 
 
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -125,7 +130,7 @@ public class ChannelController {
 		
 		List<CategoryDTO> categoryList = this.videodao.getCategoryList(); // 카테고리 리스트
 		
-		model.addAttribute("uploadOwner", channelDTO);
+		model.addAttribute("uploadOwner", ownerCode);
 		model.addAttribute("list", bundleList);
 		model.addAttribute("cateList", categoryList);
 		
@@ -162,11 +167,14 @@ public class ChannelController {
 		
 		String[] name = fileName(mRequest); // 파일명 가져오기
 		
-//		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
-//			System.out.println("성공");
-//		} else {
-//			System.out.println("실패");
-//		}
+		System.out.println("name0: " + name[0]);
+		System.out.println("name1: " + name[1]);
+		
+		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
+			System.out.println("성공");
+		} else {
+			System.out.println("실패");
+		}
 		
 		String cookingVideoCode = service.generateVideoCode(); // 비디오코드
 		int category = Integer.parseInt(categoryList);
@@ -175,18 +183,17 @@ public class ChannelController {
 		VideoPlayDTO playdto = new VideoPlayDTO();
 		playdto.setVideo_code(cookingVideoCode);
 		playdto.setChannel_code(channelCode); // 채널 코드
-		playdto.setChannel_name(channelWorlddto.getChannel_name());
-		playdto.setVideo_title(title + ".mp4");
+		playdto.setVideo_title(title);
 		playdto.setVideo_cont(context);
-		playdto.setVideo_img(name[0]);
+		playdto.setVideo_img(title + ".png");
 		playdto.setVideo_hash(null);
 		playdto.setCategory_code(category); // value값 가져온다
 		
 		// playlist 테이블
 		PlaylistDTO playbundledto = new PlaylistDTO();
 		playbundledto.setChannel_code(channelCode.trim());
-		playbundledto.setPlaylist_code(bundleCode.trim()); // 재생목록 코드
 		playbundledto.setPlaylist_title(bundleText.trim()); // 재생목록 이름
+		playbundledto.setPlaylist_code(bundleCode.trim()); // 재생목록 코드
 		playbundledto.setVideo_code(cookingVideoCode.trim());
 		
 		
@@ -204,10 +211,10 @@ public class ChannelController {
 		
 		if(open.trim().equals("시청자들과 같이 보기")) {
 			//bundledto.setPlaylist_open(1); // 재생목록 공개
-			playdto.setVideo_open(0); // 비디오 공개
+			playdto.setVideo_open(1); // 비디오 공개
 		} else if(open.trim().equals("나만 보기")) {
 			//bundledto.setPlaylist_open(0); // 재생목록 비공개
-			playdto.setVideo_open(1); // 비디오 비공개
+			playdto.setVideo_open(0); // 비디오 비공개
 		} else {
 			out.println("<script>"
 					+ "alert('스크립트 오류');");
@@ -215,15 +222,14 @@ public class ChannelController {
 					+ "</script>");
 		}
 		
-		System.out.println("playdto: " + playdto);
-		int check = this.dao.setVideoUpload(playdto);
+		int check = this.dao.setVideoUpload(playdto, playbundledto);
 		
 		
 		System.out.println("check: " + check);
 		if(check > 0 ) {
 			out.println("<script>"
 					+ "alert('업로드 완료');"
-					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelWorlddto.getChannel_code() +"';");
+					+ "location.href='" + request.getContextPath() +"/channel.do?mc="+ channelCode +"';");
 			out.println("</script>");
 		} else {
 			out.println("<script>"
@@ -251,14 +257,7 @@ public class ChannelController {
 	// 체널 프로필 이미지 업로드
 	@RequestMapping("channel_profil.do")
 	public void profilImg(Model model, HttpServletResponse response) throws IOException {
-		//System.out.println("mrequest: " + mRequest);
 		
-		
-		sendPosition = "profilChange";
-		//uploadFile.fileChangeUpload(mRequest, sendPosition, chCode, dynamicPath());
-		
-		//int check = this.dao.setChangeChannelProfil(chCode);
-		//PrintWriter out =  response.getWriter();
 	}
 	
 	
@@ -271,39 +270,117 @@ public class ChannelController {
 		
 		playdto = this.videodao.getVideoOne(code); // 비디오 코드
 		
-		// 영상 코드의 주인
-		List<PlaylistDTO> playListTitle = this.dao.getPlayList(playdto.getChannel_code()); // 재생목록 리스트
+		List<CategoryDTO> categoryList = this.videodao.getCategoryList(); // 카테고리 리스트
+		List<BundleDTO> bundleList = this.bundledao.getBundleList(playdto.getChannel_code()); // 재생목록 리스트
 		
-		
-		model.addAttribute("list", playdto);
-		model.addAttribute("playBundle", playListTitle);
+		model.addAttribute("list", playdto); // videoplay
+		model.addAttribute("cateList", categoryList); // category
+		model.addAttribute("playBundle", bundleList); // bundle
 		
 		
 		return "channel/channel_update_modal";
 	}
 	
 	
-	// 영상 수정 완료
+	// 영상, 이미지 수정시
 	@RequestMapping("video_update_success.do")
 	public void setVideoUpdateSuccess(MultipartHttpServletRequest mRequest,
-			@RequestParam("video_code") String code, 
+			HttpServletResponse response,
+			HttpServletRequest request,
+			@RequestParam("cp") String cp,
+			@RequestParam("subVideoCode") String videoCode, 
 			@RequestParam("video_title") String title, 
 			@RequestParam(value="video_cont", required = false) String cont,
-			@RequestParam("video_playList") String list,
-			@RequestParam("flexRadioDefault_age") String age,
-			@RequestParam("flexRadioDefault_openClose") String open,
-			@RequestParam("channel_code") String channelCode) {
+			@RequestParam("category_List") String categoryCode,
+			@RequestParam("bundleValue") String bundleValue,
+			@RequestParam("bundleText") String bundleText,
+			@RequestParam("select_Age") String age,
+			@RequestParam("select_openClose") String open,
+			@RequestParam("channelCode") String channelCode) throws IOException {
 		
 		
-		String position = "uploadMVChange";
+		response.setContentType("text/html charset=utf-8");
+		System.out.println(age.trim() + " " + open.trim());
 		
-		VideoPlayDTO playdto = new VideoPlayDTO();
-		playdto.setVideo_code(code);
-		playdto.setVideo_title(title);
-		playdto.setVideo_cont(cont);
-		// list는 재생목록에
+		String[] name = fileName(mRequest); // 파일명 가져오기
+		for(int i=0; i<name.length; i++) {
+			System.out.println("name: "+ name[i]);
+		}
+		// 파일 값 수정
+		//videoCode
+		VideoPlayDTO playdtoSearch = this.videodao.getVideoOne(videoCode);
+		if(fileDelete(cp, channelCode, playdtoSearch)) { // 파일 삭제
+			if(uploadFile.fileUpload(mRequest, channelCode.trim(), title.trim())) {
+				System.out.println("성공");
+			} else {
+				System.out.println("실패");
+			}
+		} else {
+			System.out.println("변경된 파일이 없습니다.");
+		}
+		
+		// 삭제 및 수정 끝
+		
+		// DB값 수정
+		PrintWriter out = response.getWriter();
+		
+		VideoPlayDTO videodto = new VideoPlayDTO();
+		videodto.setVideo_code(videoCode);
+		videodto.setVideo_title(title);
+		videodto.setVideo_cont(cont);
+		videodto.setCategory_code(Integer.parseInt(categoryCode));
+		
+		int upCheck = Integer.parseInt(cp);
+		if(upCheck == 1 || upCheck == 3) {
+			videodto.setVideo_img(title.trim() + ".png");	
+		} else {
+			
+		}
+		
+		if(age.trim().equals("예 아동용 입니다")) {
+			videodto.setVideo_age("true");
+		} else if(age.trim().equals("아니요 성인용 입니다")) {
+			videodto.setVideo_age("false");
+		} else {
+			out.println("<script>"
+					+ "alert('스크립트 오류');");
+			out.println("history.back();"
+					+ "</script>");
+		}
+		
+		if(open.trim().equals("시청자들과 같이 보기")) {
+			//bundledto.setPlaylist_open(1); // 재생목록 공개
+			videodto.setVideo_open(1); // 비디오 공개
+		} else if(open.trim().equals("나만 보기")) {
+			//bundledto.setPlaylist_open(0); // 재생목록 비공개
+			videodto.setVideo_open(0); // 비디오 비공개
+		} else {
+			out.println("<script>"
+					+ "alert('스크립트 오류');");
+			out.println("history.back();"
+					+ "</script>");
+		}
+		
+		
+		PlaylistDTO playdto = new PlaylistDTO();
+		playdto.setPlaylist_code(bundleValue);
+		playdto.setPlaylist_title(bundleText);
+		playdto.setVideo_code(videoCode);
+		
+		
+		int check = this.videodao.updateUploadVideo(videodto, playdto);
+		System.out.println("check: " +check);
+		if(check > 0) {
+			out.println("<script>"
+					+ "location.href ='"+ request.getContextPath() +"/channel_manager.do?code=" + channelCode +"';");
+			out.println("</script>");
+		} else {
+			out.println("<script>"
+					+ "history.back();"
+					+ "</script>");
+		}
+		// DB값 수정 끝
 	}
-	
 	
 	// 영상 이름 받아오기
 	public String[] fileName(MultipartHttpServletRequest mRequest) {
@@ -330,5 +407,66 @@ public class ChannelController {
 			
 		}
 		return null;
+	}
+	
+	// 영상 파일 삭제
+	public boolean fileDelete(String cp, String channelCode, VideoPlayDTO playdtoSearch) throws IOException {
+		int select = Integer.parseInt(cp);
+		
+		boolean success = true;
+		String eq = playdtoSearch.getVideo_title().trim();
+		
+		String video_dir = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + channelCode + "/";
+		
+		if(select == 3) { // 둘 다 true
+			File dir;
+			dir = new File(video_dir + eq + ".mp4"); // 현재 저장되어 있는 파일
+			
+			if(dir.exists()) {
+				if(dir.delete()) {
+					dir = new File(video_dir + "thumbnail/" + eq + ".png");
+					if(dir.exists()) {
+						if(dir.delete()) {
+							System.out.println("삭제 완료: " + eq + ".mp4 / " + eq +".png");
+						}
+					}
+				}
+			}
+		} else if (select == 2) { // 비디오만 true
+			File dir;
+			dir = new File(video_dir + eq + ".mp4"); // 현재 저장되어 있는 파일
+			
+			if(dir.exists()) {
+				if(dir.delete()) {
+					System.out.println("삭제 완료: " + eq + ".mp4");
+				}
+			}
+		} else if(select == 1) { // 이미자만 true
+			File dir;
+			dir = new File(video_dir + "thumbnail/" + eq + ".png"); // 현재 저장되어 있는 파일
+			
+			if(dir.exists()) {
+				if(dir.delete()) {
+					System.out.println("삭제 완료: " + eq + ".png");
+				}
+			}
+		} else if(select == 0) {  // 둘 다 false
+			success = false;
+		} else { // 그 외
+			res();
+		}
+		
+		return success;
+	}
+	
+	public void res() throws IOException {
+		ServletWebRequest servletContainer = (ServletWebRequest)RequestContextHolder.getRequestAttributes();
+		HttpServletResponse response = servletContainer.getResponse();
+		PrintWriter out = response.getWriter();
+		
+		out.println("<script>");
+		out.println("alert('경로 오류');");
+		out.println("history.back();");
+		out.println("</script>");
 	}
 }
