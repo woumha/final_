@@ -7,8 +7,18 @@
 }
 
 
-#video_table a:hover{
+.video_table a:hover{
 	color: #fc942c !important;
+}
+
+
+.test_video  {
+  transition: all 0.2s linear;
+  overflow: hidden;
+}
+
+.test_video:hover {
+  transform: scale(1.2);
 }
 
 
@@ -16,7 +26,7 @@
 	
 body {
 	font-family: 'Noto Sans KR' !important;
-	cursor: url('../eunji_IMG/bunny.png'),auto;
+	cursor: url('../eunji_IMG/rabbit_cursor.png'),auto;
 }
 
 @media screen and (max-width: 992px) {
@@ -146,7 +156,7 @@ a:active {
 		        padding: .75em 1.5em .5em 1.5em;
 		    }
 		    
-		    #side_wrap{
+		    .l-navbar{
 		    	display: none;
 		    }
 		
@@ -156,29 +166,28 @@ a:active {
 			background-color: #fc942c;
 		}
 		
-     	#video_table{
+     	.video_table{
      		width: 1500px;
      		display: flex;
 	      	flex: 3;
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			margin-left: 22%;
-			margin-top: 25px;
+			margin-left: 18%;
 			padding-left: 10px;
 			
      	}
      	
 		video{
 			border-radius: 10px;
+			margin-top: 0px;
 		}
 		
-		#video_view_ctn, #video_title, #video_channel{
+		.video_view_ctn, .video_title, .video_channel{
 			padding-left: 6px;
-			padding-top: 2px;
 		}
 		
-		#video_view_ctn{
+		.video_view_ctn{
 			padding-bottom: 5px;
 			margin-bottom: 10px;
 		}
@@ -193,7 +202,7 @@ a:active {
      	 	vertical-align: text-top;
      	 }
      	 
-     	 #video_title{
+     	 .video_title{
      		 font-size: 1.1rem;
      		 font-weight: bold;
      	 }
@@ -201,8 +210,10 @@ a:active {
      	 
 /*------------------------------------------유저 이미지 설정-------------------------------------  */	 
      	 
-     	 #ch_img{
-     	 	font-size: 2.5rem;
+     	 .channel_profile{
+     	 	width: 40px;
+     	 	height: 40px;
+     	 	border-radius: 50%;
      	 	padding-top: 2px;
      	 	padding-left: 2px;
      	 }
@@ -346,7 +357,8 @@ button {
 	   
 #re_label{
 	margin-top: -30px;
-	margin-left: 3.1%;
+	margin-bottom: 25px; 
+	margin-left: -2%;
 }
 	  
 	.custom-btn {

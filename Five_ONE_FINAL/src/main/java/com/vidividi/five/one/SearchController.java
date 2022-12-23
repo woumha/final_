@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vidividi.model.VidividiDAO;
+import com.vidividi.variable.MainListDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
@@ -32,15 +33,18 @@ public class SearchController {
 	 //ajax로 list출력(인기순)
 	 @ResponseBody
 	  @RequestMapping("search_result.do")
-	  public List<VideoPlayDTO> search(@RequestParam("field") String field, @RequestParam("keyword") String keyword,
+	  public List<MainListDTO> search(@RequestParam("field") String field, @RequestParam("keyword") String keyword,
 			  			@RequestParam("option") String option, int page) {
 
-		 	int rowsize = 5;
+		 	int rowsize = 10;
 			int startNo = (page * rowsize) - (rowsize - 1);
 			int endNo = (page * rowsize);
 		 
-			List<VideoPlayDTO> searchList = this.dao.searchVideoList(field, keyword, option, startNo, endNo);
-					
+			List<MainListDTO> searchList = this.dao.searchVideoList(field, keyword, option, startNo, endNo);
+			
+			System.out.println("field>>>>" + field);
+			System.out.println("keyword>>>" + keyword);
+			
 			return searchList; 
 	  }
 	 
@@ -48,15 +52,15 @@ public class SearchController {
 	 //ajax로 list출력(최신순)
 	 @ResponseBody
 	  @RequestMapping("search_result_new.do")
-	  public List<VideoPlayDTO> search_new(@RequestParam("field") String field, @RequestParam("keyword") String keyword, 
+	  public List<MainListDTO> search_new(@RequestParam("field") String field, @RequestParam("keyword") String keyword, 
 			  @RequestParam("option") String option, int page) {
 
-		 	int rowsize = 5;
+		 	int rowsize = 10;
 			int startNo = (page * rowsize) - (rowsize - 1);
 			int endNo = (page * rowsize);
 		 
-			List<VideoPlayDTO> searchList2 = this.dao.searchVideoList_new(field, keyword, option, startNo, endNo);
-					
+			List<MainListDTO> searchList2 = this.dao.searchVideoList_new(field, keyword, option, startNo, endNo);
+			
 			return searchList2; 
 		 
 	  }

@@ -1,5 +1,8 @@
 @charset "UTF-8";
-
+	a {
+		text-decoration: none !important;
+		color: inherit !important;
+	}
 	
 	#info-wrap {
 		display: flex;
@@ -45,18 +48,52 @@
 	    border-bottom: 2px solid lightgray;
 	}
 	
-	ul.info-navi li {
+	ul.info-navi > li {
 		font-size: 1.3em;
 		color: gray;
-		transition: all 0.4s;
-		border-bottom: 4px solid transparent;
+		transition: all 0.2s;
+		padding-left: 20px;
+		padding-right: 20px;
+		position: relative;
+		cursor: pointer;
 	}
 	
-	ul.info-navi li:hover {
-		cursor: pointer;
-		border-bottom: 4px solid #fc942c;
+	ul.info-navi > li.navi-this-page {
+		background-color: #fc942c;
+		font-weight: bold;
+		color: white;
+	}
+	
+	ul.info-navi > li.navi-not-page:hover {
+		border-bottom : 4px solid #fc942c;
 	}
 
+	ul.info-navi > li > ul {
+		padding: 0px;
+		position: absolute;
+		top:38px;
+		left:0px;
+		display: none;
+		width: 100%;
+	}
+	
+	ul.info-navi > li > ul > li {
+		list-style-type: none;
+		font-size: 0.8em;
+		background-color: rgb(245, 245, 245);
+		color: gray;
+		padding-top: 12px;
+		padding-bottom: 10px;
+		font-weight: normal;
+	}
+	ul.info-navi > li > ul > li:hover{
+		background-color:#fc942c;
+		color:white;
+	}
+	
+	ul.info-navi > li.info-navi-selected > ul {
+		display: block;
+	}
 
 	#info-protect-card, #info-premium-card {
 		display: inline-block;
@@ -121,6 +158,7 @@
 	#info-channel-card-content {
 		text-align: left;
 	}
+	
 	
 	#info-profile-table {
 		border-collapse: collapse;

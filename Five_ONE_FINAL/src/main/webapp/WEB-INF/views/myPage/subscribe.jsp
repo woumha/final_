@@ -4,11 +4,75 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<c:set var="path" value="${pageContext.request.contextPath }"/>   
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8"> 
 <title>Insert title here</title>
+<script type="text/javascript">
+
+function getContextPath(){
+	
+	let path = location.href.indexOf(location.host)+location.host.length;
+	
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
+
+function getSubscribe_list(member_code){
+
+	$.ajax({
+
+		url : getContextPath() +"/getSubscribe_list.do",
+		data : {
+			"member_code" : member_code,
+		},
+		datatype : 'JSON',
+		contentType : "application/json; charset=UTF-8",
+		success : function(data){
+			
+			let str = data;
+
+			if(str == "[]"){
+				loading = false;
+				
+			}else{
+				
+				let subscribe_div = JSON.parse(data);
+				let div = "";
+				div += "<div class='video_boxs'>"
+				$(subscribe_div).each(function(){
+					div += "<div class='chanel_area'>";
+					div += "<div class='chanel_box'>";
+					div += "<div class='channel_icon'> <img src='"+getContextPath()+"/resources/img/unnamed.jpg'> </div>";
+					div += "<div class='channel_name'>"+this.channel_name+"</div>";
+					div += "</div>";
+					div += "<div class='channel_info'>";
+					div += "<div class='info_box'>";
+					div += "<div class='info_text'>";
+					div += "<p class='channel_like'>구독자 "+this.channel_like+"</p>";
+					div += "</div>";
+					div += "</div>";
+					div += "</div>";
+					div += "<button class='cancel_btn' onclick=''>구독중</button>";
+					div += "</div>";
+				});
+				div += "</div>";
+				loading = true;
+				$("#ajax_area").append(div);
+			}
+		},
+		error : function(){
+			alert('구독목록 불러오기 오류!!!!!!!!!');
+		}
+	}); 
+}
+
+
+
+
+</script>
 </head>
 <body>
 
@@ -25,46 +89,9 @@
 	
 	<c:set var="s_list" value="${subscribe_list }" />
 	<c:if test="${!empty member_code }">
-	<div id="subscribe_title"><p>구독 목록</p></div>
+	<div id="subscribe_title"><p><i class="fa-solid fa-stamp"></i>&nbsp;&nbsp;구독 목록</p></div>
 	<c:if test="${!empty s_list }">
-	<c:forEach items="${s_list }" var="s_dto">
-	<div class="chanel_area">
-		<div class="channel_box">
-			<div class="channel_icon"> <img src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"> </div>
-			<div class="channel_name"> ${s_dto.getChannel_name() } </div>
-		</div> <!-- ".channel_box" end -->
-		
-		<div class="channel_info">
-			<div class="info_box">
-				<div class="info_text">
-					<p class="channel_like">구독자
-						<%-- 구독자 출력 영역 --%>
-						<c:set var="like" value="${s_dto.getChannel_like() }" />
-						<c:if test="${like < 1000 }">${like }명</c:if>
-						<c:if test="${like >= 1000 && like < 10000 }">
-							<fmt:formatNumber value="${like / 1000 }" pattern=".0" />천명
-						</c:if>
-						<c:if test="${like >= 10000 && like < 100000 }">
-							<fmt:formatNumber value="${like / 10000 }" pattern=".0" />만명
-						</c:if>
-						<c:if test="${like >= 100000 && like < 100000000 }">
-							<fmt:formatNumber value="${like / 10000 }" pattern="0" />만명
-						</c:if>
-						<c:if test="${like >= 100000000 }">
-							<fmt:formatNumber value="${like / 100000000 }" pattern=".00" />억명
-						</c:if>
-						<%-- 구독자 출력 영역 끝 --%>
-					</p>
-				</div>
-			</div>
-		</div> <!-- ".channel_info" end -->
-		
-		<button class="cancel_btn" onclick="location.href='<%=request.getContextPath() %>/subscribe_one_delete.do?member_code=${member_code }&channel_code=${s_dto.getChannel_code() }'">
-		구독중
-		</button>
-
-	</div> <!-- ".channel_area" end -->
-	</c:forEach>
+	
 
 	</c:if>
 	<c:if test="${empty s_list }">

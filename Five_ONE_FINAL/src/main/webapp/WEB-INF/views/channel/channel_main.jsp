@@ -33,7 +33,6 @@
 	<jsp:include page="../include/top_include.jsp"/>
 	<jsp:include page="../include/side_include.jsp"/>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel.js"></script>
-	
 	<img src="${path }/resources/hochan_img/vidi.png" id="channel_banner" class="col-lg-12 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
 	<div class="container text-center mb-3">
 	  <div class="row mb-3">
@@ -45,6 +44,7 @@
 			  ${owner.channel_name }
 			</div>
 			<div class="col-sm-12 text-left mb-1" style="font-size: 14px">
+				<input type="hidden" id="ownerCode" value="${owner.channel_code }">
 			  채널&nbsp; ${owner.channel_code }
 			</div>
 			<div class="col-sm-12 text-left mb-1" style="font-size: 14px">
@@ -65,9 +65,9 @@
 			</c:if>	     	
 	     	
 	     	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			    <div class="modal-dialog modal-lg">
+			    <div class="modal-dialog modal-xl" role="document">
 			        <div class="modal-content">
-			       		 <jsp:include page="/movie_upload.do?code=${owner.channel_code }"></jsp:include>
+			       		
 			        </div>
 			    </div>
 			</div>

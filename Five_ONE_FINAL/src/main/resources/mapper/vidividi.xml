@@ -10,63 +10,63 @@
 	</select>
 	
 	<!-- main video list 출력(인기순) -->
-	<select id="video_list" parameterType="hashmap" resultType="VideoPlayDTO">		
+	<select id="video_list" parameterType="hashmap" resultType="MainListDTO">		
 		<![CDATA[
-		   select * from
-			(select v.video_title, video_cont, channel_name, video_view_cnt, video_regdate, video_code, channel_code, row_number() 
-			   over(order by video_good desc) rnum from video_play v)
-			   where rnum >= #{startNo} and rnum <= #{endNo}
+		   select *
+   			 from (select *
+        		from(select row_number() over(order by v.video_good desc) rnum, v.*
+                from (select * from video_play inner join user_channel using (channel_code)) v))
+    			where rnum >=#{startNo} and rnum <=#{endNo}
 		]]>	
 					
 	</select>
 	
 	<!-- main video list 출력(최신순) -->
-	<select id="video_list_up" parameterType="hashmap" resultType="VideoPlayDTO">
+	<select id="video_list_up" parameterType="hashmap" resultType="MainListDTO">
 		<![CDATA[
-		   select * from
-			(select v.video_title, video_cont, channel_name, video_view_cnt, video_regdate, video_code, channel_code, row_number() 
-			   over(order by video_regdate desc) rnum from video_play v)
-			   where rnum >= #{startNo} and rnum <= #{endNo}
-		]]>	
+		   select *
+   			 from (select *
+        		from(select row_number() over(order by v.video_regdate desc) rnum, v.*
+                from (select * from video_play inner join user_channel using (channel_code)) v))
+    			where rnum >=#{startNo} and rnum <=#{endNo}
+		]]>		
+	</select>
+	
+	<!-- main video list 소트 정렬 -->
+	<select id="video_list_sort" parameterType="hashmap" resultType="MainListDTO">		
+		<![CDATA[
+		 select * from
+		(select v.*, row_number() 
+			over(order by video_good desc) rnum
+            from (select * from video_play inner join user_channel using (channel_code))v where category_code = ${option})
+			where rnum >= #{startNo} and rnum <= #{endNo}
+		]]>
 	</select>
 	
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++ 구분해요 ++++++++++++++++++++++++++++++++++++++++++++++ -->	
 
 	<!-- 검색 video list 인기순 출력(제목) -->
-	<select id="searchVideo" parameterType="hashmap" resultType="VideoPlayDTO">
+	<select id="searchVideo" parameterType="hashmap" resultType="MainListDTO">
 		<![CDATA[
-		   select * from
+			select * from
 			(select v.*, row_number() 
-			   over(order by video_good desc) rnum from video_play v
-			   where ${field} like '%' || #{keyword} || '%' )
-			   where rnum >= #{startNo} and rnum <= #{endNo}
-		]]>	
+				over(order by video_good desc) rnum
+                from (select * from video_play inner join user_channel using (channel_code))v
+                where ${field} like '%' || #{keyword} || '%')
+				where rnum >= #{startNo} and rnum <= #{endNo}	
+		]]>
 	</select>
-	
-
-	<!-- 검색 video list 인기순 출력(채널명) -->
-	<select id="ch_name" parameterType="hashmap" resultType="VideoPlayDTO">
-		select * from video_play where ${field} 
-		like '%' || #{keyword} || '%' order by video_good desc
-	</select>
-	
-	<!-- 검색 video list 인기순 출력(해시) -->
-	<select id="vi_hash" parameterType="hashmap" resultType="VideoPlayDTO">
-		select * from video_play where ${field}
-		like '%' || #{keyword} || '%' order by video_good desc
-	</select>
-	
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++ 구분해요 ++++++++++++++++++++++++++++++++++++++++++++++ -->
 	
 	<!-- 검색 video list 최신순 출력(제목) -->
-	<select id="searchVideo_new" parameterType="hashmap" resultType="VideoPlayDTO">		
+	<select id="searchVideo_new" parameterType="hashmap" resultType="MainListDTO">		
 		<![CDATA[
-		   select * from
+			select * from
 			(select v.*, row_number() 
-			   over(order by video_regdate desc) rnum from video_play v where  ${field} like '%' || #{keyword} || '%' )
-			   where rnum >= #{startNo} and rnum <= #{endNo}
-		]]>	
+				over(order by video_regdate desc) rnum
+                from (select * from video_play inner join user_channel using (channel_code))v
+                where ${field} like '%' || #{keyword} || '%')
+				where rnum >= #{startNo} and rnum <= #{endNo}	
+		]]>
 	</select>
-
 	
 </mapper>

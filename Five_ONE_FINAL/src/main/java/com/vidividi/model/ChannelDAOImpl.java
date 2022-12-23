@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
@@ -25,10 +26,19 @@ public class ChannelDAOImpl implements ChannelDAO {
 		return this.session.selectOne("owner", memberDTO);
 	}
 	
+	// 재생목록 리스트
+	@Override
+	public List<PlaylistDTO> getPlayList(String code) {
+		return this.session.selectList("member_playlist", code);
+	}
+	
 	// 영상 업로드
 	@Override
 	public int setVideoUpload(VideoPlayDTO playDTO) {
-		return this.session.insert("video_update", playDTO);
+		if(this.session.insert("videoInsert", playDTO) > 0) {
+			// PlaylistDTO Insert 해야함
+		}
+		return this.session.insert("videoInsert", playDTO);
 	}
 	
 	// 영상 전체 목록
@@ -58,17 +68,19 @@ public class ChannelDAOImpl implements ChannelDAO {
 	}
 	
 	@Override
+	public int deleteChannel(String channelCode) {
+		return this.session.delete("deleteChannel", channelCode);
+	}
+	
+	@Override
 	public List<ChannelDTO> getChannelList(String memberCode) {
 		return this.session.selectList("getChannelList", memberCode);
 	}
-	
-//	@Override
-//	public int setVideoUpload(VideoPlayDTO playDTO) {
-//		return this.session.insert("video_update", playDTO);
-//	}
 	
 	@Override
 	public int setChangeChannelProfil(String channelCode) {
 		return this.session.update("profil_update", channelCode);
 	}
+	
+	
 }

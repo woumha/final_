@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.vidividi.variable.MainListDTO;
 import com.vidividi.variable.TestDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
@@ -25,7 +26,7 @@ public class VidividiDAOImpl implements VidividiDAO {
 
 	//비디오 인기순(메인 페이지)
 	@Override
-	public List<VideoPlayDTO> mainVideo(int startNo, int endNo) {
+	public List<MainListDTO> mainVideo(int startNo, int endNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
         map.put("startNo", startNo);
@@ -36,7 +37,7 @@ public class VidividiDAOImpl implements VidividiDAO {
 	
 	//비디오 최신순(메인 페이지)
 	@Override
-	public List<VideoPlayDTO> mainVideo_up(int startNo, int endNo) {
+	public List<MainListDTO> mainVideo_up(int startNo, int endNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		 map.put("startNo", startNo);
@@ -45,9 +46,22 @@ public class VidividiDAOImpl implements VidividiDAO {
 		return this.sqlSession.selectList("video_list_up", map);
 	}
 	
+	//비디오 메인 소트 정렬
+	@Override
+	public List<MainListDTO> mainVideo_sort(int startNo, int endNo, String option) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("startNo", startNo);
+        map.put("endNo", endNo);
+        map.put("option", option);
+  
+		return sqlSession.selectList("video_list_sort", map);
+	}
+	
 	//인기순 검색
 	@Override
-	public List<VideoPlayDTO> searchVideoList(String field, String keyword, String option, int startNo, int endNo) {
+	public List<MainListDTO> searchVideoList(String field, String keyword, String option, int startNo, int endNo) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -62,7 +76,7 @@ public class VidividiDAOImpl implements VidividiDAO {
 	
 	//최신순 검색
 	@Override
-	public List<VideoPlayDTO> searchVideoList_new(String field, String keyword, String option, int startNo, int endNo) {
+	public List<MainListDTO> searchVideoList_new(String field, String keyword, String option, int startNo, int endNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
         map.put("field", field);

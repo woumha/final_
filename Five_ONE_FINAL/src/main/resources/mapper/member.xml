@@ -27,26 +27,74 @@
 		insert into members values(
 			#{member_code},
 			#{member_id},
-			#{member_id},
+			#{member_name},
 			#{member_pwd},
 			'',
 			'',
+			#{member_email},
 			'',
 			'',
-			'',
-			sysdate,
+			current_date,
 			default,
 			default,
-			sysdate,
+			current_date,
 			default,
 			default,
 			#{member_rep_channel},
-			default			
+			default,
+			default,
+			#{member_google_link}
 		)
 	</insert>
+	<update id="emailAuth" parameterType="memberdto">
+		update members set member_email = #{member_email}, member_email_auth = 1 where member_code = #{member_code}
+	</update>
 	
 	<update id="memberInfoUpdate" parameterType="memberdto">
 		update members set member_name = #{member_name}, member_email = #{member_email}, member_birth = #{member_birth}, member_phone = #{member_phone}, member_addr = #{member_addr} where member_code = #{member_code}
 	</update>
+	
+	<select id="alreadyEmail" parameterType="String" resultType="String">
+		select member_email from members where member_code = #{memberCode} and member_email_auth = 1
+	</select>
+	
+	<update id="emailLogin" parameterType="String">
+		<![CDATA[
+			DECLARE
+			    toggle_protect members.member_protect%TYPE;
+			BEGIN
+			    select member_protect 
+			        into toggle_protect
+			        from members 
+			        where member_code = #{memberCode};
+			    
+			    if toggle_protect = 0 then
+			        update members set member_protect = 1 where member_code = #{memberCode};
+			    end if;
+			 
+			    if toggle_protect = 1 then
+			        update members set member_protect = 0 where member_code = #{memberCode};
+			    end if;
+			END;
+		]]>
+	</update>
+	
+	<insert id="insertLoginHistory" parameterType="loginhistorydto">
+		insert into login_history values (
+			#{member_code},
+			#{login_country},
+			#{login_region},
+			#{login_city},
+			#{login_ip},
+			current_date
+		)
+	</insert>
+	
+	<select id="getLoginHistory" parameterType="String" resultType="loginhistorydto">
+		select * from login_history where member_code = #{memberCode} and login_date > (select to_char(sysdate-30, 'yyyy-mm-dd') from dual) order by login_date desc
+	</select>
+	<select id="isGoogleLinked" parameterType="googledto" resultType="String">
+		select member_google_link from members where member_email = #{google_email}
+	</select>
 	
 </mapper>

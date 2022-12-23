@@ -85,5 +85,40 @@
  		select count(*) from video_play where channel_code = #{channel_code}
  	</select>
 
+	<select id="getSubscribe" parameterType="hashmap" resultType="subscribeDTO">
+		select * from subscribe where channel_code = #{channel_code} and member_code = #{repChannelCode}
+	</select>
+	
+	<select id="getGood" parameterType="hashmap" resultType="GoodDTO">
+		select * from good where video_code = #{video_code} and channel_code = #{repChannelCode}
+	</select>
+	
+	<select id="getFeedback" parameterType="hashmap" resultType="feedbackDTO">
+		select * from feedback_reply where video_code = #{video_code} and channel_code = #{repChannelCode}
+	</select>
+	
+	<insert id="insertGood" parameterType="hashmap">
+		insert into good values(#{good_code}, #{repChannelCode}, #{video_code}, sysdate, #{good_bad})
+	</insert>
+	
+	<delete id="deleteGood" parameterType="String">
+		delete from good where good_code = #{good_code}
+	</delete>
+	
+	<update id="updateGood" parameterType="hashmap">
+		update good set good_bad = #{good_bad} where good_code = #{good_code}
+	</update>
+	
+	<insert id="insertSubscribe" parameterType="hashmap">
+		insert into subscribe values(#{subscribe_code}, #{channel_code}, #{repChannelCode})
+	</insert>
+	
+	<delete id="deleteSubscribe" parameterType="String">
+		delete from subscribe where subscribe_code = #{subscribe_code}
+	</delete>
+	
+	<select id="getVideoGoodCount" parameterType="String" resultType="int">
+		select video_good from video_play where video_code = #{video_code}
+	</select>
 	
 </mapper>

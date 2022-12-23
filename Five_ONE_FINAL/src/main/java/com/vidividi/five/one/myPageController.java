@@ -1,14 +1,13 @@
 package com.vidividi.five.one;
 
 import java.io.*;
-import java.text.DecimalFormat;
+
 import java.util.*;
 import javax.inject.Inject;
 import javax.servlet.http.*;
 
-import org.apache.ibatis.reflection.SystemMetaObject;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,205 +75,38 @@ public class myPageController {
 		return "myPage/myPage";
 	}
 	
-	@RequestMapping("history_test.do")
-	public @ResponseBody List<VideoPlayDTO> history_test(@RequestParam("channel_code") String code) {
-		
-		// 동영상 리스트 불러오기
-		List<VideoPlayDTO> history_list = this.dao.getHistory_list(code);
-		 
-		return history_list;
-	}
-
-	@RequestMapping("playlist_list.do")
-	public String playlist_list(@RequestParam("channel_code") String code,
-								@RequestParam("playlist_code") String no,
-								Model model) {
-		
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("code", code);
-		map.put("no", no);
-		
-		// 현재 세션의 채널, 선택한 재생목록no 에 해당하는 video_play 리스트 불러오기
-		List<VideoPlayDTO> playlist_list = this.dao.getPlaylist_no(map);
-		model.addAttribute("playlist_list", playlist_list);
-		model.addAttribute("playlist_code", no);
-		model.addAttribute("channel_code", code);
-		
-		
-		return "myPage/playlist";
-	}
-	@RequestMapping("playlist_search.do")
-	public String search(@RequestParam("channel_code") String code,
-						@RequestParam("playlist_code") int no,
-						@RequestParam("keyword") String keyword,
-						HttpServletRequest request, Model model) {
-		
-		
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("keyword", keyword);
-		map.put("code", code);
-		map.put("no", no);
-		
-		List<VideoPlayDTO> search_playlist = this.dao.searchPlaylist(map);
-		
-		model.addAttribute("playlist_list", search_playlist);
-		model.addAttribute("channel_code", code);
-		model.addAttribute("playlist_code", no);
-		
-		return "myPage/playlist";
-	}
 	
-	@RequestMapping("good_list.do")
-	public String good_list() {
-
-		return "myPage/good";
-	}
 	
-	@RequestMapping("reply_list.do")
-	public String reply_list() {
-
-		return "myPage/reply";
-	}
-	
-	@RequestMapping("delete_history.do")
-	public void delete_history(@RequestParam("channel_code") String code, HttpServletResponse response) throws IOException {
+	@ResponseBody
+	@RequestMapping(value = "getPlaylist_list.do" , produces = "application/text; charset=UTF-8")
+	public String getReplyList(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
+							   int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		
-		int check = this.dao.delete_history(code);
-		
-		if(check > 0) {
-			out.println("<script>");
-			out.println("location.href='history_list.do?channel_code="+code+"'");
-			out.println("</script>");
-		}else {
-			out.println("<script>");
-			out.println("alert('전체 시청기록 삭제 중 오류 발생')");
-			out.println("history.back()");
-			out.println("</script>");
-		}
-	}
-	
-	@RequestMapping("delete_playlist.do")
-	public void delete_history(@RequestParam("channel_code") String code,
-								@RequestParam("playlist_code") String no,
-								HttpServletResponse response) throws IOException {
-		
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("code", code);
-		map.put("no", no);
-		
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		
-		int check = this.dao.delete_playlist(map);
-		
-		if(check > 0) {
-			out.println("<script>");
-			out.println("alert('재생목록 삭제 완료')");
-			out.println("location.href='myPage_go.do?channel_code="+code+"'");
-			out.println("</script>");
-		}else {
-			out.println("<script>");
-			out.println("alert('재생목록 삭제 중 오류 발생')");
-			out.println("history.back()");
-			out.println("</script>");
-		}
-	}
-	
-	@RequestMapping("history_one_delete.do")
-	public void delete_history(@RequestParam("video_code") int video,
-								@RequestParam("channel_code") String channel,
-								@RequestParam("option") int option,
-								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
-								HttpServletResponse response) throws IOException {
-		
-		System.out.println("video_code >>> " + video);
-		System.out.println("channel_code >>> " + channel);
-		System.out.println("option >>> " + option);
-		System.out.println("keyword >>> " + keyword);
-		
-		
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("video", video);
-		map.put("channel", channel);
-		
-		// 선택된 history_num 가져오기
-		int history_num = this.dao.getHistory_num(map);
-		
 
+		int rowsize = 10;
+		int startNo = (page * rowsize) - (rowsize - 1);
+		int endNo = (page * rowsize);
 		
-		// 선택된 history 데이터 지우기
-		int check = this.dao.history_search_one_delete(history_num);
+		List<PlaylistDTO> list = null;
 		
-		response.setContentType("text/html; charset=UTF-8");
+		JSONArray jArray = new JSONArray();
 		
-		PrintWriter out = response.getWriter();
-		
-		if(check > 0) {
-			
-			this.dao.updateSequence(history_num);
-			
-			// search라면
-			if(option == 2) {
-				out.println("<script>");
-				out.println("location.href='history_list.do?channel_code="+channel+"&option=2&keyword="+keyword+"'");
-				out.println("</script>");
-			} else if(option == 1) {
-				out.println("<script>");
-				out.println("location.href='history_list.do?channel_code="+channel+"&option=1&keyword="+keyword+"'");
-				out.println("</script>");
-			}
-			
-		}else {
-			out.println("<script>");
-			out.println("alert('시청기록 삭제 중 오류 발생')");
-			out.println("history.back()");
-			out.println("</script>");
+		list = this.dao.getPlayList_list(code, startNo, endNo);
+
+		for(PlaylistDTO dto : list) {
+			JSONObject json = new JSONObject();
+			json.put("channel_code", dto.getChannel_code());
+			json.put("playlist_title", dto.getPlaylist_title());
+			json.put("playlist_code", dto.getPlaylist_code());
+			json.put("video_code", dto.getVideo_code());
+			json.put("playlist_regdate", dto.getPlaylist_regdate());
+
+			jArray.add(json);
 		}
+		return jArray.toString();
 	}
 	
-	@RequestMapping("playlist_one_delete.do")
-	public void delete_history(@RequestParam("video_code") String video,
-								@RequestParam("channel_code") String channel,
-								@RequestParam("playlist_code") String no,
-								HttpServletResponse response) throws IOException {
-		
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("video_code", video);
-		map.put("channel_code", channel);
-		map.put("playlist_code", no);
-		
-		System.out.println("video_code >>> " + video);
-		System.out.println("channel_code >>> " + channel);
-		System.out.println("playlist_code >>> " + no);
-		
-		// 선택된 playlist_num 가져오기
-		int playlist_num = this.dao.getPlayList_num(map);
-		
-		// 선택된 playlist_num 데이터 지우기
-		int check = this.dao.playlist_one_delete(map);
-		
-		response.setContentType("text/html; charset=UTF-8");
-		
-		PrintWriter out = response.getWriter();
-		
-		if(check > 0) {
-			
-			this.dao.updateSequence_p(playlist_num);
-			
-			out.println("<script>");
-			out.println("alert('재생목록 삭제 완료')");
-			out.println("location.href='playlist_list.do?channel_code="+channel+"&playlist_code="+no+"'");
-			out.println("</script>");
-		}else {
-			out.println("<script>");
-			out.println("alert('재생목록 삭제 중 오류 발생')");
-			out.println("history.back()");
-			out.println("</script>");
-		}
-	}
 	
 	
 	@RequestMapping("subscribe_list.do")
@@ -286,10 +118,6 @@ public class myPageController {
 			System.out.println("member_code 있음!!!");
 			// 구독 리스트 불러오기
 			List<ChannelDTO> subscribe_list = this.dao.getSubscribe_list(code);
-			
-			// 테스트용 코드 (삭제예정)
-			/* String su = format(10000); */
-			/* System.out.println("su 확인 >>>" + su); */
 			
 			model.addAttribute("subscribe_list", subscribe_list);
 			model.addAttribute("member_code", code);
@@ -305,23 +133,24 @@ public class myPageController {
 		map.put("member_code", member);
 		map.put("channel_code", channel);
 
-		// 선택한 구독 번호 불러오기
-		int num = this.dao.getSubscribe_num(map);
 		
+		  // 선택한 구독 번호 불러오기
+		String code = this.dao.getSubscribe_code(map);
+		 
+		
+	
 		System.out.println("================================================");
-		System.out.println("테스트 subscribe_num >>> " + num);
+		System.out.println("테스트 subscribe_code >>> " + code);
 		System.out.println("================================================");
 		
 		// 선택한 구독 삭제
-		int check = this.dao.subscribe_one_delete(num);
+		int check = this.dao.subscribe_one_delete(code);
 		response.setContentType("text/html; charset=UTF-8");
 		
 		PrintWriter out = response.getWriter();
 		
 		if(check > 0) {
-			this.dao.updateSequence_s(num);
 			out.println("<script>");
-			/* out.println("alert('구독 해제 완료')"); */
 			out.println("location.href='subscribe_list.do?member_code="+member+"'");
 			out.println("</script>");
 		}else {
@@ -332,22 +161,4 @@ public class myPageController {
 		}
 	}	
 
-	
-	
-	
-	
-	/*
-	 * public String format(int no) {
-	 * 
-	 * String result = "";
-	 * 
-	 * DecimalFormat df = new DecimalFormat("#.#");
-	 * 
-	 * if(no >= 10000000) { result = df.format(no/10000000.0) +"천 만"; }else if(no >=
-	 * 10000) { result = df.format(no/10000.0) +"만"; }else if(no >= 1000) { result =
-	 * df.format(no/1000.0) +"천"; }else { result = String.valueOf(no); } return
-	 * result; }
-	 */
-	
-	
 }

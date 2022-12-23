@@ -37,3 +37,8 @@
 	display: flex;
 	text-align: right;
 }
+
+#listmake {
+	font-size: 14px;
+	margin: 6px;
+}

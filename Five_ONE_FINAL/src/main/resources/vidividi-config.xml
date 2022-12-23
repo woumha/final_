@@ -9,6 +9,7 @@
 	<typeAliases>
 		<typeAlias type="com.vidividi.model.VidividiDAO" alias="VidividiDAO"/>
 		<typeAlias type="com.vidividi.variable.TestDTO" alias="TestDTO" />		
+		<typeAlias type="com.vidividi.variable.MainListDTO" alias="MainListDTO" />
 		
 		<typeAlias type="com.vidividi.model.WatchDAO" alias="watchDAO" />
 		<typeAlias type="com.vidividi.variable.ReplyDTO" alias="replyDTO" />
@@ -22,6 +23,8 @@
 		<typeAlias type="com.vidividi.model.MemberDAO" alias="memberdao" />
 		<typeAlias type="com.vidividi.variable.MemberDTO" alias="memberdto" />
 		<typeAlias type="com.vidividi.variable.LoginDTO" alias="logindto" />
+		<typeAlias type="com.vidividi.variable.LoginHistoryDTO" alias="loginhistorydto" />
+		<typeAlias type="com.vidividi.variable.GoogleLoginDTO" alias="googledto" />
 		
 		<!-- Channel -->
 		<typeAlias type="com.vidividi.model.ChannelDAO" alias="channeldao"/>
@@ -30,5 +33,21 @@
 		<!-- VideoPlay -->
 		<typeAlias type="com.vidividi.model.VideoPlayDAO" alias="videoplayDAO"/>
 		<typeAlias type="com.vidividi.variable.VideoPlayDTO" alias="videoplayDTO" />
+		
+		<!-- subscribe -->
+		<typeAlias type="com.vidividi.variable.SubscribeDTO" alias="subscribeDTO" />
+		
+		<!-- good -->
+		<typeAlias type="com.vidividi.variable.GoodDTO" alias="GoodDTO" />
+	
+		<!-- feedback -->
+		<typeAlias type="com.vidividi.variable.FeedbackDTO" alias="feedbackDTO" />
+		
+		<!-- category (main 상단) -->
+		<typeAlias type="com.vidividi.variable.CategoryDTO" alias="categoryDTO"/>
+		
+		<!-- 재생목록 리스트 -->
+		<typeAlias type="com.vidividi.variable.BundleDTO" alias="bundleDTO" />
+		<typeAlias type="com.vidividi.model.BundleDAO" alias="bundleDAO" />
 	</typeAliases>
 </configuration>

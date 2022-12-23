@@ -70,7 +70,7 @@
 <body id="body">
 
 <%--  로딩화면  --%>
-<div id="loading">
+ <div id="loading">
 	<div class="rabbit"></div>
 		<div class="clouds"></div>
 		<div class = "loading_logo">

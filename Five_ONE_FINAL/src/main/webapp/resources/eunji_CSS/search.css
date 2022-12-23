@@ -1,4 +1,22 @@
 @charset "UTF-8";
+
+.test_video  {
+  transition: all 0.2s linear;
+  overflow: hidden;
+}
+
+.test_video:hover {
+  transform: scale(1.15);
+}
+
+/* -----------------------------------------------------------반응형-------------------------------------------------------- */
+
+@media screen and (max-width: 992px) {
+	#adv{
+	 	display: none;
+	 }		
+}
+
 /* -----------------------------------------------------------광고배너 css------------------------------------------------  */
 
  #adv_box{
@@ -14,8 +32,19 @@
    width: 230px;
    height: 480px;
    border-radius: 15px;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+	   				7px 7px 20px 0px rgba(0,0,0,.1),
+	   				4px 4px 5px 0px rgba(0,0,0,.1);
 }
 
+ /*--------------------------------------------------------------유저 이미지 설정-------------------------------------------  */
+.channel_profile{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	padding-top: 2px;
+	padding-left: 2px;
+}
 
 /* -------------------------------------------------------텍스트 설정----------------------------------------------------  */
 
@@ -23,29 +52,24 @@
 	text-decoration: none !important;
 }
 
-a:hover{
+#search_result a:hover{
 	color: #fc942c !important;
 }
 
-a:link {
+#search_result a:link {
     color: black;
 }
 
-a:visited {
+#search_result a:visited {
     color: black;
 }
 
 
-a:active {
+#search_result a:active {
     color: black;
 }
-
 
 /* --------------------------------------------------------------video css---------------------------------------------- */
-#search_video{
-	flex: 8;
-	width: 1500px;
-}
 	
 video{
 	border-radius: 10px;
@@ -201,7 +225,6 @@ padding-top: 2px;
 .switcher__input--yang:checked ~ .switcher__toggle {
   left: 100px;
 }
-
 
 
 /*--------------------------------------------------무한 스크롤 로딩 이벤트-------------------------------------- */

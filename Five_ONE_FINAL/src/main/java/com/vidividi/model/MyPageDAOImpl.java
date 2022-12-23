@@ -25,19 +25,24 @@ public class MyPageDAOImpl implements MyPageDAO {
 	
 	@Override
 	public List<VideoPlayDTO> getHistory_list(String code) {
-		return this.sqlSession.selectList("history_list", code);
+		return this.sqlSession.selectList("m_history_list", code);
 	}
 
 	@Override
 	public List<PlaylistDTO> getPlaylist_list(String code) {
-		return this.sqlSession.selectList("playlist_list", code);
+		return this.sqlSession.selectList("m_playlist_list", code);
 	}
 
 	@Override
 	public List<VideoPlayDTO> getGood_list(String code) {
-		return this.sqlSession.selectList("good_list", code);
+		return this.sqlSession.selectList("m_good_list", code);
 	}
-
+	
+	@Override
+	public List<ReplyDTO> getReply_list(String code) {
+		return this.sqlSession.selectList("m_reply_list", code);
+	}
+	
 	@Override
 	public ChannelDTO getChannel_info(String code) {
 		return this.sqlSession.selectOne("member_channel", code);
@@ -53,20 +58,9 @@ public class MyPageDAOImpl implements MyPageDAO {
 		return this.sqlSession.selectList("channel_sub", code);
 	}
 
-	@Override
-	public List<ReplyDTO> getReply_list(String code) {
-		return this.sqlSession.selectList("reply_list", code);
-	}
 
-	@Override
-	public int delete_history(String code) {
-		return this.sqlSession.delete("delete_history", code);
-	}
 
-	@Override
-	public int updateSequence(int num) {
-		return this.sqlSession.update("updateSeq", num);
-	}
+	
 
 	@Override
 	public List<VideoPlayDTO> getPlaylist_no(Map<String, Object> map) {
@@ -99,58 +93,126 @@ public class MyPageDAOImpl implements MyPageDAO {
 	}
 
 	@Override
-	public List<VideoPlayDTO> history_list(String code) {
-		return this.sqlSession.selectList("history_list", code);
-	}
-
-	@Override
 	public List<ChannelDTO> getSubscribe_list(String code) {
 		return this.sqlSession.selectList("subscribe_list", code);
 	}
 
-	@Override
-	public int getSubscribe_num(Map<String, Object> map) {
-		return this.sqlSession.selectOne("getSubscribe_num", map);
-	}
+	
+	@Override public String getSubscribe_code(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getSubscribe_code", map); }
+	
 
 	@Override
-	public int subscribe_one_delete(int num) {
-		return this.sqlSession.delete("delete_one_subscribe", num);
+	public int subscribe_one_delete(String code) {
+		return this.sqlSession.delete("delete_one_subscribe", code);
 	}
 
-	@Override
-	public int updateSequence_s(int num) {
-		return this.sqlSession.update("updateSeq_s", num);
-	}
+	/*
+	 * @Override public int updateSequence_s(int num) { return
+	 * this.sqlSession.update("updateSeq_s", num); }
+	 */
 
+
+	
+	/* history 페이지 */
 	@Override
-	public List<VideoPlayDTO> getHistoryListCount(String code, int startNo, int endNo) {
+	public List<VideoPlayDTO> getHistoryList(String code, int startNo, int endNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		System.out.println("code >>> "+code);
-		System.out.println("startNo >>> "+startNo);
-		System.out.println("endNo >>> "+endNo);
-		
-		map.put("code", code);
-		map.put("startNo", startNo);
-		map.put("endNo", endNo);
-		
-		return this.sqlSession.selectList("getHistory_list", map);
-	}
-
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getHistory_list", map); }
 	@Override
 	public List<VideoPlayDTO> getHistory_search(Map<String, Object> map) {
-		return this.sqlSession.selectList("history_search", map);
-	}
-	
+		return this.sqlSession.selectList("history_search", map); }
 	@Override
 	public int getHistory_num(Map<String, Object> map) {
-		return this.sqlSession.selectOne("getHistory_num", map);
-	}
-
+		return this.sqlSession.selectOne("getHistory_num", map); }
 	@Override
 	public int history_search_one_delete(int num) {
-		return this.sqlSession.delete("history_search_one_delete", num);
-	}
+		return this.sqlSession.delete("history_search_one_delete", num); }
+	@Override
+	public int updateSequence(int num) {
+		return this.sqlSession.update("updateSeq", num); }
+	@Override
+	public int delete_history(String code) {
+		return this.sqlSession.delete("delete_history", code); }
+
+	/* good 페이지 */
+	@Override
+	public List<VideoPlayDTO> getGoodList_date(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getGood_list_date", map); }
+	@Override
+	public List<VideoPlayDTO> getGoodList_most(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getGood_list_most", map); }
+	@Override
+	public List<VideoPlayDTO> getGoodList_bad(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getGood_list_bad", map); }
+	@Override
+	public List<VideoPlayDTO> getGood_search_date(Map<String, Object> map) {
+		return this.sqlSession.selectList("good_search_date", map); }
+	@Override
+	public List<VideoPlayDTO> getGood_search_most(Map<String, Object> map) {
+		return this.sqlSession.selectList("good_search_most", map); }
+	@Override
+	public List<VideoPlayDTO> getGood_search_bad(Map<String, Object> map) {
+		return this.sqlSession.selectList("good_search_bad", map); }
+	@Override
+	public String getGood_num(Map<String, Object> map) {
+		return this.sqlSession.selectOne("getGood_num", map); }
+	@Override
+	public int getGood_bad(String num) {
+		return this.sqlSession.selectOne("getGood_bad", num); }
+	@Override
+	public int good_search_one_delete(String num) {
+		return this.sqlSession.delete("good_search_one_delete", num); }
+
+	/*
+	 * @Override public int updateSequence_g(int num) { return
+	 * this.sqlSession.update("updateSeq_g", num); }
+	 */
+	
+	@Override
+	public int removeGood(String video) {
+		return this.sqlSession.update("removeGood", video); }
+	@Override
+	public int removeBad(String video) {
+		return this.sqlSession.update("removeBad", video); }
+
+	/* mainPage playlist 더보기 ajax */
+	@Override
+	public List<PlaylistDTO> getPlayList_list(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getPlaylist_list", map); }
+
+	
+	/* playlist */
+	@Override
+	public List<VideoPlayDTO> getPlaylist_new(String code, int startNo, int endNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
+		return this.sqlSession.selectList("getPlaylist_new", map); }
+	@Override
+	public List<VideoPlayDTO> getPlaylist_search(Map<String, Object> map) {
+		return this.sqlSession.selectList("getPlaylist_search", map); }
+
+	@Override
+	public int playlist_search_one_delete(Map<String, Object> map) {
+		return this.sqlSession.delete("playlist_search_one_delete", map); }
+
+	@Override
+	public int delete_playlist(String p_code) {
+		return this.sqlSession.delete("delete_playlist", p_code);}
+
+	@Override
+	public int delete_bundlelist(String p_code) {
+		return this.sqlSession.delete("delete_bundlelist", p_code);}
+
+
 	
 }

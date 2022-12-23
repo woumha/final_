@@ -4,11 +4,108 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<c:set var="c_info" value="${m_channel }" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8"> 
 <title>Insert title here</title>
+
+<!-- 아이콘 관련 링크 -->
+<script src="https://kit.fontawesome.com/ccf3e996b8.js" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
+
+<script type="text/javascript">
+$(document).on("mouseover", ".test_video", function(){
+	 $(this).get(0).play();
+});
+
+$(document).on("mouseout", ".test_video", function(){
+	 $(this).get(0).pause();
+});	
+
+function getContextPath(){
+	let path = location.href.indexOf(location.host)+location.host.length;
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
+/* 넘어온 기본 값 */
+let channel_code = "${channel_code}";
+let page = 1;
+let loading = false;
+
+/* 재생목록 ajax */
+function getPlaylist_list(channel_code, page){
+	
+	let channel_name = '${m_channel.getChannel_name() }';
+	console.log("channel_name >>> " + channel_name);
+	
+	$.ajax({
+		url : getContextPath() +"/getPlaylist_list.do",
+		data : {
+			"channel_code" : channel_code,
+			"page" : page,
+		},
+		datatype : 'JSON',
+		contentType : "application/json; charset=UTF-8",
+		success : function(data){
+			
+			let str = data;
+
+			if(str == "[]"){
+				loading = false;
+				
+				console.log("걸러짐");
+				
+			}else{
+				let playlist = JSON.parse(data);
+				let div = "";
+				
+				console.log("data >>> " + data);
+				console.log("good >>> " + playlist);
+				$(playlist).each(function(){
+					div += "<div class='video_box'>";
+					div += "<div class='playlist_video_div'>";
+					div += "<a href='"+getContextPath()+"/playlist_list.do?channel_code="+channel_code+"&playlist_code="+this.playlist_code+"'>";					
+					div += "<div class='playlist_lid'>";
+					
+					div += "<p class='p_playlist_lid'>재생목록 보기</p>";
+					div += "<img class='playlist_lid_img' src='"+getContextPath()+"/resources/img/playlist_lid1.png'>";
+					div += "</div>";
+					div += "</a>";
+					div += "<video class='video_play' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "</div>";
+					div += "<p class='video_title_p' style='margin-top: 5px;'>"+this.playlist_title+"<p>";
+					div += "<p class='video_channel_p'>"+channel_name+"<p>" ;
+					div += "</div>";
+				});
+				console.log("playlist >>> " + playlist);
+				$("#playlist_area").append(div);
+				
+			}
+		},
+		error : function(){
+			alert('getPlaylist_list 불러오기 오류!!!!!!!!!');
+		}
+	}); 
+};
+
+// 기본 실행 함수
+console.log("기본 함수 진입!!!!");
+getPlaylist_list(channel_code, page);
+
+// 재생목록 더보기 클릭시
+$(document).on("click", "#playlist_more", function(){
+	if(loading == true) {
+		console.log("재생목록 더보기 실행!!!!!");
+		getPlaylist_list(channel_code, page);
+	}else if(loading == false) {
+		$("#playlist_more").css('display', 'none');
+	}
+});
+</script>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/myPage/myPage_CSS/myPage.css">
 </head>
 <body>
@@ -20,7 +117,7 @@
 	<jsp:include page="../include/side_include.jsp"/>
 
 	
-	<c:set var="c_info" value="${m_channel }" />
+	
 
 	<c:if test="${!empty channel_code }">
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
@@ -57,22 +154,21 @@
 	<div id="content_area" class="area_style">
 		
 		<!-- [기록(시청한 동영상)] 박스 -->
+		<c:set var="history" value="${h_list }" />
 		<div id="history_box" class="content_box">
 			<div class="content_title_box">
 				<img id="history_logo" src="${pageContext.request.contextPath}/resources/img/history.png">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">기록</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">기록</a> [${fn:length(h_list)}]</p>
 				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">모두보기</a></p>
 			</div>
 			
-			<c:set var="history" value="${h_list }" />
 			<c:if test="${!empty history }">
 				<c:forEach items="${history }" var="h_dto" begin="0" end="9" step="1">
 					<div class="video_box">
 						<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
 						<p class="video_title_p_his">${h_dto.getVideo_title() }</p>
-						<%-- <img class="more_img${h_dto.getVideo_code() }" src="${pageContext.request.contextPath}/resources/img/more.png"> --%>
-						<p class="video_channel_p">${h_dto.getChannel_name() }<p>
-						<p class="video_views_p">조회수 ${h_dto.getVideo_view_cnt() }회 • ${h_dto.getVideo_regdate() }<p>
+						<p class="video_channel_p"><i class='fa-solid fa-circle-user' id='ch_img'></i>&nbsp;${h_dto.getChannel_name() }<p>
+						<p class="video_views_p">조회수 ${h_dto.getVideo_view_cnt() }회 <i class="fa-solid fa-carrot"></i> ${h_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
 			</c:if>
@@ -88,28 +184,16 @@
 			<div class="content_title_box">
 				<img id="playlist_logo" src="${pageContext.request.contextPath}/resources/img/playlist_lid.png">
 				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">재생목록</a></p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">모두보기</a></p>
+				<%-- <p class="content_title2"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=995">모두보기</a></p> --%>
 			</div>
 			
 			<c:set var="playlist" value="${p_list }" />
 			<c:if test="${!empty playlist }">
-				<c:forEach items="${playlist }" var="p_dto" begin="0" end="4" step="1">
-					<div class="video_box">
-						<!-- 재생목록 덮개 -->
-						<div class="playlist_video_div">
-							<!-- 재생목록 덮개 영역 -->
-							<div class="playlist_lid" onclick="location.href='<%=request.getContextPath() %>/playlist_list.do?channel_code=995&playlist_code=${p_dto.getPlaylist_code() }'">
-								<p class="p_playlist_lid">재생목록 보기</p>
-								<img class="playlist_lid_img" src="${pageContext.request.contextPath}/resources/img/playlist_lid1.png">
-							</div>
-							<video class="video_play" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
-						</div>
-						<p class="video_title_p" style="margin-top: 5px;">${p_dto.getPlaylist_title() }<p>
-						<p class="video_title_p">${p_dto.getPlaylist_code() }<p>
-						<p class="video_channel_p">${c_info.getChannel_name() }<p>
-					</div>
-				</c:forEach>
+			
+				<div id="playlist_area"></div>
+				<button id="playlist_more"><i class="fa-solid fa-caret-down"></i>&nbsp;더보기</button>
 			</c:if>
+			
 			<c:if test="${empty playlist }">
 				<p class="p_none">만들거나 저장한 재생목록이 여기에 표시됩니다.</p>
 			</c:if>
@@ -131,8 +215,8 @@
 					<div class="video_box">
 						<video class="test_video" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
 						<p class="video_title_p">${g_dto.getVideo_title() }<p>
-						<p class="video_channel_p">${g_dto.getChannel_name() }<p>
-						<p class="video_views_p">조회수 ${g_dto.getVideo_view_cnt() }회 • ${g_dto.getVideo_regdate() }<p>
+						<p class="video_channel_p"><i class='fa-solid fa-circle-user' id='ch_img'></i>&nbsp;${g_dto.getChannel_name() }<p>
+						<p class="video_views_p">조회수 ${g_dto.getVideo_view_cnt() }회 <i class="fa-solid fa-carrot"></i> ${g_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
 			</c:if>
@@ -160,9 +244,6 @@
 						<c:if test="${r_dto.getReply_regdate() ne null }">
 							<p class="reply_list_date">작성일 ${r_dto.getReply_regdate() }</p>
 						</c:if>
-						<%-- <c:if test="${r_dto.getReply_regdate() eq null }">
-							<p class="reply_list_date">${r_dto.getReply_update().substring(0,10) }•수정됨 </p>
-						</c:if> --%>
 					</div>
 				</c:forEach>
 			</c:if>

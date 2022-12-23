@@ -4,6 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <c:set var="playList" value="${list }" />
+<c:set var="bundle" value="${playBundle }" />
+<c:set var="mainCategory" value="${cateList }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,16 +64,42 @@
 		    </div>
 		  </div>
 		  <hr>
+		  
+		  <div class="row">
+		  	<div class="col-12" align="left">
+		  		<strong>영상 카테고리</strong>
+		  	</div>
+		  	<div class="col-12">
+		  		<c:if test="${empty mainCategory }">
+		  			<a href="#" class="text-decoration-none" style="display: flex;">카테고리 오류</a>
+		  		</c:if>
+		  		<c:if test="${!empty mainCategory }">
+		  			<select id="category_List" name="category_List" class="form-select" size="3" aria-label="size 3 select example">
+					  <c:forEach items="${mainCategory }" var="categoryList">
+					      	<option value="${categoryList.category_code }">${categoryList.category_title }</option>
+					  </c:forEach>
+					</select>
+		  		</c:if>
+		  	</div>
+		  </div>
+		  
+		  <hr>
 		  <div class="row">
 		  	<div class="col-12" align="left">
 		  		<strong>재생목록</strong>
 		  	</div>
 		  	<div class="col-12">
-		  		<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
-				  <option selected value="1">one</option>
-				  <option value="2">Two</option>
-				  <option value="3">Three</option>
-				</select>
+		  		
+		  		<c:if test="${empty bundle }">
+		  			<a href="#" class="text-decoration-none" style="display: flex;">재생목록이 없어요. 재생목록을 추가해보세요!</a>
+		  		</c:if>
+		  		<c:if test="${!empty bundle }">
+		  			<select id="update_playList" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
+					  <c:forEach items="${bundle }" var="play">
+					      	<option value="${play.playlist_code }">${play.playlist_title }</option>
+					  </c:forEach>
+					</select>
+		  		</c:if>
 		  	</div>
 		  </div>
 		  <hr>
@@ -117,9 +145,9 @@
 				</div>
 		  	</div>
 		  	<div class="col-2 ">
-		  		<button type="submit" class="btn btn-primary up_btn">수 정</button> <!-- submit_btn -->
+		  		<button type="button" class="btn btn-primary up_btn">수 정</button> <!-- submit_btn -->
 		  		&nbsp;
-		  		<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">종 료</button>
+		  		<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">취 소</button>
 		  	</div>
 		  </div>
 		  <hr>

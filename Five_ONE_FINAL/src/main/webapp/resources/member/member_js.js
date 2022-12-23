@@ -66,35 +66,17 @@
 		
 		$(".member-input").focus();
 		$(".member-input").blur();
+		
 	}
 	
-	
-	/* setting 페이지 navi css 제어*/
-	
-	function naviCss(){
-		if ($(location).attr('pathname').indexOf('setting_profile.do') >= 0) {
-			$("ul.info-navi").children('li').eq(0).css('border', '4px solid #fc942c');
-			$("ul.info-navi").children('li').eq(0).css('background-color', '#fc942c');
-			$("ul.info-navi").children('li').eq(0).css('font-weight', 'bold');
-			$("ul.info-navi").children('li').eq(0).css('color', 'white');
-		}else if ($(location).attr('pathname').indexOf('setting_channel.do') >= 0) {
-			$("ul.info-navi").children('li').eq(1).css('border', '4px solid #fc942c');
-			$("ul.info-navi").children('li').eq(1).css('background-color', '#fc942c');
-			$("ul.info-navi").children('li').eq(1).css('font-weight', 'bold');
-			$("ul.info-navi").children('li').eq(1).css('color', 'white');
-		}else if ($(location).attr('pathname').indexOf('setting_protect.do') >= 0) {
-			$("ul.info-navi").children('li').eq(2).css('border', '4px solid #fc942c');
-			$("ul.info-navi").children('li').eq(2).css('background-color', '#fc942c');
-			$("ul.info-navi").children('li').eq(2).css('font-weight', 'bold');
-			$("ul.info-navi").children('li').eq(2).css('color', 'white');
-		}else if ($(location).attr('pathname').indexOf('vidividi_premium.do') >= 0) {
-			$("ul.info-navi").children('li').eq(3).css('border', '4px solid #fc942c');
-			$("ul.info-navi").children('li').eq(3).css('background-color', '#fc942c');
-			$("ul.info-navi").children('li').eq(3).css('font-weight', 'bold');
-			$("ul.info-navi").children('li').eq(3).css('color', 'white');
-		}
+	/* navi CSS 제어 */
+	function naviCSS(){
+		$("ul.info-navi>li").on("mouseover", function(){
+			$(this).addClass('info-navi-selected');
+			$(this).siblings().removeClass('info-navi-selected');
+		});
 	}
-	
+
 	
 	function noCalHolder(){
 		$("input[type=date].date-placeholder").on("change", function(){
@@ -107,3 +89,63 @@
 	} 
 	
 	
+	
+function getChannelList(code){
+	
+	$.ajaxSetup({
+		ContentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		type : "post"								
+	});
+	
+	console.log('ajax로 보낼 멤버 코드 : '+code);
+	
+	$.ajax({
+		url : '/one/getChannelList.do',
+		data: { member_code : code },
+		dataType: "html",
+		success : function(data) {
+			$("#setting-channel-content").empty();
+			$("#setting-channel-content").html(data);
+		},
+		error : function(){
+			toastr.error('채널 목록 불러오기 실패!');
+		}
+	});
+	
+}
+
+
+
+function modalShow(){
+	$(".member-modal").fadeIn();
+	$(".member-modal").css({
+        "top": (($(window).height()-$(".member-modal").outerHeight())/2+$(window).scrollTop())+"px",
+        "left": (($(window).width()-$(".member-modal").outerWidth())/2+$(window).scrollLeft())+"px"
+     }); 
+	$("body").css("overflow","hidden");
+}
+
+function modalHide(){
+	$(".member-modal").fadeOut();
+	$("body").css("overflow","auto");
+}
+
+function toastrSetup(){
+	toastr.options = {
+				  "closeButton": false,
+				  "debug": false,
+				  "newestOnTop": false,
+				  "progressBar": false,
+				  "positionClass": "toast-top-center",
+				  "preventDuplicates": false,
+				  "onclick": null,
+				  "showDuration": "300",
+				  "hideDuration": "1000",
+				  "timeOut": "2000",
+				  "extendedTimeOut": "2000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "fadeIn",
+				  "hideMethod": "fadeOut"
+				}
+}

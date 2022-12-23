@@ -1,6 +1,8 @@
 package com.vidividi.service;
 
+import java.security.SecureRandom;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -25,8 +27,11 @@ public class LoginServiceImpl implements LoginService {
 	@Inject
 	private ChannelDAO channelDAO;
 	
+	@Inject
+	private LoginHistoryService lhservice;
+	
 	@Override
-	public String loginCheck(LoginDTO dto, HttpSession session) {
+	public String loginCheck(LoginDTO dto, HttpSession session) throws Exception {
 		String memberCode = dao.checkMember(dto);
 		MemberDTO memberDTO = dao.getMember(dto);
 		
@@ -36,6 +41,8 @@ public class LoginServiceImpl implements LoginService {
 			System.out.println("로그인 중인 멤버 코드 : "+memberCode);
 			session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
 			System.out.println("대표 채널 코드 : "+memberDTO.getMember_rep_channel());
+			
+			lhservice.setLoginData(memberCode);
 		}
 		
 		return memberCode;
@@ -96,6 +103,87 @@ public class LoginServiceImpl implements LoginService {
 		System.out.println("새로 생성된 비디오 코드 : "+result);
 		
 		return result;
+	}
+	
+
+	@Override
+	public String generatePWD(int size) {
+		char[] charSet = new char[] {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                '!', '@', '#', '$', '%', '^', '&' };
+
+        StringBuffer sb = new StringBuffer();
+        SecureRandom sr = new SecureRandom();
+        sr.setSeed(new Date().getTime());
+
+        int idx = 0;
+        int len = charSet.length;
+        for (int i=0; i<size; i++) {
+            idx = sr.nextInt(len); 
+            sb.append(charSet[idx]);
+        }
+
+        return sb.toString();
+	}
+	
+	@Override
+	public String insertMember(MemberDTO dto, String via) {
+		
+		String result = "";
+		
+		dto.setMember_code(generateMembercode());
+		dto.setMember_rep_channel(generateChannelCode());
+		
+		if (via == "google") {
+			dto.setMember_google_link("1");
+			dto.setMember_pwd(generatePWD(10));
+		}else if (via == "joinForm"){
+			dto.setMember_name(dto.getMember_id());
+			dto.setMember_email("");
+			dto.setMember_google_link("0");
+		}
+		
+		int joinResult = dao.joinMember(dto);
+		System.out.println("회원 가입 결과 : " +joinResult);
+		
+		ChannelDTO channelDTO = newChannel(dto.getMember_code(), dto.getMember_rep_channel(), dto.getMember_name());
+		channelDAO.insertChannel(channelDTO);
+		
+		if (joinResult != 0) {
+			result = dto.getMember_code();
+			System.out.println("반환되는 멤버코드 : "+result);
+		}else if (joinResult == 0) {
+			result = "fail";
+		}
+		
+		return result;
+		
+
+	//재생목록 코드
+	@Override
+	public String generateBundleCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "BC-" + uuid.toString(); // Bundle Code
+		
+		System.out.println("새로 생성된 재생목록 코드: " + result);
+		
+		return result;
+	}
+	
+	// 비디오 좋아요 코드
+	@Override
+	public String generateGoodCode() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "GO-"+uuid.toString();
+		
+		System.out.println("새로 생성된 좋아요 코드 : "+result);
+		
+		return result;
+
 	}
 
 	@Override
