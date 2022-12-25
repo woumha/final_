@@ -6,6 +6,14 @@
 
 <mapper namespace="bundleDAO">
 	<select id="bundleList" parameterType="String" resultType="bundleDTO">
-		select bundle_code, bundle_title from bundlelist where channel_code = #{code} order by bundle_regdate
+		select bundle_code, bundle_title from bundlelist where channel_code = #{ownerCode} order by bundle_regdate
 	</select>
+	
+	<insert id="bundleAdd" parameterType="bundleDTO">
+		insert into bundlelist values (#{bundle_code}, #{bundle_title}, CURRENT_DATE, 1, #{channel_code})
+	</insert>
+	
+	<delete id="bundleDel" parameterType="String">
+		delete from bundlelist where bundle_code = #{bundleCode}
+	</delete>
 </mapper>

@@ -31,7 +31,7 @@
 		   <%-- 업로드 영상 섹션 --%>
 		    <div class="row">
 			    <div class="col-6 ms-auto out-side">
-			    	<div class="drag-area">
+			    	<div class="drag-area" align="center">
 			      		<div class="submit_video">
 				      		<div class="icon icon_change">
 				      			<i class="fas fa-cloud-upload-alt"></i>
@@ -144,7 +144,7 @@
 	        	<div class="col-2">
 	        		<button type="button" class="btn btn-primary video_upload_btn">업로드</button>
 	        		&nbsp;
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+			        <button type="button" class="btn btn-secondary modal_close" data-dismiss="modal">취소</button>
 	        	</div>
 		    </div>
 		    <hr>

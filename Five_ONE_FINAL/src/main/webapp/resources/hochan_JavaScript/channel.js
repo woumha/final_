@@ -27,11 +27,6 @@ $(function() {
 				console.log(false);
 			}
 		});
-		
-		
-    	$("div.modal").modal({
-       	 	href: "movie_upload.jsp"
-   	 	});
 	});
 	
 	

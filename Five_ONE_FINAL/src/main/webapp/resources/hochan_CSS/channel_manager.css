@@ -65,6 +65,10 @@
 	background-color: #ECE9EF;
 }
 
+.bundle_text:hover {
+	color: green;
+}
+
 .child_bundle {
 	padding-left: 20px solid;
 	color: black;
@@ -73,4 +77,14 @@
 
 .child_bundle:hover {
 	color: green;
+}
+
+.icon.black {
+	color: black;
+}
+
+#bDelIndex {
+	float: right;
+	border: 0;
+	background-color: #ECE9EF;
 }

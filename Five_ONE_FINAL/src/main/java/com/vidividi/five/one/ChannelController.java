@@ -1,19 +1,12 @@
 package com.vidividi.five.one;
 
 import java.io.File;
-import java.io.FilenameFilter;
+
 import java.io.IOException;
 
-
-
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -21,13 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
-import org.apache.catalina.connector.Response;
-import org.json.JSONArray;
+import org.json.simple.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,12 +27,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.vidividi.model.BundleDAO;
 import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.VideoPlayDAO;
-import com.vidividi.model.VideoPlayDAOImpl;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.CategoryDTO;
@@ -48,8 +38,6 @@ import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
 import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
-
-import lombok.NonNull;
 
 
 @Controller
@@ -397,6 +385,82 @@ public class ChannelController {
 		}
 		// DB값 수정 끝
 	}
+	
+	
+	// 재생목록 불러오기
+	@ResponseBody
+	@RequestMapping(value="bundleList.do", produces = "application/text; charset=UTF-8")
+	public String bundleList(@RequestParam("ownerCode") String code, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		PrintWriter out = response.getWriter();		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		JSONArray jsonArray = new JSONArray();
+		List<BundleDTO> bundleList = this.bundledao.getBundleList(code);
+		for(BundleDTO dto: bundleList) {
+			JSONObject json = new JSONObject();
+			json.put("bundle_code", dto.getBundle_code());
+			json.put("bundle_title", dto.getBundle_title());
+			json.put("bundle_regdate", dto.getBundle_regedate());
+			json.put("bundle_open", dto.getPlaylist_open());
+			json.put("channel_code", dto.getChannel_code());
+			
+			jsonArray.add(json);
+		}
+		return jsonArray.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "bundleMaking.do", produces = "application/text; charset=UTF-8")
+	public String bundleMaking(@RequestParam("code") String code, @RequestParam("bundleN") String bundleName, Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		System.out.println("in");
+		PrintWriter out = response.getWriter();		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		String bundleCode = service.generateBundleCode();
+		
+		BundleDTO bundledto = new BundleDTO();
+		bundledto.setBundle_code(bundleCode);
+		bundledto.setBundle_title(bundleName);
+		bundledto.setChannel_code(code);
+		
+		int check = this.bundledao.bundleAdd(bundledto);
+		JSONArray jsonArray = new JSONArray();
+		List<BundleDTO> bundleList = this.bundledao.getBundleList(code);
+		
+		if(check > 0) {
+			for(BundleDTO dto: bundleList) {
+				JSONObject json = new JSONObject();
+				json.put("bundle_code", dto.getBundle_code());
+				json.put("bundle_title", dto.getBundle_title());
+				json.put("bundle_regdate", dto.getBundle_regedate());
+				json.put("bundle_open", dto.getPlaylist_open());
+				json.put("channel_code", dto.getChannel_code());
+				
+				jsonArray.add(json);
+			}
+		} else {
+			out.println("<script>");
+			out.println("alert('추가 실패');"
+					+ "history.back();");
+			out.println("</script>");
+		}		
+		return jsonArray.toString();
+	}
+	
+	// 재생목록 삭제
+	@ResponseBody
+	@RequestMapping("BundleDelete.do")
+	public void bundleDelete(@RequestParam("bundleCode") String code, HttpServletResponse response) throws IOException {
+		
+		int check = this.bundledao.bundleDel(code);
+		
+		PrintWriter out = response.getWriter();
+		out.println(check);
+	}
+	
+	
 	
 	// 영상 이름 받아오기
 	public String[] fileName(MultipartHttpServletRequest mRequest) {
