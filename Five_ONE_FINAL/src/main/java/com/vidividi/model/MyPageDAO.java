@@ -19,20 +19,7 @@ public interface MyPageDAO {
 	List<SubscribeDTO> getChannel_sub(String code); 
 	List<ReplyDTO> getReply_list(String code);
 	
-	List<VideoPlayDTO> getPlaylist_no(Map<String, Object> map);
-	List<VideoPlayDTO> searchPlaylist(Map<String, Object> map);
-	int getPlayList_num(Map<String, Object> map);
-	int playlist_one_delete(Map<String, Object> map);
-	int updateSequence_p(int num);
-	int delete_playlist(Map<String, Object> map);
-	
-	List<ChannelDTO> getSubscribe_list(String code);
-
-	String getSubscribe_code(Map<String, Object> map);
-	int subscribe_one_delete(String code);
-	/* int updateSequence_s(int num); */
-	
-	/* history */
+	/* history (시청한 동영상) */
 	List<VideoPlayDTO> getHistoryList(String code, int startNo, int endNo);
 	List<VideoPlayDTO> getHistory_search(Map<String, Object> map);
 	int getHistory_num(Map<String, Object> map);
@@ -40,7 +27,7 @@ public interface MyPageDAO {
 	int updateSequence(int num);
 	int delete_history(String code);
 	
-	/* good */
+	/* good (좋아요, 싫어요 누른 동영상) */
 	List<VideoPlayDTO> getGoodList_date(String code, int startNo, int endNo);
 	List<VideoPlayDTO> getGoodList_most(String code, int startNo, int endNo);
 	List<VideoPlayDTO> getGoodList_bad(String code, int startNo, int endNo);
@@ -50,22 +37,27 @@ public interface MyPageDAO {
 	String getGood_num(Map<String, Object> map);
 	int getGood_bad(String num);
 	int good_search_one_delete(String num);
-	/* int updateSequence_g(int num); */
 	int removeGood(String video);
 	int removeBad(String video);
 	
 	/* mainPage playlist 더보기 ajax */
 	List<PlaylistDTO> getPlayList_list(String code, int startNo, int endNo);
 	
-	/* playlist */
+	/* playlist (재생목록) */
 	List<VideoPlayDTO> getPlaylist_new(String code, int startNo, int endNo);
 	List<VideoPlayDTO> getPlaylist_search(Map<String, Object> map);
 	int playlist_search_one_delete(Map<String, Object> map);
 	int delete_playlist(String p_code);
 	int delete_bundlelist(String p_code);
 	
+	/* subscribe (구독 채널) */
+	List<ChannelDTO> getSubscribe_list(String code, int startNo, int endNo);
+	int delete_one_subscribe(Map<String, Object> map);
 	
-	
+	/* my_reply (내가 작성한 댓글) */
+	List<ReplyDTO> getMy_reply_list(String code, int startNo, int endNo);
+	int delete_group_reply(Map<String, Object> map);
+	int delete_one_reply(Map<String, Object> map);
 	
 	
 }

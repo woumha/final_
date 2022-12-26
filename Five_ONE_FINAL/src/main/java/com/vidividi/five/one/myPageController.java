@@ -108,7 +108,7 @@ public class myPageController {
 	}
 	
 	
-	
+/*	
 	@RequestMapping("subscribe_list.do")
 	public String subscribe_list(@RequestParam(value="member_code", required=false, defaultValue="none") String code, Model model) {
 		
@@ -160,5 +160,5 @@ public class myPageController {
 			out.println("</script>");
 		}
 	}	
-
+*/
 }
