@@ -94,7 +94,7 @@ display: inline-block;
 display: inline-block;
 margin-right: 0px;
 margin-left: 0px;
-margin-bottom: 30px;
+margin-bottom: 10px;
 }
 
 .video_pbox {
@@ -156,6 +156,28 @@ padding-left: 10px;
 padding-top: 2px;
 }
 
+.play_list_plus {
+    vertical-align: top;
+    float: right;
+    padding-bottom: 10px;
+}
+
+
+
+#my_modal {
+  display: none;
+  width: 300px;
+  padding: 20px 60px;
+  background-color: #fefefe;
+  border: 1px solid #888;
+  border-radius: 3px;
+}
+
+#my_modal .modal_close_btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 
 /*-------------------------------------정렬 변환 토글 버튼---------------------------------------- */
 

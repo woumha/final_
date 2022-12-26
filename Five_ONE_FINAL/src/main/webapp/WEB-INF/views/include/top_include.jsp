@@ -94,12 +94,13 @@
 			    <c:set var = "tag" value = "${field }" />
 					<option value="video_title"
 						<c:if test="${tag == 'video_title'}">selected</c:if>>동영상 제목</option>
+					
+					<option value="video_cont"
+						<c:if test="${tag == 'video_cont'}">selected</c:if>>동영상 내용</option>	
 						
 					<option value="channel_name"
 						<c:if test="${tag == 'channel_name'}">selected</c:if>>채널명</option>
-					
-					<option value="video_hash"
-						<c:if test="${tag == 'video_hash'}">selected</c:if>>태그</option>					
+									
 			  </select>
 			</div>
 			
@@ -155,7 +156,7 @@
           <c:set var="ccode" value="${RepChannelCode }" />
 					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'">
 					<i class="fa-regular fa-circle-user"></i>&nbsp;&nbsp;내 채널</li>
-					<li onclick="location.href='<%=request.getContextPath()%>'"> <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
+					<li onclick="location.href='<%=request.getContextPath()%>//myPage_go.do?channel_code=${RepChannelCode}'"> <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					<li><i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
 					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>

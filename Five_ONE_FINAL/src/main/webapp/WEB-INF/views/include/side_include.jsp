@@ -57,7 +57,7 @@
                		 
                		 <a href="#" class="nav__link" id="my_setting">
 	                    <i class="fa-solid fa-gear"></i>
-	                    <span class="nav_name"> &nbsp; 설정 </span>
+	                    <span class="nav_name"> &nbsp; 계정 설정 </span>
                		 </a>
                		 
                		 <a href="#" class="nav__link" id="complain">
@@ -82,6 +82,53 @@ $(document).on("click", "#my_subscribe", function(){
 		alert("구독페이지 연결하기");
 	}
 });
+
+//시청 기록 버튼 클릭 시
+$(document).on("click", "#my_watch_record", function(){
+	if(${empty MemberCode }){
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}else{
+		alert("시청 기록 페이지 연결하기");
+	}
+});
+
+
+//좋아요 동영상 버튼 클릭 시
+$(document).on("click", "#my_like_video", function(){
+	if(${empty MemberCode }){
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}else{
+		alert("좋아요 동영상 페이지 연결하기");
+	}
+});
+
+//나중에 시청할 동영상 버튼 클릭 시
+$(document).on("click", "#my_watch_later", function(){
+	if(${empty MemberCode }){
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}else{
+		alert("나중에 시청할 동영상 페이지 연결하기");
+	}
+});
+
+//내 동영상 버튼 클릭 시
+$(document).on("click", "#my_upload_video", function(){
+	if(${empty MemberCode }){
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}else{
+		alert("내 동영상 연결하기");
+	}
+});
+
+//설정버튼 클릭 시
+$(document).on("click", "#my_setting", function(){
+	if(${empty MemberCode }){
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}else{
+		alert("설정 페이지 연결하기");
+	}
+});
+
 
 
 /* -------------------------------------------------------------------------------------------------------------------  */

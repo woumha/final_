@@ -160,9 +160,13 @@ function getContextPath(){
 				console.log(check);
 
 				let str = data;
+				
+				if(str.length == 0){
+					$(".loading_list").css("display", "none");
+				}
+				
 				if(str == "[]"){
 					loading = false;
-					$(".loading_list").css("display", "none");
 				}else{
 
 					var table = "";
@@ -172,16 +176,18 @@ function getContextPath(){
 					$(data).each(function(){
 					
 					table += "<tr>";
-					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
+					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
+								"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
 					
 					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
 								+ '&nbsp;' + this.video_title + "</td>";
 																	
 					table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
-								"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
+								"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
 					
-					table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+					table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +
+								"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
 					table += "</tr>";
 									
 					table += "<tr>";
@@ -240,6 +246,10 @@ function getMainVideoList_recent(page_rec){
 				console.log(check);
 				
 				let str = data;
+				
+				if(str.length == 0){
+					$(".loading_list").css("display", "none");
+				}
 
 				if(str == "[]"){
 					loading = false;
@@ -253,16 +263,18 @@ function getMainVideoList_recent(page_rec){
 				$(data).each(function(){
 				
 					table += "<tr>";
-					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
+					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
+								"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
 
 					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
 								+ '&nbsp;' + this.video_title + "</td>";
 
 					table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
-								"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
+								"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
 					
-					table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+					table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+								"조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
 					table += "</tr>";
 					
 					table += "<tr>";
@@ -383,6 +395,17 @@ function getMainVideoList_recent(page_rec){
 					
 					console.log("소트 함수 실행");
 					
+					let str = data;
+					
+					if(str.length == 0){
+						$(".loading_list").css("display", "none");
+					}
+
+					if(str == "[]"){
+						loading = false;
+						
+					}else{
+					
 					var table = "";
 					
 					table += "<table class='video_table'>"
@@ -390,14 +413,15 @@ function getMainVideoList_recent(page_rec){
 					$(data).each(function(){
 					
 						table += "<tr>";
-						table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>"
-
+						table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
+									"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
+		
 						table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 									"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
 									+ '&nbsp;' + this.video_title + "</td>";
 
 						table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
-									"<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</td>";
+									"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
 						
 						table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
 						table += "<tr>";
@@ -417,7 +441,8 @@ function getMainVideoList_recent(page_rec){
 					table += "</table>";
 						
 					$(".video_list").append($("<div>").html(table));
-					
+				
+					}//else end
 				},
 				error: function(){
 					alert("소트 정렬 비디오 리스트 ajax 오류입니다.");
@@ -437,7 +462,9 @@ function getMainVideoList_recent(page_rec){
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
 		
 		$(".video_table").remove();
-		check = 0;
+		check = 2;
+        page_rec = 1;
+ 	    page_pop = 1;
 		getMainVideoList_popular(page_pop);
 	});
 	

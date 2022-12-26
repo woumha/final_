@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vidividi.model.VidividiDAO;
 import com.vidividi.variable.MainListDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
@@ -65,8 +66,20 @@ public class SearchController {
 		 
 	  }
 	 
+	 	//재생목록 리스트 불러오기
+	 	@ResponseBody
+		@RequestMapping("playList_result.do")
+		public List<PlaylistDTO> list(@RequestParam("play_code") String play_code) {
+			
+			System.out.println("playListlist 메소드 실행");
+			
+			List<PlaylistDTO> p_list = this.dao.getPlaylistList(play_code);
+			
+			System.out.println("p_list>>>" + p_list);
+			System.out.println("play_code>>" + play_code);
+			
+			return p_list;
+		}
 	  
-	  
-
 
 }
