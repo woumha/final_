@@ -359,8 +359,14 @@ button{
 .reply_good_btn{
 	margin-right: 1rem;
 }
+.comment_good_btn{
+	margin-right: 1rem;
+}
 
 .reply_bad_btn{
+	margin-right: 1rem;
+}
+.comment_bad_btn{
 	margin-right: 1rem;
 }
 

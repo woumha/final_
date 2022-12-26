@@ -31,7 +31,11 @@ $(document).ready(function() {
 	let scroll_check = false;
 
 	
-
+	function repalceEnter(cont){
+		let replace_cont = cont.replaceAll(',', '\\n');
+		console.log('cont re>' +replace_cont);
+		return cont.replaceAll(',', '\\n');
+	}
 
 	function getReply(video_code, reply_option, channel_code, page_reply){
 
@@ -60,13 +64,13 @@ $(document).ready(function() {
 
 
 					$(reply).each(function(){
-						div += "<div class='reply_box card_a'>";
+						div += "<div class='reply_box card_a' data-value='" +this.check_good+ "' data-code='" +this.check_code+ "'>";
 						
-						div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>"
+						div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>";
 
 						div += "<div class='item_a'>";
 						div += "<div class='reply_wrap'>";
-						div += "<div class='input_profile'><img class='profile' src='" +getContextPath()+ "/resources/img/" +this.channel_profil+ "'></div></div></div>"
+						div += "<div class='input_profile'><img class='profile' src='" +getContextPath()+ "/resources/img/" +this.channel_profil+ "'></div></div></div>";
 
 						div += "<div class='input_reply item_a'>";
 
@@ -77,10 +81,11 @@ $(document).ready(function() {
 
 						div += "<div class='reply_cont_box'>";
 						div += "<div id='input_reply_cont'>" +this.reply_cont+ "</div>";
+						//div += "<div id='input_reply_cont'>" +repalceEnter(this.reply_cont)+ "</div>";
 						div += "</div>";
 
 						div += "<div class='reply_action_box'>";
-						div += "<div class='toolbar_wrap card_a' data-value='" +this.check_good+ "'>";
+						div += "<div class='toolbar_wrap card_a'>";
 
 						div += "<div class='reply_good_btn'><div class='card_b'>";
 						if(this.check_good == 1){
@@ -163,7 +168,10 @@ $(document).ready(function() {
 
 				$(comment).each(function(){
 					
-					div += "<div class='comment_wrap card_a'>"; //card
+
+
+					div += "<div class='comment_wrap card_a' data-value='" +this.check_good+ "' data-code='" +this.check_code+ "'>"; //card
+					div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>";
 					// commnet_wrap(item1)
 					div += "<div class='profile'>"; //.comment_wrap(item1)
 					div += "<img class='profile' src='" +getContextPath()+ "/resources/img/" +this.channel_profil+ "'>";
@@ -183,7 +191,7 @@ $(document).ready(function() {
 					div += "<div class='reply_action_box'>"; 
 					div += "<div class='toolbar_wrap card_a'>" //card
 					// toolbar(item1)
-					div += "<div class='reply_good_btn'><div class='card_b'>"; 
+					div += "<div class='comment_good_btn'><div class='card_b'>"; 
 					if(this.check_good == 1){
 						div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon_selected.svg'>";
 					}else{
@@ -192,7 +200,7 @@ $(document).ready(function() {
 					div += "<div>" +this.reply_good+ "</div>";
 					div += "</div></div>"; //.reply_good_btn, .card_b
 					// toolbar(item2)
-					div += "<div class='reply_bad_btn'>"; 
+					div += "<div class='comment_bad_btn'>"; 
 					if(this.check_good == 2){
 						div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon_selected.svg'>";
 					}else{
