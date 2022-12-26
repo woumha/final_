@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<!-- Google -->
 <meta name ="google-signin-client_id" content="279446786317-1d8b3dusm3g9oc69uvskvd84p04eira1.apps.googleusercontent.com">
 <title>Insert title here</title>
 <!-- jQuery -->
@@ -17,8 +18,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<!-- google signin api -->
+<!-- Google signin api -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<!-- KaKao -->
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js"
+  integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	Kakao.init('f76456adebea52ab2b1a18207c100a25');
+</script>
+
+<!-- Naver -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
 
 <script type="text/javascript">
 	$(function(){
@@ -45,6 +56,17 @@
 				  "showMethod": "fadeIn",
 				  "hideMethod": "fadeOut"
 				}
+		
+		var naverLogin = new naver.LoginWithNaverId(
+				{
+					clientId: "jyvqXeaVOVmV",
+					callbackUrl: "http://localhost:8282/one/naver_login.do",
+					isPopup: true
+				}
+			);
+			
+			naverLogin.init();
+		
 	});
 	
 	function loginCheck(){
@@ -95,9 +117,24 @@
 	
 
 	
-      
- 
+	<!-- 카카오 로그인 -->
+	function loginWithKakao() {
+	 console.log('loginWithKakao() 호출됨');
+	 Kakao.Auth.authorize({
+	    redirectUri: 'http://localhost:8282/one/kakao_login.do',
+	  });
+	 
+	}
+	
+	
+	<!--네이버 로그인 -->
+
+
+	
+	
+
 </script>
+
 
 </head>
 <body>
@@ -145,8 +182,16 @@
 				         data-shape="rectangular"
 				         data-logo_alignment="left">
 				      </div>
-					<input type="button" value="카카오 로그인" class="form-btn">
-					<input type="button" value="네이버 로그인" class="form-btn">
+					<div>
+						<a id="kakao-login-btn" href="javascript:loginWithKakao()">
+						  <img src="<%=request.getContextPath() %>/resources/img/kakao_login_medium_wide.png" alt="카카오 로그인 버튼" />
+						</a>
+					</div>
+					<div id="naverIdLogin">
+						<a id="naverIdLogin_loginButton" href="#">
+						  <img src="<%=request.getContextPath() %>/resources/img/naver_login.png" alt="네이버 로그인 버튼" width="300"/>
+						</a>
+					</div>
 					<hr class="horizontal-hr">
 					<div class="login-menu">
 							<a href="<%=request.getContextPath()%>/join.do" class="form-a">
