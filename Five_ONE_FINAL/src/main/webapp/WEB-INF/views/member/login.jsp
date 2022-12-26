@@ -14,9 +14,16 @@
 <!-- member css -->
 <link rel="stylesheet" href="${path}/resources/member/member_login.css">
 <link rel="stylesheet" href="${path}/resources/member/member_cummon.css"> 
+
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
+
 <!-- toast -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- bootstrap icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
 <!-- Google signin api -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -57,16 +64,10 @@
 				  "hideMethod": "fadeOut"
 				}
 		
-		var naverLogin = new naver.LoginWithNaverId(
-				{
-					clientId: "jyvqXeaVOVmV",
-					callbackUrl: "http://localhost:8282/one/naver_login.do",
-					isPopup: true
-				}
-			);
-			
-			naverLogin.init();
 		
+		inputPlaceholder();
+		pwdShow();
+				
 	});
 	
 	function loginCheck(){
@@ -100,11 +101,12 @@
 				jwt : response.credential
 			},
 			success : function(data){
-				if (data == "joined"){
+				if (data == "joined" || data == "linked"){
 					toastr.success("로그인 성공");
 					$(location).attr("href", "<%=request.getContextPath()%>");
 				}else if (data == "notlinked"){
-					
+					toastr.success('기존 아이디가 구글과 연동되었습니다.');
+					$(location).attr("href", "<%=request.getContextPath()%>");
 				}
 			},
 			error: function(){
@@ -125,12 +127,6 @@
 	  });
 	 
 	}
-	
-	
-	<!--네이버 로그인 -->
-
-
-	
 	
 
 </script>
@@ -154,9 +150,27 @@
 			<div id="login-wrap-bottom">
 				<div id="login-component-left">
 					<form method="post" action="<%=request.getContextPath()%>/loginOk.do" id="login-form">
-						<input name="id" class="form-input id" placeholder="아이디">
-						<input name="pwd" class="form-input password" placeholder="비밀번호">
-						<!-- <input type="submit" value="로그인" class="form-btn"> -->
+						<div class="input-wrap">
+								<div class="label-input" >
+								<label for="input-id" id="input-id-check"></label>
+								<label for="input-id" id="input-id-label">아이디</label>
+								</div>
+								<input name="id" class="member-input form-input" id="input-id">
+							</div>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-id" class="label-input" id="input-pwd-check"></label>
+									<label for="input-id" class="label-input" id="input-pwd-label">비밀번호</label>
+								</div>
+								<div class="pwd-wrap">
+									<input name="pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd" autocomplete="off">
+									<div class="pwd-eye showEye">
+										<i class="bi bi-eye-fill"></i>
+									</div>
+								</div>
+								
+							</div>
+						
 						<input type="button" value="로그인" class="form-btn" onclick="loginCheck()">
 						<hr class="horizontal-hr">
 						<div class="login-menu">
@@ -168,29 +182,38 @@
 				</div>
 				<hr class="vertical-hr">
 				<div id="login-component-right">
-				    <div id="g_id_onload"
+					<span id="social-title">소셜 로그인</span>
+					<hr class="horizontal-hr">
+					<div id="login-icon-wrap">
+					<div id="google-wrap">
+						<div id="g_id_onload"
 				         data-client_id="279446786317-1d8b3dusm3g9oc69uvskvd84p04eira1.apps.googleusercontent.com"
 				         data-callback="getGoogleData"
 				         data-auto_prompt="false"
+				         data-auto_select="false"
 				         data-context="signin">
 				      </div>
 				      <div class="g_id_signin"
-				         data-type="standard"
+				         data-type="icon"
 				         data-size="large"
 				         data-theme="outline"
 				         data-text="sign_in_with"
-				         data-shape="rectangular"
-				         data-logo_alignment="left">
+				         data-shape="circle"
+				         data-logo_alignment="center"
+				         >
 				      </div>
-					<div>
+					</div>
+				    
+					<div id="kakao-wrap">
 						<a id="kakao-login-btn" href="javascript:loginWithKakao()">
-						  <img src="<%=request.getContextPath() %>/resources/img/kakao_login_medium_wide.png" alt="카카오 로그인 버튼" />
+						  <img src="<%=request.getContextPath() %>/resources/img/kakao_login_circle.png" alt="카카오 로그인 버튼" width="40px"/>
 						</a>
 					</div>
-					<div id="naverIdLogin">
-						<a id="naverIdLogin_loginButton" href="#">
-						  <img src="<%=request.getContextPath() %>/resources/img/naver_login.png" alt="네이버 로그인 버튼" width="300"/>
+					<div id="naver-wrap">
+						<a id="naver-login-btn" href="${NaverLoginUrl }">
+						  <img src="<%=request.getContextPath() %>/resources/img/naver_login_circle.png" alt="네이버 로그인 버튼" width="40px"/>
 						</a>
+					</div>
 					</div>
 					<hr class="horizontal-hr">
 					<div class="login-menu">

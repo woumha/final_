@@ -21,6 +21,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<!-- 카카오 주소 api -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 <script type="text/javascript">
 
 function numberPad(n, width) {
@@ -202,7 +205,21 @@ $(function(){
 		}, 1000);
 		
 	});
-
+	
+	// 주소창을 클릭하면 주소 검색 팝업을 띄우는 함수
+	
+	$("#input-addr1").on("click", function(){
+		addrSearch();
+	});
+	$("#input-zipcode").on("click", function(){
+		addrSearch();
+	});
+	
+	// 비밀번호 유효성 검사
+	memberPwdCheck();
+	
+	// 비밀번호 보여주는 기능
+	pwdShow();
 	
 });
 
@@ -261,7 +278,18 @@ $(function(){
 		display: none;
 	}
 	
+	#addr-wrap{
+		display: flex;
+	}
 	
+	#addr-wrap div:nth-child(1){
+		flex: 3;
+		margin-right: 10px;
+	}
+	
+	#addr-wrap div:nth-child(2){
+		flex: 7;
+	}
 	
 
 
@@ -308,31 +336,46 @@ $(function(){
 					</div>
 					<div id="profile-input">
 						<form>
+							<div class="input-wrap">
+								<div class="label-input onfocus" >
+								<label for="input-id" id="input-id-check"></label>
+								<label for="input-id" id="input-id-label">아이디</label>
+								</div>
+								<input name="member_id" class="member-input form-input disabled" id="input-id" value="${MemberDTO.getMember_id() }" disabled="disabled">
+							</div>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-id" class="label-input" id="input-pwd-check"></label>
+									<label for="input-id" class="label-input" id="input-pwd-label">비밀번호 변경</label>
+								</div>
+								<div class="pwd-wrap">
+									<input name="member_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd" autocomplete="off">
+									<div class="pwd-eye showEye">
+										<i class="bi bi-eye-fill"></i>
+									</div>
+								</div>
+								
+							</div>
 							
-							<div class="label-input onfocus" >
-							<label for="input-id" id="input-id-check"></label>
-							<label for="input-id" id="input-id-label">아이디</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
+									<label for="input-id" class="label-input" id="input-pwd-confirm-label">비밀번호 변경 확인</label>
+								</div>
+								<div class="pwd-wrap">
+									<input name="check-pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-confirm" autocomplete="off">
+									<div class="pwd-eye showEye">
+										<i class="bi bi-eye-fill"></i>
+									</div>
+								</div>
 							</div>
-							<input name="member_id" class="member-input form-input disabled" id="input-id" value="${MemberDTO.getMember_id() }" disabled="disabled">
-						
-							<div class="label-input" >
-							<label for="input-pwd" id="input-pwd-check"></label>
-							<label for="input-pwd" id="input-pwd-label">비밀번호 변경</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+								<label for="input-name" id="input-name-check"></label>
+								<label for="input-name" id="input-name-label">이름</label>
+								</div>
+								<input name="member_name" class="member-input form-input" id="input-name" value="${MemberDTO.getMember_name() }">
 							</div>
-							<input name="member_pwd" class="member-input form-input password" id="input-pwd" value="">
-														
-							<div class="label-input" >
-							<label for="input-pwd-confirm" id="input-pwd-confirm-check"></label>
-							<label for="input-pwd-confirm" id="input-pwd-confirm-label">비밀번호 변경 확인</label>
-							</div>
-							<input name="member_pwd_confirm" class="member-input form-input password" id="input-pwd-confirm" value="">
-														
-							<div class="label-input" >
-							<label for="input-name" id="input-name-check"></label>
-							<label for="input-name" id="input-name-label">이름</label>
-							</div>
-							<input name="member_name" class="member-input form-input" id="input-name" value="${MemberDTO.getMember_name() }">
-							
 							<div id="email-input-wrap">
 								<div id="email-input">
 									<div class="label-input" >
@@ -349,26 +392,49 @@ $(function(){
 									<span id="email-auth-complete"><i class="bi bi-check2-circle"></i> 인증 완료</span>
 								</div>
 							</div>
-						
-							<div class="label-input" >
-							<label for="input-phone" id="input-phone-check"></label>
-							<label for="input-phone" id="input-phone-label">전화번호</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+								<label for="input-phone" id="input-phone-check"></label>
+								<label for="input-phone" id="input-phone-label">전화번호</label>
+								</div>
+								<input name="member_phone" class="member-input form-input" id="input-phone" value="${MemberDTO.getMember_phone() }">
 							</div>
-							<input name="member_phone" class="member-input form-input" id="input-phone" value="${MemberDTO.getMember_phone() }">
-						
-							<div class="label-input" >
-							<label for="input-birth" id="input-birth-check"></label>
-							<label for="input-birth" id="input-birth-label">생년월일</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+								<label for="input-birth" id="input-birth-check"></label>
+								<label for="input-birth" id="input-birth-label">생년월일</label>
+								</div>
+								<input type="date" name="member_birth" class="member-input form-input date-placeholder" id="input-birth" value="${MemberDTO.getMember_birth().substring(0,10) }">
 							</div>
-							<input type="date" name="member_birth" class="member-input form-input date-placeholder" id="input-birth" value="${MemberDTO.getMember_birth().substring(0,10) }">
-						
-							<div class="label-input" >
-							<label for="input-addr" id="input-addr-check"></label>
-							<label for="input-addr" id="input-addr-label">주소</label>
+							<div class="input-wrap">
+								<div id="addr-wrap">
+									<div>
+									<div class="label-input" >
+									<label for="input-zipcode" id="input-zipcode-check"></label>
+									<label for="input-zipcode" id="input-zipcode-label">우편번호</label>
+									</div>
+									<input name="member_zipcode" class="member-input form-input" id="input-zipcode" value="${MemberDTO.getMember_zipcode() }">
+									</div>
+									<div>
+									<div class="label-input" >
+									<label for="input-addr1" id="input-addr1-check"></label>
+									<label for="input-addr1" id="input-addr1-label">주소</label>
+									</div>
+									<input name="member_addr1" class="member-input form-input" id="input-addr1" value="${MemberDTO.getMember_addr1() }">
+									</div>
+								</div>
 							</div>
-							<input name="member_addr" class="member-input form-input" id="input-addr" value="${MemberDTO.getMember_addr() }">
-							<div style="text-align: center;">
-								<input type="button" class="form-btn disabled" id="profile-submit-btn" value="프로필 수정">
+							<div class="input-wrap">
+								<div class="label-input" >
+								<label for="input-addr2" id="input-addr2-check"></label>
+								<label for="input-addr2" id="input-addr2-label">상세주소</label>
+								</div>
+								<input name="member_addr2" class="member-input form-input" id="input-addr2" value="${MemberDTO.getMember_addr2() }">
+							</div>
+							<div class="input-wrap">
+								<div style="text-align: center;">
+									<input type="button" class="form-btn disabled" id="profile-submit-btn" value="프로필 수정">
+								</div>
 							</div>
 						</form>
 					</div>

@@ -110,11 +110,11 @@ $(function(){
 											</td>											
 										</c:if>
 										<th class="small-content-span-1">주소</th>
-										<c:if test="${empty MemberDTO.getMember_addr()}" >
+										<c:if test="${empty MemberDTO.getMember_addr1()}" >
 											<td class="small-content-span-2">미입력</td>
 										</c:if>
-										<c:if test="${!empty MemberDTO.getMember_addr()}" >
-											<td class="small-content-span-2">${MemberDTO.getMember_addr() }</td>
+										<c:if test="${!empty MemberDTO.getMember_addr1()}" >
+											<td class="small-content-span-2">${MemberDTO.getMember_zipcode()} ${MemberDTO.getMember_addr1()} ${MemberDTO.getMember_addr2()}</td>
 										</c:if>
 									</tr>
 									

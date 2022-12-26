@@ -29,21 +29,23 @@
 			#{member_id},
 			#{member_name},
 			#{member_pwd},
-			'',
-			'',
+			'', <!-- gender -->
+			'', <!-- birth -->
 			#{member_email},
-			'',
-			'',
-			current_date,
-			default,
-			default,
-			current_date,
-			default,
-			default,
-			#{member_rep_channel},
-			default,
-			default,
-			#{member_google_link}
+			'', <!-- phone -->
+			'', <!-- addr1 -->
+			current_date, <!-- 가입일 -->
+			default, <!-- protect -->
+			default, <!-- premium -->
+			current_date, <!-- last pwd change date -->
+			default, <!-- 회원탈퇴 여부 -->
+			default, <!-- 관리자 -->
+			#{member_rep_channel}, <!-- 대표채널 -->
+			default, <!-- 기록 여부 -->
+			default, <!-- 이메일인증 -->
+			#{member_social_link}, <!-- 소셜 연동 -->
+			'', <!-- 우편번호 -->
+			'' <!-- addr2 -->
 		)
 	</insert>
 	<update id="emailAuth" parameterType="memberdto">
@@ -51,7 +53,15 @@
 	</update>
 	
 	<update id="memberInfoUpdate" parameterType="memberdto">
-		update members set member_name = #{member_name}, member_email = #{member_email}, member_birth = #{member_birth}, member_phone = #{member_phone}, member_addr = #{member_addr} where member_code = #{member_code}
+		update members set 
+			member_name = #{member_name}, 
+			member_email = #{member_email}, 
+			member_birth = #{member_birth}, 
+			member_phone = #{member_phone}, 
+			member_addr1 = #{member_addr1}, 
+			member_addr2 = #{member_addr2}, 
+			member_zipcode = #{member_zipcode}
+		where member_code = #{member_code}
 	</update>
 	
 	<select id="alreadyEmail" parameterType="String" resultType="String">
@@ -93,8 +103,16 @@
 	<select id="getLoginHistory" parameterType="String" resultType="loginhistorydto">
 		select * from login_history where member_code = #{memberCode} and login_date > (select to_char(sysdate-30, 'yyyy-mm-dd') from dual) order by login_date desc
 	</select>
-	<select id="isGoogleLinked" parameterType="googledto" resultType="String">
-		select member_google_link from members where member_email = #{google_email}
+	<select id="isSocialLinked" parameterType="String" resultType="String">
+		select member_social_link from members where member_email = #{email}
 	</select>
+	<select id="isExistEmail" parameterType="String" resultType="String">
+		select member_code from members where member_email = #{email}	
+	</select>
+	<update id="socialLink" parameterType="memberdto">
+		update members set 
+			member_social_link = #{member_social_link}
+		where member_code = #{member_code}
+	</update>
 	
 </mapper>

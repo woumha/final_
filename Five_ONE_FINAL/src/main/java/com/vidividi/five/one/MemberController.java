@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import com.vidividi.variable.KakaoLoginDTO;
 import com.vidividi.variable.LoginDTO;
 import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.NaverLoginDTO;
 import com.vidividi.variable.TestDTO;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -67,15 +69,14 @@ public class MemberController {
 	
 	@Autowired
 	private EmailSendService emailservice;
-	
-	@Autowired
-	private LoginHistoryService loginHistoryService;
-  
+	  
 	@Autowired
 	private SocialLoginService socialservice;
 	
 	@RequestMapping("login.do")
-	public String login() {
+	public String login(Model model, HttpSession session) throws UnsupportedEncodingException {
+		String url = socialservice.getNaverAuthUrl(session);
+		model.addAttribute("NaverLoginUrl", url);
 		return "member/login";
 	}
 	
@@ -119,17 +120,7 @@ public class MemberController {
 		}
 	}
 	
-	/*
-	 * @ResponseBody
-	 * 
-	 * @RequestMapping("testajax.do") public List<MemberDTO> test(){ List<MemberDTO>
-	 * list = dao.getMemberList();
-	 * 
-	 * if(list.size() != 0) { System.out.println("리스트 잘 넘어옴"); }
-	 * 
-	 * return list; }
-	 */
-	
+
 	@ResponseBody
 	@RequestMapping("joinOk.do")
 	public String joinMember(MemberDTO memberDTO) {
@@ -140,15 +131,6 @@ public class MemberController {
 	@ResponseBody
 	@RequestMapping("infoUpdate.do")
 	public int infoUpdate(MemberDTO dto) {
-		
-		System.out.println("------#join-form-2------");
-		System.out.println(dto.getMember_code());
-		System.out.println(dto.getMember_name());
-		System.out.println(dto.getMember_email());
-		System.out.println(dto.getMember_birth());
-		System.out.println(dto.getMember_phone());
-		System.out.println(dto.getMember_addr());
-
 		return dao.mebmerInfoUpdate(dto);
 	}
 	
@@ -405,28 +387,27 @@ public class MemberController {
 	@RequestMapping("googleLogin.do")
 	public String googleLogin(@RequestParam("jwt") String jwt_token, HttpSession session) throws Exception {
 		
-		GoogleLoginDTO dto = socialservice.decodeGoogleJWT(jwt_token);
-		String check = dao.isGoogleLinked(dto);
-		if (check == "1") { // 회원인데 구글 링크 된 경우
-			
+		GoogleLoginDTO gdto = socialservice.decodeGoogleJWT(jwt_token);
+		String check = dao.isSocialLinked(gdto.getGoogle_email());
+		MemberDTO mdto = new MemberDTO();
+		
+		if (check.equals("google")) { // 회원인데 구글 링크 된 경우
+			service.socialLogin(gdto, session);
 			return "linked";
-		}else if (check == "0"){ // 회원인데 구글 링크 안된 경우
+		}else if (check.equals("0")){ // 회원인데 구글 링크 안된 경우
+			String memberCode = service.socialLogin(gdto, session);
+			mdto.setMember_code(memberCode);
+			mdto.setMember_social_link("google");
+			dao.socialLink(mdto);
 			return "notlinked";
 		}else { // 아예 회원이 아닌 경우
 			
-			MemberDTO mdto = new MemberDTO();
+			mdto.setMember_name(gdto.getGoogle_name());
+			mdto.setMember_email(gdto.getGoogle_email());
+			mdto.setMember_id(gdto.getGoogle_id());
+			 
+			service.insertMember(mdto, "google"); service.socialLogin(gdto, session);
 			
-			mdto.setMember_name(dto.getGoogle_name());
-			mdto.setMember_email(dto.getGoogle_email());
-			mdto.setMember_id(dto.getGoogle_id());
-			
-			service.insertMember(mdto, "google");
-			
-			LoginDTO ldto = new LoginDTO();
-			ldto.setId(mdto.getMember_id());
-			ldto.setPwd(mdto.getMember_pwd());
-			ldto.setCode(mdto.getMember_code());
-			String memberCode = service.loginCheck(ldto, session);
 			
 			return "joined";
 		}
@@ -436,27 +417,65 @@ public class MemberController {
 	
 	
 	@RequestMapping("kakao_login.do")
-	public String kakao_login (@RequestParam("code") String code){
+	public String kakao_login (@RequestParam("code") String code, HttpSession session) throws Exception{
 		
-		System.out.println(code);
+		System.out.println("카카오 로그인 코드 : " +code);
 		String access_token = socialservice.getKakaoAccessToken(code);
-		System.out.println("토큰 : " + access_token);
+		System.out.println("카카오 엑세스 토큰 : " + access_token);
 		
-		KakaoLoginDTO dto = socialservice.getKakaoData(access_token);
+		KakaoLoginDTO kdto = socialservice.getKakaoData(access_token);
+		String check = dao.isSocialLinked(kdto.getKakao_email());
 		MemberDTO mdto = new MemberDTO();
-		mdto.setMember_name(dto.getKakao_name());
-		mdto.setMember_email(dto.getKakao_email());
-		mdto.setMember_id(dto.getKakao_id());
 		
-		service.insertMember(mdto, "kakao");
+		if (check.equals("kakao")) { // 회원인데 카카오 링크 된 경우
+			service.socialLogin(kdto, session);
+		}else if (check.equals("0")){ // 회원인데 카카오 링크 안된 경우
+			String memberCode = service.socialLogin(kdto, session);
+			mdto.setMember_code(memberCode);
+			mdto.setMember_social_link("kakao");
+			dao.socialLink(mdto);
+		}else { // 아예 회원이 아닌 경우
+			
+			mdto.setMember_name(kdto.getKakao_name());
+			mdto.setMember_email(kdto.getKakao_email());
+			mdto.setMember_id(kdto.getKakao_id());
+			
+			service.insertMember(mdto, "kakao");
+			service.socialLogin(kdto, session);
+			
+		}
 		
 		return "main";
 	}
 	
 	
 	@RequestMapping("naver_login.do")
-	public String naver_login (@RequestParam("code") String code){
+	public String naver_login (@RequestParam("code") String code, HttpSession session) throws Exception{
+		System.out.println("네이버 로그인 코드 : " +code);
+		String access_token = socialservice.getNaverAccessToken(code, session);
+		System.out.println("네이버 액세스 토큰 : "+access_token);
+		NaverLoginDTO ndto = socialservice.getNaverData(access_token);
 		
+		String check = dao.isSocialLinked(ndto.getNaver_email());
+		MemberDTO mdto = new MemberDTO();
+		
+		if (check.equals("naver")) { // 회원인데 네이버 링크 된 경우
+			service.socialLogin(ndto, session);
+		}else if (check.equals("0")){ // 회원인데 네이버 링크 안된 경우
+			String memberCode = service.socialLogin(ndto, session);
+			mdto.setMember_code(memberCode);
+			mdto.setMember_social_link("naver");
+			dao.socialLink(mdto);
+		}else { // 아예 회원이 아닌 경우
+			mdto.setMember_name(ndto.getNaver_name());
+			mdto.setMember_email(ndto.getNaver_email());
+			mdto.setMember_id(ndto.getNaver_id());
+			mdto.setMember_phone(ndto.getNaver_phone());
+			mdto.setMember_birth(ndto.getNaver_birth());
+			
+			service.insertMember(mdto, "naver");
+			service.socialLogin(ndto, session);
+		}
 		
 		return "main";
 	}
