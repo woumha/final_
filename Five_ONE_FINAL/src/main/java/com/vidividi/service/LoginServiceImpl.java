@@ -144,6 +144,7 @@ public class LoginServiceImpl implements LoginService {
 			dto.setMember_name(dto.getMember_id());
 			dto.setMember_email("");
 			dto.setMember_google_link("0");
+		}else if (via == "kakao") {
 		}
 		
 		int joinResult = dao.joinMember(dto);
@@ -160,7 +161,7 @@ public class LoginServiceImpl implements LoginService {
 		}
 		
 		return result;
-	}	
+	}
 
 	//재생목록 코드
 	@Override
