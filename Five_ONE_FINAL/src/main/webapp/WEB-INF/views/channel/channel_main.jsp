@@ -20,13 +20,6 @@
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/uploadBtn.css">
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/css/bootstrap.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-<script type="text/javascript">
-	$(function() {
-		
-	});
-</script>
-
-
 <title>채널입니다.</title>
 </head>
 <body>
@@ -172,28 +165,17 @@
 				</div><!-- 그리드 -->
 				<!-- 재생목록 및 영상 삽입 -->
 				<!-- bundle -->
-				<c:if test="${empty bundle }">
-						
-				</c:if>
-				<c:if test="${!empty bundle }">
-					<c:forEach items="${bundle }" var="list">
-						<hr width="100%" color="#ECE9EF">
-						<div class="play_list_title">${list.bundle_title }</div>
-						<input hidden id="bundleCode" value='${list.bundle_code }'>
-						<a href='' class="play_list_title">모두재생</a>
-						<div class="container text-center">
-							<div class="row">
-								<div class="col-12 col-sm-6 col-lg-3">
-									<div class="m-1 ratio ratio-4x3 bundleVideo">
-										
-									</div>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</c:if>
+				
+				
+				<%-- 추가하자 --%>
+				
+				
+				<%-- 추가하자 --%>
+				
+				
+				
 				<%-- 다음 재생목록 영상 --%>
-				<hr width="100%" color="gary">
+				<hr width="100%" color="#ECE9EF">
 				<div class="play_list_title">재생목록 제목</div>
 				<div class="play_list_title">▶모두재생</div>
 				<div class="container text-center"> <!-- 그리드 시작 -->

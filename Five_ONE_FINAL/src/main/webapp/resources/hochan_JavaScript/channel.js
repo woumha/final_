@@ -35,6 +35,25 @@ $(function() {
 	});
 	
 	
+	$(".bundle_Code").each(function() {
+		let bundle = $(this).val();
+		$.ajax({
+			url: getContextPath() + "/bundleSetList.do",
+			data: {
+				"bundle_Code": bundle	
+			},
+			datatyle: html,
+			success: function(data) {
+				
+			},
+			error: function() {
+				alert('통신 오류');
+			}
+		});	
+	});
+	
+	
+	
 });
 
 

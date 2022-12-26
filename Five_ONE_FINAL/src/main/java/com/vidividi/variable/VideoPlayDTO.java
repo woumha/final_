@@ -26,6 +26,9 @@ public class VideoPlayDTO {
 	private String playList_title; // 재생목록
 	private String playList_code; // 재생목록
 	
+	private String bundle_code;
+	private String bundle_title;
+	
 	public String getVideo_code() {
 		return video_code;
 	}
@@ -133,6 +136,19 @@ public class VideoPlayDTO {
 	
 	public void setVideo_age(String video_age) {
 		this.video_age = video_age;
+	}
+	
+	public String getBundle_code() {
+		return bundle_code;
+	}
+	public void setBundle_code(String bundle_code) {
+		this.bundle_code = bundle_code;
+	}
+	public String getBundle_title() {
+		return bundle_title;
+	}
+	public void setBundle_title(String bundle_title) {
+		this.bundle_title = bundle_title;
 	}
 	
 	

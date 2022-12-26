@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -86,17 +87,21 @@ public class ChannelController {
 			List<VideoPlayDTO> channelVideoDto = this.dao.getVideoList(channelCode); // 비디오 영상
 			List<BundleDTO> bundle = this.bundledao.getBundleList(channelCode); // 재생목록 리스트
 			
-			int index = 1;
-			for(BundleDTO bundleArr: bundle) {
-				List<VideoPlayDTO> playdto = this.dao.getPlayListDetails(bundleArr.getBundle_code());
-				model.addAttribute("playdto"+index , playdto);
-				index++;
-			}
+			int bundleSize = bundle.size();
 			
+			
+			
+//			int index = 0;
+//			for(BundleDTO bundleArr: bundle) {
+//				List<VideoPlayDTO> playdto = this.dao.getPlayListDetails(bundleArr.getBundle_code());
+//				model.addAttribute("playdto"+index , playdto);
+//				index++;
+//			}
+//			model.addAttribute("dtoSize", index);
+//			// playdto0, playdto1, playdto2, playdto3 ....
 			
 			VideoPlayDTO newVideo = this.dao.getNewVideo(channelCode); // 가장 최근에 올린 영상
 			
-			model.addAttribute("size", index);
 			model.addAttribute("currentOwner", channeldto);
 			model.addAttribute("currentVideo", channelVideoDto);
 			model.addAttribute("currentNewVideo", newVideo);
@@ -107,6 +112,17 @@ public class ChannelController {
 			return "main";
 		}
 		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "bundleSetList.do", produces = "application/text; charset=UTF-8")
+	public String bundleVideoList(@RequestParam("bundle_Code") String bundleCode, HttpServletResponse response) {
+		response.setContentType("text/html; charset=UTF-8");
+		
+		List<VideoPlayDTO> playdto = this.dao.getPlayListDetails(bundleCode);
+		
+		
+		return null;
 	}
 	
 	@RequestMapping("movie_upload.do")
@@ -241,7 +257,7 @@ public class ChannelController {
 	// 영상 관리 페이지
 	@RequestMapping("channel_manager.do")
 	public String manager(Model model, @RequestParam("code") String code, HttpServletResponse response, HttpSession session) {
-		response.setContentType("text/html charset=UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		String memCode = (String)session.getAttribute("MemberCode"); // 유저 코드
 		
 		if(memCode != "") {
