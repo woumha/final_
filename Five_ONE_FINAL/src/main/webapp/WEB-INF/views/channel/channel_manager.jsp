@@ -28,14 +28,7 @@
 	  <div class="row justify-content-center">
 	    <div class="col-3 d-none d-xl-block" align="center">
 	      	<div class="card left_card" style="width: 18rem;">
-			  <img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" class="card-img-top left_img channel-backcolor" onload="changeBackColor('${channelOwner.getChannel_code()}')" alt="...">
-			   
-			  <button class="btn btn-primary profil_settings">
-			  	<font size="2px">
-			  		  				  	
-			  	</font>
-			   </button>
-		  		<input type="file" name="file" hidden class="profil_input" />			   
+			  <img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" class="card-img-top left_img channel-backcolor" onload="changeBackColor('${channelOwner.getChannel_code()}')" alt="...">		   
 			  
 			  <div class="card-body">
 			    <h5 class="card-title">
@@ -79,8 +72,7 @@
                      	<ul class="nav flex-column ms-3" id="bundleList">
                      	<c:forEach items="${bundle }" var="bundledto" varStatus="status">
                      		<li class="w-100 index">
-                             	<input type="hidden" class="${status.index }" value="${bundledto.bundle_code }">
-                             	<a href="bundle_video_list" class="nav-link px-0 bundle_text" style="display: inline-block;">
+                             	<a class="nav-link px-3 bundle_text" style="display: inline-block;" onclick="bundleDetail('${bundledto.bundle_code }')">
                              		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-note-list icon black" viewBox="0 0 16 16">
 									  <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z"/>
 									  <path fill-rule="evenodd" d="M12 3v10h-1V3h1z"/>
@@ -89,7 +81,7 @@
 									</svg>
                              		<span class="d-none d-sm-inline child_bundle">${bundledto.bundle_title }</span>	
                              	</a>
-                             	<button id="bDelIndex" class="${status.index } delicon" onclick="bundleDel('${bundledto.bundle_code}')">
+                             	<button id="bDelIndex" class="delicon" onclick="bundleDel('${bundledto.bundle_code}')">
                              			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
 									  	<path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
 										</svg>
@@ -139,7 +131,7 @@
 					  	<th class="col-1">좋아요</th>
 					  </tr>
 					</thead>
-					<tbody>
+					<tbody class="manager_tbody">
 					  <c:forEach items="${mvlist }" var="mvdto">
 					  	<tr onclick="modal('${mvdto.video_code}')" data-toggle="modal" data-target="#MoaModal">
 					  		<td>

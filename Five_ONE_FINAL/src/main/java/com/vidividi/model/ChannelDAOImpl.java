@@ -84,5 +84,13 @@ public class ChannelDAOImpl implements ChannelDAO {
 		return this.session.update("profil_update", channelCode);
 	}
 	
+	@Override
+	public List<VideoPlayDTO> getPlayListDetail(String bundleCode) {
+		return this.session.selectList("playlistDetail", bundleCode);
+	}
 	
+	@Override
+	public List<VideoPlayDTO> getPlayListDetails(String bundleCode) {
+		return this.session.selectList("playlistDetails", bundleCode);
+	}
 }

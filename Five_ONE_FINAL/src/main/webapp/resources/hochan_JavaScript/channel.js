@@ -44,3 +44,7 @@ function getContextPath(){
 	
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
+
+function getBundleVideoList() {
+	
+}

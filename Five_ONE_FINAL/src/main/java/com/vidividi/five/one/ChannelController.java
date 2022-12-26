@@ -59,8 +59,6 @@ public class ChannelController {
 	
 	@Autowired
 	private UploadFile uploadFile;
-
-	private ChannelDTO channelWorlddto;
 	
 	private String sendPosition;
 	
@@ -71,7 +69,7 @@ public class ChannelController {
 	
 	
 	@RequestMapping("channel.do")
-	public String channel(@RequestParam("mc") String repCcode,HttpServletRequest request, HttpSession session, Model model) throws Exception {
+	public String channel(@RequestParam("mc") String channelCode,HttpServletRequest request, HttpSession session, Model model) throws Exception {
 		
 		
 		String memCode = (String)session.getAttribute("MemberCode"); // 유저 코드
@@ -79,21 +77,30 @@ public class ChannelController {
 		
 		if(memCode != null) {
 			MemberDTO memberDTO = new MemberDTO();
-			
 			memberDTO.setMember_code(memCode);
+			memberDTO.setMember_rep_channel(channelCode);
 			
-			memberDTO.setMember_rep_channel(repCcode);
 			
 			
-			channelWorlddto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값
+			ChannelDTO channeldto = this.dao.getChannelOwner(memberDTO); // 채널의 모든 값			
+			List<VideoPlayDTO> channelVideoDto = this.dao.getVideoList(channelCode); // 비디오 영상
+			List<BundleDTO> bundle = this.bundledao.getBundleList(channelCode); // 재생목록 리스트
 			
-			List<VideoPlayDTO> channelVideoDto = this.dao.getVideoList(repCcode); // 비디오 영상
+			int index = 1;
+			for(BundleDTO bundleArr: bundle) {
+				List<VideoPlayDTO> playdto = this.dao.getPlayListDetails(bundleArr.getBundle_code());
+				model.addAttribute("playdto"+index , playdto);
+				index++;
+			}
 			
-			VideoPlayDTO newVideo = this.dao.getNewVideo(repCcode); // 가장 최근에 올린 영상
 			
-			model.addAttribute("currentOwner", channelWorlddto);
+			VideoPlayDTO newVideo = this.dao.getNewVideo(channelCode); // 가장 최근에 올린 영상
+			
+			model.addAttribute("size", index);
+			model.addAttribute("currentOwner", channeldto);
 			model.addAttribute("currentVideo", channelVideoDto);
 			model.addAttribute("currentNewVideo", newVideo);
+			model.addAttribute("bundleList", bundle);
 			
 			return "channel/channel_main";
 		} else {
@@ -117,6 +124,7 @@ public class ChannelController {
 		List<BundleDTO> bundleList = this.bundledao.getBundleList(ownerCode); // 재생목록 리스트
 		
 		List<CategoryDTO> categoryList = this.videodao.getCategoryList(); // 카테고리 리스트
+		
 		
 		model.addAttribute("uploadOwner", ownerCode);
 		model.addAttribute("list", bundleList);
@@ -185,7 +193,7 @@ public class ChannelController {
 		playbundledto.setPlaylist_code(bundleCode.trim()); // 재생목록 코드
 		playbundledto.setVideo_code(cookingVideoCode.trim());
 		
-		
+		//System.out.println("age: " + age.trim());
 		
 		if(age.trim().equals("예 아동용 입니다")) {
 			playdto.setVideo_age("true");
@@ -232,17 +240,28 @@ public class ChannelController {
 	
 	// 영상 관리 페이지
 	@RequestMapping("channel_manager.do")
-	public String manager(Model model, @RequestParam("code") String code, HttpServletResponse response) {
+	public String manager(Model model, @RequestParam("code") String code, HttpServletResponse response, HttpSession session) {
 		response.setContentType("text/html charset=UTF-8");
+		String memCode = (String)session.getAttribute("MemberCode"); // 유저 코드
 		
-		List<VideoPlayDTO> videoList = this.dao.getVideoList(code);
-		List<BundleDTO> bundle = this.bundledao.getBundleList(code);
+		if(memCode != "") {
+			MemberDTO memdto = new MemberDTO();
+			memdto.setMember_rep_channel(code);
+			memdto.setMember_code(memCode);
+			
+			ChannelDTO channelDTO =  this.dao.getChannelOwner(memdto);
+			List<VideoPlayDTO> videoList = this.dao.getVideoList(code);
+			List<BundleDTO> bundle = this.bundledao.getBundleList(code);
+			
+			
+			model.addAttribute("currentOwner", channelDTO);
+			model.addAttribute("mvList", videoList);
+			model.addAttribute("bundleList", bundle);
+			
+			return "channel/channel_manager";
+		}
 		
-		model.addAttribute("currentOwner", channelWorlddto);
-		model.addAttribute("mvList", videoList);
-		model.addAttribute("bundleList", bundle);
-	
-		return "channel/channel_manager";
+		return "main";
 	}
 	
 	// 체널 프로필 이미지 업로드
@@ -372,8 +391,6 @@ public class ChannelController {
 		
 		
 		int check = this.videodao.updateUploadVideo(videodto, playdto);
-		//int check = -1;
-		System.out.println("check: " +check);
 		if(check > 0) {
 			out.println("<script>"
 					+ "location.href ='"+ request.getContextPath() +"/channel_manager.do?code=" + channelCode +"';");
@@ -390,8 +407,7 @@ public class ChannelController {
 	// 재생목록 불러오기
 	@ResponseBody
 	@RequestMapping(value="bundleList.do", produces = "application/text; charset=UTF-8")
-	public String bundleList(@RequestParam("ownerCode") String code, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		PrintWriter out = response.getWriter();		
+	public String bundleList(@RequestParam("ownerCode") String code, HttpServletResponse response) throws IOException {	
 		response.setContentType("text/html; charset=UTF-8");
 		
 		JSONArray jsonArray = new JSONArray();
@@ -413,10 +429,9 @@ public class ChannelController {
 	
 	@ResponseBody
 	@RequestMapping(value = "bundleMaking.do", produces = "application/text; charset=UTF-8")
-	public String bundleMaking(@RequestParam("code") String code, @RequestParam("bundleN") String bundleName, Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		System.out.println("in");
-		PrintWriter out = response.getWriter();		
+	public String bundleMaking(@RequestParam("code") String code, @RequestParam("bundleN") String bundleName, HttpServletResponse response, HttpServletRequest request) throws IOException {
 		response.setContentType("text/html; charset=UTF-8");
+		
 		
 		String bundleCode = service.generateBundleCode();
 		
@@ -426,41 +441,62 @@ public class ChannelController {
 		bundledto.setChannel_code(code);
 		
 		int check = this.bundledao.bundleAdd(bundledto);
-		JSONArray jsonArray = new JSONArray();
-		List<BundleDTO> bundleList = this.bundledao.getBundleList(code);
+		String arr = "";
 		
 		if(check > 0) {
-			for(BundleDTO dto: bundleList) {
-				JSONObject json = new JSONObject();
-				json.put("bundle_code", dto.getBundle_code());
-				json.put("bundle_title", dto.getBundle_title());
-				json.put("bundle_regdate", dto.getBundle_regedate());
-				json.put("bundle_open", dto.getPlaylist_open());
-				json.put("channel_code", dto.getChannel_code());
-				
-				jsonArray.add(json);
-			}
-		} else {
-			out.println("<script>");
-			out.println("alert('추가 실패');"
-					+ "history.back();");
-			out.println("</script>");
-		}		
-		return jsonArray.toString();
+			arr = bundleList(code, response);
+		}
+		
+		return arr;
 	}
 	
 	// 재생목록 삭제
 	@ResponseBody
-	@RequestMapping("BundleDelete.do")
-	public void bundleDelete(@RequestParam("bundleCode") String code, HttpServletResponse response) throws IOException {
+	@RequestMapping(value = "BundleDelete.do", produces = "application/text; charset=UTF-8")
+	public String bundleDelete(@RequestParam("bundleCode") String code, @RequestParam("ownerCode") String ownerCode, HttpServletResponse response) throws IOException {
+		response.setContentType("text/html; charset=UTF-8");
 		
 		int check = this.bundledao.bundleDel(code);
-		
-		PrintWriter out = response.getWriter();
-		out.println(check);
+		String arr = "";
+
+		if(check > 0) {
+			arr = bundleList(ownerCode, response);
+		}
+		System.out.println("delarr " + arr);
+		return arr;
 	}
 	
-	
+	// 재생목록에 있는 비디오 가져오기
+	@ResponseBody
+	@RequestMapping(value = "videoListBundle.do", produces = "application/text; charset=UTF-8")
+	public String videoListBundle(@RequestParam("bundleCode") String bundleCode, HttpServletResponse response) {
+		response.setContentType("text/html; charset=UTF-8");
+		
+		
+		List<VideoPlayDTO> list = this.dao.getPlayListDetail(bundleCode);
+		JSONArray arr = new JSONArray();
+		for(VideoPlayDTO dto : list) {
+			JSONObject json = new JSONObject();
+			json.put("video_code", dto.getVideo_code());
+			json.put("channel_code", dto.getChannel_code());
+			json.put("channel_name", dto.getChannel_name());
+			json.put("video_title", dto.getVideo_title());
+			json.put("video_cont", dto.getVideo_cont());
+			json.put("video_img", dto.getVideo_img());
+			json.put("video_good", dto.getVideo_good());
+			json.put("video_bad", dto.getVideo_bad());
+			json.put("video_view_cnt", dto.getVideo_view_cnt());
+			json.put("video_hash", dto.getVideo_hash());
+			json.put("video_regdate", dto.getVideo_regdate());
+			json.put("video_open", dto.getVideo_open());
+			json.put("category_code", dto.getCategory_code());
+			json.put("video_age", dto.getVideo_age());
+			
+			arr.add(json);
+		}
+		System.out.println("arr: " + arr.toString());
+		return arr.toString();
+	}
 	
 	// 영상 이름 받아오기
 	public String[] fileName(MultipartHttpServletRequest mRequest) {

@@ -6,6 +6,8 @@
 <c:set var="owner" value="${currentOwner }" />
 <c:set var="current" value="${currentVideo }" />
 <c:set var="lastUpVideo" value="${currentNewVideo }" />
+<c:set var="bundle" value="${bundleList }" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,11 +35,11 @@
 	<jsp:include page="../include/top_include.jsp"/>
 	<jsp:include page="../include/side_include.jsp"/>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel.js"></script>
-	<img src="${path }/resources/hochan_img/vidi.png" id="channel_banner" class="col-lg-12 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
+	<img src="${path }/resources/img/channel_banner/${owner.channel_banner}" id="channel_banner" class="col-10 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
 	<div class="container text-center mb-3">
 	  <div class="row mb-3">
 	    <div class="col-lg-2">
-	      <img src="${path }/resources/hochan_img/channelprofil_test.png" class="img-fluid" id="chennelprofil" alt="...">
+	      <img src="${path }/resources/img/channel_profile/${owner.channel_profil}" class="img-fluid" id="chennelprofil" alt="...">
 	    </div>
 	    <div class="col-lg-6">
 	     	<div class="col-sm-12 text-left mb-1" style="font-size: 18px">
@@ -130,7 +132,6 @@
 				  		<c:if test="${empty lastUpVideo }">
 				  			<div>영상을 올려주세요!</div>
 				  		</c:if>
-						
 					</div><!-- video -->
 					  <div class="col">
 					    <div class="col mb-1" style="font-size: 14px;">${lastUpVideo.video_title }</div>
@@ -169,7 +170,28 @@
 				  	</c:forEach>
 				  </div>
 				</div><!-- 그리드 -->
-				
+				<!-- 재생목록 및 영상 삽입 -->
+				<!-- bundle -->
+				<c:if test="${empty bundle }">
+						
+				</c:if>
+				<c:if test="${!empty bundle }">
+					<c:forEach items="${bundle }" var="list">
+						<hr width="100%" color="#ECE9EF">
+						<div class="play_list_title">${list.bundle_title }</div>
+						<input hidden id="bundleCode" value='${list.bundle_code }'>
+						<a href='' class="play_list_title">모두재생</a>
+						<div class="container text-center">
+							<div class="row">
+								<div class="col-12 col-sm-6 col-lg-3">
+									<div class="m-1 ratio ratio-4x3 bundleVideo">
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+				</c:if>
 				<%-- 다음 재생목록 영상 --%>
 				<hr width="100%" color="gary">
 				<div class="play_list_title">재생목록 제목</div>
