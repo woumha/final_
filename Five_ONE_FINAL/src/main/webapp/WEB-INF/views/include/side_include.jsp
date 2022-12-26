@@ -24,7 +24,7 @@
                     <a href="<%= request.getContextPath() %>/" class="nav__logo"><i class="fa-solid fa-carrot"></i>&nbsp;VIDIVIDI</a>
                 </div>
                 <div class="nav__list">
-                    <a href="#" class="nav__link active_nav">
+                    <a href="<%= request.getContextPath() %>/" class="nav__link active_nav">
                         <i class="fa-solid fa-house nav__icon"></i>
                         <span class="nav_name"> &nbsp; Home</span>
                     </a>
@@ -44,8 +44,8 @@
                		 </a>
                		 
                		 <a href="#" class="nav__link" id="my_watch_later">
-	                    <i class="fa-solid fa-clock"></i>
-	                    <span class="nav_name"> &nbsp; 나중에 볼 동영상</span>
+	                    <i class="fa-solid fa-comment-dots"></i>
+	                    <span class="nav_name"> &nbsp; 작성한 댓글</span>
                		 </a>
                		 
                		 <a href="#" class="nav__link" id="my_upload_video">
@@ -76,56 +76,56 @@
 
 //구독버튼 클릭 시
 $(document).on("click", "#my_subscribe", function(){
-	if(${empty MemberCode }){
+	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		alert("구독페이지 연결하기");
+		alert("구독 정보 페이지 연결하기");
 	}
 });
 
 //시청 기록 버튼 클릭 시
 $(document).on("click", "#my_watch_record", function(){
-	if(${empty MemberCode }){
+	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		alert("시청 기록 페이지 연결하기");
+		$(location).attr('href', '<%=request.getContextPath()%>/history_list.do?channel_code=${RepChannelCode}');
 	}
 });
 
 
 //좋아요 동영상 버튼 클릭 시
 $(document).on("click", "#my_like_video", function(){
-	if(${empty MemberCode }){
+	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		alert("좋아요 동영상 페이지 연결하기");
+		$(location).attr('href', '<%=request.getContextPath()%>/good_list.do?channel_code=${RepChannelCode}');
 	}
 });
 
-//나중에 시청할 동영상 버튼 클릭 시
+//작성 댓글 버튼 클릭 시
 $(document).on("click", "#my_watch_later", function(){
-	if(${empty MemberCode }){
+	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		alert("나중에 시청할 동영상 페이지 연결하기");
+		$(location).attr('href', '<%=request.getContextPath()%>/reply_list.do?channel_code=${RepChannelCode}');
 	}
 });
 
 //내 동영상 버튼 클릭 시
 $(document).on("click", "#my_upload_video", function(){
-	if(${empty MemberCode }){
+	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		alert("내 동영상 연결하기");
+		$(location).attr('href', '<%=request.getContextPath()%>/channel.do?mc=${RepChannelCode}');
 	}
 });
 
 //설정버튼 클릭 시
 $(document).on("click", "#my_setting", function(){
-	if(${empty MemberCode }){
+	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		alert("설정 페이지 연결하기");
+		$(location).attr('href', '<%=request.getContextPath()%>/setting.do');
 	}
 });
 

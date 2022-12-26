@@ -19,15 +19,14 @@
 <body align="center">
 
 <%-- 검색 필드 include 영역 --%>
-
 	<div id="top_wrap">
 		<jsp:include page="./include/top_include.jsp"/>
 	</div>
 	
 	<br>
+	
 
 <%-- 카테고리 영역 --%>
-
 	<nav id="mainnav" class="group">
 	    <div id="menu">&#x2261; Menu</div>
 	    <ul>
@@ -43,8 +42,16 @@
 	</nav>
 	 	
 
-<%-- 캐러셀 영역 --%>
+<%-- 카테고리 글자 변경 영역 --%>
+<div id="cate_alert">
+	<p>
+	<a id="change_icon"><i class="fa-solid fa-music"></i></a> &nbsp;
+		VIDIVIDI의 <a id="change_word">음악</a> 카테고리 동영상을 만나보세요.
+	</p>
+</div>
 
+
+<%-- 캐러셀 영역 --%>
 <div id="slide_wrap">
 	
 		<div id="slide"> 
@@ -172,42 +179,43 @@ function getContextPath(){
 					var table = "";
 					
 					table += "<table class='video_table'>"
+						
+						$(data).each(function(){
+						
+							table += "<tr>";
+							table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
+										"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
+
+							table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
+										"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+										+ '&nbsp;' + "<a class='vidi_ti'>" + this.video_title + "</a>" + "</td>";
+
+							table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+										"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
+							
+							table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+										"조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+							table += "</tr>";
+							
+							table += "<tr>";
+							table += "<td>" +"</td>";
+							table += "</tr>";
+							table += "<tr>";
+							table += "<td>" + "</td>";
+							table += "</tr>";
+							table += "<tr>";
+							table += "<td>" + "</td>";
+							table += "</tr>";
+							table += "<tr>";
+							table += "<td>" + "</td>";
+							table += "</tr>";
+
+						}); //each end
+						
+						table += "</table>";
+			
 					
-					$(data).each(function(){
-					
-					table += "<tr>";
-					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
-								"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
-					
-					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-								+ '&nbsp;' + this.video_title + "</td>";
-																	
-					table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
-								"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
-					
-					table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "조회수&nbsp;" + this.video_view_cnt + "회" +
-								"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
-					table += "</tr>";
-									
-					table += "<tr>";
-					table += "<td>" + "</td>";
-					table += "</tr>";
-					table += "<tr>";
-					table += "<td>" + "</td>";
-					table += "</tr>";
-					table += "<tr>";
-					table += "<td>" + "</td>";
-					table += "</tr>";
-					table += "<tr>";
-					table += "<td>" + "</td>";
-					table += "</tr>";
-					
-					}); //each end
-					
-					table += "</table>";
-					
-					$(".video_list").append($("<div>").html(table));		
+					$(".video_list").append($("<div>").html(table));	
 				}	
 			},
 			error: function(){
@@ -268,7 +276,7 @@ function getMainVideoList_recent(page_rec){
 
 					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-								+ '&nbsp;' + this.video_title + "</td>";
+								+ '&nbsp;' + "<a class='vidi_ti'>" + this.video_title + "</a>" + "</td>";
 
 					table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 								"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
@@ -461,6 +469,8 @@ function getMainVideoList_recent(page_rec){
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
 		
+		$("#cate_alert").css("display", "none");
+		
 		$(".video_table").remove();
 		check = 2;
         page_rec = 1;
@@ -476,10 +486,14 @@ function getMainVideoList_recent(page_rec){
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
 		
+		$("#cate_alert").css("display", "block");
+		
+		$("#change_icon").html("<i class='fa-solid fa-music'></i>");
+		$("#change_word").text("음악");
+		
 		$(".video_table").remove();
 		var option = 100;
 		getMainVideoList_sort(page_sort, option);
-		$(".video_table").css("margin-left", "11%");
 	});
 	
 	//게임 카테고리 선택
@@ -489,6 +503,11 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#fc942c"); $("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
+		
+		$("#cate_alert").css("display", "block");
+		
+		$("#change_icon").html("<i class='fa-solid fa-gamepad'></i>");
+		$("#change_word").text("게임");
 		
 		$(".video_table").remove();
 		var option = 200;
@@ -504,6 +523,11 @@ function getMainVideoList_recent(page_rec){
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
 
+		$("#cate_alert").css("display", "block");
+		
+		$("#change_icon").html("<i class='fa-solid fa-utensils'></i>");
+		$("#change_word").text("요리");
+		
 		$(".video_table").remove();
 		var option = 300;
 		getMainVideoList_sort(page_sort, option);
@@ -518,6 +542,11 @@ function getMainVideoList_recent(page_rec){
 		$("#sports").css("background-color", "#fc942c"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
 		
+		$("#cate_alert").css("display", "block");
+		
+		$("#change_icon").html("<i class='fa-regular fa-futbol'></i>");
+		$("#change_word").text("스포츠");
+		
 		$(".video_table").remove();
 		var option = 400;
 		getMainVideoList_sort(page_sort, option);
@@ -530,6 +559,11 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#424242"); $("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#fc942c");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#424242");
+		
+		$("#cate_alert").css("display", "block");
+		
+		$("#change_icon").html("<i class='fa-regular fa-newspaper'></i>");
+		$("#change_word").text("뉴스");
 		
 		$(".video_table").remove();
 		var option = 500;
@@ -545,9 +579,15 @@ function getMainVideoList_recent(page_rec){
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#fc942c"); $("#kids").css("background-color", "#424242");
 		
+		$("#cate_alert").css("display", "block");
+		
+		$("#change_icon").html("<i class='fa-solid fa-pencil'></i>");
+		$("#change_word").text("교육");
+		
 		$(".video_table").remove();
 		var option = 600;
 		getMainVideoList_sort(page_sort, option);
+
 	});
 	
 	//아동용 카테고리 선택
@@ -557,6 +597,11 @@ function getMainVideoList_recent(page_rec){
 		$("#game").css("background-color", "#424242"); $("#cook").css("background-color", "#424242");
 		$("#sports").css("background-color", "#424242"); $("#news").css("background-color", "#424242");
 		$("#education").css("background-color", "#424242"); $("#kids").css("background-color", "#fc942c");
+		
+		$("#cate_alert").css("display", "block");
+		
+		$("#change_icon").html("<i class='fa-solid fa-hands-holding-child'></i>");
+		$("#change_word").text("아동");
 		
 		$(".video_table").remove();
 		var option = 700;
