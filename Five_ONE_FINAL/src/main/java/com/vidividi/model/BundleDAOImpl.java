@@ -17,7 +17,17 @@ public class BundleDAOImpl implements BundleDAO {
 	private SqlSession session;
 	
 	@Override
-	public List<BundleDTO> getBundleList(String code) {
-		return this.session.selectList("bundleList", code);
-	}
+	public List<BundleDTO> getBundleList(String ownerCode) {
+		return this.session.selectList("bundleList", ownerCode);
+	} // 재생목록 리스트
+	
+	@Override
+	public int bundleAdd(BundleDTO bundledto) {
+		return this.session.insert("bundleAdd", bundledto);
+	} // 재생목록 추가
+	
+	@Override
+	public int bundleDel(String bundleCode) {
+		return this.session.delete("bundleDel", bundleCode);
+	} // 재생목록 삭제
 }

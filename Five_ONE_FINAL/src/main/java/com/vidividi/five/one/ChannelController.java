@@ -1,19 +1,12 @@
 package com.vidividi.five.one;
 
 import java.io.File;
-import java.io.FilenameFilter;
+
 import java.io.IOException;
 
-
-
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -21,13 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
-import org.apache.catalina.connector.Response;
-import org.json.JSONArray;
+import org.json.simple.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,12 +27,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.vidividi.model.BundleDAO;
 import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.VideoPlayDAO;
-import com.vidividi.model.VideoPlayDAOImpl;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.CategoryDTO;
@@ -48,8 +38,6 @@ import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
 import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
-
-import lombok.NonNull;
 
 
 @Controller
@@ -167,9 +155,6 @@ public class ChannelController {
 		
 		String[] name = fileName(mRequest); // 파일명 가져오기
 		
-		System.out.println("name0: " + name[0]);
-		System.out.println("name1: " + name[1]);
-		
 		if(uploadFile.fileUpload(mRequest, lastChannelCode.trim(), title.trim())) {
 			System.out.println("성공");
 		} else {
@@ -178,14 +163,18 @@ public class ChannelController {
 		
 		String cookingVideoCode = service.generateVideoCode(); // 비디오코드
 		int category = Integer.parseInt(categoryList);
-		
+		String img = name[1];
 		// video_play 테이블
 		VideoPlayDTO playdto = new VideoPlayDTO();
-		playdto.setVideo_code(cookingVideoCode);
-		playdto.setChannel_code(channelCode); // 채널 코드
-		playdto.setVideo_title(title);
-		playdto.setVideo_cont(context);
-		playdto.setVideo_img(title + ".png");
+		playdto.setVideo_code(cookingVideoCode.trim());
+		playdto.setChannel_code(channelCode.trim()); // 채널 코드
+		playdto.setVideo_title(title.trim());
+		playdto.setVideo_cont(context.trim());
+		if(!(img.equals(""))) {
+			playdto.setVideo_img(title + ".png");			
+		} else {
+			playdto.setVideo_img("");
+		}
 		playdto.setVideo_hash(null);
 		playdto.setCategory_code(category); // value값 가져온다
 		
@@ -247,9 +236,11 @@ public class ChannelController {
 		response.setContentType("text/html charset=UTF-8");
 		
 		List<VideoPlayDTO> videoList = this.dao.getVideoList(code);
+		List<BundleDTO> bundle = this.bundledao.getBundleList(code);
 		
 		model.addAttribute("currentOwner", channelWorlddto);
 		model.addAttribute("mvList", videoList);
+		model.addAttribute("bundleList", bundle);
 	
 		return "channel/channel_manager";
 	}
@@ -287,7 +278,6 @@ public class ChannelController {
 	public void setVideoUpdateSuccess(MultipartHttpServletRequest mRequest,
 			HttpServletResponse response,
 			HttpServletRequest request,
-			@RequestParam("cp") String cp,
 			@RequestParam("subVideoCode") String videoCode, 
 			@RequestParam("video_title") String title, 
 			@RequestParam(value="video_cont", required = false) String cont,
@@ -296,11 +286,12 @@ public class ChannelController {
 			@RequestParam("bundleText") String bundleText,
 			@RequestParam("select_Age") String age,
 			@RequestParam("select_openClose") String open,
+			@RequestParam("video_name") String video_name,
+			@RequestParam("img_name") String img_name,
 			@RequestParam("channelCode") String channelCode) throws IOException {
 		
 		
 		response.setContentType("text/html charset=utf-8");
-		System.out.println(age.trim() + " " + open.trim());
 		
 		String[] name = fileName(mRequest); // 파일명 가져오기
 		for(int i=0; i<name.length; i++) {
@@ -309,14 +300,30 @@ public class ChannelController {
 		// 파일 값 수정
 		//videoCode
 		VideoPlayDTO playdtoSearch = this.videodao.getVideoOne(videoCode);
-		if(fileDelete(cp, channelCode, playdtoSearch)) { // 파일 삭제
-			if(uploadFile.fileUpload(mRequest, channelCode.trim(), title.trim())) {
-				System.out.println("성공");
-			} else {
-				System.out.println("실패");
-			}
+		
+		
+		if(fileDelete(video_name.trim(), channelCode.trim(), playdtoSearch)) {
+			System.out.println("삭제 성공: " + playdtoSearch.getVideo_title());
 		} else {
-			System.out.println("변경된 파일이 없습니다.");
+			System.out.println("파일이 존재하지 않습니다.");
+		}
+		
+		if(ImgDelete(img_name.trim(), channelCode.trim(), playdtoSearch)) {
+			if(!(playdtoSearch.getVideo_img().trim() == null)) {
+				System.out.println("삭제 성공: " + playdtoSearch.getVideo_img().trim());				
+			} else {
+				System.out.println("이미지가 존재하지 않습니다.");
+			}
+			
+		} else {
+			System.out.println("이미지가 존재하지 않습니다.");
+		}
+		
+		
+		if(uploadFile.fileUpload(mRequest, channelCode.trim(), title.trim())) {
+			System.out.println("성공");
+		} else {
+			System.out.println("실패");
 		}
 		
 		// 삭제 및 수정 끝
@@ -329,13 +336,9 @@ public class ChannelController {
 		videodto.setVideo_title(title);
 		videodto.setVideo_cont(cont);
 		videodto.setCategory_code(Integer.parseInt(categoryCode));
-		
-		int upCheck = Integer.parseInt(cp);
-		if(upCheck == 1 || upCheck == 3) {
-			videodto.setVideo_img(title.trim() + ".png");	
-		} else {
-			
-		}
+		if(!(img_name.trim().equals("파일을 선택해주세요"))) {
+			videodto.setVideo_img(title.trim() + ".png");				
+		} 
 		
 		if(age.trim().equals("예 아동용 입니다")) {
 			videodto.setVideo_age("true");
@@ -369,6 +372,7 @@ public class ChannelController {
 		
 		
 		int check = this.videodao.updateUploadVideo(videodto, playdto);
+		//int check = -1;
 		System.out.println("check: " +check);
 		if(check > 0) {
 			out.println("<script>"
@@ -381,6 +385,82 @@ public class ChannelController {
 		}
 		// DB값 수정 끝
 	}
+	
+	
+	// 재생목록 불러오기
+	@ResponseBody
+	@RequestMapping(value="bundleList.do", produces = "application/text; charset=UTF-8")
+	public String bundleList(@RequestParam("ownerCode") String code, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		PrintWriter out = response.getWriter();		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		JSONArray jsonArray = new JSONArray();
+		List<BundleDTO> bundleList = this.bundledao.getBundleList(code);
+		for(BundleDTO dto: bundleList) {
+			JSONObject json = new JSONObject();
+			json.put("bundle_code", dto.getBundle_code());
+			json.put("bundle_title", dto.getBundle_title());
+			json.put("bundle_regdate", dto.getBundle_regedate());
+			json.put("bundle_open", dto.getPlaylist_open());
+			json.put("channel_code", dto.getChannel_code());
+			
+			jsonArray.add(json);
+		}
+		return jsonArray.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "bundleMaking.do", produces = "application/text; charset=UTF-8")
+	public String bundleMaking(@RequestParam("code") String code, @RequestParam("bundleN") String bundleName, Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		System.out.println("in");
+		PrintWriter out = response.getWriter();		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		String bundleCode = service.generateBundleCode();
+		
+		BundleDTO bundledto = new BundleDTO();
+		bundledto.setBundle_code(bundleCode);
+		bundledto.setBundle_title(bundleName);
+		bundledto.setChannel_code(code);
+		
+		int check = this.bundledao.bundleAdd(bundledto);
+		JSONArray jsonArray = new JSONArray();
+		List<BundleDTO> bundleList = this.bundledao.getBundleList(code);
+		
+		if(check > 0) {
+			for(BundleDTO dto: bundleList) {
+				JSONObject json = new JSONObject();
+				json.put("bundle_code", dto.getBundle_code());
+				json.put("bundle_title", dto.getBundle_title());
+				json.put("bundle_regdate", dto.getBundle_regedate());
+				json.put("bundle_open", dto.getPlaylist_open());
+				json.put("channel_code", dto.getChannel_code());
+				
+				jsonArray.add(json);
+			}
+		} else {
+			out.println("<script>");
+			out.println("alert('추가 실패');"
+					+ "history.back();");
+			out.println("</script>");
+		}		
+		return jsonArray.toString();
+	}
+	
+	// 재생목록 삭제
+	@ResponseBody
+	@RequestMapping("BundleDelete.do")
+	public void bundleDelete(@RequestParam("bundleCode") String code, HttpServletResponse response) throws IOException {
+		
+		int check = this.bundledao.bundleDel(code);
+		
+		PrintWriter out = response.getWriter();
+		out.println(check);
+	}
+	
+	
 	
 	// 영상 이름 받아오기
 	public String[] fileName(MultipartHttpServletRequest mRequest) {
@@ -410,53 +490,41 @@ public class ChannelController {
 	}
 	
 	// 영상 파일 삭제
-	public boolean fileDelete(String cp, String channelCode, VideoPlayDTO playdtoSearch) throws IOException {
-		int select = Integer.parseInt(cp);
+	public boolean fileDelete(String video, String channelCode, VideoPlayDTO playdtoSearch) throws IOException {
+		boolean check = false;
 		
-		boolean success = true;
-		String eq = playdtoSearch.getVideo_title().trim();
-		
-		String video_dir = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + channelCode + "/";
-		
-		if(select == 3) { // 둘 다 true
-			File dir;
-			dir = new File(video_dir + eq + ".mp4"); // 현재 저장되어 있는 파일
-			
+		String video_dir = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + channelCode + "/" + playdtoSearch.getVideo_title().trim();
+		File dir = new File(video_dir);
+	
+		if(!(video.trim().equals(playdtoSearch.getPlayList_title()))) { // 수정했을 때
 			if(dir.exists()) {
 				if(dir.delete()) {
-					dir = new File(video_dir + "thumbnail/" + eq + ".png");
-					if(dir.exists()) {
-						if(dir.delete()) {
-							System.out.println("삭제 완료: " + eq + ".mp4 / " + eq +".png");
-						}
+					return true;
+				}
+			}
+		}
+		
+		return check;
+	}
+	
+	public boolean ImgDelete(String img, String channelCode, VideoPlayDTO playdtoSearch) {
+		boolean check = false;
+		if(!(playdtoSearch.getVideo_img() == null)) {
+			String img_dir = "/Users/maclee/Public/Spring/Github/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/AllChannel/" + channelCode + "/thumbnail/" + playdtoSearch.getVideo_img().trim();
+			File dir = new File(img_dir);
+			
+			if(!(img.trim().equals(playdtoSearch.getVideo_img()))) {
+				if(dir.exists()) {
+					if(dir.delete()) {
+						return true;
 					}
 				}
 			}
-		} else if (select == 2) { // 비디오만 true
-			File dir;
-			dir = new File(video_dir + eq + ".mp4"); // 현재 저장되어 있는 파일
-			
-			if(dir.exists()) {
-				if(dir.delete()) {
-					System.out.println("삭제 완료: " + eq + ".mp4");
-				}
-			}
-		} else if(select == 1) { // 이미자만 true
-			File dir;
-			dir = new File(video_dir + "thumbnail/" + eq + ".png"); // 현재 저장되어 있는 파일
-			
-			if(dir.exists()) {
-				if(dir.delete()) {
-					System.out.println("삭제 완료: " + eq + ".png");
-				}
-			}
-		} else if(select == 0) {  // 둘 다 false
-			success = false;
-		} else { // 그 외
-			res();
+		} else {
+			return false;
 		}
-		
-		return success;
+			
+		return check;
 	}
 	
 	public void res() throws IOException {

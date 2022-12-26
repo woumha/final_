@@ -140,7 +140,8 @@ $(function(){
 										<th>지역</th>
 										<th>도시</th>
 										<th>IP</th>
-									<tr>
+									</tr>
+									</c:forEach>
 									<c:forEach var="dto" items="${LoginHistoryList }" varStatus="status">
 									<tr>
 										<td>${status.count	 }</td>
