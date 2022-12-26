@@ -38,6 +38,7 @@ import com.vidividi.service.LoginService;
 import com.vidividi.service.SocialLoginService;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.GoogleLoginDTO;
+import com.vidividi.variable.KakaoLoginDTO;
 import com.vidividi.variable.LoginDTO;
 import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
@@ -431,6 +432,33 @@ public class MemberController {
 		}
 		
 		
+	}
+	
+	
+	@RequestMapping("kakao_login.do")
+	public String kakao_login (@RequestParam("code") String code){
+		
+		System.out.println(code);
+		String access_token = socialservice.getKakaoAccessToken(code);
+		System.out.println("토큰 : " + access_token);
+		
+		KakaoLoginDTO dto = socialservice.getKakaoData(access_token);
+		MemberDTO mdto = new MemberDTO();
+		mdto.setMember_name(dto.getKakao_name());
+		mdto.setMember_email(dto.getKakao_email());
+		mdto.setMember_id(dto.getKakao_id());
+		
+		service.insertMember(mdto, "kakao");
+		
+		return "main";
+	}
+	
+	
+	@RequestMapping("naver_login.do")
+	public String naver_login (@RequestParam("code") String code){
+		
+		
+		return "main";
 	}
 	
 
