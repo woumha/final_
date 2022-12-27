@@ -31,6 +31,7 @@
 	<input type="hidden" value="${video_dto.getCategory_code() }" id="category_code">
 	<input type="hidden" value="${good_dto.getGood_code()}" id ="good_code">
 	<input type="hidden" value="${subscribe_dto.getSubscribe_code() }" id="subscribe_code">
+	<input type="hidden" value="${channel_dto.getChannel_profil()}" id="profil">
 	
 	<jsp:include page="../include/top_include2.jsp"/>
 	<%-- <jsp:include page="../include/side_include.jsp"/> --%>
@@ -70,7 +71,7 @@
 						<div class="card_a">
 							<div class="item_a">
 								<div id="input_profile">
-									<img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg">
+									<img class="profile" src="${pageContext.request.contextPath}/resources/img/${video_dto.getChannel_profil()}">
 								</div>
 							</div>
 							
@@ -125,7 +126,7 @@
 											</c:if>
 										</div>
 								</button>
-							</div>
+							</div><!-- .btn_wrap -->
 							<div class="item_a btn_wrap">
 								<button class="watch_btn">
 									<div class="share">공유</div>
@@ -178,7 +179,7 @@
 					<div class="item_a">
 						<div>
 							<div class="card_a">
-								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"></div>
+								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/${channel_dto.getChannel_profil()}"></div>
 								<div class="write_box">
 									<div class="item_a write_field">
 										<div id="reply_cont" class="reply_cont" contenteditable="true" placeholder="댓글 추가..."></div>
@@ -188,7 +189,7 @@
 										<div>이모티콘</div>
 										<div class="card_e">
 											<div class="item_reply btn_wrap">
-												<button class="watch_btn">
+												<button id="reply_cancle" class="watch_btn">
 													<div class="cancle_btn">취소</div>
 												</button>
 											</div>

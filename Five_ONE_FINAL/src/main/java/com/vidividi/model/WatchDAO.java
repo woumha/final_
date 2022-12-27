@@ -20,8 +20,10 @@ public interface WatchDAO {
 	
 	public List<VideoPlayDTO> getVideoList();
 	
+	public List<ReplyDTO> getReply(String video_code, String reply_option, int startNo, int endNo);
+	
 	public List<ReplyDTO> getReply(String video_code, String reply_option, String channel_code, int startNo, int endNo);
-
+	
 	public List<ReplyDTO> getComment(String video_code, String reply_group, int startNo, int endNo);
 	
 	public List<VideoPlayDTO> getPlayList(String playList_code);
@@ -55,15 +57,23 @@ public interface WatchDAO {
 
 	public void updateFeedback(String feedback_code, int feedback_good);
 
-	public void plusVideoGood(String video_code, String option);
+	public int plusVideoGood(String video_code, String option);
 
-	public void minusVideoGood(String video_code, String option);
+	public int minusVideoGood(String video_code, String option);
 
-	public void changeGood(String video_code, String option);
+	public int changeGood(String video_code, String option);
 
 	public void inputReply(String video_code, String reply_code, String reply_cont, int reply_comment, String reply_group,
 			String repChannelCode);
 
 	public ReplyDTO getNewReply(String reply_code);
+
+	public List<ReplyDTO> getMyReply(String video_code, String reply_option, String repChannelCode);
+
+	public ChannelDTO getChannel(String repChannelCode);
+
+	public void updateReplyComment(String reply_code);
+
+	
 	
 }
