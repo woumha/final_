@@ -112,22 +112,18 @@ public class m_HistoryController {
 	public void delete_history(@RequestParam("video_code") String video,
 								@RequestParam("channel_code") String channel,
 								@RequestParam("search") int search,
-								@RequestParam("keyword") String keyword,
+								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								HttpServletResponse response) throws IOException {
 		Map<String,Object>map = new HashMap<String,Object>();
 		map.put("video", video); map.put("channel", channel);
 		
-		// 선택된 history_num 가져오기
-		int history_num = this.dao.getHistory_num(map);
-		
 		// 선택된 history 데이터 지우기
-		int check = this.dao.history_search_one_delete(history_num);
+		int check = this.dao.history_search_one_delete(map);
 		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
 		if(check > 0) {
-			this.dao.updateSequence(history_num);
 			// search라면
 			if(search == 2) {
 				out.println("<script>");

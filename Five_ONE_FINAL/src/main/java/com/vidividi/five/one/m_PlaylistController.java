@@ -149,7 +149,7 @@ public class m_PlaylistController {
 			}
 		}else {
 			out.println("<script>");
-			out.println("alert('시청기록 삭제 중 오류 발생')");
+			out.println("alert('재생목록 삭제 중 오류 발생')");
 			out.println("history.back()");
 			out.println("</script>");
 		}

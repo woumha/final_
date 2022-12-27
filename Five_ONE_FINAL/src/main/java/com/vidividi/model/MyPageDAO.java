@@ -22,9 +22,7 @@ public interface MyPageDAO {
 	/* history (시청한 동영상) */
 	List<VideoPlayDTO> getHistoryList(String code, int startNo, int endNo);
 	List<VideoPlayDTO> getHistory_search(Map<String, Object> map);
-	int getHistory_num(Map<String, Object> map);
-	int history_search_one_delete(int num);
-	int updateSequence(int num);
+	int history_search_one_delete(Map<String, Object> map);
 	int delete_history(String code);
 	
 	/* good (좋아요, 싫어요 누른 동영상) */
@@ -56,8 +54,10 @@ public interface MyPageDAO {
 	
 	/* my_reply (내가 작성한 댓글) */
 	List<ReplyDTO> getMy_reply_list(String code, int startNo, int endNo);
-	int delete_group_reply(Map<String, Object> map);
-	int delete_one_reply(Map<String, Object> map);
+	int delete_group_reply(String group);
+	int delete_one_reply(String code);
+	String getMy_reply_group(String code);
+	int getMy_reply_comment(String code);
 	
 	
 }

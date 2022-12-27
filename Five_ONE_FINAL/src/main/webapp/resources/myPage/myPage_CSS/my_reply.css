@@ -2,85 +2,109 @@
 
 body { margin: 0; padding: 0; }
 
-#wrap_myPage {
-/* background-color: yellow; */
-width: 100%; }
+#wrap_myPage { width: 100%; }
 
 #content_box {
 margin-top: 94px;
-margin-left: 300px;
+margin-left: 500px;
+margin-bottom: 50px;
 }
 
 #my_reply_title {
-	
 font-size: 16px;
 font-weight: bold;
 margin-bottom: 20px;
+margin-left: 50px;
 }
 
 .video_boxs {
-	width: 700px;
-	margin-left: 50px;
-	
+width: 700px;
+margin-left: 100px;
+margin-bottom: 20px;
 }
 
 .delete_reply {
-	text-align: right;
+text-align: right;
+margin-bottom: 10px;
 }
 
 .reply_text_box {
-	float: left;
-	
+float: left;
 }
 
 .reply_cont {
-	width: 500px;
-	margin-top: 10px;
-	margin-bottom: 20px;
+width: 480px;
+margin-top: 10px;
+margin-bottom: 30px;
 	
-	font-size: 16px;
+font-size: 16px;
 	
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
 }
 
 .video_title {
-	width: 500px;
-	margin-bottom: 20px;
+width: 480px;
+font-size: 14px;
 	
-	font-size: 14px;
-	
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+}
+
+.video_title_sub {
+font-size: 14px;
+margin-bottom: 20px;
 }
 
 .reply_regdate {
-	width: 500px;
+width: 480px;
 	
-	font-size: 12px;
+font-size: 12px;
 	
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
 }
 
 .video_img_box {
-	float: right;
+/* float: right; */
+}
+
+.reply_box {
+margin-bottom: 30px;
 }
 
 .video_img {
-	width: 200px;
-	
-	/* 삭제 할 코드*/
-	border: solid 1px;
+width: 210px;
+height: 118px;
+border-radius: 10px;
+}
+
+
+
+/* 댓글 개별 삭제 이미지 */
+.video_d_img {
+display: inline-block;
+width: 15px;
+vertical-align: top;
+margin-top: 10px;
+}
+
+#reply_end {
+text-align: center;
+margin-top: 100px;
+}
+
+.reply_line {
+ width: 100%;
 }
 
 /* 로그인 안했을 시 */
@@ -89,13 +113,9 @@ width: 100%;
 height: 800px;
 text-align: center;
 }
-#none_img { margin-top: 12%; margin-bottom: 20px;}
-#none_title {
-font-size: 30px;
-font-weight: bold;
-}
+#none_img { margin-top: 12%; margin-bottom: 20px; }
+#none_title { font-size: 30px; font-weight: bold; }
 #none_text { font-size: 17px; }
-#none_btn {  }
 #none_btn {
 border: 0; outline: 0;
 font-size: 12px;
@@ -109,16 +129,27 @@ margin-top: 12px;
 
 /* ======================= 미디어 쿼리 스타일 영역 ======================= */
 @media screen and (max-width: 1500px) {
-	#content_box {
-		margin-left: 200px;
-	}
+	#content_box { margin-left: 200px; }
 }
 @media screen and (max-width: 1200px) {
-	#content_box {
-		margin-left: 130px;
-	}
-	#subscribe_title {
-		margin-left: 105px;
-	}
+	#content_box { margin-left: 130px; }
+	#subscribe_title { margin-left: 105px; }
+}
+@media screen and (max-width: 1200px) {
+	#content_box { margin-left: 130px; }
+	#subscribe_title { margin-left: 105px; }
+}
+@media screen and (max-width: 1000px) {
+	#content_box { margin-left: 100px; }
+	#subscribe_title { margin-left: 105px; }
+	.video_boxs { width: 560px;}
+	.reply_cont { width: 350px; }
+	.video_title { width: 350px; }
+	.reply_regdate { width: 350px; }
 }
 /* ========================= 미디어 쿼리 end ========================= */
+
+
+
+
+

@@ -77,7 +77,7 @@ function getHistory_new(channel_code, page_history, video_loction){
 				$(history).each(function(){
 					div += "<div class='video_box'>";
 					div += "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>";
-					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<video class='test_video' src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
 					div += "</a>";
@@ -130,7 +130,7 @@ function getHistory_search(channel_code, page_search, keyword) {
 				$(history_search).each(function(){
 					div += "<div class='video_box'>";
 					div += "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>";
-					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<video class='test_video' src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
 					div += "</a>";

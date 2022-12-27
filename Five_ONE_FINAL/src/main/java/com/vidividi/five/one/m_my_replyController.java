@@ -32,7 +32,7 @@ public class m_my_replyController {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
-		int rowsize = 10;
+		int rowsize = 5;
 		int startNo = (page * rowsize) - (rowsize - 1);
 		int endNo = (page * rowsize);
 		
@@ -45,7 +45,7 @@ public class m_my_replyController {
 		for(ReplyDTO dto : list) {
 			JSONObject json = new JSONObject();
 			json.put("video_code", dto.getVideo_code());
-			json.put("reply_code", dto.getChannel_code());
+			json.put("reply_code", dto.getReply_code());
 			json.put("reply_comment", dto.getReply_comment());	
 			json.put("reply_cont", dto.getReply_cont());	
 			json.put("member_code", dto.getMember_code());	
@@ -59,7 +59,8 @@ public class m_my_replyController {
 			json.put("reply_bad", dto.getReply_bad());	
 			json.put("reply_group", dto.getReply_group());
 			json.put("video_title", dto.getVideo_title());
-			json.put("video_img", dto.getVideo_img());
+			json.put("video_img", dto.getVideo_img());		
+			json.put("video_owner", dto.getVideo_owner());			
 			
 			jArray.add(json);
 		}
@@ -67,73 +68,39 @@ public class m_my_replyController {
 		return jArray.toString();
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "delete_one_my_reply.do" , produces = "application/text; charset=UTF-8")
-	public String delete_one_subscribe(@RequestParam("channel_code") String channel,
-									@RequestParam("reply_code") String reply,
-									@RequestParam("reply_group") String group,
-									@RequestParam("reply_comment") int comment,
-									int page, HttpServletResponse response) throws IOException {
+	@RequestMapping("my_reply_delete.do")
+	public void delete_my_reply(@RequestParam("reply_code") String code,
+								@RequestParam("channel_code") String channel,
+								Model model, HttpServletResponse response) throws IOException {
 		
-		response.setContentType("text/html; charset=UTF-8");
+		// reply_code로 reply_group, reply_comment 구하기
+		String group = this.dao.getMy_reply_group(code);
+		int comment = this.dao.getMy_reply_comment(code);
 		
-		int rowsize = 10;
-		int startNo = (page * rowsize) - (rowsize - 1);
-		int endNo = (page * rowsize);
+		int check = 0;
 		
-		System.out.println("channel_code >>> " + channel);
-		System.out.println("reply_code >>> " + reply);
-		System.out.println("reply_group >>> " + group);
-		
-		Map<String,Object>map = new HashMap<String,Object>();
-		
-		// 접속중인 채널 코드
-		map.put("channel", channel);
-		
-		// reply_code (댓글 고유코드)
-		map.put("reply", reply);
-		
-		// reply_group (댓글 그룹이름)
-		map.put("group", group);
-		
-		// 만약 대댓글이 있는 댓글이라면
 		if(comment == 1) {
-			// 댓글 그룹 삭제
-			this.dao.delete_group_reply(map);
+			check = this.dao.delete_group_reply(group);
 		}else {
-			// 아니라면 댓글만 삭제
-			this.dao.delete_one_reply(map);
+			check = this.dao.delete_one_reply(code);
 		}
-
-		JSONArray jArray = new JSONArray();
+		response.setContentType("text/html; charset=UTF-8");
+		model.addAttribute("channel_code", channel);
+		PrintWriter out = response.getWriter();
 		
-		List<ReplyDTO> list = null;
-		
-		list = this.dao.getMy_reply_list(channel, startNo, endNo);
-
-		for(ReplyDTO dto : list) {
-			JSONObject json = new JSONObject();
-			json.put("video_code", dto.getVideo_code());
-			json.put("reply_code", dto.getChannel_code());
-			json.put("reply_comment", dto.getReply_comment());	
-			json.put("reply_cont", dto.getReply_cont());	
-			json.put("member_code", dto.getMember_code());	
-			json.put("member_name", dto.getMember_name());	
-			json.put("reply_regdate", dto.getReply_regdate());	
-			json.put("reply_update", dto.getReply_update());	
-			json.put("channel_code", dto.getChannel_code());	
-			json.put("channel_name", dto.getChannel_name());	
-			json.put("channel_profil", dto.getChannel_profil());	
-			json.put("reply_good", dto.getReply_good());	
-			json.put("reply_bad", dto.getReply_bad());	
-			json.put("reply_group", dto.getReply_group());
-			json.put("video_title", dto.getVideo_title());
-			json.put("video_img", dto.getVideo_img());
-			jArray.add(json);
+		if(check > 0) {
+			out.println("<script>");
+			out.println("location.href='my_reply.do?channel_code="+channel+"'");
+			out.println("</script>");
+		}else {
+			out.println("<script>");
+			out.println("alert('댓글 삭제 중 오류 발생')");
+			out.println("history.back()");
+			out.println("</script>");
 		}
-		
-		return jArray.toString();
-}
+	}
+	
+	
 	  
 
 }

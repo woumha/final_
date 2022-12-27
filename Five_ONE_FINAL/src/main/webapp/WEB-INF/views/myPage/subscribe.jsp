@@ -49,7 +49,7 @@ function getSubscribe_list(member_code, page){
 				$(subscribe_div).each(function(){
 					div += "<div class='chanel_area'>";
 					div += "<div class='chanel_box'>";
-					div += "<div class='channel_icon'> <img src='"+getContextPath()+"/resources/img/unnamed.jpg'> </div>";
+					div += "<div class='channel_icon'> <img src='"+getContextPath()+"/resources/img/"+this.channel_profil+"'> </div>";
 					div += "<div class='channel_name'>"+this.channel_name+"</div>";
 					div += "</div>";
 					div += "<div class='channel_info'>";
