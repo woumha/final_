@@ -78,6 +78,10 @@
 	    cursor: pointer;
 	}
 	
+	.nav__toggle:hover{
+		color: #fc942c;
+	}
+	
 	.nav__logo {
 	    color: var(--white-color);
 	    font-weight: 600;

@@ -6,6 +6,7 @@
 <html id="html">
 <head>
 <meta charset="UTF-8">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -150,17 +151,24 @@
 		<c:if test="${!empty MemberCode }">
 			<div id="user_popup"> 
 				<ul id="user_list">
-					<li><b><i class="fa-solid fa-circle-user" id="user_nickname"></i> ${MemberName }님</b></li>
+					<li id="userpop_title"><b>
+						<img id="userpop_img" src="${pageContext.request.contextPath}/resources/img/default_channel_profile.png" width="45px" height="45px">
+						${MemberName }&nbsp;님</b>
+					</li>
 					<hr>
 					<%-- 내 채널 이미지 //이호찬 --%>
           <c:set var="ccode" value="${RepChannelCode }" />
-					<li onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'">
+					<li id="userpop_mychannel" onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'">
+					
 					<i class="fa-regular fa-circle-user"></i>&nbsp;&nbsp;내 채널</li>
-					<li onclick="location.href='<%=request.getContextPath()%>//myPage_go.do?channel_code=${RepChannelCode}'"> <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
-					<li><i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
+					
+					<li id="userpop_mypage" onclick="location.href='<%=request.getContextPath()%>/myPage_go.do?channel_code=${RepChannelCode}'"> <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
+					
+					<li id="userpop_box" onclick="location.href='<%=request.getContextPath()%>/myPage_go.do?channel_code=${RepChannelCode}'"><i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
-					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
-					<li><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
+					<li id="userpop_setting" onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
+					
+					<li id="userpop_logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
 				</ul>
 			</div>
 		</c:if>

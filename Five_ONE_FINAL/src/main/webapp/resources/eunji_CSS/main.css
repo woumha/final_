@@ -1,117 +1,107 @@
 @charset "UTF-8";
-
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
 * {
-	outline: none !important;
-	text-decoration: none !important;
+outline: none !important;
+text-decoration: none !important;
 }
 
+body {
+font-family: 'Gowun Dodum', sans-serif;
+cursor: url('../eunji_IMG/rabbit_cursor.png'),auto;
+}
 
 .video_table a:hover{
-	color: #fc942c !important;
+color: #fc942c !important;
 }
 
-
 .test_video  {
-  transition: all 0.2s linear;
-  overflow: hidden;
+transition: all 0.2s linear;
+overflow: hidden;
 }
 
 .test_video:hover {
-  transform: scale(1.2);
+transform: scale(1.2);
 }
 
-
-/* -----------------------------------------------------------커서 이미지 변경------------------------------------------------------------- */
-	
-body {
-	font-family: 'Noto Sans KR' !important;
-	cursor: url('../eunji_IMG/rabbit_cursor.png'),auto;
+#cate_alert{
+display: none;
 }
 
-@media screen and (max-width: 992px) {
-	.container1 div{
-		width: 500px;
-		justify-content: center;
-	}
-		
-	#slide {
-		width: 800px;
-		height: 350px;
-		 padding: 0 10%;
-		 justify-content: space-between;
-		 align-items: center;
-	}
-		
-}	
+#change_icon i{
+font-size : 25px;	
+}
 
+/* -----------------------------------------------------------------------커서 이미지 변경-------------------------------------------------------------- */
 .group:after {
-	content: "";
-	display: table;
-	clear: both;
+content: "";
+display: table;
+clear: both;
 }
-
 
 #side_wrap{
-	display: flex;
+display: flex;
 }
 	
 #sidebar{
-	flex: 1;
+flex: 1;
 }
 
+/* --------------------------------------------------------------------------cate_alert설정---------------------------------------------------------- */
+#cate_alert{
+width: 500px;
+margin-top: 50px;
+margin-left: 21%;
+}
 
 /* ---------------------------------------------------------------------------텍스트 설정--------------------------------------------------------------  */
-
-
 a:link {
-    text-decoration: none;
-    color: black;
+text-decoration: none;
+color: black;
 }
 
 a:visited {
-    text-decoration: none;
-    color: black;
+text-decoration: none;
+color: black;
 }
 
 a:hover {
-    text-decoration: none;
-    color: #fc942c;
+text-decoration: none;
+color: #fc942c;
 }
 
 a:active {
-    text-decoration: none;
+text-decoration: none;
 }	
-
 
 /*------------------------------------------------------------- 상단 카테고리 바------------------------------------- */	
 #mainnav {
-	background: #424242;
-	color: #fff;
-	font-weight: bold;
-	text-transform:uppercase;
-	letter-spacing: .05em;
+background: #424242;
+color: #fff;
+font-weight: bold;
+text-transform:uppercase;
+letter-spacing: .05em;
 }
 		
 #mainnav #menu {
-	display: none;
-	padding: .8em 1.5em;
-	cursor: pointer;
+display: none;
+padding: .8em 1.5em;
+cursor: pointer;
 }
 		
 		
-		#mainnav ul {
-		    display: block;
-		    margin: 0;
-		    margin-left: 7%;
-		    text-align: center;
-		}
+#mainnav ul {
+display: block;
+margin: 0;
+margin-left: 7%;
+text-align: center;
+}
 		
-		#mainnav ul li {
-		    margin: 0;
-		    list-style: none;
-		    display: inline-block;
-		}
+#mainnav ul li {
+margin: 0;
+list-style: none;
+display: inline-block;
+}
 		
 		#mainnav ul li a {
 		    color: #fff;
@@ -129,12 +119,178 @@ a:active {
 			  padding: 1.5em;
 		}
 		
+			.video_table{
+	     		width: 1500px;
+	     		display: flex;
+		      	flex: 3;
+				flex-direction: column;
+				justify-content: center;
+				margin-left: 20%;
+				padding-left: 10px;	
+	     	}
 	
-		@media all and (min-width: 768px) and (max-width: 992px) {
+/* ---------------------------------------------------------------------------반응형---------------------------------------------------------------------  */
+		@media all and (min-width: 1502px){
 		
-		}
+			button {
+				margin: 20px; 
+			}
+			  
+			.custom-btn {
+			  width: 130px;
+			  height: 40px;
+			  color: #fff;
+			  border-radius: 5px;
+			  padding: 10px 25px;
+			  font-weight: 500;
+			  background: transparent;
+			  cursor: pointer;
+			  transition: all 0.3s ease;
+			  position: relative;
+			  display: inline-block;
+			   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+			   7px 7px 20px 0px rgba(0,0,0,.1),
+			   4px 4px 5px 0px rgba(0,0,0,.1);
+			  outline: none;
+			}
+				   
+			#re_label{
+				margin-top: -30px;
+				margin-bottom: 25px; 
+				margin-left: 1%;
+			}
 		
-		@media all and (max-width: 767px) {
+			.re_btn {
+			  margin-left: 20.2%;
+		   	  margin-top: 10%;
+			  background: #fc942c;
+			  border: none;
+			  z-index: 1;
+			  width: 200px;
+			  outline: none;
+			}
+			
+			.re_btn:after {
+			  position: absolute;
+			  content: "";
+			  width: 0;
+			  height: 100%;
+			  top: 0;
+			  right: 0;
+			  z-index: -1;
+			  background-color: #424242;
+			  border-radius: 5px;
+			   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+			   7px 7px 20px 0px rgba(0,0,0,.1),
+			   4px 4px 5px 0px rgba(0,0,0,.1);
+			  transition: all 0.3s ease;
+			  outline: none;
+			}
+			
+			.re_btn:hover {
+			  color: #fff;
+			}
+			
+			.re_btn:hover:after {
+			  left: 0;
+			  width: 100%;
+			}
+			
+			.re_btn:active {
+			  top: 2px;
+			}
+	   
+		}/* 풀 화면 end */
+     	
+     	
+     	@media all and (min-width: 901px) and (max-width: 1501px) {
+     	   .video_table{
+     			width: 1000px;	
+     			display: flex;
+	      		flex: 3;
+				flex-direction: column;
+				justify-content: center;
+				margin-left: 20%;
+				padding-left: 10px;		
+     		}
+     		
+     		#slide_wrap{
+		    	display: none;
+		    }
+		    
+		    button {
+				margin: 20px; 
+			}
+			  
+			.custom-btn {
+			  width: 130px;
+			  height: 40px;
+			  color: #fff;
+			  border-radius: 5px;
+			  padding: 10px 25px;
+			  font-weight: 500;
+			  background: transparent;
+			  cursor: pointer;
+			  transition: all 0.3s ease;
+			  position: relative;
+			  display: inline-block;
+			   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+			   7px 7px 20px 0px rgba(0,0,0,.1),
+			   4px 4px 5px 0px rgba(0,0,0,.1);
+			  outline: none;
+			}
+				   
+			#re_label{
+				margin-top: -30px;
+				margin-bottom: 25px; 
+				margin-left: 1%;
+			}
+		
+			.re_btn {
+			  margin-left: 0.1%;
+		   	  margin-top: 10%;
+			  background: #fc942c;
+			  border: none;
+			  z-index: 1;
+			  width: 200px;
+			  outline: none;
+			}
+			
+			.re_btn:after {
+			  position: absolute;
+			  content: "";
+			  width: 0;
+			  height: 100%;
+			  top: 0;
+			  right: 0;
+			  z-index: -1;
+			  background-color: #424242;
+			  border-radius: 5px;
+			   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+			   7px 7px 20px 0px rgba(0,0,0,.1),
+			   4px 4px 5px 0px rgba(0,0,0,.1);
+			  transition: all 0.3s ease;
+			  outline: none;
+			}
+			
+			.re_btn:hover {
+			  color: #fff;
+			}
+			
+			.re_btn:hover:after {
+			  left: 0;
+			  width: 100%;
+			}
+			
+			.re_btn:active {
+			  top: 2px;
+			}
+			
+		} /* 중간단계 end */
+		
+		
+		
+		@media all and (max-width: 900px) {
 			
 		    #mainnav #menu {
 		        display: block;
@@ -158,25 +314,95 @@ a:active {
 		    .l-navbar{
 		    	display: none;
 		    }
+		    
+		    #slide_wrap{
+		    	display: none;
+		    }
+		    
+		     .video_table{
+     			width: 500px;	
+     			display: flex;
+	      		flex: 3;
+				flex-direction: column;
+				justify-content: center;
+				margin-left: 20%;
+				padding-left: 10px;		
+     		}
+     		
+     		button {
+				margin: 20px; 
+			}
+			  
+			.custom-btn {
+			  width: 130px;
+			  height: 40px;
+			  color: #fff;
+			  border-radius: 5px;
+			  padding: 10px 25px;
+			  font-weight: 500;
+			  background: transparent;
+			  cursor: pointer;
+			  transition: all 0.3s ease;
+			  position: relative;
+			  display: inline-block;
+			   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+			   7px 7px 20px 0px rgba(0,0,0,.1),
+			   4px 4px 5px 0px rgba(0,0,0,.1);
+			  outline: none;
+			}
+				   
+			#re_label{
+				margin-top: -30px;
+				margin-bottom: 25px; 
+				margin-left: 1%;
+			}
 		
-		}  
+			.re_btn {
+			  margin-left: 0.1%;
+		   	  margin-top: 10%;
+			  background: #fc942c;
+			  border: none;
+			  z-index: 1;
+			  width: 200px;
+			  outline: none;
+			}
+			
+			.re_btn:after {
+			  position: absolute;
+			  content: "";
+			  width: 0;
+			  height: 100%;
+			  top: 0;
+			  right: 0;
+			  z-index: -1;
+			  background-color: #424242;
+			  border-radius: 5px;
+			   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+			   7px 7px 20px 0px rgba(0,0,0,.1),
+			   4px 4px 5px 0px rgba(0,0,0,.1);
+			  transition: all 0.3s ease;
+			  outline: none;
+			}
+			
+			.re_btn:hover {
+			  color: #fff;
+			}
+			
+			.re_btn:hover:after {
+			  left: 0;
+			  width: 100%;
+			}
+			
+			.re_btn:active {
+			  top: 2px;
+			}
+		} /* 제일 작을 때 반응형 end */
 		
+/* ----------------------------------------------------------------------------------------------------------------------------------------------- */
 		#all{
 			background-color: #fc942c;
 		}
-		
-     	.video_table{
-     		width: 1500px;
-     		display: flex;
-	      	flex: 3;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			margin-left: 20%;
-			padding-left: 10px;
 			
-     	}
-     	
 		video{
 			border-radius: 10px;
 			margin-top: 0px;
@@ -189,6 +415,12 @@ a:active {
 		.video_view_ctn{
 			padding-bottom: 5px;
 			margin-bottom: 10px;
+		}
+		
+		.vidi_ti{
+			font-size: 21px;
+			vertical-align: middle;
+			color: #424242;
 		}
 	
 		tr { display: block; float: left; }
@@ -346,79 +578,8 @@ a:active {
 		  left: 17em;
 		  top: 20em;
 		} 
-		
-		     		
-/* ------------------------------------------------추천 동영상 라벨-------------------------------------------------  */
+	
    
-button {
-	margin: 20px; 
-}
-	   
-#re_label{
-	margin-top: -30px;
-	margin-bottom: 25px; 
-	margin-left: 1%;
-}
-	  
-	.custom-btn {
-	  width: 130px;
-	  height: 40px;
-	  color: #fff;
-	  border-radius: 5px;
-	  padding: 10px 25px;
-	  font-family: 'Lato', sans-serif;
-	  font-weight: 500;
-	  background: transparent;
-	  cursor: pointer;
-	  transition: all 0.3s ease;
-	  position: relative;
-	  display: inline-block;
-	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-	   7px 7px 20px 0px rgba(0,0,0,.1),
-	   4px 4px 5px 0px rgba(0,0,0,.1);
-	  outline: none;
-	}
-   
-	 .re_btn {
-	  margin-left: 20.2%;
-   	  margin-top: 10%;
-	  background: #fc942c;
-	  border: none;
-	  z-index: 1;
-	  width: 200px;
-	  outline: none;
-	}
-	
-	.re_btn:after {
-	  position: absolute;
-	  content: "";
-	  width: 0;
-	  height: 100%;
-	  top: 0;
-	  right: 0;
-	  z-index: -1;
-	  background-color: #424242;
-	  border-radius: 5px;
-	   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-	   7px 7px 20px 0px rgba(0,0,0,.1),
-	   4px 4px 5px 0px rgba(0,0,0,.1);
-	  transition: all 0.3s ease;
-	  outline: none;
-	}
-	
-	.re_btn:hover {
-	  color: #fff;
-	}
-	
-	.re_btn:hover:after {
-	  left: 0;
-	  width: 100%;
-	}
-	
-	.re_btn:active {
-	  top: 2px;
-	}
-	   
 /*---------------------------------------------- 신규 동영상 버튼 --------------------------------------------------*/
 	
 	.up_btn {

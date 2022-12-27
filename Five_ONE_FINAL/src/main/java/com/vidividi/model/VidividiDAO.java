@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.vidividi.variable.MainListDTO;
 import com.vidividi.variable.PlaylistDTO;
+import com.vidividi.variable.SearchPlayListDTO;
 import com.vidividi.variable.TestDTO;
 
 public interface VidividiDAO {
@@ -29,6 +30,9 @@ public interface VidividiDAO {
 	List<MainListDTO> searchVideoList_new(String field, String keyword, String option, int startNo, int endNo);
 	
 	//재생목록 리스트 띄우기
-	List<PlaylistDTO> getPlaylistList(String play_code);
+	List<SearchPlayListDTO> getPlaylistList(String play_code);
+	
+	//재생목록 추가하기
+	List<SearchPlayListDTO> insertPlaylistList(String play_code, String play_video_code, String play_video_title, String play_bundle_title);
 	
 }
