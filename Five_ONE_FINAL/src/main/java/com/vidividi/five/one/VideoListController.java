@@ -62,8 +62,6 @@ public class VideoListController {
 		
 		List<MainListDTO> list3 = this.dao.mainVideo_sort(startNo, endNo, option);
 		
-		System.out.println("소트 옵션>>>" + option);
-		
 		return list3;
 	}
 

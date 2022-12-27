@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 	<div class="modal-body">
-	<form method="post" enctype="multipart/form-data" action="<%=request.getContextPath() %>/upload_success.do?channelCode=${channelcode };" class="form-floating" id="send_form">
+	<form method="post" enctype="multipart/form-data" action="<%=request.getContextPath() %>/upload_success.do?channelCode=${channelcode }" class="form-floating" id="send_form">
 		<div class="container-fluid">
 			<%-- 최상단 라인 --%>
 		    <div class="row">
@@ -31,7 +31,7 @@
 		   <%-- 업로드 영상 섹션 --%>
 		    <div class="row">
 			    <div class="col-6 ms-auto out-side">
-			    	<div class="drag-area">
+			    	<div class="drag-area" align="center">
 			      		<div class="submit_video">
 				      		<div class="icon icon_change">
 				      			<i class="fas fa-cloud-upload-alt"></i>
@@ -144,7 +144,7 @@
 	        	<div class="col-2">
 	        		<button type="button" class="btn btn-primary video_upload_btn">업로드</button>
 	        		&nbsp;
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+			        <button type="button" class="btn btn-secondary modal_close" data-dismiss="modal">취소</button>
 	        	</div>
 		    </div>
 		    <hr>

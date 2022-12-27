@@ -181,7 +181,7 @@
 								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"></div>
 								<div class="write_box">
 									<div class="item_a write_field">
-										<div class="reply_cont" contenteditable="true" placeholder="댓글 추가..."></div>
+										<div id="reply_cont" class="reply_cont" contenteditable="true" placeholder="댓글 추가..."></div>
 									</div>
 
 									<div class="item_a card_b">
@@ -193,7 +193,7 @@
 												</button>
 											</div>
 											<div class="item_reply btn_wrap">
-												<button class="watch_btn">
+												<button id="reply_complete" class="watch_btn">
 													<div class="reply_btn">답글</div>
 												</button>
 											</div>

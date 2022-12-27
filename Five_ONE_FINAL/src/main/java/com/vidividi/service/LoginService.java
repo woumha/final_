@@ -17,12 +17,14 @@ public interface LoginService {
 	String generateVideoCode();
 	String generatePWD(int size);
 	String insertMember(MemberDTO dto, String via);
-
-	String generateVideoCode(); // 비디오 코드
 	String generateBundleCode(); // 재생목록 코드
 
 	ChannelDTO newChannel(String memberCode, String channelCode, String memberName);
 	int getAge(String date);
   
 	String generateGoodCode();
+	String generateSubscribeCode();
+	String generateFeedbackCode();
+	String generateReplyCode();
+	String generateReplyGroupCode();
 }

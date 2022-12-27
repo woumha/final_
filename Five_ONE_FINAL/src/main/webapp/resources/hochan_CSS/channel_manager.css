@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+
 .profil_settings {
 	width: 50%;
 	margin-left: 25%;
@@ -41,4 +42,49 @@
 #listmake {
 	font-size: 14px;
 	margin: 6px;
+}
+
+.img_field {
+	border: 0 solid black;
+	width: 100%;
+	background-color: #ECE9EF;
+}
+
+.vr {
+	border-left: medium;
+}
+
+
+/* 매니저 */
+.atag {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.card-body {
+	background-color: #ECE9EF;
+}
+
+.bundle_text:hover {
+	color: green;
+}
+
+.child_bundle {
+	padding-left: 20px solid;
+	color: black;
+	font-size: 16px;
+}
+
+.child_bundle:hover {
+	color: green;
+}
+
+.icon.black {
+	color: black;
+}
+
+#bDelIndex {
+	float: right;
+	border: 0;
+	background-color: #ECE9EF;
 }

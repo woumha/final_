@@ -1,12 +1,25 @@
 package com.vidividi.five.one;
 
+import java.io.BufferedReader;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.net.URL;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +38,7 @@ import com.vidividi.service.LoginService;
 import com.vidividi.service.SocialLoginService;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.GoogleLoginDTO;
+import com.vidividi.variable.KakaoLoginDTO;
 import com.vidividi.variable.LoginDTO;
 import com.vidividi.variable.LoginHistoryDTO;
 import com.vidividi.variable.MemberDTO;
@@ -56,10 +70,9 @@ public class MemberController {
 	
 	@Autowired
 	private LoginHistoryService loginHistoryService;
-	
+  
 	@Autowired
 	private SocialLoginService socialservice;
-	
 	
 	@RequestMapping("login.do")
 	public String login() {
@@ -419,6 +432,33 @@ public class MemberController {
 		}
 		
 		
+	}
+	
+	
+	@RequestMapping("kakao_login.do")
+	public String kakao_login (@RequestParam("code") String code){
+		
+		System.out.println(code);
+		String access_token = socialservice.getKakaoAccessToken(code);
+		System.out.println("토큰 : " + access_token);
+		
+		KakaoLoginDTO dto = socialservice.getKakaoData(access_token);
+		MemberDTO mdto = new MemberDTO();
+		mdto.setMember_name(dto.getKakao_name());
+		mdto.setMember_email(dto.getKakao_email());
+		mdto.setMember_id(dto.getKakao_id());
+		
+		service.insertMember(mdto, "kakao");
+		
+		return "main";
+	}
+	
+	
+	@RequestMapping("naver_login.do")
+	public String naver_login (@RequestParam("code") String code){
+		
+		
+		return "main";
 	}
 	
 

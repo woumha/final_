@@ -121,4 +121,47 @@
 		select video_good from video_play where video_code = #{video_code}
 	</select>
 	
+	<insert id="insertFeedback" parameterType="hashmap">
+		insert into feedback_reply values(#{feedback_code}, #{video_code}, #{reply_code}, #{repChannelCode}, #{feedback_good}, current_date)
+	</insert>
+	
+	<delete id="deleteFeedback" parameterType="String">
+		delete from feedback_reply where feedback_code = #{feedback_code}
+	</delete>
+	
+	<update id="updateFeedback" parameterType="hashmap">
+		update feedback_reply set feedback_good = #{feedback_good} where feedback_code = #{feedback_code}
+	</update>
+	
+	<update id="plusVideoGood" parameterType="hashmap">
+		update video_play
+		set ${option} = (select ${option}+1 from video_play where video_code=#{video_code})
+		where video_code=#{video_code}
+	</update>
+	
+	<update id="miusVideoGood" parameterType="hashmap">
+		update video_play
+		set ${option} = (select ${option}-1 from video_play where video_code=#{video_code})
+		where video_code=#{video_code}
+	</update>
+	
+	<update id="changeToGood" parameterType="String">
+		update video_play 
+		set video_good = (select video_good+1 from video_play where video_code =#{video_code}), video_bad = (select video_bad-1 from video_play where video_code=#{video_code})
+		where video_code = #{video_code}	
+	</update>
+	
+	<update id="changeToBad" parameterType="hashmap">
+		update video_play 
+		set video_good = (select video_good-1 from video_play where video_code=#{video_code}), video_bad = (select video_bad+1 from video_play where video_code=#{video_code})
+		where video_code=#{video_code}
+	</update>
+	
+	<insert id="inputReply" parameterType="hashmap">
+		insert into reply values(#{video_code}, #{reply_code}, #{reply_comment}, #{reply_cont}, #{repChannelCode}, current_date, null, 0, 0, #{reply_group})
+	</insert>
+	
+	<select id="getNewReply" parameterType="String" resultType="replyDTO">
+		select * from reply where reply_code = #{reply_code}
+	</select>
 </mapper>

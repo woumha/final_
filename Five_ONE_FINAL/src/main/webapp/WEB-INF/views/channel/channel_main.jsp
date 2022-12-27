@@ -41,7 +41,7 @@
 	    </div>
 	    <div class="col-lg-6">
 	     	<div class="col-sm-12 text-left mb-1" style="font-size: 18px">
-			  ${owner.channel_name }
+			 	 ${owner.channel_name }
 			</div>
 			<div class="col-sm-12 text-left mb-1" style="font-size: 14px">
 				<input type="hidden" id="ownerCode" value="${owner.channel_code }">
@@ -135,7 +135,18 @@
 					  <div class="col">
 					    <div class="col mb-1" style="font-size: 14px;">${lastUpVideo.video_title }</div>
 					    <div class="col mb-1" style="font-size: 12px;">${lastUpVideo.video_view_cnt }회 . ${lastUpVideo.video_regdate }</div>
-					    <div class="col mb-1" style="font-size: 14px;">${lastUpVideo.video_cont }</div>
+					    <c:if test="${lastUpVideo.video_cont eq 'null' }">
+					    	<div class="col mb-1" style="font-size: 14px;">
+					    		설명<br>
+					    	</div>	
+					    </c:if>
+					    <c:if test="${lastUpVideo.video_cont ne 'null' }">
+					    	
+						    <div class="col mb-1" style="font-size: 14px;">
+						   		설명<br>
+						    	${lastUpVideo.video_cont }
+						    </div>
+					    </c:if>
 					  </div>
 				  </div>
 				</div><!-- 메인 배너 영상 -->

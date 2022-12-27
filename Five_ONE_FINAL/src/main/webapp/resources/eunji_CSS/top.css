@@ -1,8 +1,13 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
-	#logo{
-		cursor: pointer;
-	}
+#body {
+font-family: 'Gowun Dodum', sans-serif;
+}
+
+#logo{
+cursor: pointer;
+}
 	
 /* ---------------------------------------------------------로딩화면------------------------------------------- */	
 #loading {
@@ -177,26 +182,46 @@
 }
 
 	
-/* --------------------------------------------------------이것저것 --------------------------------------------------------------  */	
+/* --------------------------------------------------------반응형 --------------------------------------------------------------  */	
 
-	@media screen and (max-width: 1500px) {
+@media all and (max-width: 900px) {
+	
+#search_div{
+width: 500px;
+margin-left: 18%;
+}
+		
+.rel_search {
+width: 300px;
+left: 0px;
+top: 67px;
+}
+
+#logo{
+display: none;
+}
+
+#user_div{
+display: none;
+}
+	
+}
+
+
+@media all and (min-width: 901px) and (max-width: 1501px) {
 		#user_div{
 			display: none;
 		}
 		
 		#search_div{
-			width: 400px;
+			width: 700px;
 			margin-left: 18%;
 		}
 		
 		.rel_search {
-			width: 300px;
+			width: 500px;
 			left: 0px;
 			top: 67px;
-		}
-		
-		#logo{
-		  display: none;
 		}
 		
 		
@@ -268,6 +293,7 @@
 		font-size: 1.6em;
 		color: #fc942c;
 		position: relative;
+		cursor: pointer;
 	}
 	
 	#search_input{
@@ -329,10 +355,8 @@
   	}
   
 	
-	
-	/* -----------------------------------------select----------------------------------- */
-	
-	
+/* -----------------------------------------select----------------------------------- */
+		
 	:root {
 	  --gray: #54585c;
 	  --darkgray: #424242;
@@ -388,15 +412,13 @@
 	}	
 	
 	
-	
-	/* ----------------------------------------user_login  css-------------------------- */
-	
+/* ----------------------------------------user_login  css-------------------------- */
+
 	 .customm-btn {
 	  width: 200px;
 	  height: 40px;
 	  color: #fff;
 	  border-radius: 5px;
-	  font-family: 'Lato', sans-serif;
 	  background: transparent;
 	  cursor: pointer;
 	  transition: all 0.3s ease;
@@ -449,7 +471,7 @@
 	
 	
 	
-	/* ----------------------------------------user_join css---------------------------  */
+/* ----------------------------------------user_join css---------------------------  */
 	
 	 #user_join {
 	  background: #424242;
@@ -491,7 +513,7 @@
 	}
 
 	
-	/* ------------------------------------user_logout css--------------------------------------------------------- */
+/* ------------------------------------user_logout css--------------------------------------------------------- */
 		
 		
 	 #user_logout {
@@ -532,26 +554,33 @@
 	#user_logout:active {
 	  top: 2px;
 	}
-		
 
-
-	/*----------------------------------------user_popup css-----------------------------------------------------  */
+/*----------------------------------------user_popup css-----------------------------------------------------  */
 	#user_popup{
+		cursor: pointer;
 		position: absolute;
 		display: none;
-		width: 230px;
+		width: 180px;
 		height: 300px;
 		background-color:white;
 		right: 1px;
 		top: 80px;
-		border-color: lightgray;
+		border-color: white;
+		border: 3px;
 		border-radius: 15px;
-		border: 1px solid;
 		text-align: left;
-		
+		box-shadow: inset 2px 2px 2px 0px rgb(255 255 255 / 50%),
+    	7px 7px 20px 0px rgb(0 0 0 / 10%),
+    	4px 4px 5px 0px rgb(0 0 0 / 10%);
 	}
 	
 	#user_popup ul{
+		margin-left: -30px;
+		padding-bottom: 5px;
+	}
+	
+	#user_popup hr{
+		margin-left: -12px;
 		padding-bottom: 5px;
 	}
 	
@@ -572,7 +601,40 @@
 		margin-top: 15px;
 	}
 	
+	#user_popup b{
+		font-size: 20px;
+	}
+		
+	#userpop_title{
+	  padding-top: 18px;
+	  padding-left: 5px;
+	}
 	
+	#userpop_img{
+	margin-left: -10px;
+	}
+	
+	#userpop_mychannel:hover{
+	color:#fc942c;
+	}
+	
+	#userpop_mypage:hover{
+	color:#fc942c;
+	}
+	
+	#userpop_box:hover{
+	color:#fc942c;
+	}
+	
+	#userpop_setting:hover{
+	color:#fc942c;
+	}
+	
+	#userpop_logout:hover{
+	color:#fc942c;
+	}
+	
+		
 	/* ------------------------------------------------자동완성창 css--------------------------------------- */
 	 .hide {
 		  display: none !important;

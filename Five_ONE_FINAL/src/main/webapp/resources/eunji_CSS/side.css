@@ -53,7 +53,7 @@
 	
 	/* NAV */
 	.nav {
-	    height: 800px;
+	    /* height: 800px; */
 	    display: flex;
 	    justify-content: space-between;
 	    overflow: hidden;
@@ -76,6 +76,10 @@
 	    font-size: 1.25rem;
 	    padding: .75rem;
 	    cursor: pointer;
+	}
+	
+	.nav__toggle:hover{
+		color: #fc942c;
 	}
 	
 	.nav__logo {

@@ -10,6 +10,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.MainListDTO;
+import com.vidividi.variable.PlaylistDTO;
+import com.vidividi.variable.SearchPlayListDTO;
 import com.vidividi.variable.TestDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
@@ -93,5 +95,29 @@ public class VidividiDAOImpl implements VidividiDAO {
 		return this.sqlSession.selectOne("count");
 	}
 
+	//플레이 리스트 불러오기
+	@Override
+	public List<SearchPlayListDTO> getPlaylistList(String play_code) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("play_code", play_code);
+		
+		return this.sqlSession.selectList("p_list", map);
+	}
 
+	
+	//플레이 리스트 등록하기
+	@Override
+	public List<SearchPlayListDTO> insertPlaylistList(String play_code, String play_video_code, String play_bundle_code, String play_bundle_title) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("play_code", play_code);
+		map.put("play_video_code", play_video_code);
+		map.put("play_bundle_code", play_bundle_code);
+		map.put("play_bundle_title", play_bundle_title);
+		
+		return this.sqlSession.selectList("a_list", map);
+	}
 }

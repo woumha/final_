@@ -75,6 +75,7 @@
 <%-- 넘어온 값 받기 --%>
 	<input type="hidden" value="${keyword }" id="keyword" >
 	<input type="hidden" value="${field }" id="field" >
+	<input type="hidden" value="${RepChannelCode}" id="code" >
 
 </div> <!-- 전체 div end -->
 </body> 
@@ -85,10 +86,13 @@
 
 let keyword = $("#keyword").val();
 let field = $("#field").val();
+let play_code = $("#code").val();
+
 let page_rec = 1;
 let page_pop = 1;
 let check = 0;
 let option = "video_regdate";
+
 let loading = true;
 
 function getContextPath(){
@@ -117,6 +121,10 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 			console.log("인기순 함수 실행");
 			let str = data;
 			
+			if(str.length == 0){
+				$(".loading_list").css("display", "none");
+			}
+			
 			if(str == "[]"){
 				loading = false;
 				
@@ -132,15 +140,27 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 				div += "<video class='test_video' width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					
-						div += "<p class = 'video_title_p'>" +  "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-								+ '&nbsp;' + this.video_title + "</p>";								
+						//전송용 비디오 코드
+						div += "<p class='vi_code'style='display:none;'>" +  this.video_code + "</p>";
 						
-						div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</p>";
+						//비디오 제목 + 채널 프로필 
+						div += "<p class = 'video_title_p'>"+ "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>"
+								+ "<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+								+ this.video_title + "</a> </p>" + "<button class='play_list_plus' onclick='location.href='#''> <i class='fa-solid fa-plus'></i> </button>";
 						
+						//재생목록 추가 버튼 클릭 시 팝업
+						div += "<div class = 'add_popList' style='display:none;'>" + "<a class='text_title'>" + "<b>●&nbsp; 재생목록 &nbsp;●</b>" +
+									"<div class='listResult_pop'> </div>" + 
+									"<button class='add_playList'>추가하기</button>" + "</div>"		
+						
+						//채널명
+						div += "<p class = 'video_channel_p'>"+ "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</p>";
+						
+						//조회수 + 업데이트 날짜
 						div += "<p class = 'video_view_date_p'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate + "</p>";
+						
+						//비디오 내용
 						div += "<p class = 'video_views_p'>" + this.video_cont + "</p>";
-
 					div += "</div>"; //video pbox end
 					div += "<hr>"
 				div += "</div>"; //video box end
@@ -160,7 +180,7 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 			
 		}
 	});
-}
+}//전체 end
 
 	//기본 인기순	
 	if(check == 2) {
@@ -196,6 +216,10 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 			
 			let str = data;
 			
+			if(str.length == 0){
+				$(".loading_list").css("display", "none");
+			}
+			
 			if(str == "[]"){
 				loading = false;
 				
@@ -205,24 +229,38 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 			
 			div += "<div class='search_table'>"
 			
-			$(data).each(function(){
-			div += "<div id='watch_box' class='content_box'>";
-			div += "<div class='video_box'>";
-			div += "<video class='test_video' width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
-				div += "<div class='video_pbox'>";
-					div += "<p class = 'video_title_p'>" +  "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-							"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-							+ '&nbsp;' + this.video_title + "</p>";	
+				$(data).each(function(){
+					div += "<div id='watch_box' class='content_box'>";
+					div += "<div class='video_box'>";
+					div += "<video class='test_video' width='320px' height='180px' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+						div += "<div class='video_pbox'>";
 						
-					div += "<p class = 'video_channel_p'>" + "<a href='<%=request.getContextPath() %>/channel.do?channel_code=" + this.channel_code + "'>" + this.channel_name + "</p>";
-					
-					div += "<p class = 'video_view_date_p'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate + "</p>";
-					div += "<p class = 'video_views_p'>" + this.video_cont + "</p>";
-					
-				div += "</div>"; //video pbox end
-			div += "</div>"; //video box end
-			div += "</div>"; //watch box end
-			}); //each end
+							//전송용 비디오 코드
+							div += "<p class='vi_code'style='display:none;'>" +  this.video_code + "</p>";
+							
+							//비디오 제목 + 채널 프로필 
+							div += "<p class = 'video_title_p'>"+ "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>"
+									+ "<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+									+ this.video_title + "</a> </p>" + "<button class='play_list_plus' onclick='location.href='#''> <i class='fa-solid fa-plus'></i> </button>";
+							
+							//재생목록 추가 버튼 클릭 시 팝업
+							div += "<div class = 'add_popList' style='display:none;'>" + "<a class='text_title'>" + "<b>●&nbsp; 재생목록 &nbsp;●</b>" +
+										"<div class='listResult_pop'> </div>" + 
+										"<button class='add_playList'>추가하기</button>" + "</div>"		
+							
+							//채널명
+							div += "<p class = 'video_channel_p'>"+ "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</p>";
+							
+							//조회수 + 업데이트 날짜
+							div += "<p class = 'video_view_date_p'>" + "조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate + "</p>";
+							
+							//비디오 내용
+							div += "<p class = 'video_views_p'>" + this.video_cont + "</p>";
+						div += "</div>"; //video pbox end
+						div += "<hr>"
+					div += "</div>"; //video box end
+					div += "</div>"; //watch box end
+					}); //each end
 			
 			div += "</div>";
 				$("#search_result").append($("<div>").html(div));			
@@ -272,6 +310,137 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 	$(document).on("mouseout", ".test_video", function(){
 		 $(this).get(0).pause();
 	});	
+	
+	
+// -------------------------------------------------------모달 클릭 시 재생목록 리스트 불러오기 ---------------------------------------------
+
+//재생목록 데이터 지우기
+function close() {
+	console.log("지우기 함수 실행");
+	$(".pl_tr").remove();
+}
+
+//클릭 시 재생목록 추가 창 보이기
+$(document).on("click", ".play_list_plus", function(){
+	
+	if(${empty RepChannelCode }){
+		alert("로그인 이후 이용할 수 있는 서비스입니다.");
+	}else{
+		
+		if(this.nextElementSibling.style.display == "none"){
+			this.nextElementSibling.style.display = 'block';
+			close();
+			getPlayList(play_code);
+		}else{
+			close();
+			this.nextElementSibling.style.display = 'none';
+		}	
+	}//감싸는 else end
+	
+});
+
+
+//재생목록 가져오기 함수
+function getPlayList(play_code){
+	
+	$.ajax({
+		url : "playList_result.do",
+		type: "post",
+		data: {
+			play_code : play_code
+		},
+		success: function(data){
+			
+			console.log("리스트 함수 성공");
+			
+			if(data.length > 0){
+			
+				let table = "";
+				
+				table += "<table class='playList_table'>"
+				
+				$(data).each(function(){
+					table += "<tr class='pl_tr'>";
+					table += "<td style='display:none;'>" + this.bundle_code + "</td>";
+					table += "<td>" + "<input type='radio' name='play_radio' class='click_radio'>" + this.bundle_title + "</td>";
+					table += "</tr>";
+					
+				}); //each end
+				
+				table += "</table>";
+					$(".listResult_pop").append($("<table>").html(table));	
+				
+			}else{
+				console.log("데이터 없음");
+			}
+					
+		},
+		
+		error: function(){
+			alert("재생 목록 리스트 ajax 오류입니다.");
+			console.log("data>>>" + data);
+		}
+	});
+		
+}//재생목록 end
+
+
+//-----------------------------------------------------------해당 영상 재생목록에 추가하기-------------------------------------------------
+
+//라디오 버튼 클릭 시 필요한 값 받아오기
+let radio_code = '';
+let radio_title = '';
+let add_video_code = '';
+let add_video_title = '';
+
+$(document).on("click", ".click_radio", function(){
+	radio_code = this.parentElement.parentElement.firstChild.textContent;
+	radio_title= this.parentElement.parentElement.firstChild.nextElementSibling.textContent;
+	add_video_code = this.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.firstChild.firstChild.textContent;
+	//add_video_title = this.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.firstChild.firstChild.nextElementSibling.textContent;
+	
+	console.log(radio_code);
+	console.log(radio_title);
+	console.log(add_video_code);
+	//console.log(add_video_title);
+	
+}); //추가 함수 end
+
+
+//등록 함수 
+function addPlayList(){	
+	
+	console.log("~~~~~~~~~~~~등록 함수 실행~~~~~~~~~~~~~");
+	
+	$.ajax({
+		url : "playList_add.do",
+		type: "post",
+		data: {
+			//멤버코드
+			play_code: play_code,
+			//번들 제목
+			play_bundle_title: radio_title, 
+			//비디오 코드
+			play_video_code: add_video_code,
+			//번들 번호 코드
+			play_bundle_code: radio_code
+		},
+		success: function(data){
+			alert("해당 재생목록에 추가되었습니다.");
+		},
+		
+		error: function(){
+			alert("재생목록 추가에 실패했습니다.");
+			console.log("data>>>" + data);
+		}
+	});	
+}
+
+//추가하기 버튼 클릭 시
+$(document).on("click", ".add_playList", function(){
+	console.log("클릭 함수 실행");
+	addPlayList();
+}); //추가 함수 end
 	
 //---------------------------------------------------------------- 배너 스크롤 따라 이동 ---------------------------------------------------------------------	
 
