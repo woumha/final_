@@ -294,27 +294,46 @@ public class ChannelController {
 	
 	// 채널 관리 페이지
 	@RequestMapping("channel_manager.do")
-	public String manager(Model model, @RequestParam("code") String code, HttpServletResponse response, HttpSession session) {
+	public String manager(Model model, @RequestParam("code") String code, HttpServletResponse response, HttpServletRequest request,
+			HttpSession session) throws IOException {
 		response.setContentType("text/html; charset=UTF-8");
 		String memCode = (String)session.getAttribute("MemberCode"); // 유저 코드
+		String repCode = (String)session.getAttribute("RepChannelCode"); // 세션 코드
 		
-		if(code != "") {
-			MemberDTO memdto = new MemberDTO();
-			memdto.setMember_rep_channel(code);
-			memdto.setMember_code(memCode);
-			
-			ChannelDTO channelDTO =  this.dao.getChannelOwner(code);
-			List<VideoPlayDTO> videoList = this.dao.getVideoList(code);
-			List<BundleDTO> bundle = this.bundledao.getBundleList(code);
-			
-			model.addAttribute("currentOwner", channelDTO);
-			model.addAttribute("mvList", videoList);
-			model.addAttribute("bundleList", bundle);
-			
-			return "channel/channel_manager";
+		String path = "";
+		
+		PrintWriter out = response.getWriter();
+		
+		if(!(code.trim().equals(""))) {
+			if(repCode.trim().equals(code.trim())) {
+				MemberDTO memdto = new MemberDTO();
+				memdto.setMember_rep_channel(code);
+				memdto.setMember_code(memCode);
+				
+				ChannelDTO channelDTO =  this.dao.getChannelOwner(code); // 채널의 모든값
+				List<VideoPlayDTO> videoList = this.dao.getVideoList(code); // 모든 비디오 리스트
+				List<BundleDTO> bundle = this.bundledao.getBundleList(code); // 재생목록 리스트
+				
+				model.addAttribute("currentOwner", channelDTO);
+				model.addAttribute("mvList", videoList);
+				model.addAttribute("bundleList", bundle);
+				path = "channel/channel_manager";
+			} else {
+				out.println("<script>");
+				out.println("alert('잘못된 접근입니다.');");
+				out.println("location.href='"+ request.getContextPath() + "/main.do';");
+				out.println("</script>");
+			}
+		} else if(code.trim().equals("")) {
+			out.println("<script>");
+			out.println("alert('세션이 만료되었습니다.');");
+			out.println("location.href='"+ request.getContextPath() + "/main.do';");
+			out.println("</script>");
+		} else {
+			path = "main";
 		}
 		
-		return "main";
+		return path;
 	}
 	
 	// 체널 프로필 이미지 업로드

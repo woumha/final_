@@ -97,3 +97,19 @@
 	height: 80px;
 }
 
+/* 시청자들에게 영상 보여주기 */
+.arrow.upload_btn {
+	width: 150px;
+	height: 150px;
+	color: #fc942c;
+}
+
+.arrow.upload_font {
+	color: #fc942c;
+	font-size: 20px;
+	margin: 15px;
+}
+
+.arrow.upload_btn:hover {
+	color: #f78411;
+}
