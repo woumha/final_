@@ -49,15 +49,13 @@ public class myPageController {
 		// 해당 유저 채널정보 불러오기
 		ChannelDTO m_channel = this.dao.getChannel_info(code);
 
-		System.out.println("member_code >>> "+code);
-		System.out.println("m_channel.getChannel_code() >>> "+m_channel.getChannel_code());
-		
+		System.out.println("channel_code >>> "+code);
+
 		// 해당 유저 채널에 업로드 되어 있는 동영상 불러오기
-		String channel_code = m_channel.getChannel_code();
-		List<VideoPlayDTO> channel_video = this.dao.getChannel_video(channel_code);
+		List<VideoPlayDTO> channel_video = this.dao.getChannel_video(code);
 		
 		// 해당 유저 채널을 구독자 수
-		List<SubscribeDTO> channel_sub = this.dao.getChannel_sub(channel_code);
+		List<SubscribeDTO> channel_sub = this.dao.getChannel_sub(code);
 		
 		model.addAttribute("h_list", history_list);
 		model.addAttribute("p_list", playlist_list);
