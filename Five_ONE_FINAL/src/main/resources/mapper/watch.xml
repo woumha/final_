@@ -14,8 +14,17 @@
 		from reply inner join user_channel using(channel_code)
 		where video_code='101010' and reply_comment in(0,1) and channel_code = #{channel_code};
 	</select> -->
-	
 	<select id="getReply" parameterType="hashmap" resultType="replyDTO">
+	<![CDATA[
+		select * 
+		from (select row_number() over(order by a.${reply_option} desc) rnum, a.* 
+		from (select b.*, (b.reply_good - b.reply_bad) most 
+		from (select * from reply inner join user_channel using(channel_code) where video_code = #{video_code} and reply_comment in(0,1)) b) a) 
+		where rnum >= #{startNo} and rnum <= #{endNo}
+	]]>		
+	</select>
+	
+	<select id="getReplyLogin" parameterType="hashmap" resultType="replyDTO">
 	<![CDATA[
 		select * 
 		from (select row_number() over(order by a.${reply_option} desc) rnum, a.* 
@@ -28,7 +37,7 @@
 	<select id="getComment" parameterType="hashmap" resultType="replyDTO">
 	<![CDATA[
 		select *
-		from (select row_number() over(order by a.reply_regdate desc) rnum, a.* 
+		from (select row_number() over(order by a.reply_regdate) rnum, a.* 
 	    from (select * from reply inner join user_channel using(channel_code) where video_code = #{video_code} and reply_group = #{reply_group} and reply_comment=2) a)
 		where rnum >= #{startNo} and rnum <= #{endNo}
 	]]>
@@ -137,24 +146,36 @@
 		update video_play
 		set ${option} = (select ${option}+1 from video_play where video_code=#{video_code})
 		where video_code=#{video_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select ${option} from video_play where video_code = #{video_code}
+		</selectKey>
 	</update>
 	
 	<update id="miusVideoGood" parameterType="hashmap">
 		update video_play
 		set ${option} = (select ${option}-1 from video_play where video_code=#{video_code})
 		where video_code=#{video_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select ${option} from video_play where video_code = #{video_code}
+		</selectKey>
 	</update>
 	
-	<update id="changeToGood" parameterType="String">
+	<update id="changeToGood" parameterType="hashmap">
 		update video_play 
 		set video_good = (select video_good+1 from video_play where video_code =#{video_code}), video_bad = (select video_bad-1 from video_play where video_code=#{video_code})
-		where video_code = #{video_code}	
+		where video_code = #{video_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select ${option} from video_play where video_code = #{video_code}
+		</selectKey>	
 	</update>
 	
 	<update id="changeToBad" parameterType="hashmap">
 		update video_play 
 		set video_good = (select video_good-1 from video_play where video_code=#{video_code}), video_bad = (select video_bad+1 from video_play where video_code=#{video_code})
 		where video_code=#{video_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select ${option} from video_play where video_code = #{video_code}
+		</selectKey>
 	</update>
 	
 	<insert id="inputReply" parameterType="hashmap">
@@ -162,6 +183,22 @@
 	</insert>
 	
 	<select id="getNewReply" parameterType="String" resultType="replyDTO">
-		select * from reply where reply_code = #{reply_code}
+		select * from reply inner join user_channel using(channel_code) where reply_code = #{reply_code}
 	</select>
+	
+	<select id="getMyReply" parameterType="hashmap" resultType="replyDTO">
+		select * 
+		from (select b.*, (b.reply_good - b.reply_bad) most 
+		from (select * from reply inner join user_channel using(channel_code) where video_code = #{video_code} and reply_comment in(0,1)) b)
+		where channel_code = #{repChannelCode}
+		order by #{reply_option} desc	
+	</select>
+	
+	<select id="getChannel" parameterType="String" resultType="channeldto">
+		select * from user_channel where channel_code = #{repChannelCode}
+	</select>
+	
+	<update id="updateComment" parameterType="String">
+		update reply set reply_comment = 1 where reply_code = #{reply_code}
+	</update>
 </mapper>
