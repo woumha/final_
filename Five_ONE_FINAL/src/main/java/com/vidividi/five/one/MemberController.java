@@ -84,16 +84,40 @@ public class MemberController {
 	@RequestMapping("loginOk.do")
 	public String loginOk(Model model, LoginDTO loginDTO, HttpSession session) throws Exception {
 		
+		String check_member_code = dao.checkMember(loginDTO);
+		if (check_member_code != null) {
+			int checkProtect = dao.isProtected(check_member_code);
+			if (checkProtect == 1) {
+				MemberDTO mdto = dao.getMember(check_member_code);
+				String authKey = emailservice.sendAuthEmail(mdto.getMember_email());
+				return authKey;
+			}else {
+				String membercode = service.loginCheck(loginDTO, session);
+				if (membercode != null) {
+					model.addAttribute("MemberCode", membercode);
+					return "success";
+				}else {
+					return "fail";
+				}
+			}
+		}else {
+			return "fail";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("protect_login_ok.do")
+	public String protectLogin (Model model, LoginDTO loginDTO, HttpSession session) throws Exception {
 		String membercode = service.loginCheck(loginDTO, session);
-		
 		if (membercode != null) {
 			model.addAttribute("MemberCode", membercode);
-			
 			return "success";
 		}else {
 			return "fail";
 		}
 	}
+	
 	
 	@RequestMapping("logout.do")
 	public String logout(HttpSession session) {
@@ -144,8 +168,12 @@ public class MemberController {
 			dto = dao.getMember(memberCode);
 			
 			int age= 0;
+			
 			if (dto.getMember_birth() != null) {
 				age = service.getAge(dto.getMember_birth());
+				if (age < 0) {
+					age = 0;
+				}
 			}else {
 				age = -1;
 			}
@@ -384,14 +412,24 @@ public class MemberController {
 	
 	
 	@ResponseBody
-	@RequestMapping("googleLogin.do")
+	@RequestMapping("google_login.do")
 	public String googleLogin(@RequestParam("jwt") String jwt_token, HttpSession session) throws Exception {
 		
 		GoogleLoginDTO gdto = socialservice.decodeGoogleJWT(jwt_token);
 		String check = dao.isSocialLinked(gdto.getGoogle_email());
+		System.out.println("check : "+check);
 		MemberDTO mdto = new MemberDTO();
 		
-		if (check.equals("google")) { // 회원인데 구글 링크 된 경우
+		if(check == null){ // 아예 회원이 아닌 경우
+			
+			mdto.setMember_name(gdto.getGoogle_name());
+			mdto.setMember_email(gdto.getGoogle_email());
+			mdto.setMember_id("g-"+gdto.getGoogle_id());
+			 
+			service.insertMember(mdto, "google"); service.socialLogin(gdto, session);
+						
+			return "joined";
+		}else if (check.equals("google")) { // 회원인데 구글 링크 된 경우
 			service.socialLogin(gdto, session);
 			return "linked";
 		}else if (check.equals("0")){ // 회원인데 구글 링크 안된 경우
@@ -400,18 +438,9 @@ public class MemberController {
 			mdto.setMember_social_link("google");
 			dao.socialLink(mdto);
 			return "notlinked";
-		}else { // 아예 회원이 아닌 경우
-			
-			mdto.setMember_name(gdto.getGoogle_name());
-			mdto.setMember_email(gdto.getGoogle_email());
-			mdto.setMember_id(gdto.getGoogle_id());
-			 
-			service.insertMember(mdto, "google"); service.socialLogin(gdto, session);
-			
-			
-			return "joined";
 		}
 		
+		return "main";
 		
 	}
 	
@@ -425,25 +454,26 @@ public class MemberController {
 		
 		KakaoLoginDTO kdto = socialservice.getKakaoData(access_token);
 		String check = dao.isSocialLinked(kdto.getKakao_email());
+		System.out.println("check : "+check);
 		MemberDTO mdto = new MemberDTO();
 		
-		if (check.equals("kakao")) { // 회원인데 카카오 링크 된 경우
+		if(check == null){ // 아예 회원이 아닌 경우
+			
+			mdto.setMember_name(kdto.getKakao_name());
+			mdto.setMember_email(kdto.getKakao_email());
+			mdto.setMember_id("k-"+kdto.getKakao_id());
+			
+			service.insertMember(mdto, "kakao");
+			service.socialLogin(kdto, session);
+			
+		}else if (check.equals("kakao")) { // 회원인데 카카오 링크 된 경우
 			service.socialLogin(kdto, session);
 		}else if (check.equals("0")){ // 회원인데 카카오 링크 안된 경우
 			String memberCode = service.socialLogin(kdto, session);
 			mdto.setMember_code(memberCode);
 			mdto.setMember_social_link("kakao");
 			dao.socialLink(mdto);
-		}else { // 아예 회원이 아닌 경우
-			
-			mdto.setMember_name(kdto.getKakao_name());
-			mdto.setMember_email(kdto.getKakao_email());
-			mdto.setMember_id(kdto.getKakao_id());
-			
-			service.insertMember(mdto, "kakao");
-			service.socialLogin(kdto, session);
-			
-		}
+		} 
 		
 		return "main";
 	}
@@ -457,28 +487,83 @@ public class MemberController {
 		NaverLoginDTO ndto = socialservice.getNaverData(access_token);
 		
 		String check = dao.isSocialLinked(ndto.getNaver_email());
+		System.out.println("check : "+check);
 		MemberDTO mdto = new MemberDTO();
 		
-		if (check.equals("naver")) { // 회원인데 네이버 링크 된 경우
+		if(check == null){ // 아예 회원이 아닌 경우
+			mdto.setMember_name(ndto.getNaver_name());
+			mdto.setMember_email(ndto.getNaver_email());
+			mdto.setMember_id("n-"+ndto.getNaver_id());
+			mdto.setMember_phone(ndto.getNaver_phone());
+			mdto.setMember_birth(ndto.getNaver_birth());
+			
+			service.insertMember(mdto, "naver");
+			service.socialLogin(ndto, session);
+		}else if (check.equals("naver")) { // 회원인데 네이버 링크 된 경우
 			service.socialLogin(ndto, session);
 		}else if (check.equals("0")){ // 회원인데 네이버 링크 안된 경우
 			String memberCode = service.socialLogin(ndto, session);
 			mdto.setMember_code(memberCode);
 			mdto.setMember_social_link("naver");
 			dao.socialLink(mdto);
-		}else { // 아예 회원이 아닌 경우
-			mdto.setMember_name(ndto.getNaver_name());
-			mdto.setMember_email(ndto.getNaver_email());
-			mdto.setMember_id(ndto.getNaver_id());
-			mdto.setMember_phone(ndto.getNaver_phone());
-			mdto.setMember_birth(ndto.getNaver_birth());
-			
-			service.insertMember(mdto, "naver");
-			service.socialLogin(ndto, session);
 		}
 		
 		return "main";
 	}
 	
+	
+	
+	@RequestMapping("find_id.do")
+	public String findId(Model model, HttpSession session) throws UnsupportedEncodingException {
+		String url = socialservice.getNaverAuthUrl(session);
+		model.addAttribute("NaverLoginUrl", url);
+		return "member/find_id";
+	}
+	
+	@RequestMapping("find_pwd.do")
+	public String findPwd(Model model, HttpSession session) throws UnsupportedEncodingException {
+		String url = socialservice.getNaverAuthUrl(session);
+		model.addAttribute("NaverLoginUrl", url);
+		return "member/find_pwd";
+	}
+	
+	@ResponseBody
+	@RequestMapping("find_id_ok.do")
+	public String findIdOk(@RequestParam("email") String email) {
+		String check = dao.isSocialLinked(email);
+		String member_id = dao.findId(email);
+		
+		if (member_id != null) {
+			if (member_id.contains("-")) {
+				return check;
+			}else {
+				return member_id;
+			}
+		}else {
+			return "undefined";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping("find_pwd_ok.do")
+	public String findPwdOk(@RequestParam("id") String id, @RequestParam("email") String email) {
+		
+		String member_id = dao.findId(email);
+		
+		if (member_id != null) {
+			if (member_id.contains("-")) {
+				return "social";
+			}else {
+				String tempPwd = emailservice.sendTempPwdEmail(email);
+				LoginDTO ldto = new LoginDTO();
+				ldto.setId(member_id);
+				ldto.setPwd(tempPwd);
+				dao.changePwd(ldto);
+				return "mail";
+			}
+		}else {
+			return "undefined";
+		}
+	}
 
 }

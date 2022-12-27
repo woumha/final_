@@ -15,9 +15,6 @@
 <link rel="stylesheet" href="${path}/resources/member/member_login.css">
 <link rel="stylesheet" href="${path}/resources/member/member_cummon.css"> 
 
-<!-- member js -->
-<script src="${path}/resources/member/member_js.js"></script>
-
 <!-- toast -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -69,7 +66,10 @@
 		pwdShow();
 				
 	});
+
 	
+	
+	<!-- 로그인 보호 사용중인지 아닌지 체크하여 로그인하는 함수-->
 	function loginCheck(){
 		
 		$.ajax({
@@ -77,6 +77,35 @@
 			data : $('#login-form').serialize(),
 			datatype : 'text',
 			success : function(data){
+				
+				console.log("data : "+data);
+				
+				if (data == 'success'){
+					$(location).attr('href', '<%=request.getContextPath()%>');
+				}else if(data == 'fail'){
+					toastr.error('아이디와 비밀번호를 확인하세요.','로그인 실패!');
+				}else {
+					$("#email-auth-span").text("이메일 전송중");
+					modalShow();
+					protectLogin(data);
+				}
+			},
+			error : function(){
+				toastr["error"]("데이터 통신 오류");
+			}
+		});
+		
+	}
+	
+	<!-- 보호 사용중인 계정 로그인하는 함수 -->
+	function authLogin(){
+
+		$.ajax({
+			url : "<%=request.getContextPath()%>/protect_login_ok.do",
+			data : $('#login-form').serialize(),
+			datatype : 'text',
+			success : function(data){
+				
 				if (data == 'success'){
 					$(location).attr('href', '<%=request.getContextPath()%>');
 				}else if(data == 'fail'){
@@ -90,13 +119,41 @@
 		
 	}
 	
+	<!-- 인증번호 확인하는 함수 -->
+	function protectLogin(key){
+		
+		authtimer();
+		setTimeout(function(){
+			clearInterval(CountDown);
+			key == "";
+			$("#email-auth-span").text("인증 번호 만료");
+			toastr.warning("인증 시간이 초과되었습니다.");
+		}, 180000);
+		
+		$("#protect-login-btn").on('click', function(){
+			if ($("#input-authKey").val() == key){
+				authLogin();
+			}else {
+				toastr.error('인증번호를 확인하세요.');
+			}
+		});
+		
+		$("#protect-cancle-btn").on('click', function(){
+			modalHide();
+			clearInterval(CountDown);
+			key == "";
+			$("#email-auth-span").text("");
+			toastr.warning("로그인이 취소되었습니다.");
+		});
+	}
+	
 <!-- 구글 로그인 -->
 
 	function getGoogleData(response){
 	 	console.log("Encoded JWT ID token: " + response.credential);
 	 	
 	 	$.ajax({
-	 		url : '<%=request.getContextPath()%>/googleLogin.do',
+	 		url : '<%=request.getContextPath()%>/google_login.do',
 			data: {
 				jwt : response.credential
 			},
@@ -151,7 +208,7 @@
 				<div id="login-component-left">
 					<form method="post" action="<%=request.getContextPath()%>/loginOk.do" id="login-form">
 						<div class="input-wrap">
-								<div class="label-input" >
+							<div class="label-input" >
 								<label for="input-id" id="input-id-check"></label>
 								<label for="input-id" id="input-id-label">아이디</label>
 								</div>
@@ -168,14 +225,12 @@
 										<i class="bi bi-eye-fill"></i>
 									</div>
 								</div>
-								
 							</div>
-						
 						<input type="button" value="로그인" class="form-btn" onclick="loginCheck()">
 						<hr class="horizontal-hr">
 						<div class="login-menu">
-							<a href="<%=request.getContextPath()%>/find.do" class="form-a">
-								<span class="form-text">로그인이 안되세요?</span> <span class="form-link">아이디/비밀번호 찾기</span>
+							<a href="<%=request.getContextPath()%>/find_id.do" class="form-a">
+								<span class="form-text">로그인이 안되세요?<span class="form-link"> 아이디/비밀번호 찾기</span></span> 
 							</a>
 						</div>
 					</form>
@@ -218,10 +273,32 @@
 					<hr class="horizontal-hr">
 					<div class="login-menu">
 							<a href="<%=request.getContextPath()%>/join.do" class="form-a">
-								<span class="form-text">아직 회원이 아니세요?</span> <span class="form-link">회원가입</span>
+								<span class="form-text">아직 회원이 아니세요?<span class="form-link"> 회원가입</span></span> 
 							</a>
 						</div>
 				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 로그인 이메일 인증 모달 -->
+		<div class="member-modal">
+		<div class="member-modal-body">
+			<div class="member-modal-title member-alert">
+				<span>로그인 보호</span>
+			</div>
+			<hr>
+			<div class="member-modal-content member-alert">
+				<span>이메일로 발송된 인증번호를 입력하세요.</span>
+				<div class="input-wrap" style="color:gray;">
+					<span id="email-auth-span"></span>
+				</div>
+				<div class="input-wrap">
+					<input id="input-authKey" class="member-input form-input">
+				</div>
+				<br>
+				<input type="button" value="로그인" class="member-emp" id="protect-login-btn">
+				<input type="button" value="취소" id="protect-cancle-btn">
 			</div>
 		</div>
 	</div>

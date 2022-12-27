@@ -114,5 +114,17 @@
 			member_social_link = #{member_social_link}
 		where member_code = #{member_code}
 	</update>
+	<select id="findId" parameterType="String" resultType="String">
+		select member_id from members where member_email = #{email}
+	</select>
+	<update id="changePwd" parameterType="logindto">
+		update members set
+			member_pwd = #{pwd}
+		where member_id = #{id}
+	</update>
+	<select id="isProtected" parameterType="String" resultType="int">
+		select member_protect from members where member_code = #{memberCode} 
+	</select>
+	
 	
 </mapper>

@@ -206,7 +206,7 @@
 	}
 	
 	.member-modal-title.member-alert span::before{
-		content: "⚠";
+		content: "⚠ ";
 	}
 	
 	.member-modal-content {

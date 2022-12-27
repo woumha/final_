@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
@@ -25,35 +27,6 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script type="text/javascript">
-
-function numberPad(n, width) {
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
-}
-
-function authtimer() {
-	
-	let time = 180000;
-	let min = 3;
-	let sec = 60;
-	
-	$("#email-auth-span").text(min+":"+'00');
-	
-	CountDown = setInterval(function(){
-					time = time-1000;
-					min = time/(60*1000);
-					
-					if(sec > 0){
-						sec = sec-1;
-						$("#email-auth-span").text(Math.floor(min)+ ':' + numberPad(sec, 2));
-					}
-					if (sec == 0){
-						sec = 60;
-						$("#email-auth-span").text(Math.floor(min)+ ':' +'00');
-					}
-				},1000);
-	
-}
 
 
 function changeAuthStatus(email){
@@ -336,107 +309,173 @@ $(function(){
 					</div>
 					<div id="profile-input">
 						<form>
-							<div class="input-wrap">
-								<div class="label-input onfocus" >
-								<label for="input-id" id="input-id-check"></label>
-								<label for="input-id" id="input-id-label">아이디</label>
+							<div id="profile-pwd"> <!-- 비밀번호 변경 -->
+								<div class="input-wrap">
+									<div class="label-input onfocus" >
+									<label for="input-id" id="input-id-check"></label>
+									<label for="input-id" id="input-id-label">아이디</label>
+									</div>
+									<c:if test="${!fn:contains(MemberDTO.getMember_id(), '-')}">
+										<input name="member_id" class="member-input form-input disabled" id="input-id" value="${MemberDTO.getMember_id() }" disabled="disabled">
+									</c:if>
+									<c:if test="${fn:contains(MemberDTO.getMember_id(), '-')}">
+										<input name="member_id" class="member-input form-input disabled" id="input-id" value="소셜 로그인" disabled="disabled">
+									</c:if>
 								</div>
-								<input name="member_id" class="member-input form-input disabled" id="input-id" value="${MemberDTO.getMember_id() }" disabled="disabled">
-							</div>
-							<div class="input-wrap">
-								<div class="label-input" >
-									<label for="input-id" class="label-input" id="input-pwd-check"></label>
-									<label for="input-id" class="label-input" id="input-pwd-label">비밀번호 변경</label>
+								<div class="input-wrap">
+									<div class="label-input" >
+										<label for="input-id-current" class="label-input" id="input-pwd-current-check"></label>
+										<label for="input-id-current" class="label-input" id="input-pwd-current-label">현재 비밀번호</label>
+									</div>
+									<div class="pwd-wrap">
+										<c:if test="${!fn:contains(MemberDTO.getMember_id(), '-')}">
+											<input name="current_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-current" autocomplete="off">
+											<div class="pwd-eye showEye">
+												<i class="bi bi-eye-fill"></i>
+											</div>
+										</c:if>
+										<c:if test="${fn:contains(MemberDTO.getMember_id(), '-')}">
+											<input name="current_pwd" class="member-input form-input essential member-pwd-input disabled" value="현재 비밀번호" id="input-pwd-current" autocomplete="off" disabled="disabled">
+											<div style="position: absolute; top:15px; right:20px; color: gray;">
+												<i class="bi bi-eye-fill"></i>
+											</div>
+										</c:if>
+									</div>
+									
 								</div>
-								<div class="pwd-wrap">
-									<input name="member_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd" autocomplete="off">
-									<div class="pwd-eye showEye">
-										<i class="bi bi-eye-fill"></i>
+								<div class="input-wrap">
+									<div class="label-input" >
+										<label for="input-id" class="label-input" id="input-pwd-check"></label>
+										<label for="input-id" class="label-input" id="input-pwd-label">비밀번호 변경</label>
+									</div>
+									<div class="pwd-wrap">
+										<c:if test="${!fn:contains(MemberDTO.getMember_id(), '-')}">
+											<input name="current_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-current" autocomplete="off">
+											<div class="pwd-eye showEye">
+												<i class="bi bi-eye-fill"></i>
+											</div>
+										</c:if>
+										<c:if test="${fn:contains(MemberDTO.getMember_id(), '-')}">
+											<input name="current_pwd" class="member-input form-input essential member-pwd-input disabled" value="비밀번호 변경" id="input-pwd-current" autocomplete="off" disabled="disabled">
+											<div style="position: absolute; top:15px; right:20px; color: gray;">
+												<i class="bi bi-eye-fill"></i>
+											</div>
+										</c:if>
+									</div>
+									
+								</div>
+								
+								<div class="input-wrap">
+									<div class="label-input" >
+										<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
+										<label for="input-id" class="label-input" id="input-pwd-confirm-label">비밀번호 변경 확인</label>
+									</div>
+									<div class="pwd-wrap">
+										<c:if test="${!fn:contains(MemberDTO.getMember_id(), '-')}">
+											<input name="current_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-current" autocomplete="off">
+											<div class="pwd-eye showEye">
+												<i class="bi bi-eye-fill"></i>
+											</div>
+										</c:if>
+										<c:if test="${fn:contains(MemberDTO.getMember_id(), '-')}">
+											<input name="current_pwd" class="member-input form-input essential member-pwd-input disabled" value="비밀번호 변경 확인" id="input-pwd-current" autocomplete="off" disabled="disabled">
+											<div style="position: absolute; top:15px; right:20px; color: gray;">
+												<i class="bi bi-eye-fill"></i>
+											</div>
+										</c:if>
 									</div>
 								</div>
 								
-							</div>
+								<div class="input-wrap">
+									<div style="text-align: center;">
+										<input type="button" class="form-btn disabled" id="profile-submit-btn" value="비밀번호 변경">
+									</div>
+								</div>
+								
+							</div> <!-- 비밀번호 변경 끝 -->
+							<div class="gap"></div>
+							<div id="profile-optional"> <!-- 선택정보 -->
+								<div class="input-wrap">
+									<div class="label-input" >
+									<label for="input-name" id="input-name-check"></label>
+									<label for="input-name" id="input-name-label">이름</label>
+									</div>
+									<input name="member_name" class="member-input form-input" id="input-name" value="${MemberDTO.getMember_name() }">
+								</div>
+								<div id="email-input-wrap">
+									<div id="email-input">
+										<div class="label-input" >
+											<label for="input-email" id="input-email-check"></label>
+											<label for="input-email" id="input-email-label">이메일</label>
+										</div>
+										<input name="member_email" class="member-input form-input" id="input-email" value="${MemberDTO.getMember_email() }">
+									</div>
+									<div id="email-auth-btn">
+										<input type="button" value="인증번호 받기" id="email-auth-request-btn" class="form-btn">
+										<input id="email-auth-input" class="info-hidden" placeholder="인증번호">
+										<span id="email-auth-span" class="info-hidden">전송중</span>
+										<input type="button" value="입력" id="email-auth-confirm-btn" class="form-btn info-hidden">
+										<span id="email-auth-complete"><i class="bi bi-check2-circle"></i> 인증 완료</span>
+									</div>
+								</div>
+								<div class="input-wrap">
+									<div class="label-input" >
+									<label for="input-phone" id="input-phone-check"></label>
+									<label for="input-phone" id="input-phone-label">전화번호</label>
+									</div>
+									<input name="member_phone" class="member-input form-input" id="input-phone" value="${MemberDTO.getMember_phone() }">
+								</div>
+								<div class="input-wrap">
+									<div class="label-input" >
+									<label for="input-birth" id="input-birth-check"></label>
+									<label for="input-birth" id="input-birth-label">생년월일</label>
+									</div>
+									<input type="date" name="member_birth" class="member-input form-input date-placeholder" id="input-birth" value="${MemberDTO.getMember_birth().substring(0,10) }">
+								</div>
+								<div class="input-wrap">
+									<div id="addr-wrap">
+										<div>
+										<div class="label-input" >
+										<label for="input-zipcode" id="input-zipcode-check"></label>
+										<label for="input-zipcode" id="input-zipcode-label">우편번호</label>
+										</div>
+										<input name="member_zipcode" class="member-input form-input" id="input-zipcode" value="${MemberDTO.getMember_zipcode() }">
+										</div>
+										<div>
+										<div class="label-input" >
+										<label for="input-addr1" id="input-addr1-check"></label>
+										<label for="input-addr1" id="input-addr1-label">주소</label>
+										</div>
+										<input name="member_addr1" class="member-input form-input" id="input-addr1" value="${MemberDTO.getMember_addr1() }">
+										</div>
+									</div>
+								</div>
+								<div class="input-wrap">
+									<div class="label-input" >
+									<label for="input-addr2" id="input-addr2-check"></label>
+									<label for="input-addr2" id="input-addr2-label">상세주소</label>
+									</div>
+									<input name="member_addr2" class="member-input form-input" id="input-addr2" value="${MemberDTO.getMember_addr2() }">
+								</div>
+								<div class="input-wrap">
+									<div style="text-align: center;">
+										<input type="button" class="form-btn disabled" id="profile-submit-btn" value="프로필 수정">
+									</div>
+								</div>
 							
-							<div class="input-wrap">
-								<div class="label-input" >
-									<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
-									<label for="input-id" class="label-input" id="input-pwd-confirm-label">비밀번호 변경 확인</label>
-								</div>
-								<div class="pwd-wrap">
-									<input name="check-pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-confirm" autocomplete="off">
-									<div class="pwd-eye showEye">
-										<i class="bi bi-eye-fill"></i>
-									</div>
-								</div>
-							</div>
-							<div class="input-wrap">
-								<div class="label-input" >
-								<label for="input-name" id="input-name-check"></label>
-								<label for="input-name" id="input-name-label">이름</label>
-								</div>
-								<input name="member_name" class="member-input form-input" id="input-name" value="${MemberDTO.getMember_name() }">
-							</div>
-							<div id="email-input-wrap">
-								<div id="email-input">
-									<div class="label-input" >
-										<label for="input-email" id="input-email-check"></label>
-										<label for="input-email" id="input-email-label">이메일</label>
-									</div>
-									<input name="member_email" class="member-input form-input" id="input-email" value="${MemberDTO.getMember_email() }">
-								</div>
-								<div id="email-auth-btn">
-									<input type="button" value="인증번호 받기" id="email-auth-request-btn" class="form-btn">
-									<input id="email-auth-input" class="info-hidden" placeholder="인증번호">
-									<span id="email-auth-span" class="info-hidden">전송중</span>
-									<input type="button" value="입력" id="email-auth-confirm-btn" class="form-btn info-hidden">
-									<span id="email-auth-complete"><i class="bi bi-check2-circle"></i> 인증 완료</span>
-								</div>
-							</div>
-							<div class="input-wrap">
-								<div class="label-input" >
-								<label for="input-phone" id="input-phone-check"></label>
-								<label for="input-phone" id="input-phone-label">전화번호</label>
-								</div>
-								<input name="member_phone" class="member-input form-input" id="input-phone" value="${MemberDTO.getMember_phone() }">
-							</div>
-							<div class="input-wrap">
-								<div class="label-input" >
-								<label for="input-birth" id="input-birth-check"></label>
-								<label for="input-birth" id="input-birth-label">생년월일</label>
-								</div>
-								<input type="date" name="member_birth" class="member-input form-input date-placeholder" id="input-birth" value="${MemberDTO.getMember_birth().substring(0,10) }">
-							</div>
-							<div class="input-wrap">
-								<div id="addr-wrap">
-									<div>
-									<div class="label-input" >
-									<label for="input-zipcode" id="input-zipcode-check"></label>
-									<label for="input-zipcode" id="input-zipcode-label">우편번호</label>
-									</div>
-									<input name="member_zipcode" class="member-input form-input" id="input-zipcode" value="${MemberDTO.getMember_zipcode() }">
-									</div>
-									<div>
-									<div class="label-input" >
-									<label for="input-addr1" id="input-addr1-check"></label>
-									<label for="input-addr1" id="input-addr1-label">주소</label>
-									</div>
-									<input name="member_addr1" class="member-input form-input" id="input-addr1" value="${MemberDTO.getMember_addr1() }">
-									</div>
-								</div>
-							</div>
-							<div class="input-wrap">
-								<div class="label-input" >
-								<label for="input-addr2" id="input-addr2-check"></label>
-								<label for="input-addr2" id="input-addr2-label">상세주소</label>
-								</div>
-								<input name="member_addr2" class="member-input form-input" id="input-addr2" value="${MemberDTO.getMember_addr2() }">
-							</div>
+							</div> <!-- 선택정보 입력 끝 -->
+							
+						</form>
+						<br>
+						<hr>
+						<br>
+						<div id="profile-expire">
 							<div class="input-wrap">
 								<div style="text-align: center;">
-									<input type="button" class="form-btn disabled" id="profile-submit-btn" value="프로필 수정">
+									<input type="button" class="form-btn disabled" id="profile-submit-btn" value="회원탈퇴">
 								</div>
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</div>

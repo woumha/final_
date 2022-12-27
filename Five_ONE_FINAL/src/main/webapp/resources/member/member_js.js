@@ -290,3 +290,37 @@ function pwdShow(){
 		
 	});
 }
+
+
+
+/* 인증 시간 카운트 다운 함수*/
+
+
+function numberPad(n, width) {
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+}
+
+function authtimer() {
+	
+	let time = 180000;
+	let min = 3;
+	let sec = 60;
+	
+	$("#email-auth-span").text(min+":"+'00');
+	
+	CountDown = setInterval(function(){
+					time = time-1000;
+					min = time/(60*1000);
+					
+					if(sec > 0){
+						sec = sec-1;
+						$("#email-auth-span").text(Math.floor(min)+ ':' + numberPad(sec, 2));
+					}
+					if (sec == 0){
+						sec = 60;
+						$("#email-auth-span").text(Math.floor(min)+ ':' +'00');
+					}
+				},1000);
+	
+}

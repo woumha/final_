@@ -160,7 +160,7 @@
 					<li><i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
 					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
-					<li><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;<a href="logout.do">로그아웃</a></li>		
+					<li onclick="location.href='<%=request.getContextPath()%>/logout.do'"><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;로그아웃</li>		
 				</ul>
 			</div>
 		</c:if>

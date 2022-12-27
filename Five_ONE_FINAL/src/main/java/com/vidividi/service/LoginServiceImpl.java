@@ -41,13 +41,9 @@ public class LoginServiceImpl implements LoginService {
 		
 		if (memberCode != null) {
 			session.setAttribute("MemberCode", memberCode);
-
-			System.out.println("로그인 중인 멤버 코드 : "+memberCode);
+			session.setAttribute("MemberName", memberDTO.getMember_name());
 			session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
-			System.out.println("대표 채널 코드 : "+memberDTO.getMember_rep_channel());
-			
 			lhservice.setLoginData(memberCode);
-			
 			return memberCode;
 		}else {
 			return null;
@@ -217,6 +213,7 @@ public class LoginServiceImpl implements LoginService {
 		}else if (via.equals("naver")) {
 			dto.setMember_social_link("naver");
 			dto.setMember_pwd(generatePWD(10));
+			System.out.println("-------------> " + dto.getMember_name());
 		}
 		
 		int joinResult = dao.joinMember(dto);

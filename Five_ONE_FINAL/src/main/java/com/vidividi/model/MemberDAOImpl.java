@@ -96,5 +96,20 @@ public class MemberDAOImpl implements MemberDAO {
 	public void socialLink(MemberDTO dto) {
 		this.sqlSession.update("socialLink", dto);
 	}
+	
+	@Override
+	public String findId(String email) {
+		return this.sqlSession.selectOne("findId", email);
+	}
+	
+	@Override
+	public void changePwd(LoginDTO dto) {
+		this.sqlSession.update("changePwd", dto);
+	}
+	
+	@Override
+	public int isProtected(String memberCode) {
+		return this.sqlSession.selectOne("isProtected", memberCode);
+	}
 
 }

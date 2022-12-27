@@ -25,4 +25,7 @@ public interface MemberDAO {
 	String isSocialLinked(String email);
 	String isExistEmail(String email);
 	void socialLink(MemberDTO dto);
+	String findId(String email);
+	void changePwd(LoginDTO dto);
+	int isProtected(String memberCode);
 }

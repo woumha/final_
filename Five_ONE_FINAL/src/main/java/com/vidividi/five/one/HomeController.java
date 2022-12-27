@@ -42,12 +42,14 @@ public class HomeController {
         if (session.getAttribute("MemberCode")!=null) {
             String memberCode = (String)session.getAttribute("MemberCode");
             String repChannelCode = (String)session.getAttribute("RepChannelCode");
-            MemberDTO memberDTO = memberDAO.getMember(memberCode);
-            //String repChannelPsa = ChannelDAO.getChannelPsa(repChannelCode);
-
+            String memberName = (String)session.getAttribute("MemberName");
+            
+            System.out.println("로그인 중인 멤버 이름 : "+memberName);
+            System.out.println("로그인 중인 멤버 코드 : "+memberCode);
+            System.out.println("로그인 중인 멤버 대표 채널 코드 : "+repChannelCode);
+            
             model.addAttribute("MemberCode", memberCode);
-            model.addAttribute("MemberName", memberDTO.getMember_name());
-            //model.addAttribute("RepChannelPsa", repChannelPsa);
+            model.addAttribute("MemberName", memberName);
             model.addAttribute("RepChannelCode", repChannelCode);
         }
 
