@@ -35,6 +35,25 @@ $(function() {
 	});
 	
 	
+	$(".bundle_Code").each(function() {
+		let bundle = $(this).val();
+		$.ajax({
+			url: getContextPath() + "/bundleSetList.do",
+			data: {
+				"bundle_Code": bundle	
+			},
+			datatyle: html,
+			success: function(data) {
+				
+			},
+			error: function() {
+				alert('통신 오류');
+			}
+		});	
+	});
+	
+	
+	
 });
 
 
@@ -43,4 +62,8 @@ function getContextPath(){
 	let path = location.href.indexOf(location.host)+location.host.length;
 	
 	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
+function getBundleVideoList() {
+	
 }

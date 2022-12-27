@@ -111,3 +111,61 @@ body {
 .arrow.upload_btn:hover {
 	color: #f78411;
 }
+
+
+/*=================== 재생목록 박스 ===================*/
+/* 작업 영역 */
+.video_box {
+display: inline-block; /* 동영상 리스트 x축 나열  ※해제시 y축 */
+margin-right: 0px;
+margin-left: 0px;
+margin-bottom: 0px;
+}
+
+/* 재생목록 영역 잡기 */
+.playlist_video_div {
+position: relative; /* ★기준★ */
+width: 218px;       /* 동영상 사이즈에 맞춰 조정 */
+height: 100%;       /* 동영상 사이즈에 맞춰 조정 */
+}
+
+/* 동영상 스타일 */
+.video_player {
+position: absolute; /* ☆나열☆ */
+width: 210px; /* 동영상 크기 조절 */
+z-index: 2;   /* 순서: .playlist_lid 보다 낮아야 함 */
+border-radius: 10px;
+}
+
+/* 덮개 (불투명한 검은색) */
+.playlist_lid {
+position: absolute; /* ☆나열☆ */
+text-align: center;
+background-color: black;
+/* ==================== 조정 가능 ==================== */
+width: 50%;                       /* 절반 가림 */
+height: 118px;                    /* 영역 크기에 맞춰 작성 */
+margin-left: 101px;               /* 딱 맞을때까지 조정 */
+opacity:0.8;                      /* 불투명도 */
+border-top-right-radius: 10px;    /* 한쪽만 둥글게 */
+border-bottom-right-radius: 10px; /* 한쪽만 둥글게 */
+cursor: pointer;                  /* 마우스 포인터 변경 */
+z-index: 3;                       /* 순서 : 숫자가 높을수록 앞으로 */
+/* ================================================= */
+}
+
+/* 덮개 안에 있는 텍스트 스타일 */
+.playlist_lid p {
+font-size: 18px;
+color: white;
+margin-top: 26px;
+margin-bottom: 5px;
+}
+
+/* 덮개 안에 있는 이미지 스타일 */
+.playlist_lid_img {
+width: 20px;
+color: white;
+}
+
+/* =================== 재생목록 박스 종료 ===================*/
