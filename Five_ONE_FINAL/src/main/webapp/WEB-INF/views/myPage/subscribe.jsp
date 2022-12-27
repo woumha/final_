@@ -10,6 +10,7 @@
 <head>
 <meta charset="UTF-8"> 
 <title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
 <script type="text/javascript">
 
 function getContextPath(){
@@ -19,14 +20,17 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-
-function getSubscribe_list(member_code){
+let member_code = "${member_code}";
+let loading = false;
+let page = 1;
+function getSubscribe_list(member_code, page){
 
 	$.ajax({
 
 		url : getContextPath() +"/getSubscribe_list.do",
 		data : {
 			"member_code" : member_code,
+			"page" : page
 		},
 		datatype : 'JSON',
 		contentType : "application/json; charset=UTF-8",
@@ -55,7 +59,9 @@ function getSubscribe_list(member_code){
 					div += "</div>";
 					div += "</div>";
 					div += "</div>";
-					div += "<button class='cancel_btn' onclick=''>구독중</button>";
+					div += "<a href='"+getContextPath()+"/delete_one_subscribe.do?member_code="+member_code+"&channel_code="+this.channel_code+"'>";
+					div += "<button class='cancel_btn'>구독중</button>";
+					div += "</a>";
 					div += "</div>";
 				});
 				div += "</div>";
@@ -70,6 +76,19 @@ function getSubscribe_list(member_code){
 }
 
 
+// 기본 실행 함수
+getSubscribe_list(member_code, page);	
+
+// 무한 스크롤
+$(window).scroll(function(){
+	if($(window).scrollTop()>=$(document).height() - $(window).height()){
+
+		if(loading == true){
+			page++;
+			getSubscribe_list(member_code, page);
+		}
+	}
+}); //scroll end
 
 
 </script>
@@ -90,12 +109,9 @@ function getSubscribe_list(member_code){
 	<c:set var="s_list" value="${subscribe_list }" />
 	<c:if test="${!empty member_code }">
 	<div id="subscribe_title"><p><i class="fa-solid fa-stamp"></i>&nbsp;&nbsp;구독 목록</p></div>
-	<c:if test="${!empty s_list }">
 	
-
-	</c:if>
-	<c:if test="${empty s_list }">
-	</c:if>
+	<div id="ajax_area"></div>
+	
 	<div id="chanel_area_plus" class="chanel_area" onclick="location.href='<%=request.getContextPath() %>/'">
 		<div class="channel_box">
 			<div class="channel_icon"> <img src="${pageContext.request.contextPath}/resources/img/plus.png"> </div>
@@ -105,8 +121,8 @@ function getSubscribe_list(member_code){
 		구독+
 		</button>
 	</div>
-	</c:if> <!-- member_code 있음!!! -->
-	
+	</c:if>
+	<!-- 로그인 안했을 시 -->
 	<c:if test="${empty member_code }">
 		<div id="page_none">
 			<img id="none_img" src="${pageContext.request.contextPath}/resources/img/subscribe.png">

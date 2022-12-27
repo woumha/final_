@@ -98,6 +98,16 @@ display: -webkit-box;
 -webkit-line-clamp: 1;
 -webkit-box-orient: vertical;
 }
+.video_title_good {
+width: 215px;
+font-size: 15px; margin-bottom: -5px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+margin-bottom: 12px;
+}
 
 .video_channel_p { font-size: 12px; margin-bottom: -15px;}
 .video_views_p { font-size: 12px; margin-bottom: -15px;}
