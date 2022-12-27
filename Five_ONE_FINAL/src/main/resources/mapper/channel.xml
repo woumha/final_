@@ -80,7 +80,17 @@
  	<delete id="deleteChannel" parameterType="String">
  		delete from user_channel where channel_code = #{channelCode}
  	</delete>
-
+	
+	<select id="playlistDetail" parameterType="String" resultType="videoplayDTO">
+		select * from video_play v join playlist p on v.video_code = p.video_code where p.playlist_code = #{bundleCode} order by p.playlist_regdate asc
+	</select>
+	
+	<select id="playlistDetails" parameterType="String" resultType="videoplayDTO">
+		select b.bundle_code, b.bundle_title, v.video_code, v.video_title, v.video_regdate, v.video_view_cnt 
+		from video_play v join playlist p join bundlelist b 
+		on p.playlist_code = b.bundle_code on v.video_code = p.video_code 
+		where b.bundle_code = #{bundleCode}
+	</select>
  </mapper>
   
  

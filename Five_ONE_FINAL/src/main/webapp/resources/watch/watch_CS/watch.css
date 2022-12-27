@@ -389,6 +389,10 @@ button{
 	text-align: left;
 }
 
+.comment_inputBox{
+	margin-bottom: 2rem;
+}
+
 .comment_card{
 	width:100%;
 }
@@ -411,12 +415,25 @@ button{
 	font-size: 14px;
 }
 
+.comment_toggle_more{
+	background-color: #fff;
+	color: #66c;
+	font-weight:bold;
+	align-items: center;
+	font-size: 14px;	
+}
+
+
 
 .comment_toggle:hover{
 	background-color: #9cf;
 	border-radius: 100px;
 }
 
+.comment_toggle_more:hover{
+	background-color: #9cf;
+	border-radius: 100px;
+}
 
 .toggle{
 	height: 1rem;

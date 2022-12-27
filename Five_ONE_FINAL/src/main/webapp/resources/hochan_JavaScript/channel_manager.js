@@ -2,9 +2,7 @@
  * 
  */
  
-const card = document.querySelector(".left_card"),
-profilFile = card.querySelector(".profil_input"),
-img = card.querySelector(".left_img");
+const card = document.querySelector(".left_card");
 
 const fileArea = document.querySelector("#file_area");
 const inputFile = document.querySelector("#input_file");
@@ -21,23 +19,6 @@ $(function() {
 	$.ajaxSetup({
 			ContentType: "application/x-www-form-urlencoded;charset=UTF-8", //한글처리
 			type: "post"
-	});
-	
-	//defaultProfil = profilFile.files[0];
-	
-	$(".profil_settings").on("click", function() {
-		$(".profil_input").click();
-	});
-	
-	profilFile.addEventListener("change", function() {
-		file = this.files[0];
-		
-		let fileType = file.type;
-		
-		let fileTypeCheck = [];
-		
-		showFile();
-		
 	});
 	
 	$("#file_area").on("click", function() {
@@ -142,7 +123,6 @@ $(function() {
 		}
 	});
 	
-	$(".delicon").hide();
 	$(".bDel").on("click", function() {
 		$(".delicon").toggle();
 	});
@@ -217,34 +197,44 @@ function newVideo() {
 // 재생목록 추가하기
 function bundleMake() {
 	let bundleName = $(".bundleNameField").val();
+	let ownerCode = $("#oCc").val();
+	
+	
 	
 	$.ajax({
 		url : getContextPath() + '/bundleMaking.do',
 		data : {
-			"code": $("#oCc").val(),
+			"code": ownerCode,
 			"bundleN": bundleName
 		},
-		datatype : 'JSON',
-		contentType : "application/json; charset=UTF-8",
+		datatype : 'html',
 		success : function(data) {
-			let str = data;
+			let arr = data;
 			
-			if(str == "[]") {
+			if(arr == "[]") {
 				loading_playlist = false;
 			} else {
 				let list = JSON.parse(data);
 				let li = "";
 				$(list).each(function () {
 					li += "<li class='w-100 index'>";
-					li += "<input type='hidden' value='"+ this.bundle_code +"'";
-					li += "<a href='bundle_video_list' class='nav-link px-0 bundle_text' style='display: inline-block;'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-music-note-list icon black' viewBox='0 0 16 16'><path d='M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z'/><path fill-rule='evenodd' d='M12 3v10h-1V3h1z'/><path d='M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z'/><path fill-rule='evenodd' d='M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z'/></svg>";
+					li += '<a class="nav-link px-3 bundle_text" style="display: inline-block;" onclick="bundleDetail(&quot;' + this.bundle_code + '&quot;)">';
+					li += "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-music-note-list icon black' viewBox='0 0 16 16'><path d='M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z'/>";
+					li += "<path fill-rule='evenodd' d='M12 3v10h-1V3h1z'/><path d='M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z'/>";
+					li += "<path fill-rule='evenodd' d='M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z'/>";
+					li += "</svg>"
 					li += "<span class='d-none d-sm-inline child_bundle'>"+ this.bundle_title +"</span>	</a>";
-					li += "<button id='bDelIndex' class='delicon' onclick='bundleDel('"+ this.bundle_code +"')'";
-					li += "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16'><path d='M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z'/></svg>";
+					
+					li += '<button id="bDelIndex" class="delicon" onclick="bundleDel(&quot;' + this.bundle_code + '&quot;)">';
+					li += "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16'>";
+					li += "<path d='M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z'/>";
+					li += "</svg>";
 					li += "</button>"
-					li += "</li>";		
+					li += "</li>";
 				});
-				$("#bundleList").append(li);
+				alert('추가 성공');
+				$("#bundleList").html(li);
+				$(".bundleNameField").val("");
 			}
 		},
 		error: function() {
@@ -254,24 +244,105 @@ function bundleMake() {
 }
 
 function bundleDel(bundleCode) {	
+	let ownerCode = $("#oCc").val();
 	
 	$.ajax({
 		url: getContextPath() + "/BundleDelete.do",
 		data: {
-			"bundleCode": bundleCode
+			"bundleCode": bundleCode,
+			"ownerCode": ownerCode
 		},
+		datatype: 'html',
 		success: function(data) {
-			if(data > 0) {
-				alert('삭제 완료');
-				getData();				
+			let arr = data;
+			
+			if(arr == "[]") {
+				loading_playlist = false;
 			} else {
-				alert('삭제 실패');
+				let list = JSON.parse(data);
+				let li = "";
+				$(list).each(function () {
+					li += "<li class='w-100 index'>";
+					li += '<a class="nav-link px-3 bundle_text" style="display: inline-block;" onclick="bundleDetail(&quot;' + this.bundle_code + '&quot;)">';
+					li += "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-music-note-list icon black' viewBox='0 0 16 16'><path d='M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z'/>";
+					li += "<path fill-rule='evenodd' d='M12 3v10h-1V3h1z'/><path d='M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z'/>";
+					li += "<path fill-rule='evenodd' d='M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z'/>";
+					li += "</svg>"
+					li += "<span class='d-none d-sm-inline child_bundle'>"+ this.bundle_title +"</span>	</a>";
+					
+					li += '<button id="bDelIndex" class="delicon" onclick="bundleDel(&quot;' + this.bundle_code + '&quot;)">';
+					li += "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16'>";
+					li += "<path d='M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z'/>";
+					li += "</svg>";
+					li += "</button>"
+					li += "</li>";		
+				});
+				alert('삭제 완료');
+				$("#bundleList").html(li);
 			}
 		},
 		error: function() {
 			alert('삭제 실패');
 		}
 	});
-	
 }
 
+function bundleDetail(bundle_code) {
+		let code = bundle_code; // 재생목록 코드
+		
+		$.ajax({
+			url: getContextPath() + "/videoListBundle.do",
+			data: {
+				'bundleCode': code 
+			},
+			datatype: 'html',
+			success: function(data) {
+				let check = data;
+				
+				if(check == "[]") {
+					loading_playlist = false;
+				} else {
+					let list = JSON.parse(data);
+					let li = "";
+					
+					$(list).each(function() {
+						li += '<tr onclick="modal(&quot;'+ this.video_code +'&quot;)" data-toggle="modal" data-target="#MoaModal">';
+						if(this.video_img == undefined) {
+							li += '<td><div><video class="show_file"><source src="'+ getContextPath()+'/resources/AllChannel/'+ this.channel_code + '/' + this.video_title +'.mp4"></video></div>';							
+						} else if(this.video_img != undefined) {
+							li += '<td><div><img clss="show_file" src="' + getContextPath() + '/resources/AllChannel/'+ this.channel_code + '/thumbnail/' + this.video_img + '" style="background-size: cover; width: 80%; height: 80px;"></div></td>';
+						}
+						
+						li += '<td>'+ this.video_title +'</td>';
+						if(this.video_open == 1) {
+							li += '<td>공개</td>';
+						} else if(this.video_open == 0) {
+							li += '<td>비공개</td>';
+						}
+						if(this.video_age == "true") {
+							li += '<td>아동용</td>';
+						} else {
+							li += '<td>성인용</td>';
+						}
+						li += '<td>'+ this.video_view_cnt +'</td>';
+						li += '<td>' + this.video_regdate + '</td>';
+						if(this.video_good == 0) {
+							li += '<td>' + 0% + '</td>';
+						} else {
+							let good = this.video_good;
+							let bad = this.video_bad;
+							console.log(good + " " + bad);
+							let answer = (good - bad) / bad;
+							li += '<td>' + answer +'</td>';
+						}
+						li += '</tr>'
+					});
+					$(".manager_tbody").html(li).trigger("create");
+				}
+			},
+			error: function() {
+				alert('불러오기 실패');
+			}
+		});
+		
+	}

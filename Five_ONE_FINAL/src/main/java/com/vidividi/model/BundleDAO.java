@@ -3,6 +3,7 @@ package com.vidividi.model;
 import java.util.List;
 
 import com.vidividi.variable.BundleDTO;
+import com.vidividi.variable.VideoPlayDTO;
 
 public interface BundleDAO {
 	public List<BundleDTO> getBundleList(String ownerCode); // 재생목록 리스트

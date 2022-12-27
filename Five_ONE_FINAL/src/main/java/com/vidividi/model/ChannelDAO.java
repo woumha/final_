@@ -41,5 +41,9 @@ public interface ChannelDAO {
 	// 채널 프로필 수정
 	public int setChangeChannelProfil(String channelCode);
 	
+	// 재생목록 영상 불러오기
+	public List<VideoPlayDTO> getPlayListDetail(String bundleCode);
 	
+	// 다수의 재생목록의 영상들
+	public List<VideoPlayDTO> getPlayListDetails(String bundleCode);
 }

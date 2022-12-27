@@ -6,11 +6,6 @@
 	margin-left: 25%;
 }
 
-.show_file {
-	background-size: cover;
-	width: 80%;
-	height: 80px;
-}
 
 .font_setting {
 	font-size: 16px;
@@ -39,11 +34,6 @@
 	text-align: right;
 }
 
-#listmake {
-	font-size: 14px;
-	margin: 6px;
-}
-
 .img_field {
 	border: 0 solid black;
 	width: 100%;
@@ -70,7 +60,7 @@
 }
 
 .child_bundle {
-	padding-left: 20px solid;
+	margin-left: 5px;
 	color: black;
 	font-size: 16px;
 }
@@ -87,4 +77,23 @@
 	float: right;
 	border: 0;
 	background-color: #ECE9EF;
+	display: none;
 }
+
+#listmake {
+	font-size: 14px;
+	margin: 6px;
+}
+
+#videoMake {
+	font-size: 14px;
+	margin: 6px;
+}
+
+/* 영상 썸네일 이미지 */
+.show_file {
+	background-size: cover;
+	width: 80%;
+	height: 80px;
+}
+

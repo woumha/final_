@@ -6,6 +6,8 @@
 <c:set var="owner" value="${currentOwner }" />
 <c:set var="current" value="${currentVideo }" />
 <c:set var="lastUpVideo" value="${currentNewVideo }" />
+<c:set var="bundle" value="${bundleList }" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,13 +20,6 @@
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/uploadBtn.css">
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/css/bootstrap.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-<script type="text/javascript">
-	$(function() {
-		
-	});
-</script>
-
-
 <title>채널입니다.</title>
 </head>
 <body>
@@ -33,11 +28,11 @@
 	<jsp:include page="../include/top_include.jsp"/>
 	<jsp:include page="../include/side_include.jsp"/>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel.js"></script>
-	<img src="${path }/resources/hochan_img/vidi.png" id="channel_banner" class="col-lg-12 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
+	<img src="${path }/resources/img/channel_banner/${owner.channel_banner}" id="channel_banner" class="col-10 img-fluid mb-3" style="max-width: 100%; max-height: 423px; border: 1px solid;" alt="...">
 	<div class="container text-center mb-3">
 	  <div class="row mb-3">
 	    <div class="col-lg-2">
-	      <img src="${path }/resources/hochan_img/channelprofil_test.png" class="img-fluid" id="chennelprofil" alt="...">
+	      <img src="${path }/resources/img/channel_profile/${owner.channel_profil}" class="img-fluid" id="chennelprofil" alt="...">
 	    </div>
 	    <div class="col-lg-6">
 	     	<div class="col-sm-12 text-left mb-1" style="font-size: 18px">
@@ -130,7 +125,6 @@
 				  		<c:if test="${empty lastUpVideo }">
 				  			<div>영상을 올려주세요!</div>
 				  		</c:if>
-						
 					</div><!-- video -->
 					  <div class="col">
 					    <div class="col mb-1" style="font-size: 14px;">${lastUpVideo.video_title }</div>
@@ -169,9 +163,19 @@
 				  	</c:forEach>
 				  </div>
 				</div><!-- 그리드 -->
+				<!-- 재생목록 및 영상 삽입 -->
+				<!-- bundle -->
+				
+				
+				<%-- 추가하자 --%>
+				
+				
+				<%-- 추가하자 --%>
+				
+				
 				
 				<%-- 다음 재생목록 영상 --%>
-				<hr width="100%" color="gary">
+				<hr width="100%" color="#ECE9EF">
 				<div class="play_list_title">재생목록 제목</div>
 				<div class="play_list_title">▶모두재생</div>
 				<div class="container text-center"> <!-- 그리드 시작 -->

@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
 
 import com.vidividi.variable.BundleDTO;
+import com.vidividi.variable.VideoPlayDTO;
 
 
 @Controller
