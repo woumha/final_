@@ -16,4 +16,8 @@
 	<delete id="bundleDel" parameterType="String">
 		delete from bundlelist where bundle_code = #{bundleCode}
 	</delete>
+	
+	<update id="bundleVideoDel" parameterType="String">
+		update playlist set playlist_code = '' where playlist_code = #{bundleCode}
+	</update>
 </mapper>

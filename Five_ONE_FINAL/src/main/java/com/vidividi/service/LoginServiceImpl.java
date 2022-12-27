@@ -106,6 +106,17 @@ public class LoginServiceImpl implements LoginService {
 		return result;
 	}
 	
+	// 구독자 코드
+	@Override
+	public String generateSubscribe() {
+		String result = "";
+		UUID uuid = UUID.randomUUID();
+		result = "MY-"+uuid.toString();
+		
+		System.out.println("새로 생성된 비디오 코드 : "+result);
+		
+		return result;
+	}
 
 	@Override
 	public String generatePWD(int size) {

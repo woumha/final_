@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.MemberDTO;
 import com.vidividi.variable.PlaylistDTO;
+import com.vidividi.variable.SubscribeDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Controller
@@ -22,8 +23,14 @@ public class ChannelDAOImpl implements ChannelDAO {
 	
 	// 채널 정보
 	@Override
-	public ChannelDTO getChannelOwner(MemberDTO memberDTO) {
-		return this.session.selectOne("owner", memberDTO);
+	public ChannelDTO getChannelOwner(String channelCode) {
+		return this.session.selectOne("owner", channelCode);
+	}
+	
+	// 멤버 코드를 이용한 채널 정보
+	@Override
+	public ChannelDTO getChannelInformation(MemberDTO dto) {
+		return this.session.selectOne("memOwner", dto);
 	}
 	
 	// 재생목록 리스트
@@ -92,5 +99,36 @@ public class ChannelDAOImpl implements ChannelDAO {
 	@Override
 	public List<VideoPlayDTO> getPlayListDetails(String bundleCode) {
 		return this.session.selectList("playlistDetails", bundleCode);
+	}
+	
+	@Override
+	public PlaylistDTO getBundleBundleList(String bundleCode) {
+		return this.session.selectOne("bbundleCode", bundleCode);
+	}
+	
+	@Override
+	public int checkSubscribe(SubscribeDTO subdto) {
+		int check = this.session.selectOne("checkSub", subdto);
+		
+		return check;
+	}
+	
+	@Override
+	public boolean inOutSubscribe(SubscribeDTO subdto) {
+		int check = this.session.selectOne("checkSub", subdto);
+		int result = 0;
+		if(check > 0) {
+			result = this.session.delete("subDelete", subdto);
+			if(result > 0) {
+				return false;
+			}
+		} else {
+			result = this.session.insert("subinsert", subdto);
+			if(result > 0) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

@@ -18,6 +18,7 @@ public class ChannelDTO {
 	private String channel_lastupload; // 마지막 업로드 날짜
 	private String member_code; // 채널 주인 코드
 	
+	private int channel_view_cnt;
 	
 	private MultipartHttpServletRequest multi_title;
 	

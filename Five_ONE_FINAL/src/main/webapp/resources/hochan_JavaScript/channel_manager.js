@@ -243,6 +243,7 @@ function bundleMake() {
 	});
 }
 
+// 재생목록 삭제
 function bundleDel(bundleCode) {	
 	let ownerCode = $("#oCc").val();
 	
