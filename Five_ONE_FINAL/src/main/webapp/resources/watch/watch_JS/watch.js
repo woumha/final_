@@ -12,7 +12,9 @@ $(document).ready(function() {
 
 	let video_code = $("#video_code").val();
 	let channel_code = $("#channel_code").val();
+	let video_title = $("#video_title").val();
 	let category_code = $("#category_code").val();
+	let video_img = $("#video_img").val();
 
 	let navOption = "all";
 	let reply_option = "most";
@@ -27,6 +29,79 @@ $(document).ready(function() {
 	let nav_list;
 
 	let scroll_check = false;
+
+	//let video_url = getContextPath()+"/webapp/resources/AllChannel/"+channel_code+"/"+video_title+".mp4"; 
+	video_url = getContextPath() +"/resources/AllChannel/" +channel_code+ "/" +video_title +".mp4";
+	poster_url = getContextPath() +"/resources/AllChannel/thumbnail/" +channel_code+ "/" +video_img;
+
+	console.log('url>' +poster_url);
+
+
+
+	var player = videojs("myPlayer", {
+		sources : [
+		 	{ src : video_url, type : "video/mp4"}
+		],
+		controls : true,
+		playsinline : true,
+		poster : poster_url,
+		muted : true,
+		preload : "metadata",
+		fluid : true,
+		label: '720P',
+		playsinline : true,
+		//autoplay : "autoplay",
+		playbackRates: [.5, .75, 1, 1.25, 1.5] //재생 속도
+
+	});
+
+
+	function changeBackColor(channelcode){
+		switch(channelcode.charAt(3)){
+			   case "1" :
+				   $(".channel-backcolor").css("background-color",DarkSalmon);
+			   break
+			   
+			   case "2" :
+				   $(".channel-backcolor").css("background-color","HotPink");
+			   break
+			   
+			   case "3" :
+				   $(".channel-backcolor").css("background-color","IndianRed");
+			   break
+			   
+			   case "4" :
+				   $(".channel-backcolor").css("background-color","lightpink");
+			   break
+			   
+			   case "5" :
+				   $(".channel-backcolor").css("background-color","Teal");
+			   break
+			   
+			   case "6" :
+				   $(".channel-backcolor").css("background-color","RoyalBlue");
+			   break
+			   
+			   case "7" :
+				   $(".channel-backcolor").css("background-color","Turquoise");
+			   break
+			   
+			   case "8" :
+				   $(".channel-backcolor").css("background-color","MediumPurple");
+			   break
+			   
+			   case "9" :
+				   $(".channel-backcolor").css("background-color","Wheat");
+			   break
+			   
+			   case "0" :
+				   $(".channel-backcolor").css("background-color","SeaGreen");
+			   break
+			   default:
+				   $(".channel-backcolor").css("background-color","#fc942c");
+			   break
+		   } 
+	}
 
 
 
@@ -68,7 +143,9 @@ $(document).ready(function() {
 
 						div += "<div class='item_a'>";
 						div += "<div class='reply_wrap'>";
-						div += "<div class='input_profile'><img class='profile' src='" +getContextPath()+ "/resources/img/" +this.channel_profil+ "'></div></div></div>";
+						div += "<a href='" +getContextPath()+ "/channel.do?mc=" +this.channel_code+ "'>";
+						div += "<div class='input_profile'><img class='profile channel-backcolor' src='" +getContextPath()+ "/resources/img/channel_profile/" +this.channel_profil+ "'></div></div></div>";
+						div += "</a>";
 
 						div += "<div class='input_reply item_a'>";
 
@@ -114,7 +191,7 @@ $(document).ready(function() {
 						if(this.reply_comment == 1){
 
 							div += "<div class='comment_box'>";
-							div += "<div class='comment_menu card_c'><div class='comment_btn close'><button class='comment_toggle card_a' value='" +this.reply_group+ "'><img class='toggle open' src='" +getContextPath()+ "/resources/watch/watch_img/comment_open.png'>";
+							div += "<div class='comment_menu card_c'><div class='comment_btn close'><button class='comment_toggle important card_a' value='" +this.reply_group+ "'><img class='toggle open' src='" +getContextPath()+ "/resources/watch/watch_img/comment_open.png'>";
 							div += "<div class='comment_count'>답글" +this.comment_count+ "개</div>";
 							div += "</button></div>"
 							div += "</div>" // .comment_wrap
@@ -175,7 +252,9 @@ $(document).ready(function() {
 						div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>";
 						// commnet_wrap(item1)
 						div += "<div class='profile'>"; //.comment_wrap(item1)
-						div += "<img class='profile' src='" +getContextPath()+ "/resources/img/" +this.channel_profil+ "'>";
+						div += "<a href='" +getContextPath()+ "/channel.do?mc=" +this.channel_code+ "'>";
+						div += "<img class='profile channel-backcolor' src='" +getContextPath()+ "/resources/img/channel_profile/" +this.channel_profil+ "'>";
+						div += "</a>";
 						div += "</div>"; //.profile end
 						//comment_wrap(item2)
 						div += "<div class='comment_card card_c'>"; //card
@@ -222,6 +301,7 @@ $(document).ready(function() {
 										
 						div += "</div>"; // .comment_wrap
 
+						
 					});
 
 					if(comment.length == 3){
@@ -236,6 +316,7 @@ $(document).ready(function() {
 					}
 
 						tag.append(div);
+						
 					
 				}
 				
@@ -298,14 +379,15 @@ $(document).ready(function() {
 					nav += "<div class='video_list_box card_a'>";
 					// video_list_box(item1)
 					nav += "<div class='video_list_thumbnail'>";
-					nav += "<a><img class='video_list_img' src='" +getContextPath()+ "/resources/watch/watch_img/" +nav_list[i].video_img+ "'></a>";
+					nav += "<a href='" +getContextPath()+ "/watch.do?video_code=" +nav_list[i].video_code+ "'>";
+					nav += "<img class='video_list_img' src='" +getContextPath()+ "/resources/AllChannel/"+nav_list[i].channel_code+ "/thumbnail/" +nav_list[i].video_img+ "'>";
 					nav += "</div>";
 					// video_list_box(item2)
 					nav += "<div class='video_list_info card_c'>";
-					nav += "<span class='video_list_title'>" +nav_list[i].video_title+ "</span>";
-					nav += "<span class='video_list_channel_name'>" +nav_list[i].channel_name+ "</span>";
+					nav += "<span class='video_list_title'><a class='watch video_title_font' href='" +getContextPath()+ "/watch.do?video_code=" +nav_list[i].video_code+ "'>" +nav_list[i].video_title+ "</a></span>";
+					nav += "<span class='video_list_channel_name'><a class='watch channel_name_font'href='" +getContextPath()+ "/channel.do?mc=" +nav_list[i].channel_code+ "'>" +nav_list[i].channel_name+ "</a></span>";
 					nav += "<div class='video_list_meta_block'>";
-					nav += "<span class='video_list_view_cnt'>" +nav_list[i].video_view_cnt+ "</span>";
+					nav += "<span class='video_list_view_cnt'>" +nav_list[i].video_view_cnt+ "회</span>";
 					nav += "<span class='video_list_date'>" +nav_list[i].video_regdate+ "</span>";
 					nav += "</div>"; // video_list_mata_block end
 					nav += "</div>"; // video_list_info end

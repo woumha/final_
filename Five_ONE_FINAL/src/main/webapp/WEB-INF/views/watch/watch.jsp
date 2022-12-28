@@ -28,13 +28,15 @@
 	<c:set var="good_dto" value="${good_dto }"/>
 	
 	<input type="hidden" value="${video_dto.getVideo_code() }" id="video_code">
+	<input type="hidden" value="${video_dto.getVideo_title() }" id="video_title">
 	<input type="hidden" value="${video_dto.getChannel_code() }" id="channel_code">
 	<input type="hidden" value="${video_dto.getCategory_code() }" id="category_code">
 	<input type="hidden" value="${good_dto.getGood_code()}" id ="good_code">
 	<input type="hidden" value="${subscribe_dto.getSubscribe_code() }" id="subscribe_code">
 	<input type="hidden" value="${channel_dto.getChannel_profil()}" id="profil">
+	<input type="hidden" value="${video_dto.getVideo_img() }" id="video_img">
 	
-	<jsp:include page="../include/top_include2.jsp"/>
+	<jsp:include page="../include/top_include.jsp"/>
 	<%-- <jsp:include page="../include/side_include.jsp"/> --%>
 <div class="all">
 	<div class="watch_layer">
@@ -43,18 +45,18 @@
 		<div class="watch_container">
 			<div class="video_box">
 				<div class="video_wrap">
-					<video id="myPlayer" class="video-js vjs-default-skin vjs-16-9" autoplay="autoplay"></video>
+					<video id="myPlayer" class="video-js vjs-default-skin vjs-16-9 vjs-big-play-centered" ></video>
 					<!-- <video id="myPlayer" class="video-js vjs-theme-city player" controls="controls" autoplay="autoplay"></video> -->
 				</div>
 			</div>
 			
 			<div class="watch_info">
 			
-				<div class="hash_box">
+<!-- 				<div class="hash_box">
 					<div id="input_hash">
 						<a href="#">#해시태그</a>
 					</div>
-				</div>
+				</div> -->
 				
 				<div class="title_box">
 					<div id="input_title">
@@ -68,14 +70,16 @@
 						<div class="card_a">
 							<div class="item_a">
 								<div id="input_profile">
-									<img class="profile" src="${pageContext.request.contextPath}/resources/img/${video_dto.getChannel_profil()}">
+								<a href="${pageContext.request.contextPath}/channel.do?mc=${video_dto.getChannel_code() }">
+									<img class="profile channel-backcolor" src="${pageContext.request.contextPath}/resources/img/channel_profile/${video_dto.getChannel_profil()}">
+								</a>
 								</div>
 							</div>
 							
 							<div class="item_a">
 								<div class="channel_info card_c">
-									<div id="input_uploader">${video_dto.getChannel_name()}</div>
-									<div id="input_member">구독자 &nbsp; ${video_dto.getChannel_like() }명</div>
+									<div class="input_uploader">${video_dto.getChannel_name()}</div>
+									<div class="input_member">구독자 &nbsp; ${video_dto.getChannel_like() }명</div>
 								</div>
 							</div>
 							
@@ -87,7 +91,7 @@
 								</c:if>
 								<c:if test="${!empty subscribe_dto }">
 									<button id="subscribe_btn" class="subscribe_true">
-										<div>구독중</div>
+										<div class="subscribe_text">구독중</div>
 									</button>
 								</c:if>
 								
@@ -124,11 +128,11 @@
 										</div>
 								</button>
 							</div><!-- .btn_wrap -->
-							<div class="item_a btn_wrap">
+<!-- 							<div class="item_a btn_wrap">
 								<button class="watch_btn">
 									<div class="share">공유</div>
 								</button>
-							</div>
+							</div> -->
 							
 							<div class="item_a btn_wrap">
 								<button class="watch_btn savePlaylist_btn">
@@ -136,11 +140,11 @@
 								</button>
 							</div>
 							
-							<div class="item_a btn_wrap">
+<!-- 							<div class="item_a btn_wrap">
 								<button class="watch_btn">
 									<div class="other">기타</div>
 								</button>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div> <!-- watch_info end -->
@@ -177,14 +181,14 @@
 					<div class="item_a">
 						<div>
 							<div class="card_a">
-								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/${channel_dto.getChannel_profil()}"></div>
+								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/channel_profile/${channel_dto.getChannel_profil()}"></div>
 								<div class="write_box">
 									<div class="item_a write_field">
 										<div id="reply_cont" class="reply_cont" contenteditable="true" placeholder="댓글 추가..."></div>
 									</div>
 
 									<div class="item_a card_b">
-										<div>이모티콘</div>
+										<div></div> <!-- 이모티콘 -->
 										<div class="card_e">
 											<div class="item_reply btn_wrap">
 												<button id="reply_cancle" class="watch_btn">
@@ -192,8 +196,8 @@
 												</button>
 											</div>
 											<div class="item_reply btn_wrap">
-												<button id="reply_complete" class="watch_btn">
-													<div class="reply_btn">답글</div>
+												<button id="reply_complete" class="watch_btn watch btn btn-secondary" data-bs-placement="right" data-bs-content="완료">
+													<div class="reply_btn">댓글 입력</div>
 												</button>
 											</div>
 										</div>
@@ -326,10 +330,10 @@
 				    <button id="slide_left"><</button>
 				  </div>
 				  <div class="scrollmenu">
-				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="all">모두</a>
-				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="category">관련 콘텐츠</a>
-				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="current">최근에 업로드된 영상</a>
-				    <a class="scrollmenu_btn" href="#" onclick="return false;" data-value="history">감상한 동영상</a>
+				    <a class="scrollmenu_btn important" href="#" onclick="return false;" data-value="all">모두</a>
+				    <a class="scrollmenu_btn important" href="#" onclick="return false;" data-value="category">관련 콘텐츠</a>
+				    <a class="scrollmenu_btn important" href="#" onclick="return false;" data-value="current">최근에 업로드된 영상</a>
+				    <a class="scrollmenu_btn important" href="#" onclick="return false;" data-value="history">감상한 동영상</a>
 				  </div> 
 				  <div class="button_container">
 				    <button id="slide_right">></button>
@@ -369,7 +373,7 @@
 						
 		</div> <!-- side_container end -->
 		
-		<%-- <jsp:include page="../include/side_include.jsp"/> --%>
+		<jsp:include page="../include/side_include.jsp"/>
 	</div>
 </div>
 
@@ -422,7 +426,7 @@
 		
 		<div class="newPlaylist_input_box">
 			<input class="input_playlist_title" id="playlist_title" placeholder="새 재생목록 제목">
-			<input type="hidden" id="playlist_open" value="">
+			<input type="hidden" id="playlist_open" value="2">
 			
 			<div class="dropdown">
 			  <button class="btn btn-secondary dropdown-toggle playlist_dropdown" type="button" id="playlist_btn_text" data-bs-toggle="dropdown" aria-expanded="false">
@@ -433,8 +437,13 @@
 			    <li><a class="dropdown-item" href="#" onclick="return false;" data-value="1">비공개</a></li>
 			  </ul>
 			  
+			  
+			  
+			  
 			  <div id="complete_playlist" class="complete_playlist">
-			  	만들기
+			  	<button id="newPlaylist_check" type="button" class="btn btn-secondary"  data-bs-placement="right" data-bs-content="완료" >
+ 					만들기
+				</button>
 			  </div>
 			</div>				
 
@@ -449,7 +458,7 @@
 
 </body>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
 function getContextPath(){
 	
@@ -458,16 +467,21 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-let vid = ${video_dto.getVideo_code()};
+//let video_url = ${video_dto.getVideo_code()} +".mp4"; 
+let url_channel_code = $("#channel_code").val()
+let url_video_title = $("#video_title").val();
 
+let video_url = url_channel_code + "/" +url_video_title+ ".mp4"; 
 
-let video_url = ${video_dto.getVideo_code()} +".mp4"; 
+console.log("url>" +video_url);
 
 
 
 var player = videojs("myPlayer", {
 	sources : [
-		{ src : getContextPath() +"/resources/Upload/UploadVideo/" +video_url, type : "video/mp4"}
+		//{ src : getContextPath() +"/webapp/resources/AllChannel/" +video_url, type : "video/mp4"}
+		//{ src : getContextPath() +"/webapp/resources/AllChannel/CH-a6ab151d-eacd-481e-8b6f-3bfd31665e6b/나만.mp4", type : "video/mp4"}
+		{ src : "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", type : "video/mp4"}
 	],
 	controls : true,
 	playsinline : true,
@@ -498,7 +512,7 @@ vi.css({
 }).resize(); */
 
 
-</script>
+</script> -->
 
 
 

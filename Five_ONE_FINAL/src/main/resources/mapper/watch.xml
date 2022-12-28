@@ -5,6 +5,24 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="watchDAO">
+
+<select id="getHistory_save" parameterType="String" resultType="int">
+select member_historysave from members where member_rep_channel = #{repChannelCode}
+</select>
+	
+<select id="checkHistory" parameterType="Map" resultType="historyDTO">
+select * from history where channel_code = #{channel_code} and video_code = #{video_code}
+</select>
+	
+<insert id="insert_history" parameterType="Map">
+insert into history values(#{channel_code}, #{video_code}, CURRENT_DATE)
+</insert>
+<update id="update_history" parameterType="Map">
+update history set history_date = (CURRENT_DATE) where channel_code = #{channel_code} and video_code = #{video_code}
+</update>
+
+
+
 	<select id="getVideo" parameterType="String" resultType="videoplayDTO">
 		select r.* from (select * from video_play inner join user_channel using(channel_code)) r where video_code = #{video_code}
 	</select>
@@ -243,10 +261,22 @@
 	</insert>
 	
 	<select id="getMyBundleList" parameterType="hashmap" resultType="bundleDTO">
-		select * from bundlelist where channel_code =  #{repChannelCode}
+		select * from bundlelist where channel_code =  #{repChannelCode} order by bundle_regdate desc
 	</select>
 	
 	<select id="getMyPlaylist" parameterType="hashmap" resultType="playlistDTO">
 		select * from playlist where video_code = #{video_code} and channel_code = #{repChannelCode}
 	</select>
+	
+	<insert id="addPlaylist" parameterType="hashmap">
+		insert into playlist values(#{repChannelCode}, #{playlist_title}, #{playlist_code}, #{video_code}, CURRENT_DATE)
+	</insert>
+	
+	<delete id="deletePlaylist" parameterType="hashmap">
+		delete from playlist where channel_code = #{repChannelCode} and playlist_code = #{playlist_code} and video_code = #{video_code}
+	</delete>
+	
+	<update id="plusVideoCnt" parameterType="String">
+		update video_play set video_view_cnt = video_view_cnt+1 where video_code = #{video_code}
+	</update>
 </mapper>

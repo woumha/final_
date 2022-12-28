@@ -20,6 +20,7 @@ import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
+import com.vidividi.variable.HistoryDTO;
 import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
@@ -28,6 +29,30 @@ public class WatchDAOImpl implements WatchDAO {
 
 	@Inject
 	private SqlSessionTemplate sqlSession;
+	
+	
+	@Override
+	public int getHistory_save(String repChannelCode) {
+	return this.sqlSession.selectOne("getHistory_save", repChannelCode);
+	}
+
+	@Override
+	public HistoryDTO checkHistory(Map<String, Object> map) {
+	return this.sqlSession.selectOne("checkHistory", map);
+	}
+
+	@Override
+	public int insert_history(Map<String, Object> map) {
+	return this.sqlSession.insert("insert_history", map);
+	}
+
+	@Override
+	public int update_history(Map<String, Object> map) {
+	return this.sqlSession.update("update_history", map);
+	}
+
+	
+	
 
 	@Override
 	public VideoPlayDTO getVideo(String video_code) {
@@ -401,6 +426,38 @@ public class WatchDAOImpl implements WatchDAO {
 		map.put("repChannelCode", repChannelCode);
 		
 		return this.sqlSession.selectList("getMyPlaylist", map);
+	}
+
+
+	@Override
+	public void addPlaylist(String video_code, String playlist_code, String playlist_title, String repChannelCode) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("playlist_code", playlist_code);
+		map.put("playlist_title", playlist_title);
+		map.put("repChannelCode", repChannelCode);
+		
+		this.sqlSession.insert("addPlaylist", map);
+	}
+
+	@Override
+	public void deletePlaylist(String video_code, String playlist_code, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("playlist_code", playlist_code);
+		map.put("repChannelCode", repChannelCode);
+		
+		this.sqlSession.delete("deletePlaylist", map);
+	}
+
+	@Override
+	public void plusViewCnt(String video_code) {
+
+		this.sqlSession.update("plusVideoCnt", video_code);
+		
 	}
 
 

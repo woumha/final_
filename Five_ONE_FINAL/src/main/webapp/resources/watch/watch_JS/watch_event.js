@@ -4,6 +4,13 @@
 
 let feedback_code;
 
+function getContextPath(){
+		
+	let path = location.href.indexOf(location.host)+location.host.length;
+	
+	return location.href.substring(path, location.href.indexOf('/', path+1));
+}
+
 function getSession(){
 
 	let res;
@@ -40,18 +47,78 @@ $(document).ready(function(){
 	let feedback_code;	
 	let resultGood;
 
-	function getContextPath(){
-		
-		let path = location.href.indexOf(location.host)+location.host.length;
-		
-		return location.href.substring(path, location.href.indexOf('/', path+1));
+
+
+
+	function closePlaylist(){
+		$(".savePlaylist_container").removeClass("block");
+		$(".newPlaylist_input_box").css("display", "none");	
+		$(".newPlaylist_btn").css("display", "block");	
+		$("#input_bundleList").empty(); //재생목록 초기화
+		$("#playlist_open").val("2");
+		$("#playlist_title").val("");
+		$("#playlist_btn_text").text("공개 여부");
 	}
+
+	function showPopover(popover){
+
+		popover.popover("enable");
+		popover.popover("show");
+
+		setTimeout(function(){
+			popover.popover("hide");
+		}, 1000);
+	}
+
+	function addPlaylist(video_code, playlist_code, playlist_title){
+
+		$.ajax({
+			url :  getContextPath() +"/addPlaylist.do",
+			ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			data : {
+				"video_code": video_code,
+				"playlist_code" : playlist_code,
+				"playlist_title" : playlist_title
+			},
+			success : function(data){
+				console.log('리스트등록성공');
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+		});
+
+	}
+
+	function deletePlaylist(video_code, playlist_code){
+
+		$.ajax({
+			url :  getContextPath() +"/deletePlaylist.do",
+			ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			data : {
+				"video_code": video_code,
+				"playlist_code" : playlist_code
+			},
+			success : function(data){
+				console.log('리스트삭제성공');
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+		});		
+	}
+
 
 	function getBundleList(video_code){
 
 		$.ajax({
 			url :  getContextPath() +"/getBundleList.do",
 			ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			async: false,
 			data : {
 				"video_code": video_code
 			},
@@ -60,7 +127,7 @@ $(document).ready(function(){
 
 					$(data).each(function(){
 
-						div += "<label class='list-group-item'>";
+						div += "<label class='list-group-item list_group watch'>";
 						if(this.check == 0){
 							div += "<input name='addPlaylist' class='form-check-input me-1' type='checkbox' value='"+this.bundle_code+"'>";
 						}else{
@@ -375,7 +442,7 @@ $(document).ready(function(){
 
 				div += "<div class='item_a'>";
 				div += "<div class='reply_wrap'>";
-				div += "<div class='input_profile'><img class='profile' src='" +getContextPath()+ "/resources/img/" +data.channel_profil+ "'></div></div></div>";
+				div += "<div class='input_profile'><img class='profile channel-backcolor' src='" +getContextPath()+ "/resources/img/channel_profile/" +data.channel_profil+ "'></div></div></div>";
 
 				div += "<div class='input_reply item_a'>";
 
@@ -462,7 +529,7 @@ $(document).ready(function(){
 					div += "<input type='hidden' class='reply_code' name='reply_code' value='" +data.reply_code+ "'>";
 					// commnet_wrap(item1)
 					div += "<div class='profile'>"; //.comment_wrap(item1)
-					div += "<img class='profile' src='" +getContextPath()+ "/resources/img/" +data.channel_profil+ "'>";
+					div += "<img class='profile channel-backcolor' src='" +getContextPath()+ "/resources/img/channel_profile/" +data.channel_profil+ "'>";
 					div += "</div>"; //.profile end
 					//comment_wrap(item2)
 					div += "<div class='comment_card card_c'>"; //card
@@ -668,6 +735,7 @@ $(document).ready(function(){
 				}
 			}else{
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 		});
 
@@ -702,6 +770,7 @@ $(document).ready(function(){
 
 			}else{ // 로그인 x
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 			
 	
@@ -735,6 +804,7 @@ $(document).ready(function(){
 
 			}else{ // 로그인 x
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 			
 	
@@ -779,6 +849,7 @@ $(document).ready(function(){
 
 			}else{ // 로그인 x
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 			
 	
@@ -824,6 +895,7 @@ $(document).ready(function(){
 
 			}else{ // 로그인 x
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 			
 	
@@ -869,6 +941,7 @@ $(document).ready(function(){
 
 			}else{ // 로그인 x
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 			
 	
@@ -915,6 +988,7 @@ $(document).ready(function(){
 
 			}else{ // 로그인 x
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 			
 	
@@ -925,16 +999,31 @@ $(document).ready(function(){
 			//let reply_cont = $("#reply_cont").children().text;
 			//let reply_cont = document.getElementById('reply_cont').innerText.replace("\r\n","<br>");
 			//let join_reply_cont = reply_cont.join();
+			let popover = $(this);
 
 			let reply_cont = document.getElementById("reply_cont").innerText.replaceAll("\n","\\n");
 
 			if(session){
-				let reply_comment = 0;
-				inputReply(video_code, reply_cont, reply_comment);
-				$("#reply_cont").empty();
+
+				if(reply_cont == '' || null || undefined || 0 || NaN){
+					
+					
+					popover.attr("data-bs-content", "댓글 내용을 입력하세요");
+					showPopover(popover);
+
+				}else{
+					popover.popover("disable");
+					let reply_comment = 0;
+					inputReply(video_code, reply_cont, reply_comment);
+					$("#reply_cont").empty();
+				}
+
+
+
 
 			}else{
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 
 		});
@@ -945,7 +1034,7 @@ $(document).ready(function(){
 			$("#reply_cont").empty();
 		});
 
-		//답글 버튼 클릭
+		//대댓글 버튼 클릭
 		$(document).on("click", ".reply_comment_btn", function(){
 
 			let input_reply = $(this).parents(".input_reply");
@@ -957,7 +1046,7 @@ $(document).ready(function(){
 			let div="";
 			div += "<div class='comment_inputBox card_a'>";
 			// .comment_inputBox(item1)
-			div += "<div class='input_profile'><img class='profile' src='" +getContextPath()+ "/resources/img/" +profil+ "'></div>";
+			div += "<div class='input_profile'><img class='profile channel-backcolor' src='" +getContextPath()+ "/resources/img/channel_profile/" +profil+ "'></div>";
 
 			// .commnet_inputBox(item2)
 			div += "<div class='write_box'>";
@@ -968,11 +1057,11 @@ $(document).ready(function(){
 
 			div += "<div class='comment_input_footer card_b'>";
 			// comment_input_footer(item1)
-			div += "<div>이모티콘</div>"
+			div += "<div></div>" //이모티콘
 			div += "<div class='comment_input_footer_btn card_e'>";
 			// comment_input_footer_btn(item1)
 			div += "<div class='item_reply btn_wrap'>";
-			div += "<button class='comment_cancle' class='watch_btn'>";
+			div += "<button class='comment_cancle watch_btn watch'>";
 			div += "<div class='cancle_btn'>취소</div>";
 			div += "</button>";
 			div += "</div>"; // .item_reply
@@ -1009,14 +1098,26 @@ $(document).ready(function(){
 				let reply_comment = 2;
 				let reply_group = $(this).parents().closest(".reply_box").find(".reply_group").val();
 				let reply_code = $(this).parents().closest(".reply_box").find(".reply_code").val();
-				let div = inputComment(video_code, reply_cont, reply_comment, reply_group, reply_code);
+				let popover = $(this);
+				if(reply_cont == '' || null || undefined || 0 || NaN){
+					
+					
+					popover.attr("data-bs-content", "댓글 내용을 입력하세요");
+					showPopover(popover);
 
-				$(this).parents(".write_box").find(".reply_cont").empty();
-				$(this).parents().closest(".input_reply").append(div);
+				}else{
+
+					popover.popover("disable");
+					let div = inputComment(video_code, reply_cont, reply_comment, reply_group, reply_code);
+					$(this).parents(".write_box").find(".reply_cont").empty();
+					$(this).parents().closest(".input_reply").append(div);
+				}
+
 				
 
 			}else{
 				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
 			}
 
 		});
@@ -1031,15 +1132,21 @@ $(document).ready(function(){
 
 		// 재생목록에 추가 열기 버튼
 		$(".savePlaylist_btn").on("click", function(){
-			$(".savePlaylist_container").addClass("block");
 
-			getBundleList(video_code); // 재생목록 불러오는 함수
+			if(session){
+				$(".savePlaylist_container").addClass("block");
+
+				getBundleList(video_code); // 재생목록 불러오는 함수
+			}else{
+				alert('로그인 해주세요');
+				location.href= getContextPath() +"/login.do";
+			}
+
 		});
 
 		// 재생목록 추가 닫기 버튼
 		$(".savePlaylist_close_btn").on("click", function(){
-			$(".savePlaylist_container").removeClass("block");
-			$("#input_bundleList").empty();
+			closePlaylist();
 		});
 
 
@@ -1059,25 +1166,60 @@ $(document).ready(function(){
 		 });
 
 		 // 재생목록 생성완료
-		 $("#complete_playlist").on("click", function(){
+		 $("#newPlaylist_check").on("click", function(){
+			let popover = $(this);
 			let playlist_title = $("#playlist_title").val();
 			let playlist_open = $("#playlist_open").val();
-			$(".savePlaylist_container").removeClass("block");
-			$(".newPlaylist_input_box").css("display", "none");	
-			$(".newPlaylist_btn").css("display", "block");	
-			$("#input_bundleList").empty();
-			newPlaylist(playlist_title, playlist_open);
+
+			if(playlist_title == '' || null || undefined || 0 || NaN){
+				console.log('if title');
+				console.log('title > ' +playlist_title);
+				popover.attr("data-bs-content", "제목을 입력하세요");
+				showPopover(popover);
+							
+			}else if(playlist_open == 2){
+				console.log('if else');
+				console.log('open > ' +playlist_open);
+				popover.attr("data-bs-content", "공개/비공개 여부를 선택 해주세요");
+				showPopover(popover);
+			}else{		
+				console.log('else');
+				popover.popover("disable");
+				closePlaylist();
+				newPlaylist(playlist_title, playlist_open);
+			}
+
 		 });
 
 
 		 // 재생목록 추가
 		 $(document).on("change", "input[name='addPlaylist']", function(){
 			
-			console.log('val > ' +$(this).val());
+			let playlist_code = $(this).val();
+			let playlist_title = $(this).parent().text();
+
+			if($(this).is(":checked") == true){
+				addPlaylist(video_code, playlist_code, playlist_title);
+			}else{
+				deletePlaylist(video_code, playlist_code);
+			}			
 
 
 		 });
+		 
 
-	
+	// 	 // 동영상 마우스 over
+	// 	 $(document).on("mouseover", ".video_list_thumbnail", function(){
+
+	// 		let src = $(this).children("video_list_img").attr("src");
+			
+	// 		console.log('src > ' +src);
+	// 		//$(this).get(0).play();
+	//    });
+   
+	//    $(document).on("mouseout", ".video_list_box", function(){
+	// 		//$(this).get(0).pause();
+	//    });
+
 
  });
