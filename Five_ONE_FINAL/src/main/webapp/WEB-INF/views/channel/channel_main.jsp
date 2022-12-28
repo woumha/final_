@@ -1,3 +1,4 @@
+<%@page import="org.apache.ibatis.reflection.SystemMetaObject"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -7,7 +8,11 @@
 <c:set var="current" value="${currentVideo }" />
 <c:set var="lastUpVideo" value="${currentNewVideo }" />
 <c:set var="bundle" value="${bundleList }" />
-
+<%
+	String repCode = (String)session.getAttribute("RepChannelCode");
+%>
+<c:set var="sessionChannelCode" value="<%=repCode %>" />
+<c:set var="subCheck" value="${subCheck }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +25,7 @@
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/uploadBtn.css">
 <link rel="stylesheet" href="${path }/resources/hochan_CSS/css/bootstrap.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 <title>채널입니다.</title>
 </head>
 <body>
@@ -47,10 +53,17 @@
 			</div>
 	    </div> <!-- 중간 -->
 	    <div class="col-lg-4 align-self-center">
-	    	<c:if test="${empty owner }">
-		     	<button type="button" class="btn btn-primary btn-dark">구독</button>
-	    	</c:if>
-			<c:if test="${!empty owner }">
+	    	<div id="subBtn">
+	    		<c:if test="${owner.channel_code.trim() ne sessionChannelCode.trim() }">
+		    		<c:if test="${subCheck == 1 }">
+				     	<button type="button" class="btn btn-primary btn-red text-red subing" style="color: red; background-color: #ECE9EF;" onclick="insertscribe('${owner.channel_code.trim()}', '${sessionChannelCode.trim() }')">구독중</button>
+		    		</c:if>
+		    		<c:if test="${subCheck != 1 }">
+				     	<button type="button" class="btn btn-primary btn-dark subed" onclick="insertscribe('${owner.channel_code.trim()}', '${sessionChannelCode.trim() }')">구독</button>
+		    		</c:if>
+	    		</c:if>
+	    	</div>
+			<c:if test="${owner.channel_code.trim() eq sessionChannelCode.trim() }">
 		     	<button data-toggle="modal" data-target="#exampleModal" role="button" id="video_upload_btn" class="btn btn-primary btn-blue">
 		     		동영상 업로드
 		     	</button>
@@ -82,7 +95,7 @@
 			    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">홈</button>
 			  </li>
 			  <li class="nav-item" role="presentation">
-			    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">동영상</button>
+			    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">쇼츠</button>
 			  </li>
 			  <li class="nav-item" role="presentation">
 			    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">재생목록</button>
@@ -124,6 +137,7 @@
 				  		</c:if>
 				  		<c:if test="${empty lastUpVideo }">
 				  			<div>영상을 올려주세요!</div>
+				  			
 				  		</c:if>
 					</div><!-- video -->
 					  <div class="col">
@@ -150,8 +164,9 @@
 				<div class="play_list_title">▶모두재생</div>
 				<div class="container text-center"> <!-- 그리드 시작 -->
 				  <div class="row">
+			  		<div class="col-1 paging_css"><i class="bi bi-caret-left fs-5"></i></div>
 				  	<c:forEach items="${current }" var="currentList">
-					    <div class="col-12 col-sm-6 col-lg-3">
+					    <div class="col-10 col-sm-6 col-lg-3">
 					    	<div class="m-1 ratio ratio-4x3">
 						      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
 									<source src="${path }/resources/AllChannel/${owner.channel_code}/${currentList.video_title}.mp4" type="video/mp4">
@@ -159,87 +174,83 @@
 						    </div>
 						    <div class="video-title">${currentList.video_title }</div>
 						    <div class="video-up">${currentList.video_view_cnt }회 . ${currentList.video_regdate }</div>
-					    </div>				  		
+					    </div>
 				  	</c:forEach>
+					    <div class="col-1 paging_css"><i class="bi bi-caret-right fs-5"></i></div>				  		
 				  </div>
 				</div><!-- 그리드 -->
 				<!-- 재생목록 및 영상 삽입 -->
 				<!-- bundle -->
 				
 				
-				<%-- 추가하자 --%>
-				
-				
-				<%-- 추가하자 --%>
-				
-				
-				
-				<%-- 다음 재생목록 영상 --%>
-				<hr width="100%" color="#ECE9EF">
-				<div class="play_list_title">재생목록 제목</div>
-				<div class="play_list_title">▶모두재생</div>
-				<div class="container text-center"> <!-- 그리드 시작 -->
-				  <div class="row">
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one" loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one" loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one" loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
-				    <div class="col-12 col-sm-6 col-lg-3">
-				    	<div class="m-1 ratio ratio-4x3">
-					      <video class="vicl" id="se-se-one"  loop class="embed-responsive-item" controls>
-								<source src="${path }/resources/hochan_video/main_video.mov" type="video/mp4">
-							</video>
-					    </div>
-					    <div class="video-title">영상 제목</div>
-					    <div class="video-up">조회수.업로드시간</div>
-				    </div>
-				  </div>
-				</div><!-- 그리드 -->
-		   </div><!-- 마지막 -->
+				<%-- 재생목록 목록 및 영상 --%>
+				<c:forEach items="${bundle }" var="bundle_dto">
+					<hr width="100%" color="#ECE9EF">
+					<input type="hidden" class="bundle_Code" value="${bundle_dto.bundle_code }">
+					<div class="play_list_title">${bundle_dto.bundle_title }</div>
+					<div class="play_list_title">▶모두재생</div>
+					<div class="container text-center"> <!-- 그리드 시작 -->
+						<div class="row">
+  							<div class="col-1 paging_css"><i class="bi bi-caret-left fs-5"></i></div>
+							<div class="row col-10 ${bundle_dto.bundle_code }">
+							
+							</div>
+							<div class="col-1 paging_css"><i class="bi bi-caret-right fs-5"></i></div>
+						</div>
+					</div>
+				</c:forEach>
+				<%-- 재생목록 목록 및 영상 끝 --%>
+		   </div><!-- 메인 끝 -->
+		   
 		  <div class="tab-pane fade side-color" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-		  	동영상
+		  	쇼츠
 		  </div>
+		  
+		  <%-- 재생목록 --%>
 		  <div class="tab-pane fade side-color" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-		  	재생목록
+		  	<div class="container text-center">
+			  <div class="row">
+			    <c:forEach items="${bundle }" var="bundle_bundleList">
+			    <div class="col-6 col-sm-4 col-lg-2 m-4 p-4">
+				      	<div class="video_box">
+				      		<input type="hidden" class="bundle_bundle_list" value="${bundle_bundleList.bundle_code}">
+							<div class="playlist_video_div">
+								<div class="playlist_lid b${bundle_bundleList.bundle_code }">
+									<p>${bundle_bundleList.bundle_title }</p>
+									<img class="playlist_lid_img" src="${pageContext.request.contextPath}/resources/img/playlist_lid1.png">
+								</div>
+								<video class="video_player" src="https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4" controls></video>
+							</div>
+						</div>			    
+			    </div>
+			    </c:forEach>
+			  </div>
+			</div>
 		  </div>
+		  <%-- 재생목록 끝 --%>
 		  <div class="tab-pane fade side-color" id="comm-tab-pane" role="tabpanel" aria-labelledby="comm-tab" tabindex="0">
 		  	커뮤니티
 		  </div>
 		  <div class="tab-pane fade side-color" id="infor-tab-pane" role="tabpanel" aria-labelledby="infor-tab" tabindex="0">
+		  
 		  	<div class="container text-center">
 			  	<div class="row">
 				    <div class="col-8" align="left">
-				   		 내용
+				   		 <c:if test="${empty owner.channel_cont }">
+				   		 	<div align="center">
+								채널을 소개해주세요~				   		 	
+				   		 	</div>
+				    	</c:if>
+				    	<c:if test="${!empty owner.channel_cont }">
+					   		 <div>${owner.channel_cont }</div>
+				    	</c:if>
 				    </div>
 				    <div class="col-4">
 				    통계
 				    <hr color="black" size="50%">
-				    가입일
+				    가입일 ${owner.channel_date.substring(0, 10) }
 				    <hr color="black" size="50%">
-				    조회수
+				    조회수 ${owner.channel_view_cnt }
 				    </div>
 				</div>
 			</div>

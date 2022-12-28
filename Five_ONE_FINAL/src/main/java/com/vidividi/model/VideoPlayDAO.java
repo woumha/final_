@@ -14,4 +14,6 @@ public interface VideoPlayDAO {
 	public List<CategoryDTO> getCategoryList();
 	
 	public int updateUploadVideo(VideoPlayDTO videodto, PlaylistDTO playdto);
+	
+	
 }

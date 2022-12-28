@@ -169,3 +169,22 @@ color: white;
 }
 
 /* =================== 재생목록 박스 종료 ===================*/
+
+
+.paging_css {
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	min-height: 8vh;
+	 
+}
+
+.bi-caret-left:hover {
+	color: red;
+	border: 2px solid red; 
+}
+
+.bi-caret-right:hover {
+	color: red;
+	border: 2px solid red;
+}

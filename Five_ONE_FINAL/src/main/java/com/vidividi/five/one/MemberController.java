@@ -168,7 +168,7 @@ public class MemberController {
 				age = -1;
 			}
 			
-			ChannelDTO channelDTO = channelDAO.getChannelOwner(dto);
+			ChannelDTO channelDTO = channelDAO.getChannelInformation(dto);
 			
 			int videoCount = watchDAO.getVideoCount(channelDTO.getChannel_code());
 			
