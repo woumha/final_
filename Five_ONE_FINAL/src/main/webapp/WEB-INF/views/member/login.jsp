@@ -35,6 +35,9 @@
 <!-- Naver -->
 <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
 
+<!-- member js -->
+<script type="text/javascript" src="${path}/resources/member/member_js.js"></script>
+
 <script type="text/javascript">
 	$(function(){
 		
@@ -84,7 +87,9 @@
 					$(location).attr('href', '<%=request.getContextPath()%>');
 				}else if(data == 'fail'){
 					toastr.error('아이디와 비밀번호를 확인하세요.','로그인 실패!');
-				}else {
+				}else if(data == 'expired'){
+					toastr.error('탈퇴한 회원입니다.');
+				}else{
 					$("#email-auth-span").text("이메일 전송중");
 					modalShow();
 					protectLogin(data);
@@ -110,6 +115,8 @@
 					$(location).attr('href', '<%=request.getContextPath()%>');
 				}else if(data == 'fail'){
 					toastr.error('아이디와 비밀번호를 확인하세요.','로그인 실패!');
+				}else if(data == 'expired'){
+					toastr.error('탈퇴한 회원입니다.');
 				}
 			},
 			error : function(){
@@ -164,6 +171,8 @@
 				}else if (data == "notlinked"){
 					toastr.success('기존 아이디가 구글과 연동되었습니다.');
 					$(location).attr("href", "<%=request.getContextPath()%>");
+				}else if(data == 'expired'){
+					toastr.error('탈퇴한 회원입니다.');
 				}
 			},
 			error: function(){

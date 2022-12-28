@@ -125,6 +125,17 @@
 	<select id="isProtected" parameterType="String" resultType="int">
 		select member_protect from members where member_code = #{memberCode} 
 	</select>
-	
-	
+	<update id="memberExpire" parameterType="String">
+		update members set
+			member_drop = 1
+		where member_code = #{memberCode}
+	</update>
+	<select id="checkExpire" parameterType="String" resultType="int">
+		select member_drop from members where member_code = #{memberCode}
+	</select>
+	<update id="changeRep" parameterType="memberdto">
+		update members set
+			member_rep_channel = #{member_rep_channel}
+		where member_code = #{member_code}
+	</update>
 </mapper>

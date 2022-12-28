@@ -45,16 +45,20 @@ public class LoginServiceImpl implements LoginService {
 		MemberDTO memberDTO = dao.getMember(dto);
 		
 		if (memberCode != null) {
-			session.setAttribute("MemberCode", memberCode);
-			session.setAttribute("MemberName", memberDTO.getMember_name());
-			session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
-			lhservice.setLoginData(memberCode);
-			return memberCode;
+			int check = dao.checkExpire(memberCode);
+			if (check == 0) {
+				session.setAttribute("MemberCode", memberCode);
+				session.setAttribute("MemberName", memberDTO.getMember_name());
+				session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
+				session.setAttribute("RepChannelPsa", channelDAO.getChannelPsa(memberDTO.getMember_rep_channel()));
+				lhservice.setLoginData(memberCode);
+				return memberCode;
+			}else {
+				return "expired";
+			}
 		}else {
 			return null;
 		}
-		
-		
 	}
 	
 	@Override
@@ -69,8 +73,11 @@ public class LoginServiceImpl implements LoginService {
 			ldto.setPwd(mdto.getMember_pwd());
 			
 			String memberCode = loginCheck(ldto, session);
-			
-			return memberCode;
+			if (memberCode.equals("expired")) {
+				return "expired";
+			}else {
+				return memberCode;
+			}			
 		}else {
 			return null;
 		}
@@ -89,8 +96,11 @@ public class LoginServiceImpl implements LoginService {
 			ldto.setPwd(mdto.getMember_pwd());
 			
 			String memberCode = loginCheck(ldto, session);
-			
-			return memberCode;
+			if (memberCode.equals("expired")) {
+				return "expired";
+			}else {
+				return memberCode;
+			}	
 		}else {
 			return null;
 		}
@@ -108,8 +118,11 @@ public class LoginServiceImpl implements LoginService {
 			ldto.setPwd(mdto.getMember_pwd());
 			
 			String memberCode = loginCheck(ldto, session);
-			
-			return memberCode;
+			if (memberCode.equals("expired")) {
+				return "expired";
+			}else {
+				return memberCode;
+			}	
 		}else {
 			return null;
 		}
@@ -209,7 +222,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public String insertMember(MemberDTO dto, String via) {
+	public String insertMember(MemberDTO dto, String via, String socialPsa) {
 		
 		String result = "";
 		
@@ -235,7 +248,7 @@ public class LoginServiceImpl implements LoginService {
 		int joinResult = dao.joinMember(dto);
 		System.out.println("회원 가입 결과 : " +joinResult);
 		
-		ChannelDTO channelDTO = newChannel(dto.getMember_code(), dto.getMember_rep_channel(), dto.getMember_name());
+		ChannelDTO channelDTO = newChannel(dto.getMember_code(), dto.getMember_rep_channel(), dto.getMember_name(), socialPsa);
 		channelDAO.insertChannel(channelDTO);
 		
 		if (joinResult != 0) {
@@ -319,13 +332,20 @@ public class LoginServiceImpl implements LoginService {
 	}	
 
 	@Override
-	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName) {
+	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName, String socialPsa) {
 		
 		ChannelDTO channelDTO = new ChannelDTO();
 		
 		channelDTO.setMember_code(memberCode);
 		channelDTO.setChannel_code(channelCode);
+		String random = String.valueOf((int)((Math.random()*9)+1));
+		channelDTO.setChannel_banner("default_channel_banner-"+random+".png");
 		
+		if (socialPsa.equals("")) {
+			channelDTO.setChannel_profil("default_channel_profile-"+random+".png");
+		}else {
+			channelDTO.setChannel_profil(socialPsa);
+		}
 		int countChannel = channelDAO.countMemberChannel(memberCode);
 		// 기본 재생목록 추가
 		defaultBundleAdd(channelCode);

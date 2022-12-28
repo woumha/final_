@@ -94,14 +94,20 @@
 		font-weight: bold;
 	}
 	
+	input.form-btn:hover {
+		filter:brightness(1.1);
+	}
+	
 	hr.vertical-hr {
 		width: 1px;
-		height: 40%;
-		background-color: lightgray;
+		height: 80%;
+		border: 0px;
+		border-left: 1px solid rgb();
 	}
 	
 	hr.horizontal-hr {
-		background-color: gray;
+		border: 0px;
+		border-top: 1px solid gray;
 	}
 	
 	div.login-menu {
@@ -202,11 +208,16 @@
 	
 	.member-modal-title span{
 		font-size: 1.3em;
-		color: gray;
+		color: rgb(50, 50, 50);
 	}
 	
 	.member-modal-title.member-alert span::before{
 		content: "⚠ ";
+		color: orange;
+	}
+	
+	.member-modal-title.member-sad span::before{
+		content: "😥 ";
 	}
 	
 	.member-modal-content {
@@ -217,8 +228,11 @@
 	.member-modal-content.member-alert span {
 		color: #ea0008;
 	}
+	.member-modal-content.member-sad span {
+		color: gray;
+	}
 	
-	.member-modal-content.member-alert input[type=button] {
+	.member-modal-content input[type=button] {
 		margin: 5px;
 		margin-top: 10px;
 		padding: 10px;
@@ -227,12 +241,12 @@
 		border-radius: 10px;
 		border: 1px solid lightgray;
 	}
-	.member-modal-content.member-alert input[type=button]:hover {
+	.member-modal-content input[type=button].member-emp:hover {
 		filter: brightness(1.1);
 	}
 	
 	
-	.member-modal-content.member-alert input[type=button].member-emp {
+	.member-modal-content input[type=button].member-emp {
 		color: white;
 		background-color: #fc942c;
 		border: 1px solid #fc942c;

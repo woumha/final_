@@ -43,6 +43,7 @@ public class HomeController {
             String memberCode = (String)session.getAttribute("MemberCode");
             String repChannelCode = (String)session.getAttribute("RepChannelCode");
             String memberName = (String)session.getAttribute("MemberName");
+            String repChannelPsa = (String)session.getAttribute("RepChannelPsa");
             
             System.out.println("로그인 중인 멤버 이름 : "+memberName);
             System.out.println("로그인 중인 멤버 코드 : "+memberCode);
@@ -51,6 +52,7 @@ public class HomeController {
             model.addAttribute("MemberCode", memberCode);
             model.addAttribute("MemberName", memberName);
             model.addAttribute("RepChannelCode", repChannelCode);
+            model.addAttribute("RepChannelPsa", repChannelPsa);
         }
 
         return "main";

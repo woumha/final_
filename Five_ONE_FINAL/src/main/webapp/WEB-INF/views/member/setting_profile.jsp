@@ -17,14 +17,16 @@
 <link rel="stylesheet" href="${path}/resources/member/member_cummon.css">
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>  
-<!-- member js -->
-<script src="${path}/resources/member/member_js.js"></script>
+
 <!-- toast -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!-- 카카오 주소 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
 
 <script type="text/javascript">
 
@@ -130,8 +132,117 @@ function authEmail(email){
 }
 
 
+function changePwd(){
+	
+	let id_form = $("#input-id").val();
+	let current = $("#input-pwd-current").val();
+	let change = $("#input-pwd").val();
+	
+	$.ajax({
+		url : "<%=request.getContextPath()%>/change_pwd.do",
+		data : {
+			id : id_form,
+			current_pwd : current,
+			change_pwd : change
+		},
+		success : function(data){
+			if (data == "success"){
+				toastr.success('비밀번호가 변경되었습니다.');
+				$("#input-pwd-current").val("");
+				$("#input-pwd").val("");
+				$("#input-pwd-confirm").val("");
+				inputPlaceholder();
+			}else if (data == "fail"){
+				toastr.warning('현재 비밀번호를 확인하세요.');
+			}else if (data == "session"){
+				toastr.error('로그인 세션이 만료되었습니다.','다시 로그인 하세요.');
+				$(location).attr('href', '<%=request.getContextPath()%>/login.do');
+			}
+		},
+		error : function(){
+			toastr.error('비밀번호 변경 통신 오류');
+		}			
+	});
+	
+}
+
+
+function changeProfile(){
+	$.ajax({
+		url : "<%=request.getContextPath()%>/change_profile.do",
+		data : $("#profile-form").serialize(),
+		success : function(data){
+			if (data == "success"){
+				toastr.success('프로필이 변경되었습니다.');
+			}else if (data == "fail"){
+				toastr.warning('프로필 변경에 실패했습니다.','입력한 정보를 다시 확인하세요.');
+			}else if (data == "session"){
+				toastr.error('로그인 세션이 만료되었습니다.','다시 로그인 하세요.');
+				$(location).attr('href', '<%=request.getContextPath()%>/login.do');
+			}
+		},
+		error : function(){
+			toastr.error('프로필 변경 통신 오류');
+		}			
+	});
+}
+
+function expire(){
+	
+	modalShow();
+	
+	<% 
+	
+	String memberCode = "";
+	if (session.getAttribute("MemberCode") != null) {
+		memberCode = (String)session.getAttribute("MemberCode");
+	}else {
+		memberCode = "sessionExpired";
+	}
+	%>
+	$("#expire-btn").on('click', function(){
+		if ($("#expire-confirm-input").val() == '${MemberDTO.getMember_name()} 탈퇴를 확인합니다.'){
+			$.ajax({
+				url : "<%=request.getContextPath()%>/member_expire.do",
+				data : {
+					member_code : "<%= memberCode %>"
+				},
+				success : function(data){
+					if (data == "success"){
+						toastr.success('다음에 다시 만나요.','탈퇴되었습니다.');
+						setTimeout(() => {
+							$(location).attr('href', '<%=request.getContextPath()%>');
+						}, 2000);
+					}else if (data == "fail"){
+						toastr.warning('회원 탈퇴에 실패했습니다.','입력한 정보를 다시 확인하세요.');
+					}else if (data == "session"){
+						toastr.error('로그인 세션이 만료되었습니다.','다시 로그인 하세요.');
+						$(location).attr('href', '<%=request.getContextPath()%>/login.do');
+					}
+				},
+				error : function(){
+					toastr.error('회원 탈퇴 통신 오류');
+				}		
+			});
+		}else{
+			toastr.warning('메세지를 정확하게 다시 입력하세요.');
+		}
+	});
+}
+
+
+function cancleExpire(){
+	modalHide();
+	$("#expire-confirm-input").val("");
+}
+
+
 
 $(function(){
+	
+	if ('${MemberDTO.getMember_birth()}' != ''){
+		$("#input-birth").removeClass('date-empty');
+	}
 	
 	if ('${MemberDTO.getMember_code()}' != ''){
 		let channelCode = '${MemberDTO.getMember_rep_channel()}';
@@ -145,14 +256,13 @@ $(function(){
 		}
 	}
 	
+	toastrSetup();
 	$("body").css("position","fixed");
 	inputPlaceholder();
 	$("body").css("position","");
 	noCalHolder(); 
 	naviCSS();
-	
-	$("#profile-submit-btn").attr("disabled", true);
-	
+		
 	$("#email-auth-request-btn").on("click", function(){
 		authEmail($("#input-email").val());
 		$("#email-auth-span").css("color", "red");
@@ -162,7 +272,6 @@ $(function(){
 		$(this).attr("disabled", true);
 		
 	});
-	
 	
 	$("#input-email").on('keyup', function(){
 		
@@ -193,6 +302,18 @@ $(function(){
 	
 	// 비밀번호 보여주는 기능
 	pwdShow();
+	
+	
+	// 비밀번호 입력하면 버튼 활성화하는 함수
+	$("input.member-input").on('keyup',function(){
+		if($("#input-pwd").val() != "" && pwdOk && pwdCheckOk){
+			$("#pwd-submit-btn").attr("disabled", false);
+			$("#pwd-submit-btn").removeClass("disabled");
+		}else {
+			$("#pwd-submit-btn").attr("disabled", true);
+			$("#pwd-submit-btn").addClass("disabled");
+		}
+	});
 	
 });
 
@@ -278,7 +399,7 @@ $(function(){
 			<div id="info-content">
 				<div id="info-wrap-top">
 					<div id="info-logo">
-						<span class="info-logo"><a href='<%=request.getContextPath() %>/setting.do'>${MemberName }님, 반가워요.</a></span>
+						<span class="info-logo"><a href='<%= request.getContextPath() %>/setting.do'>${MemberName }님, 반가워요.</a></span>
 					</div>
 					<div id="info-navi-wrap">
 						<ul class="info-navi">
@@ -308,7 +429,7 @@ $(function(){
 						<span>연령과 인증 정보에 따라 이용에 제한이 있을 수 있습니다.</span>
 					</div>
 					<div id="profile-input">
-						<form>
+						<form id="profile-form">
 							<div id="profile-pwd"> <!-- 비밀번호 변경 -->
 								<div class="input-wrap">
 									<div class="label-input onfocus" >
@@ -324,8 +445,8 @@ $(function(){
 								</div>
 								<div class="input-wrap">
 									<div class="label-input" >
-										<label for="input-id-current" class="label-input" id="input-pwd-current-check"></label>
-										<label for="input-id-current" class="label-input" id="input-pwd-current-label">현재 비밀번호</label>
+										<label for="input-pwd-current" class="label-input" id="input-pwd-current-check"></label>
+										<label for="input-pwd-current" class="label-input" id="input-pwd-current-label">현재 비밀번호</label>
 									</div>
 									<div class="pwd-wrap">
 										<c:if test="${!fn:contains(MemberDTO.getMember_id(), '-')}">
@@ -345,18 +466,18 @@ $(function(){
 								</div>
 								<div class="input-wrap">
 									<div class="label-input" >
-										<label for="input-id" class="label-input" id="input-pwd-check"></label>
-										<label for="input-id" class="label-input" id="input-pwd-label">비밀번호 변경</label>
+										<label for="input-pwd" class="label-input" id="input-pwd-check"></label>
+										<label for="input-pwd" class="label-input" id="input-pwd-label">비밀번호 변경</label>
 									</div>
 									<div class="pwd-wrap">
 										<c:if test="${!fn:contains(MemberDTO.getMember_id(), '-')}">
-											<input name="current_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-current" autocomplete="off">
+											<input name="mamber_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd" autocomplete="off">
 											<div class="pwd-eye showEye">
 												<i class="bi bi-eye-fill"></i>
 											</div>
 										</c:if>
 										<c:if test="${fn:contains(MemberDTO.getMember_id(), '-')}">
-											<input name="current_pwd" class="member-input form-input essential member-pwd-input disabled" value="비밀번호 변경" id="input-pwd-current" autocomplete="off" disabled="disabled">
+											<input name="mamber_pwd" class="member-input form-input essential member-pwd-input disabled" value="비밀번호 변경" id="input-pwd" autocomplete="off" disabled="disabled">
 											<div style="position: absolute; top:15px; right:20px; color: gray;">
 												<i class="bi bi-eye-fill"></i>
 											</div>
@@ -367,18 +488,18 @@ $(function(){
 								
 								<div class="input-wrap">
 									<div class="label-input" >
-										<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
-										<label for="input-id" class="label-input" id="input-pwd-confirm-label">비밀번호 변경 확인</label>
+										<label for="input-pwd-confirm" class="label-input" id="input-pwd-confirm-check"></label>
+										<label for="input-pwd-confirm" class="label-input" id="input-pwd-confirm-label">비밀번호 변경 확인</label>
 									</div>
 									<div class="pwd-wrap">
 										<c:if test="${!fn:contains(MemberDTO.getMember_id(), '-')}">
-											<input name="current_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-current" autocomplete="off">
+											<input name="confirm_pwd" class="password member-input form-input essential member-pwd-input" id="input-pwd-confirm" autocomplete="off">
 											<div class="pwd-eye showEye">
 												<i class="bi bi-eye-fill"></i>
 											</div>
 										</c:if>
 										<c:if test="${fn:contains(MemberDTO.getMember_id(), '-')}">
-											<input name="current_pwd" class="member-input form-input essential member-pwd-input disabled" value="비밀번호 변경 확인" id="input-pwd-current" autocomplete="off" disabled="disabled">
+											<input name="confirm_pwd" class="member-input form-input essential member-pwd-input disabled" value="비밀번호 변경 확인" id="input-pwd-confirm" autocomplete="off" disabled="disabled">
 											<div style="position: absolute; top:15px; right:20px; color: gray;">
 												<i class="bi bi-eye-fill"></i>
 											</div>
@@ -388,7 +509,7 @@ $(function(){
 								
 								<div class="input-wrap">
 									<div style="text-align: center;">
-										<input type="button" class="form-btn disabled" id="profile-submit-btn" value="비밀번호 변경">
+										<input type="button" class="form-btn disabled" id="pwd-submit-btn" value="비밀번호 변경" disabled="disabled" onclick="changePwd()">
 									</div>
 								</div>
 								
@@ -430,7 +551,7 @@ $(function(){
 									<label for="input-birth" id="input-birth-check"></label>
 									<label for="input-birth" id="input-birth-label">생년월일</label>
 									</div>
-									<input type="date" name="member_birth" class="member-input form-input date-placeholder" id="input-birth" value="${MemberDTO.getMember_birth().substring(0,10) }">
+									<input type="date" name="member_birth" class="member-input form-input date-placeholder date-empty" id="input-birth" value="${MemberDTO.getMember_birth().substring(0,10)}">
 								</div>
 								<div class="input-wrap">
 									<div id="addr-wrap">
@@ -459,25 +580,40 @@ $(function(){
 								</div>
 								<div class="input-wrap">
 									<div style="text-align: center;">
-										<input type="button" class="form-btn disabled" id="profile-submit-btn" value="프로필 수정">
+										<input type="button" class="form-btn" id="profile-submit-btn" value="프로필 수정" onclick="changeProfile()">
 									</div>
 								</div>
-							
+							<div style="text-align:right;"><span class="small-span" onclick="expire()" style="cursor: pointer;">회원탈퇴<i class="bi bi-chevron-double-right"></i></span></div>
 							</div> <!-- 선택정보 입력 끝 -->
 							
 						</form>
-						<br>
-						<hr>
-						<br>
-						<div id="profile-expire">
-							<div class="input-wrap">
-								<div style="text-align: center;">
-									<input type="button" class="form-btn disabled" id="profile-submit-btn" value="회원탈퇴">
-								</div>
-							</div>
-						</div>
+						
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 회원 탈퇴 모달 -->
+		<div class="member-modal">
+		<div class="member-modal-body">
+			<div class="member-modal-title member-sad">
+				<span>정말 비디비디를 떠나실거에요?</span>
+			</div>
+			<hr>
+			<div class="member-modal-content member-sad">
+				<span>- 더 이상 로그인하실 수 없어요.</span><br>
+				<span>- 채널과 업로드한 영상을 관리할 수 없어요.</span><br>
+				<span>- 가입한 프리미엄 혜택이 바로 종료돼요.</span><br><br>
+				<span>그래도 탈퇴하시려면 다음 내용을 정확하게 입력해주세요.</span><br><br>
+				<div class="input-warp" style="background-color: rgb(245, 245, 245); padding: 20px;">
+					<span class="small-title-span">${MemberDTO.getMember_name() } 탈퇴를 확인합니다.</span>
+				</div>
+				<div class="input-wrap">
+					<input id="expire-confirm-input" class="member-input form-input">
+				</div>
+				<br>
+				<input type="button" value="탈퇴" id="expire-btn">
+				<input type="button" value="취소" class="member-emp" id="expire-cancle-btn" onclick="cancleExpire()">
 			</div>
 		</div>
 	</div>

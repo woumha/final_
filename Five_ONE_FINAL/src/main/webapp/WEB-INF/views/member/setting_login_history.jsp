@@ -132,7 +132,6 @@ $(function(){
 						</div>
 							<div id="info-profile-card">
 								<table>
-									<c:forEach var="dto" items="${LoginHistoryList }" varStatus="status">
 									<tr>
 										<th>#</th>
 										<th>접속일시</th>
@@ -141,7 +140,6 @@ $(function(){
 										<th>도시</th>
 										<th>IP</th>
 									</tr>
-									</c:forEach>
 									<c:forEach var="dto" items="${LoginHistoryList }" varStatus="status">
 									<tr>
 										<td>${status.count	 }</td>

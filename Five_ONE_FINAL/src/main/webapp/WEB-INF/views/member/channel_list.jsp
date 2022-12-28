@@ -7,7 +7,6 @@
 <head>
 <!-- member js -->
 <script src="${path}/resources/member/member_js.js"></script>
-
 <script type="text/javascript">
 
 function newChannel(code){
@@ -69,6 +68,36 @@ function deleteChannel(mem_code, chan_code){
 }
 
 
+function alreadyRep(){
+	toastr.error('이미 대표채널입니다.', '대표채널을 변경할 수 없습니다.');
+}
+
+
+function changeRep(code){
+	
+	let channel_member_code = '${MemberDTO.getMember_code()}';
+	
+	$.ajax({
+		url : '<%=request.getContextPath()%>/change_rep_channel.do',
+		data : {
+			channel_code : code,
+			member_code : channel_member_code
+		},
+		success : function(data){
+			if(data == 'success'){
+				toastr.success('대표채널이 변경되었습니다.');
+				getChannelList(channel_member_code);
+			}else {
+				toastr.error('대표채널이 변경에 실패했습니다.');
+			}
+		},
+		error : function(){
+			toastr.error('대표채널 변경 통신 오류');
+		}
+	});
+}
+
+
 
 $(function(){
 	
@@ -108,16 +137,22 @@ $(function(){
 			<input id="hidden-code-${status.count }" type="hidden" name="channel_code" value="${dto.getChannel_code() }">
 			<div class="channel-card-banner">
 				<figure>
-					<img id="channel-banner-${status.count }" src="<%=request.getContextPath() %>/resources/img/channel_banner/${dto.getChannel_banner()}" style="width: 100%; height: 100%;">
-					<figcaption>${dto.getChannel_name() }</figcaption>
+					<img id="channel-banner-${status.count }" src="<%=request.getContextPath() %>/resources/img/channel_banner/${dto.getChannel_banner()}" style="width: 100%; height: 100%;" alt="채널 배너">
+					<figcaption onclick="location.href='<%=request.getContextPath()%>/channel.do?mc=${dto.getChannel_code()}'" style="cursor: pointer;">${dto.getChannel_name() }</figcaption>
+					<c:if test="${dto.getChannel_code() == MemberDTO.getMember_rep_channel()}">
+						<img src="<%=request.getContextPath() %>/resources/img/rep_channel.png" class="channel-ribbon-icon rep" onclick="alreadyRep()" alt="대표 채널">
+					</c:if>
+					<c:if test="${dto.getChannel_code() != MemberDTO.getMember_rep_channel()}">
+						<img src="<%=request.getContextPath() %>/resources/img/general_channel.png" class="channel-ribbon-icon general" alt="대표채널 변경" onclick="changeRep('${dto.getChannel_code()}')">
+					</c:if>
 				</figure>
 			</div>
 			<div class="channel-card-content">
 				<div class="channel-card-content-top">
-					<img id="channel-profile-${status.count }" src="<%=request.getContextPath() %>/resources/img/channel_profile/${dto.getChannel_profil()}" style="border-radius:100%; width:15%;">
+					<img onclick="location.href='<%=request.getContextPath()%>/channel.do?mc=${dto.getChannel_code()}'" id="channel-profile-${status.count }" src="<%=request.getContextPath() %>/resources/img/channel_profile/${dto.getChannel_profil()}" style="border-radius:100%; width:15%; cursor: pointer;" alt="채널 프로필 사진">
 					<div>
-						<button onclick="location.href='<%=request.getContextPath() %>/channel_manager.do?code=${dto.getChannel_code()}'">관리</button>
-						<button class="channel-delete-btn" value="${dto.getChannel_code() }">삭제</button>
+						<button class="channel-card-btn" onclick="location.href='<%=request.getContextPath() %>/channel_manager.do?code=${dto.getChannel_code()}'">관리</button>
+						<button class="channel-card-btn channel-delete-btn" value="${dto.getChannel_code() }">삭제</button>
 					</div>
 				</div>
 				<div class="channel-card-content-bottom">

@@ -25,6 +25,8 @@
 <!-- bootstrap icon -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
 
 <style type="text/css">
 
@@ -66,40 +68,41 @@
 		
 		
 		// 선택정보 입력 확인하는 함수(1가지 항목이라도 입력하면 활성화)
-		function optionalInputChange(){
-			if ( 
-					$("#input-name").val() == "" &&
-					$("#input-email").val() == "" &&	
-					$("#input-birth").val().toString() == "" &&
-					$("#input-phone").val() == "" &&
-					$("#input-addr").val() == ""
-				) {
-					$("#submit-2").attr("disabled", true);
-				}else {
-					$("#submit-2").attr("disabled", false);
-				}
-		}
+		
 		
 		// 필수입력 & 선택입력 확인하여 submit버튼 활성화하는 함수
 		
 		$(".member-input").on('keyup', function(){
-			
 			// (필수입력은 모두 입력해야 활성화)
 			if ($("#input-id").val() != '' && $("#input-pwd").val() != '' && $("#input-pwd-confirm").val() != '') {
 				if (idOk && pwdOk && pwdCheckOk){
 					$("#submit-1").attr("disabled", false);
+					$("#submit-1").removeClass("disabled");
 				}else {
 					$("#submit-1").attr("disabled", true);
+					$("#submit-1").addClass("disabled");
 				}
 			}else {
 				$("#submit-1").attr("disabled", true);
+				$("#submit-1").addClass("disabled");
 			}
-						
-			optionalInputChange();
-			
 		});
 		
 		
+		$(".member-input.optional").on('keyup', function(){
+			if ($("#input-name").val() == "" &&
+				$("#input-email").val() == "" &&	
+				$("#input-birth").val().toString() == "" &&
+				$("#input-phone").val() == "" &&
+				$("#input-addr").val() == "")
+			{
+				$("#submit-2").attr("disabled", true);
+				$("#submit-2").addClass("disabled");
+			}else {
+				$("#submit-2").attr("disabled", false);
+				$("#submit-2").removeClass("disabled");
+			}
+		});
 		
 		// input[type=date] placeholder 제거하는 함수
 		noCalHolder(); 
@@ -303,14 +306,13 @@
 								</div>
 							</div>
 							<div class="input-wrap">
-								<input type="button" value="회원가입" class="join-form-btn" id="submit-1" onclick="joinMember()">
+								<input type="button" value="회원가입" class="form-btn disabled" id="submit-1" onclick="joinMember()">
 							</div>
 						</form>
 					</div>
 					<div id="join-content-2">
 						<div>
-						<span class="login-logo">회원가입이 완료되었어요!</span>
-						<br>
+						<span class="block-span login-logo">회원가입이 완료되었어요!</span>
 						<span class="login-logo txt">선택정보를 입력하시면 더욱 편리하게 이용할 수 있어요.</span>
 						</div>
 						<form method="post" id="join-form-2">
@@ -369,19 +371,18 @@
 								<input name="member_addr2" class="member-input optional" id="input-addr2"> 
 							</div>
 							<div class="input-wrap">
-								<input type="button" value="선택정보 입력" class="join-form-btn" id="submit-2" onclick = "infoUpdate()">
+								<input type="button" value="선택정보 입력" class="form-btn disabled" id="submit-2" onclick = "infoUpdate()" disabled="disabled">
 							</div>
 							<div class="input-wrap">
-								<input type="button" value="다음에 할래요" class="join-form-btn" id="submit-3" onclick = "DIVchange()">
+								<input type="button" value="다음에 할래요" class="form-btn disabled" id="submit-3" onclick = "DIVchange()">
 							</div>
 						</form>
 					</div>
 					<div id="join-content-3">
-						<span class="login-logo">가입을 축하합니다! 🎉</span>
-						<br>
+						<span class="block-span login-logo">가입을 축하합니다! 🎉</span>
 						<span class="login-logo txt">이제 비디비디를 즐기러 가볼까요?</span>
 						<div class="input-wrap">
-							<input type="button" value="메인으로 가기" class="join-form-btn" id="submit-4" onclick="location.href='<%=request.getContextPath()%>'">
+							<input type="button" value="메인으로 가기" class="form-btn" id="submit-4" onclick="location.href='<%=request.getContextPath()%>'">
 						</div>
 					</div>
 				</div>

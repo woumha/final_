@@ -37,6 +37,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
+
 <script type="text/javascript">
 	$(function(){
 		inputPlaceholder();
@@ -136,7 +139,7 @@ function findPwd(){
 					<div id="find-navi-wrap">
 						<ul class="find-navi">
 							<li onclick="location.href='<%=request.getContextPath() %>/find_id.do'" id="find-id" class="navi-not-page">아이디 찾기</li>
-							<li onclick="location.href='#'" id="find-pwd" class="navi-this-page">비밀번호 찾기</li>
+							<li onclick="location.href='<%=request.getContextPath() %>/find_pwd.do'" id="find-pwd" class="navi-this-page">비밀번호 찾기</li>
 						</ul>
 					</div>
 				</div>
