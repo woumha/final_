@@ -105,6 +105,11 @@ button{
 	border-radius: 30px;
 }
 
+.cont{
+	margin-left: 1rem;
+}
+
+
 .input_cont{
 	border-radius: inherit;
 	margin: 2rem;	
@@ -506,6 +511,7 @@ button{
 
 .more{
 	opacity: 0.5;
+	margin-left: 1rem;
 }
 
 .card_a{
@@ -596,6 +602,8 @@ button{
 }
 .video_list_info{
 	width: 100%;
+	overflow: hidden;
+    white-space: nowrap;
 }
 
 .video_list_title{
@@ -605,6 +613,11 @@ button{
 
 .video_list_view_cnt{
     margin-right: 1rem;
+    color: #999;
+}
+
+.video_list_date{
+	color: #999;
 }
 
 .video_list_channel_name{
@@ -614,13 +627,18 @@ button{
 }
 
 .watch.video_title_font{
-	color: #999;
-    font-weight: bold;	
+	color: #000;
+    font-weight: bold;
+    outline: none;	
+    text-decoration: none;
+    
 }
 
 .watch.channel_name_font{
-	color: #999;
-    font-weight: bold;		
+	color: #000;
+    font-weight: bold;	
+    outline: none;	
+    text-decoration: none;
 }
 
 .video_list_meta_block{
@@ -741,7 +759,7 @@ width: 100%;
     white-space: nowrap;
 }
 
-.reply_good, .reply_bad, .reply_comment_btn, .savePlaylist_close_btn, .list_group{
+.reply_good, .reply_bad, .reply_comment_btn, .savePlaylist_close_btn, .list_group, .more{
 	cursor: pointer;
 }
 
@@ -765,8 +783,12 @@ width: 100%;
         flex: 9;
     }
     
-/*  @media screen and (max-width: 1500px) {
+*, ::after, ::before{
+	font-weight: bold;
+}
+    
+  @media screen and (max-width: 1500px) {
 	.side_container{
 		display: none;
-	} */
+	}
 }

@@ -152,8 +152,8 @@
 				
 				<div class="cont_box">
 					<div class="input_cont">
-						<span>조회수</span>&nbsp;&nbsp;
-						<span>날짜</span>
+						<span>조회수&nbsp;${video_dto.getVideo_view_cnt() }</span>&nbsp;&nbsp;
+						<span>날짜&nbsp;${video_dto.getVideo_regdate() }</span>
 					</div>
 					<div class="cont">${video_dto.getVideo_cont() }</div>
 				</div>
