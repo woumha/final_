@@ -13,8 +13,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.stereotype.Service;
 
+import com.vidividi.model.BundleDAO;
 import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
+import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.GoogleLoginDTO;
 import com.vidividi.variable.KakaoLoginDTO;
@@ -30,6 +32,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Inject
 	private ChannelDAO channelDAO;
+	
+	@Inject
+	private BundleDAO bundledao;
 	
 	@Inject
 	private LoginHistoryService lhservice;
@@ -322,9 +327,12 @@ public class LoginServiceImpl implements LoginService {
 		channelDTO.setChannel_code(channelCode);
 		
 		int countChannel = channelDAO.countMemberChannel(memberCode);
+		// 기본 재생목록 추가
+		defaultBundleAdd(channelCode);
 		
 		String channelName = memberName + "님의 "+(countChannel+1)+"번째 채널입니다.";
 		channelDTO.setChannel_name(channelName);
+		
 		
 		return channelDTO;
 	}
@@ -354,4 +362,14 @@ public class LoginServiceImpl implements LoginService {
 		return age;
 	}
 	
+	public void defaultBundleAdd(String channelCode) {
+		String bundleCode = generateBundleCode();
+		
+		BundleDTO bundleDTO = new BundleDTO();
+		bundleDTO.setBundle_code(bundleCode);
+		bundleDTO.setBundle_title("기본재생목록");
+		bundleDTO.setChannel_code(channelCode);
+		
+		bundledao.bundleAdd(bundleDTO);
+	}
 }
