@@ -62,4 +62,13 @@ public interface ChannelDAO {
 	
 	// 영상 삭제
 	public int videoDelete(String video_code);
+	
+	// 채널 배너, 프로필 이미지 수정
+	public int setChangeChannelProfil(ChannelDTO channeldto);
+	
+	
+	// 채널 프로필 이름, 설명 수정
+	public int setChannelMyPage(ChannelDTO channeldto);
+	
+
 }

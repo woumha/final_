@@ -1,1 +1,10 @@
 @charset "UTF-8";
+
+.hrtag {
+	border: solid 2px green;
+}
+
+.nameAreaBtn {
+	height: 38px;
+	margin-top: 8px;
+}

@@ -142,4 +142,29 @@ public class ChannelDAOImpl implements ChannelDAO {
 		}
 		return check;
 	}
+	
+	@Override
+	public int setChangeChannelProfil(ChannelDTO channeldto) {
+		try {
+			if(!(channeldto.getChannel_profil().equals(null))) {
+				return this.session.update("profilChange", channeldto);
+			}
+		} catch(NullPointerException e) {
+			return this.session.update("bannerChange", channeldto);
+		}
+		return 0;
+	}
+
+	@Override
+	public int setChannelMyPage(ChannelDTO channeldto) {
+		try {
+			if(!(channeldto.getChannel_name().equals(null))) {
+				return this.session.update("channelMyPageName", channeldto);			
+			}
+		} catch(NullPointerException e) {
+			return this.session.update("channelMyPageCont", channeldto);
+		}
+		
+		return 0;
+	}
 }

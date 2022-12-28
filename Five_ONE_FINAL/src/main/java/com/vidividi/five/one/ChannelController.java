@@ -569,7 +569,7 @@ public class ChannelController {
 	}
 	
 	
-	
+	// 재생목록 추가
 	@ResponseBody
 	@RequestMapping(value = "bundleMaking.do", produces = "application/text; charset=UTF-8")
 	public String bundleMaking(@RequestParam("code") String code, @RequestParam("bundleN") String bundleName, HttpServletResponse response, HttpServletRequest request) throws IOException {
@@ -677,6 +677,132 @@ public class ChannelController {
 		return "channel/channel_modify";
 	}
 	
+	//=========================== 채널 수정 ==================================
+	// 채널 프로필 수정
+	@ResponseBody
+	@RequestMapping(value="imageChange.do")
+	public String channelProfilChange(@RequestParam(value = "profilArea", required = false) MultipartFile multi,
+			@RequestParam("channelCode") String code,
+			@RequestParam("imgPath") String img,
+			HttpServletRequest request, 
+			HttpServletResponse response) {
+		
+		System.out.println(code + " //// " + img);
+		
+		
+		try {
+			if(!multi.isEmpty()) {
+				String path = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/img/channel_profile/" + code;
+				
+				String originName = multi.getOriginalFilename();
+				
+				String saveDB = code + "/" +  originName;
+				
+				ChannelDTO channeldto = new ChannelDTO();
+				channeldto.setChannel_code(code);
+				channeldto.setChannel_profil(saveDB);
+				int check = this.dao.setChangeChannelProfil(channeldto);
+				if(check > 0) {
+					File dir = new File(path);
+					if(!(dir.exists())) {
+						dir.mkdir();
+					}
+					
+					File file = new File(path, originName);
+					if(!(file.exists())) {
+						file.delete();
+						multi.transferTo(file);						
+					}
+					
+					return "업로드 완료: " + originName;					
+				} else {
+					return "업로드 실패";
+				}
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "File exception";
+	}
+	
+	// 채널 배너 수정
+	@ResponseBody
+	@RequestMapping(value="bannerChange.do")
+	public String channelBannerChange(@RequestParam(value = "bannerArea", required = false) MultipartFile multi,
+			@RequestParam("channelCode") String code,
+			@RequestParam("banner") String banner,
+			HttpServletRequest request, 
+			HttpServletResponse response) {
+		
+		System.out.println(code + " //// " + banner);
+		
+		try {
+			if(!multi.isEmpty()) {
+				String path = "F:/GitHub/workspace(Spring)/Five_ONE_Final/Five_ONE_FINAL/src/main/webapp/resources/img/channel_banner/" + code;
+				
+				String originName = multi.getOriginalFilename();
+				
+				String saveDB = code + "/" +  originName;
+				
+				ChannelDTO channeldto = new ChannelDTO();
+				channeldto.setChannel_code(code);
+				channeldto.setChannel_banner(saveDB);
+				int check = this.dao.setChangeChannelProfil(channeldto);
+				if(check > 0) {
+					File dir = new File(path);
+					if(!(dir.exists())) {
+						dir.mkdir();
+					}
+					
+					File file = new File(path, originName);
+					if(!(file.exists())) {
+						file.delete();
+						multi.transferTo(file);						
+					}
+					
+					return "업로드 완료: " + originName;					
+				} else {
+					return "업로드 실패";
+				}
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "File Exception";
+	}
+	
+	// 채널 이름 수정
+	@ResponseBody
+	@RequestMapping(value="channelNameChange.do", produces = "application/text; charset=UTF-8")
+	public String channelNameChange(@RequestParam("channelProfile") String name, @RequestParam("channelCode") String code, HttpServletRequest request) {
+		
+		ChannelDTO dto = new ChannelDTO();
+		dto.setChannel_code(code.trim());
+		dto.setChannel_name(name.trim());
+	
+		this.dao.setChannelMyPage(dto);
+		return name.trim();
+		
+	}
+	
+	// 채널 설명 수정
+	@ResponseBody
+	@RequestMapping(value="channelContChange.do", produces = "application/text; charset=UTF-8")
+	public String channelContChange(@RequestParam("channelProfile") String area, @RequestParam("channelCode") String code, HttpServletRequest request) {
+		
+		ChannelDTO dto = new ChannelDTO();
+		dto.setChannel_code(code.trim());
+		dto.setChannel_cont(area.trim());
+	
+		this.dao.setChannelMyPage(dto);
+		return area.trim();
+		
+	}
+	//=========================== 채널 수정 ==================================
 	// 영상 이름 받아오기
 	public String[] fileName(MultipartHttpServletRequest mRequest) {
 		Iterator<String> iterator = mRequest.getFileNames();
