@@ -111,5 +111,19 @@ public class MemberDAOImpl implements MemberDAO {
 	public int isProtected(String memberCode) {
 		return this.sqlSession.selectOne("isProtected", memberCode);
 	}
-
+	
+	@Override
+	public int memberExpire(String memberCode) {
+		return this.sqlSession.update("memberExpire", memberCode);
+	}
+	
+	@Override
+	public int checkExpire(String memberCode) {
+		return this.sqlSession.selectOne("checkExpire", memberCode);
+	}
+	
+	@Override
+	public int changeRep(MemberDTO dto) {
+		return this.sqlSession.update("changeRep", dto);
+	}
 }

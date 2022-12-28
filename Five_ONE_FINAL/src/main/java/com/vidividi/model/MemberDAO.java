@@ -28,4 +28,7 @@ public interface MemberDAO {
 	String findId(String email);
 	void changePwd(LoginDTO dto);
 	int isProtected(String memberCode);
+	int memberExpire(String memberCode);
+	int checkExpire(String memberCode);
+	int changeRep(MemberDTO dto);
 }

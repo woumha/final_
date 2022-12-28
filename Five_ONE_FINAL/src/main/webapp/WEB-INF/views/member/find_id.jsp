@@ -110,6 +110,7 @@
 				$("#find-card").css("display", "flex");
 				$("#find-card").css("align-items", "center");
 				$("#find-card").css("justify-content", "center");
+				$("#find-card").css("height", "100px");
 				$("#find-card").html("<span class='find-txt'></span>");
 				
 				if (data == "undefined"){
@@ -144,7 +145,7 @@
 				<div id="find-wrap-top">
 					<div id="find-navi-wrap">
 						<ul class="find-navi">
-							<li onclick="location.href='#'" id="find-id" class="navi-this-page">아이디 찾기</li>
+							<li onclick="location.href='<%=request.getContextPath() %>/find_id.do'" id="find-id" class="navi-this-page">아이디 찾기</li>
 							<li onclick="location.href='<%=request.getContextPath() %>/find_pwd.do'" id="find-pwd" class="navi-not-page">비밀번호 찾기</li>
 						</ul>
 					</div>

@@ -40,16 +40,19 @@ public class LoginServiceImpl implements LoginService {
 		MemberDTO memberDTO = dao.getMember(dto);
 		
 		if (memberCode != null) {
-			session.setAttribute("MemberCode", memberCode);
-			session.setAttribute("MemberName", memberDTO.getMember_name());
-			session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
-			lhservice.setLoginData(memberCode);
-			return memberCode;
+			int check = dao.checkExpire(memberCode);
+			if (check == 0) {
+				session.setAttribute("MemberCode", memberCode);
+				session.setAttribute("MemberName", memberDTO.getMember_name());
+				session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
+				lhservice.setLoginData(memberCode);
+				return memberCode;
+			}else {
+				return "expired";
+			}
 		}else {
 			return null;
 		}
-		
-		
 	}
 	
 	@Override
@@ -64,8 +67,11 @@ public class LoginServiceImpl implements LoginService {
 			ldto.setPwd(mdto.getMember_pwd());
 			
 			String memberCode = loginCheck(ldto, session);
-			
-			return memberCode;
+			if (memberCode.equals("expired")) {
+				return "expired";
+			}else {
+				return memberCode;
+			}			
 		}else {
 			return null;
 		}
@@ -84,8 +90,11 @@ public class LoginServiceImpl implements LoginService {
 			ldto.setPwd(mdto.getMember_pwd());
 			
 			String memberCode = loginCheck(ldto, session);
-			
-			return memberCode;
+			if (memberCode.equals("expired")) {
+				return "expired";
+			}else {
+				return memberCode;
+			}	
 		}else {
 			return null;
 		}
@@ -103,8 +112,11 @@ public class LoginServiceImpl implements LoginService {
 			ldto.setPwd(mdto.getMember_pwd());
 			
 			String memberCode = loginCheck(ldto, session);
-			
-			return memberCode;
+			if (memberCode.equals("expired")) {
+				return "expired";
+			}else {
+				return memberCode;
+			}	
 		}else {
 			return null;
 		}

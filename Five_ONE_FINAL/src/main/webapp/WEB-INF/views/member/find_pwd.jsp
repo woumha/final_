@@ -136,7 +136,7 @@ function findPwd(){
 					<div id="find-navi-wrap">
 						<ul class="find-navi">
 							<li onclick="location.href='<%=request.getContextPath() %>/find_id.do'" id="find-id" class="navi-not-page">아이디 찾기</li>
-							<li onclick="location.href='#'" id="find-pwd" class="navi-this-page">비밀번호 찾기</li>
+							<li onclick="location.href='<%=request.getContextPath() %>/find_pwd.do'" id="find-pwd" class="navi-this-page">비밀번호 찾기</li>
 						</ul>
 					</div>
 				</div>

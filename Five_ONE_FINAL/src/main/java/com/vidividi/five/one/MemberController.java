@@ -86,18 +86,27 @@ public class MemberController {
 		
 		String check_member_code = dao.checkMember(loginDTO);
 		if (check_member_code != null) {
-			int checkProtect = dao.isProtected(check_member_code);
-			if (checkProtect == 1) {
-				MemberDTO mdto = dao.getMember(check_member_code);
-				String authKey = emailservice.sendAuthEmail(mdto.getMember_email());
-				return authKey;
+			int checkExpire = dao.checkExpire(check_member_code);
+			if (checkExpire == 1) {
+				return "expired";
 			}else {
-				String membercode = service.loginCheck(loginDTO, session);
-				if (membercode != null) {
-					model.addAttribute("MemberCode", membercode);
-					return "success";
+				int checkProtect = dao.isProtected(check_member_code);
+				if (checkProtect == 1) {
+					MemberDTO mdto = dao.getMember(check_member_code);
+					String authKey = emailservice.sendAuthEmail(mdto.getMember_email());
+					return authKey;
 				}else {
-					return "fail";
+					String membercode = service.loginCheck(loginDTO, session);
+					if (membercode != null) {
+						if (membercode.equals("expired")) {
+							return "expired";
+						}else {
+							model.addAttribute("MemberCode", membercode);
+							return "success";
+						}	
+					}else {
+						return "fail";
+					}
 				}
 			}
 		}else {
@@ -111,8 +120,12 @@ public class MemberController {
 	public String protectLogin (Model model, LoginDTO loginDTO, HttpSession session) throws Exception {
 		String membercode = service.loginCheck(loginDTO, session);
 		if (membercode != null) {
-			model.addAttribute("MemberCode", membercode);
-			return "success";
+			if (membercode.equals("expired")) {
+				return "expired";
+			}else {
+				model.addAttribute("MemberCode", membercode);
+				return "success";
+			}	
 		}else {
 			return "fail";
 		}
@@ -563,6 +576,92 @@ public class MemberController {
 			}
 		}else {
 			return "undefined";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("change_pwd.do")
+	public String changePwd(@RequestParam("id") String id, @RequestParam("current_pwd") String current_pwd, @RequestParam("change_pwd") String change_pwd, HttpSession session) {
+		
+		System.out.println("넘어온 id : " + id);
+		System.out.println("넘어온 current_pwd : " + current_pwd);
+		System.out.println("넘어온 change_pwd : " + change_pwd);
+		
+		
+		LoginDTO ldto = new LoginDTO();
+		ldto.setId(id);
+		ldto.setPwd(current_pwd);
+		String member_code = dao.checkMember(ldto);
+		System.out.println("member_code : "+member_code);
+		System.out.println("세션 MemberCode: "+session.getAttribute("MemberCode"));
+		if (member_code != null) { // 아이디 현재 비밀번호가 맞는 경우
+			if (session.getAttribute("MemberCode") != null) { // 로그인 세션이 존재하는 경우
+				if (session.getAttribute("MemberCode").equals(member_code)) { // 세션과 조회된 멤버가 같은 경우
+					ldto.setPwd(change_pwd);
+					dao.changePwd(ldto);
+					return "success";
+				}else { // 세션과 조회된 멤버가 같지 않은 경우
+					return "fail";
+				}
+			}else { // 로그인 세션이 존재하지 않는 경우
+				return "session";
+			}
+		}else { // 현재 비밀번호가 틀린 경우
+			return "fail";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("change_profile.do")
+	public String changeProfile(MemberDTO mdto, HttpSession session) {
+		if (session.getAttribute("MemberCode") != null) {
+			mdto.setMember_code((String)session.getAttribute("MemberCode"));
+			int check = dao.mebmerInfoUpdate(mdto);
+			if (check > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}else {
+			return "session";
+		}		
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("member_expire.do")
+	public String expire(@RequestParam("member_code")String memberCode, HttpSession session) {
+		if (memberCode.equals("sessionExpired")) {
+			return "session";
+		}else {
+			int check = dao.memberExpire(memberCode);
+			if (check > 0) {
+				service.logout(session);
+				return "success";
+			}else {
+				return "fail";
+			}
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("change_rep_channel.do")
+	public String changeRep(@RequestParam("channel_code") String channelCode, @RequestParam("member_code")String memberCode, HttpSession session) {
+		MemberDTO mdto = new MemberDTO();
+		mdto.setMember_code(memberCode);
+		mdto.setMember_rep_channel(channelCode);
+		int check = dao.changeRep(mdto);
+		if (check > 0) {
+			System.out.println("RepChannelCode-삭제 전 : "+(String)session.getAttribute("RepChannelCode"));
+			session.removeAttribute("RepChannelCode");
+			session.setAttribute("RepChannelCode", channelCode);
+			System.out.println("RepChannelCode-삭제 후 재설정 : "+(String)session.getAttribute("RepChannelCode"));
+			return "success";
+		}else {
+			return "fail";
 		}
 	}
 
