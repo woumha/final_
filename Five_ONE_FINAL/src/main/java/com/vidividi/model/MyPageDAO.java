@@ -24,7 +24,8 @@ public interface MyPageDAO {
 	List<VideoPlayDTO> getHistory_search(Map<String, Object> map);
 	int history_search_one_delete(Map<String, Object> map);
 	int delete_history(String code);
-	
+	int dont_save_history(Map<String, Object> map);
+	int getHistory_save(String repChannelCode);
 	/* good (좋아요, 싫어요 누른 동영상) */
 	List<VideoPlayDTO> getGoodList_date(String code, int startNo, int endNo);
 	List<VideoPlayDTO> getGoodList_most(String code, int startNo, int endNo);

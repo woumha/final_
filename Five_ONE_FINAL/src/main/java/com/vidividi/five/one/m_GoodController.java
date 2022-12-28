@@ -20,28 +20,23 @@ public class m_GoodController {
     private MyPageDAO dao;
 	
 	@RequestMapping("good_list.do")
-	public String history_list(@RequestParam("channel_code") String code,
+	public String history_list(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 							@RequestParam(value="search",  required=false, defaultValue= "1") int search,
 							@RequestParam(value="keyword",  required=false, defaultValue= "none") String keyword,
 							@RequestParam(value="option",  required=false, defaultValue= "date") String option, Model model) {
-		model.addAttribute("channel_code", code);
 		/* model.addAttribute("keyword", keyword); */
 		model.addAttribute("search", search);
 		model.addAttribute("option", option);
 		return "myPage/good";
 	}
 	
-	/*
-	 * @RequestParam(value="keyword", required=false, defaultValue= "none") String keyword,
-	 */
 	
 	@RequestMapping("good_searchs.do")
-	public String history_search(@RequestParam("channel_code") String code,
+	public String history_search(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 								@RequestParam("keyword") String keyword,
 								@RequestParam(value="option",  required=false, defaultValue= "date") String option,
 								Model model) {
 		int search = 2;
-		model.addAttribute("channel_code", code);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("search", search);
 		model.addAttribute("option", option);
@@ -50,7 +45,7 @@ public class m_GoodController {
 	
 	@ResponseBody
 	@RequestMapping(value = "good_new.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
+	public String getReplyList(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 							   @RequestParam(value="option",  required=false, defaultValue="date") String option,
 							   int page, HttpServletResponse response) {
 		
@@ -92,7 +87,7 @@ public class m_GoodController {
 	
 	@ResponseBody
 	@RequestMapping(value = "good_search.do" , produces = "application/text; charset=UTF-8")
-	public String history_search(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
+	public String history_search(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								@RequestParam(value="option",  required=false, defaultValue="date") String option,
 								int page, HttpServletResponse response, Model model) {
@@ -155,7 +150,7 @@ public class m_GoodController {
 
 	@RequestMapping("good_one_delete.do")
 	public void delete_history(@RequestParam("video_code") String video,
-								@RequestParam("channel_code") String channel,
+								@SessionAttribute(name = "RepChannelCode", required = false) String channel,
 								@RequestParam("search") int search,
 								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								@RequestParam("option") String option,
@@ -187,11 +182,11 @@ public class m_GoodController {
 			// search라면
 			if(search == 2) {
 				out.println("<script>");
-				out.println("location.href='good_list.do?channel_code="+channel+"&search=2&keyword="+keyword+"&option="+option+"'");
+				out.println("location.href='good_list.do?search=2&keyword="+keyword+"&option="+option+"'");
 				out.println("</script>");
 			} else if(search == 1) {
 				out.println("<script>");
-				out.println("location.href='good_list.do?channel_code="+channel+"&search=1&keyword="+keyword+"&option="+option+"'");
+				out.println("location.href='good_list.do?search=1&keyword="+keyword+"&option="+option+"'");
 				out.println("</script>");
 			}
 		}else {

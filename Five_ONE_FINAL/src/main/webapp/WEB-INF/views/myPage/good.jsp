@@ -20,7 +20,7 @@ function getContextPath(){
 }
 
 /* 넘어온 기본 값 */
-let channel_code = "${channel_code}";
+let RepChannelCode = "${RepChannelCode}";
 let search = "${search}";
 /* search가 1이면 search 아님,
  * search가 2이면 search 임.
@@ -28,7 +28,7 @@ let search = "${search}";
 let option = "${option}";
 /* option가 "date" 이면 좋아요 누른 날짜 순,
  * option가 "most" 이면 좋아요 높은 순      */
-console.log("default channel_code >>> " + channel_code);
+console.log("default RepChannelCode >>> " + RepChannelCode);
 console.log("default search >>> " + search);
 console.log("default option >>> " + option);
 
@@ -43,12 +43,11 @@ if(search == 1) {
 	loading_search = true;
 }
 
-function getGood_new(channel_code, page_good, option){
+function getGood_new(page_good, option){
 	console.log("new ajax안에 option 값 >>> " + option);
 	$.ajax({
 		url : getContextPath() +"/good_new.do",
 		data : {
-			"channel_code" : channel_code,
 			"page" : page_good,
 			"option" : option
 		},
@@ -75,10 +74,11 @@ function getGood_new(channel_code, page_good, option){
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
 					div += "</a>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>";
+					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&search="+search+"&option="+option+"'>";
+					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&search="+search+"&option="+option+"'>";
 					div += "<img class='video_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";
@@ -93,19 +93,18 @@ function getGood_new(channel_code, page_good, option){
 			}
 		},
 		error : function(){
-			alert('good_new 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 }
 
-function getGood_search(channel_code, page_search, option) {
+function getGood_search(page_search, option) {
 	var keyword = "${keyword}";
 	console.log("search ajax안에 option 값 >>> " + option);
 	console.log("search ajax안에 keyword 값 >>> " + keyword);
     $.ajax({
   		url : getContextPath() +"/good_search.do",
   		data : {
-  			"channel_code" : channel_code,
 			"page" : page_search,
 			"keyword" : keyword,
 			"option" : option
@@ -130,10 +129,11 @@ function getGood_search(channel_code, page_search, option) {
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
 					div += "</a>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>";
+					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&keyword="+keyword+"&search="+search+"&option="+option+"'>";
+					div += "<a href='"+getContextPath()+"/good_one_delete.do?video_code="+this.video_code+"&keyword="+keyword+"&search="+search+"&option="+option+"'>";
 					div += "<img class='video_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";
@@ -145,7 +145,7 @@ function getGood_search(channel_code, page_search, option) {
 			}
 		},
 		error : function(){
-			alert('good_search 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 };	
@@ -179,7 +179,7 @@ if(search == 1) {
 	// list_option 실행
 	console.log("기본 실행 함수 option값 >>> " + "${option}");
 	input_option("${option}");
-	getGood_new(channel_code, page_good, option);	
+	getGood_new(page_good, option);	
 	
 } else if(search != 1){
 
@@ -191,11 +191,11 @@ if(search == 1) {
 		console.log("기본 실행 함수 option값 >>> " + "${option}");
 		$(".new_no_area").css('display', 'none');
 		input_option("${option}");
-		getGood_new(channel_code, page_good, option);	
+		getGood_new(page_good, option);	
 	} else {
 		// list_option 실행
 		input_option("${option}");
-		getGood_search(channel_code, page_search, option);
+		getGood_search(page_search, option);
 	}
 }
 
@@ -210,13 +210,13 @@ $(document).on("click", "#good_date", function(){
 		$(".video_boxs").remove();
 		page_good = 1;
 		page_search = 1;
-		getGood_new(channel_code, page_search, option);
+		getGood_new(page_search, option);
 		
 	}else if(search == 2) {
 		$(".video_boxs").remove();
 		page_good = 1;
 		page_search = 1;
-		getGood_search(channel_code, page_search, option);
+		getGood_search(page_search, option);
 	}
 });
 
@@ -230,13 +230,13 @@ $(document).on("click", "#good_most", function(){
 		$(".video_boxs").remove();
 		page_good = 1;
 		page_search = 1;
-		getGood_new(channel_code, page_search, option);
+		getGood_new(page_search, option);
 		
 	}else if(search == 2) {
 		$(".video_boxs").remove();
 		page_good = 1;
 		page_search = 1;
-		getGood_search(channel_code, page_search, option);
+		getGood_search(page_search, option);
 	}
 });
 
@@ -249,13 +249,13 @@ $(document).on("click", "#good_bad", function(){
 		$(".video_boxs").remove();
 		page_good = 1;
 		page_search = 1;
-		getGood_new(channel_code, page_search, option);
+		getGood_new(page_search, option);
 		
 	}else if(search == 2) {
 		$(".video_boxs").remove();
 		page_good = 1;
 		page_search = 1;
-		getGood_search(channel_code, page_search, option);
+		getGood_search(page_search, option);
 	}
 });
 
@@ -269,10 +269,10 @@ $(window).scroll(function(){
 		
 		if(loading_good == true){
 			page_good++;
-			getGood_new(channel_code, page_good, option);
+			getGood_new(page_good, option);
 		} else if(loading_search == true){
 			page_search++;
-			getGood_search(channel_code, page_search, option);
+			getGood_search(page_search, option);
 		}
 	}
 }); //scroll end
@@ -342,11 +342,10 @@ $(document).on("mouseout", ".test_video", function(){
 	
 	<!-- 중앙 메인컨텐츠 영역 -->
 	<div id="content_area" class="area_style">
-	<c:set var="code" value="${channel_code }" />
-		
+
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
-			<c:if test="${!empty code}">
+			<c:if test="${!empty RepChannelCode}">
 			<div class="test">
 				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/good_list.do?channel_code=${channel_code }'">
 				<img id="good_logo" src="${pageContext.request.contextPath}/resources/img/good.png">&nbsp;좋아요 누른 동영상
@@ -375,7 +374,7 @@ $(document).on("mouseout", ".test_video", function(){
 			
 			
 			<!-- 로그인이 되어있지 않으면 출력하는 영역 -->
-			<c:if test="${empty code}">
+			<c:if test="${empty RepChannelCode}">
 			<div class="page_none">
 				<img class="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
 				<p class="none_title">좋아하는 동영상을 감상해 보세요.</p>

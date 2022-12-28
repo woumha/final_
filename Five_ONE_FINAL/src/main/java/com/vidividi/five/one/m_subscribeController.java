@@ -19,15 +19,15 @@ public class m_subscribeController {
     private MyPageDAO dao;
 	
 	@RequestMapping("subscribe.do")
-	public String subscribe_page(@RequestParam(value="member_code",  required=false, defaultValue= "none") String member_code,
+	public String subscribe_page(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 							Model model) {
-		model.addAttribute("member_code", member_code);
+
 		return "myPage/subscribe";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "getSubscribe_list.do" , produces = "application/text; charset=UTF-8")
-	public String getSubscribe_list(@RequestParam("member_code") String code,
+	public String getSubscribe_list(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 									int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
@@ -64,15 +64,15 @@ public class m_subscribeController {
 	
 	@RequestMapping(value = "delete_one_subscribe.do" , produces = "application/text; charset=UTF-8")
 	public void delete_one_subscribe(@RequestParam("channel_code") String channel,
-									@RequestParam("member_code") String member,
+									@SessionAttribute(name = "RepChannelCode", required = false) String code,
 									HttpServletResponse response) throws IOException {
 		
 		System.out.println("channel_code >>> " + channel);
-		System.out.println("member_code >>> " + member);
+		System.out.println("member_code >>> " + code);
 		
 		
 		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("channel", channel); map.put("member", member);
+		map.put("channel", channel); map.put("member_code", code);
 
 
 		// 선택된 playlist 동영상 데이터 지우기
@@ -85,7 +85,7 @@ public class m_subscribeController {
 			System.out.println("일단 하나 삭제 성공");
 			// search라면
 			out.println("<script>");
-			out.println("location.href='subscribe.do?member_code="+member+"'");
+			out.println("location.href='subscribe.do'");
 			out.println("</script>");
 
 		}else {

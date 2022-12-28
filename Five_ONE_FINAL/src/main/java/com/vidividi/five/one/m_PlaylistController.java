@@ -19,7 +19,7 @@ public class m_PlaylistController {
     private MyPageDAO dao;
 	
 	@RequestMapping("playlist_list.do")
-	public String history_list(@RequestParam("channel_code") String code,
+	public String history_list(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 							@RequestParam(value="search",  required=false, defaultValue= "1") int search,
 							@RequestParam(value="playlist_code",  required=false, defaultValue= "none") String playlist_code,
 							@RequestParam(value="keyword",  required=false, defaultValue= "none") String keyword, Model model) {
@@ -121,7 +121,6 @@ public class m_PlaylistController {
 	@RequestMapping("playlist_one_delete.do")
 	public void delete_history(@RequestParam("video_code") String video,
 								@RequestParam("playlist_code") String playlist,
-								@RequestParam("channel_code") String channel,
 								@RequestParam("search") int search,
 								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								HttpServletResponse response) throws IOException {
@@ -140,11 +139,11 @@ public class m_PlaylistController {
 			// search라면
 			if(search == 2) {
 				out.println("<script>");
-				out.println("location.href='playlist_list.do?channel_code="+channel+"&search=2&keyword="+keyword+"&playlist_code="+playlist+"'");
+				out.println("location.href='playlist_list.do?search=2&keyword="+keyword+"&playlist_code="+playlist+"'");
 				out.println("</script>");
 			} else if(search == 1) {
 				out.println("<script>");
-				out.println("location.href='playlist_list.do?channel_code="+channel+"&search=1&keyword="+keyword+"&playlist_code="+playlist+"'");
+				out.println("location.href='playlist_list.do?search=1&keyword="+keyword+"&playlist_code="+playlist+"'");
 				out.println("</script>");
 			}
 		}else {
@@ -165,7 +164,7 @@ public class m_PlaylistController {
 		if(check > 0) {
 			this.dao.delete_bundlelist(p_code);
 			out.println("<script>");
-			out.println("location.href='myPage_go.do?channel_code="+code+"'");
+			out.println("location.href='myPage_go.do'");
 			out.println("</script>");
 		}else {
 			out.println("<script>");

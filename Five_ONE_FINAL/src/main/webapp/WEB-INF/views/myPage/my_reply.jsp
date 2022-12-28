@@ -20,17 +20,16 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-let channel_code = "${channel_code}";
+let RepChannelCode = "${RepChannelCode}";
 let loading = false;
 let page = 1;
 
-function getReply_list(channel_code, page){
+function getReply_list(page){
 
 	$.ajax({
 
 		url : getContextPath() +"/getMy_reply_list.do",
 		data : {
-			"channel_code" : channel_code,
 			"page" : page
 		},
 		datatype : 'JSON',
@@ -60,8 +59,7 @@ function getReply_list(channel_code, page){
 					div += "<div class='delete_reply'>";
 					div += "<form method='post' action='<%=request.getContextPath()%>/my_reply_delete.do'>";
 					div += "<input type='hidden' name='reply_code' value='"+this.reply_code+"'>";					
-					div += "<input type='hidden' name='reply_group' value='"+this.reply_group+"'>";					
-					div += "<input type='hidden' name='channel_code' value='"+channel_code+"'>";					
+					div += "<input type='hidden' name='reply_group' value='"+this.reply_group+"'>";										
 					div += "<input type='image' class='video_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</form>";
 					div += "</div>";
@@ -88,18 +86,17 @@ function getReply_list(channel_code, page){
 			}
 		},
 		error : function(){
-			alert('댓글 목록 불러오기 오류!!!!!!!!!');
+			
 		}
 	});
 }
 
-function getReply_delete_list(channel_code, page, code, group, comment){
+function getReply_delete_list(page, code, group, comment){
 	console.log("code >>> " + code);
 	$.ajax({
 
 		url : getContextPath() +"/delete_one_my_reply.do",
 		data : {
-			"channel_code" : channel_code,
 			"page" : page,
 			"reply_code" : code,
 			"reply_group" : group,
@@ -127,8 +124,11 @@ function getReply_delete_list(channel_code, page, code, group, comment){
 					
 					div += "<div class='reply_box'>";
 					div += "<div class='delete_reply'>";
-					div += "<a href='"+getContextPath()+"/my_reply_delete.do?reply_code="+this.reply_code+"&channel_code="+channel_code+"'>";
-					div += "<img class='video_d_img' onclick='reply_delete("+"this.reply_code"+","+"this.reply_group"+","+this.reply_comment+")' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "<form method='post' action='<%=request.getContextPath()%>/my_reply_delete.do'>";
+					div += "<input type='hidden' name='reply_code' value='"+this.reply_code+"'>";					
+					div += "<input type='hidden' name='reply_group' value='"+this.reply_group+"'>";										
+					div += "<input type='image' class='video_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "</form>";
 					div += "</div>";
 					div += "<div class='reply_text_box'>";
 					div += "<div class='reply_cont'>"+this.reply_cont+"</div>";
@@ -152,7 +152,7 @@ function getReply_delete_list(channel_code, page, code, group, comment){
 			}
 		},
 		error : function(){
-			alert('삭제 후 댓글 목록 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 }
@@ -163,11 +163,11 @@ function reply_delete(code, group, comment) {
 	console.log("삭제 함수 code >>> " + code);
 	console.log("삭제 함수 group >>> " + group);
 	console.log("삭제 함수 comment >>> " + comment);
-	getReply_delete_list(channel_code, page, code, group, comment);
+	getReply_delete_list(page, code, group, comment);
 }
 
 // 기본 실행 함수
-getReply_list(channel_code, page);	
+getReply_list(page);	
 
 // 무한 스크롤
 $(window).scroll(function(){
@@ -175,7 +175,7 @@ $(window).scroll(function(){
 
 		if(loading == true){
 			page++;
-			getReply_list(channel_code, page);
+			getReply_list(page);
 		}
 	}
 }); //scroll end
@@ -195,33 +195,16 @@ $(window).scroll(function(){
 
 <div class="">
 	<!-- 작성한 댓글 영역 -->
-	<c:if test="${!empty channel_code }">
+	<c:if test="${!empty RepChannelCode }">
 	<div id="my_reply_title"><p><i class="fa-solid fa-comment"></i>&nbsp;&nbsp;댓글 목록</p></div>
-<%-- 	
-	<div class='video_boxs'>
-		<div class="delete_reply">
-			<img class='video_d_img' src='${pageContext.request.contextPath }/resources/img/x.png'>
-		</div>
-		<div class="reply_text_box">
-			<div class="reply_cont">댓글 내용 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~rthbrfhhrhtr~~~~~~</div>
-			<a href="#">
-				<div class="video_title">동영상 제목 ~~~~~~~~~~~~~~~~~~~~~~~~~~~vrggrehegwfguiwbgfuwbnufnbsweugubnub~~~~~~~ny~~</div>
-			</a>		
-			<div class="reply_regdate">댓글 작성일 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>		
-		</div>
-		<div class="video_img_box">
-			<img class="video_img" src="${pageContext.request.contextPath}/resources/hochan_img/vidi.png">
-		</div>
-	</div>
---%>
-	
+
 	<div id="ajax_area"></div>
 	
 	<div id="reply_end">더 이상 표시할 콘텐츠가 없습니다.</div>
 	
 	</c:if>
 	<!-- 로그인 안했을 시 -->
-	<c:if test="${empty channel_code }">
+	<c:if test="${empty RepChannelCode }">
 		<div id="page_none">
 			<img id="none_img" src="${pageContext.request.contextPath}/resources/img/subscribe.png">
 			<p id="none_title">자신의 감상이나 남기고 싶은 말을 작성해보세요.</p>

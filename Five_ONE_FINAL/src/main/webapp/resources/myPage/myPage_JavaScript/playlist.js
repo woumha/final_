@@ -7,7 +7,7 @@ $('a[href="#playlist_delete"]').click(function(event) {
 });
 	
 /* 기록 정지 모달 */
-$('a[href="#playlist_stop"]').click(function(event) {
+$('a[href="#playlist_modify"]').click(function(event) {
  	event.preventDefault();
 	$(this).modal({
 		fadeDuration: 250

@@ -19,15 +19,14 @@ public class m_my_replyController {
     private MyPageDAO dao;
 	
 	@RequestMapping("my_reply.do")
-	public String subscribe_page(@RequestParam(value="channel_code",  required=false, defaultValue= "none") String channel_code,
+	public String subscribe_page(@SessionAttribute(name = "RepChannelCode", required = false) String channel_code,
 							Model model) {
-		model.addAttribute("channel_code", channel_code);
 		return "myPage/my_reply";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "getMy_reply_list.do" , produces = "application/text; charset=UTF-8")
-	public String getSubscribe_list(@RequestParam("channel_code") String code,
+	public String getSubscribe_list(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 									int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
@@ -70,7 +69,7 @@ public class m_my_replyController {
 	
 	@RequestMapping("my_reply_delete.do")
 	public void delete_my_reply(@RequestParam("reply_code") String code,
-								@RequestParam("channel_code") String channel,
+								@SessionAttribute(name = "RepChannelCode", required = false) String channel,
 								Model model, HttpServletResponse response) throws IOException {
 		
 		// reply_code로 reply_group, reply_comment 구하기
@@ -85,12 +84,12 @@ public class m_my_replyController {
 			check = this.dao.delete_one_reply(code);
 		}
 		response.setContentType("text/html; charset=UTF-8");
-		model.addAttribute("channel_code", channel);
+
 		PrintWriter out = response.getWriter();
 		
 		if(check > 0) {
 			out.println("<script>");
-			out.println("location.href='my_reply.do?channel_code="+channel+"'");
+			out.println("location.href='my_reply.do'");
 			out.println("</script>");
 		}else {
 			out.println("<script>");
