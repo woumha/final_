@@ -146,7 +146,7 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 						
 						//비디오 제목 + 채널 프로필 
 						div += "<p class = 'video_title_p'>"+ "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>"
-								+ "<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+								+ "<img class='channel_profile' src='" + getContextPath() + "/resources/img/channel_profile/" + this.channel_profil+ "'>"
 								+ this.video_title + "</a> </p>" + "<button class='play_list_plus' onclick='location.href='#''> <i class='fa-solid fa-plus'></i> </button>";
 						
 						//재생목록 추가 버튼 클릭 시 팝업
@@ -241,7 +241,7 @@ function getSearchVideoList_popular(keyword, field, option, page_pop){
 							
 							//비디오 제목 + 채널 프로필 
 							div += "<p class = 'video_title_p'>"+ "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>"
-									+ "<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
+									+ "<img class='channel_profile' src='" + getContextPath() + "/resources/img/channel_profile/" + this.channel_profil+ "'>"
 									+ this.video_title + "</a> </p>" + "<button class='play_list_plus' onclick='location.href='#''> <i class='fa-solid fa-plus'></i> </button>";
 							
 							//재생목록 추가 버튼 클릭 시 팝업
