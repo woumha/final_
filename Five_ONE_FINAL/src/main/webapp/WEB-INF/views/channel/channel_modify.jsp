@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="${path }/resouces/hochan_CSS/channel_modify.css" />
 </head>
 <body>
+	<p>
 	<div class="container text-left">
 	  <div class="row col-10">
 	  	<div class="col-10">
@@ -18,9 +19,9 @@
 	  		<div>프로필 사진은 동영상 및 댓글 옆과 같이 VIDIVIDI에서 채널을 나타내는 위치에 표시됩니다.</div>
 	  	</div>
 	  </div>
-	  
+	 <br> 
 	  <div class="row col-10" style="float: none; margin: 0 auto;">
-	    <div class="col-5" style="max-wdith: 290px; max-height: 160px;"">
+	    <div class="col-5" style="max-wdith: 290px; max-height: 160px;">
 	    	<img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" style="max-width:140px; max-height: 140px;" class="img-thumbnail">
 	    	<input type="file" hidden name="profilArea" id="profilArea">
 	    </div>
@@ -29,17 +30,17 @@
 	      	<div><a href="" onclick="">업로드</a></div>
 	    </div>
 	  </div>
-	  
+	  <br>
 	  <div class="row col-10">
 	  	<div class="col-10">
 	  		<div>배너 이미지</div>
 	  		<div>이 이미지가 채널 상단에 표시됩니다.</div>
 	  	</div>
 	  </div>
-	  
+	  <br>
 	  <div class="row col-10">
 	  	<div class="col-5">
-	  		<img src="${path }/resources/img/channel_profile/${channelOwner.channel_banner }" class="img-thumbnail">
+	  		<img src="${path }/resources/img/channel_banner/${channelOwner.channel_banner }" class="img-thumbnail">
 	  		<input type="file" hidden name="bannerArea" id="bannerArea">
 	  	</div>
 	  	<div class="col-5">
@@ -47,7 +48,7 @@
 	  		<div><a href="" onclick="">업로드</a></div>
 	  	</div>
 	  </div>
-	  
+	  <br>
 	  <div class="row col-10">
 	  	<div class="col-10">
 	  		<div>이름</div>
