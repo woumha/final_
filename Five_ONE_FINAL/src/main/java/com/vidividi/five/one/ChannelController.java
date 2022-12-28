@@ -339,13 +339,13 @@ public class ChannelController {
 				} else {
 					out.println("<script>");
 					out.println("alert('접근 오류입니다.(code)');");
-					out.println("location.href='"+ request.getContextPath() + "/main.do';");
+					out.println("location.href='"+ request.getContextPath() + "/';");
 					out.println("</script>");
 				}
 			} else if(code.trim().equals("")) {
 				out.println("<script>");
 				out.println("alert('세션이 만료되었습니다.');");
-				out.println("location.href='"+ request.getContextPath() + "/main.do';");
+				out.println("location.href='"+ request.getContextPath() + "/';");
 				out.println("</script>");
 			} else {
 				path = "main";

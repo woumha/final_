@@ -1,5 +1,6 @@
 package com.vidividi.service;
 
+import java.io.File;
 import java.security.SecureRandom;
 
 import java.util.Calendar;
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -329,6 +331,8 @@ public class LoginServiceImpl implements LoginService {
 		int countChannel = channelDAO.countMemberChannel(memberCode);
 		// 기본 재생목록 추가
 		defaultBundleAdd(channelCode);
+		
+		
 		
 		String channelName = memberName + "님의 "+(countChannel+1)+"번째 채널입니다.";
 		channelDTO.setChannel_name(channelName);
