@@ -13,7 +13,9 @@ public class MemberDTO {
 	private String member_birth;
 	private String member_email;
 	private String member_phone;
-	private String member_addr;
+	private String member_zipcode;
+	private String member_addr1;
+	private String member_addr2;
 	private String member_date;
 	private int member_protect;
 	private int member_premium;
@@ -24,5 +26,5 @@ public class MemberDTO {
 	private String member_rep_channel;
 	private int member_historysave;
 	private int member_email_auth;
-	private String member_google_link;
+	private String member_social_link;
 }

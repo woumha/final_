@@ -17,6 +17,9 @@ public class EmailSendService {
 	@Autowired
 	private JavaMailSenderImpl mailsender;
 	
+	@Autowired
+	private LoginService service;
+	
 	
 	private int size;
 	
@@ -73,6 +76,43 @@ public class EmailSendService {
 		sendMail(setFrom, toEmail, title, mailContent.toString());
 		
 		return authKey;
+	}
+	
+	
+	
+	// 비밀번호 찾기를 통해 임시비밀번호를 전송하고 반환하는 메서드
+	public String sendTempPwdEmail(String email) {
+		
+		System.out.println("To.Email : " + email);
+		
+		String tempPwd = service.generatePWD(10);
+		String setFrom = "vidivid.service@gmail.com";
+		String toEmail = email;
+		String title = "비디비디 임시 비밀번호";
+		
+		StringBuffer mailContent = new StringBuffer();
+		
+		mailContent.append("<div>");
+		mailContent.append("<div style='text-align: center;'>");
+		mailContent.append("<img style='width: 300px' src='https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FA0vnu%2FbtrT5sokBPW%2FkVhdi9fiuDFk2PCAnWoNp1%2Fimg.png'>");
+		mailContent.append("<h2>비디비디 임시 비밀번호</h2>");
+		mailContent.append("</div>");
+		mailContent.append("<div style='text-align: center; margin: auto; padding: 30px;'>");
+		mailContent.append("<p>안녕하세요, 당신 근처의 비디오, 비디비디입니다.</p>");
+		mailContent.append("<p>요청하신 아이디의 비밀번호가 임시로 변경되었습니다.</p>");
+		mailContent.append("<p>로그인 후 반드시 비밀번호를 변경해주세요.</p>");
+		mailContent.append("<div style='margin: auto; padding: 20px'>");
+		mailContent.append("<span style='font-size: 20px; background-color: rgb(245,245,245); display: inline-block; padding: 20px;'>");
+		mailContent.append(tempPwd);
+		mailContent.append("</span>");
+		mailContent.append("</div>");
+		mailContent.append("<p>비디비디를 이용해주셔서 감사합니다.</p>");
+		mailContent.append("</div>");
+		mailContent.append("</div>");
+		
+		sendMail(setFrom, toEmail, title, mailContent.toString());
+		
+		return tempPwd;
 	}
 	
 	

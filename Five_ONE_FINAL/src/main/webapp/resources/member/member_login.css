@@ -14,19 +14,18 @@
 	}
 	
 	#login-wrap-top {
-		flex: 1;
-		display: flex;
-		align-items: center;
+		flex: 2;
 	}
 	
 	#login-wrap-bottom {
-		flex: 9;
+		flex: 8;
 		display: flex;
 		align-items: center;
 	}
 	
 	#login-logo {
 		margin: auto;
+		margin-top:200px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -40,5 +39,17 @@
 		flex: 5;
 		padding-left: 50px;
 	}
+
+
+	#login-icon-wrap{
+		display: flex;
+		justify-content: space-evenly;
+	}
 	
+	#social-title {
+		color: gray;
+		font-size: 1.3em;
+		display: block;
+		text-align: center;
+	}
 

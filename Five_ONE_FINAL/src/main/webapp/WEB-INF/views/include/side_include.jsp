@@ -55,7 +55,7 @@
                		 
                		 <hr>
                		 
-               		 <a href="#" class="nav__link" id="my_setting">
+               		 <a href="<%= request.getContextPath() %>/setting.do" class="nav__link" id="my_setting">
 	                    <i class="fa-solid fa-gear"></i>
 	                    <span class="nav_name"> &nbsp; 계정 설정 </span>
                		 </a>

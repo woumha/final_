@@ -19,10 +19,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<!-- 카카오 주소 api -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<!-- bootstrap icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+
 <style type="text/css">
+
+	#addr-wrap{
+		display: flex;
+	}
+	
+	#addr-wrap div:nth-child(1){
+		flex: 3;
+		margin-right: 10px;
+	}
+	
+	#addr-wrap div:nth-child(2){
+		flex: 7;
+	}
 	
 
-	 
 </style>
 
 <script type="text/javascript">
@@ -62,11 +81,16 @@
 		}
 		
 		// 필수입력 & 선택입력 확인하여 submit버튼 활성화하는 함수
+		
 		$(".member-input").on('keyup', function(){
 			
 			// (필수입력은 모두 입력해야 활성화)
 			if ($("#input-id").val() != '' && $("#input-pwd").val() != '' && $("#input-pwd-confirm").val() != '') {
-				$("#submit-1").attr("disabled", false);
+				if (idOk && pwdOk && pwdCheckOk){
+					$("#submit-1").attr("disabled", false);
+				}else {
+					$("#submit-1").attr("disabled", true);
+				}
 			}else {
 				$("#submit-1").attr("disabled", true);
 			}
@@ -85,22 +109,21 @@
 		});
 		
 		
+		// 주소창을 클릭하면 주소 검색 팝업을 띄우는 함수
+		
+		$("#input-addr1").on("click", function(){
+			addrSearch();
+		});
+		$("#input-zipcode").on("click", function(){
+			addrSearch();
+		});
+		
+		// 비밀번호 보여주는 기능 구현 함수
+		pwdShow();
+		
+		
 		
 		// -------------------- 클라이언트 -> 컨트롤러 로직 -----------------------
-		
-		// 아이디, 비밀번호, 이름, 이메일, 전화번호 유효성 확인하는 정규식
-		let idReg = /^[a-zA-Z0-9][a-zA-Z0-9]{3,10}$/; //영대소문, 숫자 4~10글자
-		let pwdReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*()\-_=+\\\|\[\]{};:\'",.<>\/?]).{8,16}$/; //영대소문, 숫자, 특수문자 하나씩 포함하여 8~16글자
-		let nameReg = /^[가-힣a-zA-Z]+$/;
-		let emailReg = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-		let phoneReg = /^01[0179][0-9]{7,8}$/;
-		
-		// 정규식에 부합한지 확인하는 함수
-		function regCheck(checkType, value){
-			let Reg = RegExp(checkType);
-			let result = Reg.test(value);
-			return result;
-		}
 		
 		// 아이디 중복을 확인하는 함수
 		function joinIdCheck(){
@@ -118,9 +141,13 @@
 					if(result == 'allow'){
 						$("#input-id-check").text("사용 가능한 아이디입니다.");
 						$("#input-id-check").css("color", "green");
+						idOk = true;
+						
 					}else if(result == 'deny'){
 						$("#input-id-check").text("중복된 아이디입니다.");
 						$("#input-id-check").css("color", "red");
+						idOk=false;
+						$("#submit-1").attr("disabled", true);
 					}
 				},
 				error: function(){
@@ -134,6 +161,8 @@
 		// 아이디 입력 시 1초동안 keyup없으면 id유효성 검사하는 이벤트 (db에 과요청 방지)
 		$("#input-id").on('keyup', function(){
 			
+			$("#input-id").val($("#input-id").val().replace(/[^0-9a-zA-Z]/gi, ''));
+			
 			let keyupTimeout;
 			clearTimeout(keyupTimeout);
 			keyupTimeout = setTimeout(function(){
@@ -141,28 +170,23 @@
 				if ($("#input-id").val() != ""){
 					
 					if (!regCheck(idReg, $("#input-id").val())){
-						// 정규식 어긋나는거 지우는건 잘 안되는 중..
-						$("#input-id").val($("#input-id").val().replace("/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi", ''));
 						$("#input-id-check").text("4~10글자의 이하의 영문, 숫자만 아이디로 사용할 수 있습니다.");
 						$("#input-id-check").css("color", "red");
+						idOk = false;
+						$("#submit-1").attr("disabled", true);
 					}else{
 						joinIdCheck();
 					}
 					
 					$("#input-id-check").show();
 					$("#input-id-label").hide();
-										
 				}
-			
 			}, 1000);
-			
 			
 		});
 		
-		// -------------------------- 나중에 할 일 ------------------------
-		
-		
 		// 비빌번호 유효 검사
+		memberPwdCheck();
 		
 		// 선택정보 유효 검사
 		
@@ -230,7 +254,6 @@
 </script>
 </head>
 <body>
-<!-- <button onclick="ajaxTest();">테스트~~~~~~~~~~~~</button> -->
 	<div id="join-page-wrap"> 
 		<jsp:include page="../include/top_include.jsp"/>
 		<div id="join-wrap">
@@ -244,79 +267,122 @@
 					</div>
 					<div id="join-content-1">
 						<form method="post" id="join-form-1">
-							<span class="block-span">간편회원가입</span>
-							<div class="label-input" >
-								<label for="input-id" id="input-id-check"></label>
-								<label for="input-id" id="input-id-label">아이디</label>
+							<span class="block-span login-logo">간편회원가입</span>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-id" id="input-id-check"></label>
+									<label for="input-id" id="input-id-label">아이디</label>
+								</div>
+								<input name="member_id" class="member-input essential" id="input-id">
 							</div>
-							<input name="member_id" class="member-input essential" id="input-id">
 							
-							<div class="label-input" >
-								<label for="input-id" class="label-input" id="input-pwd-check"></label>
-								<label for="input-id" class="label-input" id="input-pwd-label">비밀번호</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-id" class="label-input" id="input-pwd-check"></label>
+									<label for="input-id" class="label-input" id="input-pwd-label">비밀번호</label>
+								</div>
+								<div class="pwd-wrap">
+									<input name="member_pwd" class="password member-input essential member-pwd-input" id="input-pwd" autocomplete="off">
+									<div class="pwd-eye showEye">
+										<i class="bi bi-eye-fill"></i>
+									</div>
+								</div>
+								
 							</div>
-							<input name="member_pwd" class="password member-input essential" id="input-pwd">
 							
-							<div class="label-input" >
-								<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
-								<label for="input-id" class="label-input" id="input-pwd-confirm-label">비밀번호 확인</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-id" class="label-input" id="input-pwd-confirm-check"></label>
+									<label for="input-id" class="label-input" id="input-pwd-confirm-label">비밀번호 확인</label>
+								</div>
+								<div class="pwd-wrap">
+									<input name="check-pwd" class="password member-input essential member-pwd-input" id="input-pwd-confirm" autocomplete="off">
+									<div class="pwd-eye showEye">
+										<i class="bi bi-eye-fill"></i>
+									</div>
+								</div>
 							</div>
-							<input name="check-pwd" class="password member-input essential" id="input-pwd-confirm">
-							
-							<input type="button" value="회원가입" class="join-form-btn" id="submit-1" onclick="joinMember()">
+							<div class="input-wrap">
+								<input type="button" value="회원가입" class="join-form-btn" id="submit-1" onclick="joinMember()">
+							</div>
 						</form>
-						<hr>
-						<span class="block-span">소셜로 가입하기</span>
-						<input type="button" value="구글로 가입하기">
-						<input type="button" value="카카오로 가입하기">
-						<input type="button" value="네이버로 가입하기">
 					</div>
 					<div id="join-content-2">
 						<div>
-						<span>회원가입이 완료되었어요!</span>
+						<span class="login-logo">회원가입이 완료되었어요!</span>
 						<br>
-						<span>선택정보를 입력하시면 더욱 편리하게 이용할 수 있어요</span>
+						<span class="login-logo txt">선택정보를 입력하시면 더욱 편리하게 이용할 수 있어요.</span>
 						</div>
 						<form method="post" id="join-form-2">
 							<input type="hidden" name="member_code" id="new-membercode" value="멤버코드">
-							<div class="label-input" >
-								<label for="input-name" class="label-input" id="input-name-check"></label>
-								<label for="input-name" class="label-input" id="input-name-label">이름</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-name" class="label-input" id="input-name-check"></label>
+									<label for="input-name" class="label-input" id="input-name-label">이름</label>
+								</div>
+								<input name="member_name" class="member-input optional" id="input-name"> <!-- 이름을 입력하지 않으면 id값을 받아와 이름으로 처리 -->
 							</div>
-							<input name="member_name" class="member-input optional" id="input-name"> <!-- 이름을 입력하지 않으면 id값을 받아와 이름으로 처리 -->
-							
-							<div class="label-input" >
-								<label for="input-email" class="label-input" id="input-email-check"></label>
-								<label for="input-email" class="label-input" id="input-email-label">이메일</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-email" class="label-input" id="input-email-check"></label>
+									<label for="input-email" class="label-input" id="input-email-label">이메일</label>
+								</div>
+								<input name="member_email" class="member-input optional" id="input-email"> <!-- *@*.* 형식인지 체크-->
 							</div>
-							<input name="member_email" class="member-input optional" id="input-email"> <!-- *@*.* 형식인지 체크-->
-							
-							<div class="label-input" >
-								<label for="input-birth" class="label-input" id="input-birth-check"></label>
-								<label for="input-birth" class="label-input" id="input-birth-label">생년월일</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-birth" class="label-input" id="input-birth-check"></label>
+									<label for="input-birth" class="label-input" id="input-birth-label">생년월일</label>
+								</div>
+								<input type="date" name="member_birth" class="member-input optional date-placeholder date-empty" id="input-birth" data-placeholder="" > <!-- 일정 나이 이상이어야 조회가능한 동영상이 있음. -->
 							</div>
-							<input type="date" name="member_birth" class="member-input optional date-placeholder date-empty" id="input-birth" data-placeholder=""> <!-- 일정 나이 이상이어야 조회가능한 동영상이 있음. -->
-							
-							<div class="label-input" >
-								<label for="input-phone" class="label-input" id="input-phone-check"></label>
-								<label for="input-phone" class="label-input" id="input-phone-label">전화번호</label>
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-phone" class="label-input" id="input-phone-check"></label>
+									<label for="input-phone" class="label-input" id="input-phone-label">전화번호</label>
+								</div>
+								<input name="member_phone" class="member-input optional" id="input-phone"> <!-- 문자인증 하지않으면 동영상 업로드 안되게..? 불법적인 동영상 있을 수 있으니까 실명인증 -->
 							</div>
-							<input name="member_phone" class="member-input optional" id="input-phone"> <!-- 문자인증 하지않으면 동영상 업로드 안되게..? 불법적인 동영상 있을 수 있으니까 실명인증 -->
-							
-							<div class="label-input" >
-								<label for="input-addr" class="label-input" id="input-addr-check"></label>
-								<label for="input-addr" class="label-input" id="input-addr-label">주소</label>
+							<div class="input-wrap">
+								<div id="addr-wrap">
+									<div>
+										<div class="label-input" >
+										<label for="input-zipcode" class="label-input" id="input-zipcode-check"></label>
+										<label for="input-zipcode" class="label-input" id="input-zipcode-label">우편번호</label>
+										</div>
+										<input name="member_zipcode" class="member-input optional" id="input-zipcode">
+									</div>
+									<div>
+										<div class="label-input" >
+										<label for="input-addr1" class="label-input" id="input-addr1-check"></label>
+										<label for="input-addr1" class="label-input" id="input-addr1-label">주소</label>
+										</div>
+										<input name="member_addr1" class="member-input optional" id="input-addr1"> 
+									</div>
+								</div>
 							</div>
-							<input name="member_addr" class="member-input optional" id="input-addr"> <!-- 주소는..없앨까...? -->
-														
-							<input type="button" value="선택정보 입력" class="join-form-btn" id="submit-2" onclick = "infoUpdate()">
-							<input type="button" value="다음에 할래요" class="join-form-btn" id="submit-3" onclick = "DIVchange()">
+							<div class="input-wrap">
+								<div class="label-input" >
+									<label for="input-addr2" class="label-input" id="input-addr2-check"></label>
+									<label for="input-addr2" class="label-input" id="input-addr2-label">상세주소</label>
+								</div>
+								<input name="member_addr2" class="member-input optional" id="input-addr2"> 
+							</div>
+							<div class="input-wrap">
+								<input type="button" value="선택정보 입력" class="join-form-btn" id="submit-2" onclick = "infoUpdate()">
+							</div>
+							<div class="input-wrap">
+								<input type="button" value="다음에 할래요" class="join-form-btn" id="submit-3" onclick = "DIVchange()">
+							</div>
 						</form>
 					</div>
 					<div id="join-content-3">
-						<span>가입을 축하합니다!</span>
-						<input type="button" value="메인으로 가기" class="join-form-btn" id="submit-4" onclick="location.href='<%=request.getContextPath()%>'">
-						<input type="button" value="마이페이지로 가기" class="join-form-btn" id="submit-5">
+						<span class="login-logo">가입을 축하합니다! 🎉</span>
+						<br>
+						<span class="login-logo txt">이제 비디비디를 즐기러 가볼까요?</span>
+						<div class="input-wrap">
+							<input type="button" value="메인으로 가기" class="join-form-btn" id="submit-4" onclick="location.href='<%=request.getContextPath()%>'">
+						</div>
 					</div>
 				</div>
 			</div>

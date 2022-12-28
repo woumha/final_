@@ -83,8 +83,33 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 	
 	@Override
-	public String isGoogleLinked(GoogleLoginDTO dto) {
-		return this.sqlSession.selectOne("isGoogleLinked", dto);
+	public String isSocialLinked(String email) {
+		return this.sqlSession.selectOne("isSocialLinked", email);
+	}
+	
+	@Override
+	public String isExistEmail(String email) {
+		return this.sqlSession.selectOne("isExistEmail", email);
+	}
+	
+	@Override
+	public void socialLink(MemberDTO dto) {
+		this.sqlSession.update("socialLink", dto);
+	}
+	
+	@Override
+	public String findId(String email) {
+		return this.sqlSession.selectOne("findId", email);
+	}
+	
+	@Override
+	public void changePwd(LoginDTO dto) {
+		this.sqlSession.update("changePwd", dto);
+	}
+	
+	@Override
+	public int isProtected(String memberCode) {
+		return this.sqlSession.selectOne("isProtected", memberCode);
 	}
 
 }

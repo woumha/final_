@@ -16,8 +16,11 @@ import org.springframework.stereotype.Service;
 import com.vidividi.model.ChannelDAO;
 import com.vidividi.model.MemberDAO;
 import com.vidividi.variable.ChannelDTO;
+import com.vidividi.variable.GoogleLoginDTO;
+import com.vidividi.variable.KakaoLoginDTO;
 import com.vidividi.variable.LoginDTO;
 import com.vidividi.variable.MemberDTO;
+import com.vidividi.variable.NaverLoginDTO;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -38,16 +41,76 @@ public class LoginServiceImpl implements LoginService {
 		
 		if (memberCode != null) {
 			session.setAttribute("MemberCode", memberCode);
-
-			System.out.println("로그인 중인 멤버 코드 : "+memberCode);
+			session.setAttribute("MemberName", memberDTO.getMember_name());
 			session.setAttribute("RepChannelCode", memberDTO.getMember_rep_channel());
-			System.out.println("대표 채널 코드 : "+memberDTO.getMember_rep_channel());
-			
 			lhservice.setLoginData(memberCode);
+			return memberCode;
+		}else {
+			return null;
 		}
 		
-		return memberCode;
+		
 	}
+	
+	@Override
+	public String socialLogin(GoogleLoginDTO gdto, HttpSession session) throws Exception {
+		LoginDTO ldto = new LoginDTO();
+		MemberDTO mdto = new MemberDTO();
+		
+		String existMemCode = dao.isExistEmail(gdto.getGoogle_email());
+		if (existMemCode != null ) {
+			mdto = dao.getMember(existMemCode);
+			ldto.setId(mdto.getMember_id());
+			ldto.setPwd(mdto.getMember_pwd());
+			
+			String memberCode = loginCheck(ldto, session);
+			
+			return memberCode;
+		}else {
+			return null;
+		}
+	}
+		
+	
+	@Override
+	public String socialLogin(KakaoLoginDTO kdto, HttpSession session) throws Exception {
+		LoginDTO ldto = new LoginDTO();
+		MemberDTO mdto = new MemberDTO();
+		
+		String existMemCode = dao.isExistEmail(kdto.getKakao_email());
+		if (existMemCode != null ) {
+			mdto = dao.getMember(existMemCode);
+			ldto.setId(mdto.getMember_id());
+			ldto.setPwd(mdto.getMember_pwd());
+			
+			String memberCode = loginCheck(ldto, session);
+			
+			return memberCode;
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public String socialLogin(NaverLoginDTO ndto, HttpSession session) throws Exception {
+		LoginDTO ldto = new LoginDTO();
+		MemberDTO mdto = new MemberDTO();
+		
+		String existMemCode = dao.isExistEmail(ndto.getNaver_email());
+		if (existMemCode != null ) {
+			mdto = dao.getMember(existMemCode);
+			ldto.setId(mdto.getMember_id());
+			ldto.setPwd(mdto.getMember_pwd());
+			
+			String memberCode = loginCheck(ldto, session);
+			
+			return memberCode;
+		}else {
+			return null;
+		}
+	}
+	
+	
 
 	@Override
 	public void logout(HttpSession session) {
@@ -148,14 +211,20 @@ public class LoginServiceImpl implements LoginService {
 		dto.setMember_code(generateMembercode());
 		dto.setMember_rep_channel(generateChannelCode());
 		
-		if (via == "google") {
-			dto.setMember_google_link("1");
+		if (via.equals("google")) {
+			dto.setMember_social_link("google");
 			dto.setMember_pwd(generatePWD(10));
-		}else if (via == "joinForm"){
+		}else if (via.equals("joinForm")){
 			dto.setMember_name(dto.getMember_id());
 			dto.setMember_email("");
-			dto.setMember_google_link("0");
-		}else if (via == "kakao") {
+			dto.setMember_social_link("0");
+		}else if (via.equals("kakao")) {
+			dto.setMember_social_link("kakao");
+			dto.setMember_pwd(generatePWD(10));
+		}else if (via.equals("naver")) {
+			dto.setMember_social_link("naver");
+			dto.setMember_pwd(generatePWD(10));
+			System.out.println("-------------> " + dto.getMember_name());
 		}
 		
 		int joinResult = dao.joinMember(dto);
