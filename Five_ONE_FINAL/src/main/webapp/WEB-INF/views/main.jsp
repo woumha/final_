@@ -183,9 +183,12 @@ function getContextPath(){
 						$(data).each(function(){
 						
 							table += "<tr>";
-							table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
-										"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
-
+							//비디오(비디오 포스터 경로+ 비디오 경로)
+							table += "<td colspan='2'>" +
+										"<video class='test_video' width='320px' height='180px'" +
+										"src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>" +
+									 "</td>";		
+									 
 							table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 										"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
 										+ '&nbsp;' + "<a class='vidi_ti'>" + this.video_title + "</a>" + "</td>";
@@ -195,6 +198,7 @@ function getContextPath(){
 							
 							table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 										"조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+										
 							table += "</tr>";
 							
 							table += "<tr>";
@@ -271,9 +275,13 @@ function getMainVideoList_recent(page_rec){
 				$(data).each(function(){
 				
 					table += "<tr>";
-					table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
-								"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
-
+					
+					//비디오(비디오 포스터 경로+ 비디오 경로)
+					table += "<td colspan='2'>" +
+								"<video class='test_video' width='320px' height='180px'" +
+								"src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>" +
+							 "</td>";		
+							 
 					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
 								+ '&nbsp;' + "<a class='vidi_ti'>" + this.video_title + "</a>" + "</td>";
@@ -283,6 +291,7 @@ function getMainVideoList_recent(page_rec){
 					
 					table += "<td class = 'video_view_ctn'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 								"조회수&nbsp;" + this.video_view_cnt + "회" +"&nbsp; <i class='fa-solid fa-carrot'></i> &nbsp;" + this.video_regdate; +"</td>";
+								
 					table += "</tr>";
 					
 					table += "<tr>";
@@ -421,9 +430,13 @@ function getMainVideoList_recent(page_rec){
 					$(data).each(function(){
 					
 						table += "<tr>";
-						table += "<td colspan='2'>" + "<video class='test_video' controls width='320px' height='180px' poster='" + getContextPath() + "/resources/img/vidividi_logo.png'" +
-									"src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>" + "</td>";
-		
+						
+						//비디오(비디오 포스터 경로+ 비디오 경로)
+						table += "<td colspan='2'>" +
+									"<video class='test_video' width='320px' height='180px'" +
+									"src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>" +
+								 "</td>";		
+								 
 						table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 									"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
 									+ '&nbsp;' + this.video_title + "</td>";
@@ -601,7 +614,7 @@ function getMainVideoList_recent(page_rec){
 		$("#cate_alert").css("display", "block");
 		
 		$("#change_icon").html("<i class='fa-solid fa-hands-holding-child'></i>");
-		$("#change_word").text("아동");
+		$("#change_word").text("유아");
 		
 		$(".video_table").remove();
 		var option = 700;

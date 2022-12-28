@@ -160,14 +160,14 @@
           <c:set var="ccode" value="${RepChannelCode }" />
 					<li id="userpop_mychannel" onclick="location.href='<%=request.getContextPath() %>/channel.do?mc=${ccode }'">
 					
-					<i class="fa-regular fa-circle-user"></i>&nbsp;&nbsp;내 채널</li>
+					<i class="fa-regular fa-circle-user"></i>&nbsp;&nbsp;마이 채널</li>
 					
 					<li id="userpop_mypage" onclick="location.href='<%=request.getContextPath()%>/myPage_go.do?channel_code=${RepChannelCode}'"> <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp;마이 페이지</li>
 					
 					<li id="userpop_box" onclick="location.href='<%=request.getContextPath()%>/myPage_go.do?channel_code=${RepChannelCode}'"><i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;보관함</li>
 					<hr>
-					<li onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
-					<li onclick="location.href='<%=request.getContextPath()%>/logout.do'"><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;로그아웃</li>		
+					<li id="userpop_setting" onclick="location.href='<%=request.getContextPath()%>/setting.do'"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;계정 설정</li>
+					<li id="userpop_logout" onclick="location.href='<%=request.getContextPath()%>/logout.do'"><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;로그아웃</li>		
 				</ul>
 			</div>
 		</c:if>

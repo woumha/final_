@@ -623,6 +623,8 @@ display: none;
 	}
 	
 	#userpop_box:hover{
+	
+	
 	color:#fc942c;
 	}
 	
@@ -632,6 +634,10 @@ display: none;
 	
 	#userpop_logout:hover{
 	color:#fc942c;
+	}
+	
+	#user_popup hr{
+	color: black;
 	}
 	
 		
