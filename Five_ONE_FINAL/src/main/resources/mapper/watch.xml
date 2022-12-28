@@ -144,19 +144,19 @@
 	
 	<update id="plusVideoGood" parameterType="hashmap">
 		update video_play
-		set ${option} = (select ${option}+1 from video_play where video_code=#{video_code})
+		set ${option} = ${option}+1
 		where video_code=#{video_code}
 		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
-			select ${option} from video_play where video_code = #{video_code}
+			select video_good from video_play where video_code = #{video_code}
 		</selectKey>
 	</update>
 	
-	<update id="miusVideoGood" parameterType="hashmap">
+	<update id="minusVideoGood" parameterType="hashmap">
 		update video_play
-		set ${option} = (select ${option}-1 from video_play where video_code=#{video_code})
+		set ${option} = ${option}-1
 		where video_code=#{video_code}
 		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
-			select ${option} from video_play where video_code = #{video_code}
+			select video_good from video_play where video_code = #{video_code}
 		</selectKey>
 	</update>
 	
@@ -201,4 +201,52 @@
 	<update id="updateComment" parameterType="String">
 		update reply set reply_comment = 1 where reply_code = #{reply_code}
 	</update>
+	
+	<update id="plusReplyGood" parameterType="hashmap">
+		update reply
+		set ${option} = ${option}+1
+		where reply_code=#{reply_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select reply_good from reply where reply_code = #{reply_code}
+		</selectKey>
+	</update>
+	
+	<update id="minusReplyGood" parameterType="hashmap">
+		update reply
+		set ${option} = ${option}-1
+		where reply_code=#{reply_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select reply_good from reply where reply_code = #{reply_code}
+		</selectKey>
+	</update>
+	
+	<update id="changeToGoodReply" parameterType="hashmap">
+		update reply 
+		set reply_good = (select reply_good+1 from reply where reply_code =#{reply_code}), reply_bad = (select reply_bad-1 from reply where reply_code=#{reply_code})
+		where reply_code = #{reply_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select ${option} from reply where reply_code = #{reply_code}
+		</selectKey>	
+	</update>
+	
+	<update id="changeToBadReply" parameterType="hashmap">
+		update reply 
+		set reply_good = (select reply_good-1 from reply where reply_code =#{reply_code}), reply_bad = (select reply_bad+1 from reply where reply_code=#{reply_code})
+		where reply_code = #{reply_code}
+		<selectKey keyProperty="cnt" resultType="int" order="AFTER">
+			select ${option} from reply where reply_code = #{reply_code}
+		</selectKey>	
+	</update>
+	
+	<insert id="newPlaylist" parameterType="hashmap">
+		insert into bundlelist values (#{bundle_code}, #{playlist_title}, CURRENT_DATE, #{playlist_open}, #{repChannelCode})
+	</insert>
+	
+	<select id="getMyBundleList" parameterType="hashmap" resultType="bundleDTO">
+		select * from bundlelist where channel_code =  #{repChannelCode}
+	</select>
+	
+	<select id="getMyPlaylist" parameterType="hashmap" resultType="playlistDTO">
+		select * from playlist where video_code = #{video_code} and channel_code = #{repChannelCode}
+	</select>
 </mapper>

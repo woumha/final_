@@ -98,6 +98,10 @@ display: -webkit-box;
 -webkit-box-orient: vertical;
 }
 .video_channel_p { font-size: 12px; margin-bottom: 0px; margin-top: 0px;}
+.video_channel_p a {
+text-decoration: none; /* 링크의 밑줄 제거 */
+color: inherit; /* 링크의 색상 제거 */	
+}
 .video_views_p {
 font-size: 12px;
 margin-top: 30px;

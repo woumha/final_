@@ -1,7 +1,6 @@
 package com.vidividi.five.one;
 
 import java.io.*;
-
 import java.util.*;
 import javax.inject.*;
 import javax.servlet.http.*;
@@ -13,153 +12,89 @@ import org.springframework.web.bind.annotation.*;
 import com.vidividi.model.*;
 import com.vidividi.variable.*;
 
-
+@Controller
 public class m_subscribeController {
 	
 	@Inject
     private MyPageDAO dao;
 	
 	@RequestMapping("subscribe.do")
-	public String history_list(@RequestParam("channel_code") String code,
-							@RequestParam(value="search",  required=false, defaultValue= "1") int search,
-							@RequestParam(value="member_code",  required=false, defaultValue= "none") String member_code,
-							@RequestParam(value="keyword",  required=false, defaultValue= "none") String keyword, Model model) {
-		model.addAttribute("channel_code", code);
-		/* model.addAttribute("keyword", keyword); */
-		model.addAttribute("search", search);
-		model.addAttribute("member_code", member_code);
-		return "myPage/subscrbe";
+	public String subscribe_page(@SessionAttribute(name = "RepChannelCode", required = false) String code,
+							Model model) {
+
+		return "myPage/subscribe";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "getSubscribe_list.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam("member_code") String code,
-								int page, HttpServletResponse response) {
+	public String getSubscribe_list(@SessionAttribute(name = "RepChannelCode", required = false) String code,
+									int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
+		
+		int rowsize = 10;
+		int startNo = (page * rowsize) - (rowsize - 1);
+		int endNo = (page * rowsize);
+		
+		JSONArray jArray = new JSONArray();
+		
+		List<ChannelDTO> list = null;
+		
+		list = this.dao.getSubscribe_list(code, startNo, endNo);
 
-		int rowsize = 5;
-		int startNo = (page * rowsize) - (rowsize - 1);
-		int endNo = (page * rowsize);
-		
-		JSONArray jArray = new JSONArray();
-		
-		if(code == "none") {
-			System.out.println("playlist_new.do >>> channel_code 없음!!!");
-		} else {
-			List<ChannelDTO> list = this.dao.getChannel_list(code, startNo, endNo);
-			
-			for(ChannelDTO dto : list) {
-				JSONObject json = new JSONObject();
-				json.put("channel_code", dto.getChannel_code());
-				json.put("channel_name", dto.getChannel_name());
-				
-				
-				jArray.add(json);
-			}
-		} return jArray.toString(); }
-	
-	@ResponseBody
-	@RequestMapping(value = "playlist_search.do" , produces = "application/text; charset=UTF-8")
-	public String history_search(@RequestParam(value="playlist_code",  required=false, defaultValue="none") String code,
-								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
-								int page, HttpServletResponse response) {
-		response.setContentType("text/html; charset=UTF-8");
-		
-		int rowsize = 5;
-		int startNo = (page * rowsize) - (rowsize - 1);
-		int endNo = (page * rowsize);
-		
-		JSONArray jArray = new JSONArray();
-		
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("code", code);map.put("keyword", keyword);map.put("startNo", startNo);map.put("endNo", endNo);
-		
-		List<VideoPlayDTO> list = null;
-		
-		if(keyword.equals("none")) {
-			list = this.dao.getPlaylist_new(code, startNo, endNo);
-		}else {
-			list = this.dao.getPlaylist_search(map);
-		}
-		for(VideoPlayDTO dto : list) {
+		for(ChannelDTO dto : list) {
 			JSONObject json = new JSONObject();
-			json.put("video_code", dto.getVideo_code());
 			json.put("channel_code", dto.getChannel_code());
-			json.put("channel_name", dto.getChannel_name());
-			json.put("video_title", dto.getVideo_title());
-			json.put("video_cont", dto.getVideo_cont());
-			json.put("video_img", dto.getVideo_img());
-			json.put("video_good", dto.getVideo_good());
-			json.put("video_bad", dto.getVideo_bad());
-			json.put("video_view_cnt", dto.getVideo_view_cnt());
-			json.put("video_hash", dto.getVideo_hash());
-			json.put("video_regdate", dto.getVideo_regdate());
-			json.put("video_open", dto.getVideo_open());
-			json.put("category_code", dto.getCategory_code());
-			
-			json.put("playlist_code", dto.getPlayList_code());
-			json.put("playlist_title", dto.getPlayList_title());
+			json.put("channel_name", dto.getChannel_name());	
+			json.put("channel_banner", dto.getChannel_banner());	
+			json.put("channel_profil", dto.getChannel_profil());	
+			json.put("channel_cont", dto.getChannel_cont());	
+			json.put("channel_like", dto.getChannel_like());	
+			json.put("channel_live", dto.getChannel_live());	
+			json.put("channel_date", dto.getChannel_date());	
+			json.put("channel_lastupload", dto.getChannel_lastupload());	
+			json.put("member_code", dto.getChannel_code());	
 			
 			jArray.add(json);
 		}
+		
 		return jArray.toString();
 	}
-
-	@RequestMapping("playlist_one_delete.do")
-	public void delete_history(@RequestParam("video_code") String video,
-								@RequestParam("playlist_code") String playlist,
-								@RequestParam("channel_code") String channel,
-								@RequestParam("search") int search,
-								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
-								HttpServletResponse response) throws IOException {
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("video", video); map.put("playlist", playlist);
+	
+	
+	@RequestMapping(value = "delete_one_subscribe.do" , produces = "application/text; charset=UTF-8")
+	public void delete_one_subscribe(@RequestParam("channel_code") String channel,
+									@SessionAttribute(name = "RepChannelCode", required = false) String code,
+									HttpServletResponse response) throws IOException {
 		
+		System.out.println("channel_code >>> " + channel);
+		System.out.println("member_code >>> " + code);
+		
+		
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("channel", channel); map.put("member_code", code);
+
 
 		// 선택된 playlist 동영상 데이터 지우기
-		int check = this.dao.playlist_search_one_delete(map);
-		
+		int check = this.dao.delete_one_subscribe(map);
+
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+	
 		if(check > 0) {
 			System.out.println("일단 하나 삭제 성공");
 			// search라면
-			if(search == 2) {
-				out.println("<script>");
-				out.println("location.href='playlist_list.do?channel_code="+channel+"&search=2&keyword="+keyword+"&playlist_code="+playlist+"'");
-				out.println("</script>");
-			} else if(search == 1) {
-				out.println("<script>");
-				out.println("location.href='playlist_list.do?channel_code="+channel+"&search=1&keyword="+keyword+"&playlist_code="+playlist+"'");
-				out.println("</script>");
-			}
+			out.println("<script>");
+			out.println("location.href='subscribe.do'");
+			out.println("</script>");
+
 		}else {
 			out.println("<script>");
-			out.println("alert('시청기록 삭제 중 오류 발생')");
+			out.println("alert('구독 채널 취소 중 오류 발생')");
 			out.println("history.back()");
 			out.println("</script>");
 		}
-	}
-	
-	@RequestMapping("delete_playlist.do")
-	public void delete_history(@RequestParam("channel_code") String code,
-								@RequestParam("playlist_code") String p_code,
-								HttpServletResponse response) throws IOException {
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		int check = this.dao.delete_playlist(p_code);
-		if(check > 0) {
-			this.dao.delete_bundlelist(p_code);
-			out.println("<script>");
-			out.println("location.href='myPage_go.do?channel_code="+code+"'");
-			out.println("</script>");
-		}else {
-			out.println("<script>");
-			out.println("alert('전체 재생목록 삭제 중 오류 발생')");
-			out.println("history.back()");
-			out.println("</script>");
-		}
-	}
+}
+	  
+
 }

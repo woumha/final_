@@ -22,5 +22,10 @@ public interface MemberDAO {
 	void toggleEmailLogin(String memberCode);
 	int insertLoginHistory(LoginHistoryDTO dto);
 	List<LoginHistoryDTO> getLoginHistroy(String memberCode);
-	String isGoogleLinked(GoogleLoginDTO dto);
+	String isSocialLinked(String email);
+	String isExistEmail(String email);
+	void socialLink(MemberDTO dto);
+	String findId(String email);
+	void changePwd(LoginDTO dto);
+	int isProtected(String memberCode);
 }

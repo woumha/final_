@@ -55,7 +55,7 @@
                		 
                		 <hr>
                		 
-               		 <a href="#" class="nav__link" id="my_setting">
+               		 <a href="<%= request.getContextPath() %>/setting.do" class="nav__link" id="my_setting">
 	                    <i class="fa-solid fa-gear"></i>
 	                    <span class="nav_name"> &nbsp; 계정 설정 </span>
                		 </a>
@@ -79,7 +79,7 @@ $(document).on("click", "#my_subscribe", function(){
 	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		alert("구독 정보 페이지 연결하기");
+		$(location).attr('href', '<%=request.getContextPath()%>/subscribe.do');
 	}
 });
 
@@ -88,7 +88,7 @@ $(document).on("click", "#my_watch_record", function(){
 	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		$(location).attr('href', '<%=request.getContextPath()%>/history_list.do?channel_code=${RepChannelCode}');
+		$(location).attr('href', '<%=request.getContextPath()%>/history_list.do');
 	}
 });
 
@@ -98,7 +98,7 @@ $(document).on("click", "#my_like_video", function(){
 	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		$(location).attr('href', '<%=request.getContextPath()%>/good_list.do?channel_code=${RepChannelCode}');
+		$(location).attr('href', '<%=request.getContextPath()%>/good_list.do');
 	}
 });
 
@@ -107,7 +107,7 @@ $(document).on("click", "#my_watch_later", function(){
 	if(${empty RepChannelCode }){
 		alert("로그인 이후 이용할 수 있는 서비스입니다.");
 	}else{
-		$(location).attr('href', '<%=request.getContextPath()%>/reply_list.do?channel_code=${RepChannelCode}');
+		$(location).attr('href', '<%=request.getContextPath()%>/my_reply.do');
 	}
 });
 

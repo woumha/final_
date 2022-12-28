@@ -29,23 +29,6 @@
 		select * from subscribe where channel_code = #{code}
 	</select>
 	<!-- =============================================================================================================== -->
-	
-	<select id="subscribe_list" parameterType="String" resultType="channeldto">
-		select * from user_channel where channel_code in (select channel_code from subscribe where member_code = #{code})
-	</select>
-	
-	<select id="getSubscribe_code" parameterType="Map" resultType="String">
-		select subscribe_code from subscribe where channel_code = #{channel_code} and member_code = #{member_code}
-	</select>
-	
-	<delete id="delete_one_subscribe" parameterType="String">
-		delete from subscribe where subscribe_code = #{code}
-	</delete>
-	
-	<!-- <update id="updateSeq_s" parameterType="int">
-		<![CDATA[update subscribe set subscribe_num = subscribe_num - 1 where subscribe_num > #{num}]]>
-	</update> -->
-	
 	<!-- ================================================ history 페이지 ================================================ -->
 	<select id="getHistory_list" parameterType="Map" resultType="videoplayDTO">
 		<![CDATA[select * from (select b.*, row_number() over(order by history_date desc) rnum from (select * from (video_play join user_channel using (channel_code)) inner join history using(video_code) where history.channel_code = #{code}) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by history_date desc]]>
@@ -56,15 +39,12 @@
 	<delete id="delete_history" parameterType="String">
 		delete from history where channel_code = #{code}
 	</delete>
-	<update id="updateSeq" parameterType="int">
-		<![CDATA[update history set history_num = history_num - 1 where history_num > #{num}]]>
-	</update>
-	<select id="getHistory_num" parameterType="Map" resultType="int">
-		select history_num from history where channel_code = #{channel} and video_code = #{video}
-	</select>
-	<delete id="history_search_one_delete" parameterType="int">
-		delete from history where history_num = #{num}
+	<delete id="history_search_one_delete" parameterType="Map">
+		delete from history where video_code = #{video} and channel_code = #{channel}
 	</delete>
+	<update id="dont_save_history" parameterType="Map">
+		<![CDATA[update members set member_historysave = #{save} where member_code = #{code}]]>
+	</update>
 	<!-- ================================================== good 페이지 ================================================== -->
 	<select id="getGood_list_date" parameterType="Map" resultType="videoplayDTO">
 		<![CDATA[select * from (select b.*, row_number() over(order by good_date desc) rnum from (select * from (video_play join user_channel using (channel_code)) inner join good using(video_code) where good.channel_code = #{code} and good.good_bad = 1) b ) where rnum >= #{startNo} and rnum <= #{endNo} order by good_date desc]]>
@@ -93,9 +73,6 @@
 	<delete id="good_search_one_delete" parameterType="String">
 		delete from good where good_code = #{num}
 	</delete>
-	<!-- <update id="updateSeq_g" parameterType="int">
-		<![CDATA[update good set good_num = good_num - 1 where good_num > #{num}]]>
-	</update> -->
 	<update id="removeGood" parameterType="String">
 		<![CDATA[update video_play set video_good = video_good - 1 where video_code = #{video}]]>
 	</update>
@@ -105,8 +82,8 @@
 	<!-- ================================================== mainPage playlist 더보기 ================================================== -->
 	<select id="getPlaylist_list" parameterType="Map" resultType="playlistDTO">
 		<![CDATA[select * from (select b.*, row_number() over(order by rownum) 
-rnum from (select playlist_title, playlist_code, max(video_code) from playlist where channel_code = #{code} group by playlist_title, playlist_code)
-b ) where rnum >= #{startNo} and rnum <= #{endNo}]]>
+rnum from (select playlist_title, playlist_code, max(video_code) as video_code from playlist where channel_code = #{code} group by playlist_title, playlist_code)
+b ) join video_play using (video_code) where rnum >= #{startNo} and rnum <= #{endNo}]]>
 	</select>
 	<!-- ============================================================== 재생목록 ============================================================== -->
 	<select id="getPlaylist_new" parameterType="Map" resultType="videoplayDTO">
@@ -130,6 +107,35 @@ b ) where rnum >= #{startNo} and rnum <= #{endNo}]]>
 	<delete id="delete_bundlelist" parameterType="String">
 		delete from bundlelist where bundle_code = #{p_code}
 	</delete>
-
+	<!-- ============================================================= 구독 채널 ============================================================= -->
+	<select id="getSubscribe_list" parameterType="Map" resultType="channeldto">
+		<![CDATA[select * from (select b.*, row_number() over(order by channel_like desc)
+				rnum from (select * from (subscribe join user_channel using (channel_code))
+				where subscribe.member_code = #{code}) b )
+				where rnum >= #{startNo} and rnum <= #{endNo}]]>
+	</select>
+	<delete id="delete_one_subscribe" parameterType="Map">
+		delete from subscribe where channel_code = #{channel} and member_code = #{member_code}
+	</delete>
+	<!-- ========================================================= 내가 작성한 댓글 목록 ========================================================= -->
+	<select id="getMy_reply_list" parameterType="Map" resultType="replyDTO">
+		<![CDATA[select * from (select b.*, row_number() over(order by reply_regdate desc)
+				rnum from (select reply_comment, reply_group, reply_code, video_code, video_play.video_img, reply.reply_regdate, video_play.video_title, reply.reply_cont, video_play.channel_code as video_owner 
+				from reply join video_play using(video_code)
+				where reply.channel_code = #{code}) b )
+				where rnum >= #{startNo} and rnum <= #{endNo}]]>
+	</select>
+	<delete id="delete_one_reply" parameterType="String">
+		delete from reply where reply_code = #{code}
+	</delete>
+	<delete id="delete_group_reply" parameterType="String">
+		delete from reply where reply_group = #{group}
+	</delete>
+	<select id="getMy_reply_group" parameterType="String" resultType="String">
+		select reply_group from reply where reply_code = #{code}
+	</select>
+	<select id="getMy_reply_comment" parameterType="String" resultType="int">
+		select reply_comment from reply where reply_code = #{code}
+	</select>
 </mapper>
 

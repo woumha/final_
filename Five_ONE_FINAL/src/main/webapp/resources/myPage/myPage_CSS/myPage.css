@@ -3,6 +3,7 @@
 body {
 margin: 0;
 padding: 0;
+font-family: 'Gowun Dodum', sans-serif;
 }
 
 #wrap_myPage {
@@ -48,6 +49,7 @@ height: auto;
 .test_video {
 border-radius: 10px;
 width: 210px;
+height: 118px;
 }
 
 .video_box {
@@ -98,9 +100,28 @@ display: -webkit-box;
 -webkit-line-clamp: 1;
 -webkit-box-orient: vertical;
 }
+.video_title_good {
+width: 215px;
+font-size: 15px; margin-bottom: -5px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+margin-bottom: 12px;
+}
 
-.video_channel_p { font-size: 12px; margin-bottom: -15px;}
-.video_views_p { font-size: 12px; margin-bottom: -15px;}
+.video_channel_p {
+font-size: 12px;
+margin-bottom: 7px;
+text-decoration: none; /* 링크의 밑줄 제거 */
+color: inherit; /* 링크의 색상 제거 */
+}
+.video_channel_p a {
+text-decoration: none; /* 링크의 밑줄 제거 */
+color: inherit; /* 링크의 색상 제거 */	
+}
+.video_views_p { font-size: 12px; margin-bottom: 7px;}
 .video_upload_p { font-size: 10px; margin-bottom: -10px;}
 
 .info_box {
@@ -136,8 +157,8 @@ margin-bottom: 10px;
 }
 
 .channel_hr { width: 90%; }
-
-#profile_box { margin-bottom: 30px; }
+.channel_profil {width: 20px;}
+#profile_box { margin-bottom: 20px; }
 
 /* 로그인 안했을 시 */
 #page_none {
@@ -208,6 +229,7 @@ position: absolute;
 z-index: 2;
 border-radius: 10px;
 width: 210px;
+height: 118px;
 }
 
 .playlist_video_div {
@@ -260,11 +282,81 @@ margin-bottom: 25px;
 margin-left: 20px;
 }
 
-#history_logo { margin-left: -105px; }
+#history_logo { margin-left: -110px; }
 #playlist_logo { margin-left: -120px; }
-#good_logo { margin-left: -194px; }
-#reply_logo { margin-left: -172px; }
+#good_logo { margin-left: -179px; }
+#reply_logo { margin-left: -163px; }
+
+.video_boxs {
+width: 700px;
+margin-left: 100px;
+margin-bottom: 20px;
+}
+
+.delete_reply {
+text-align: right;
+margin-bottom: 10px;
+}
+
+.reply_text_box {
+float: left;
+}
+
+.reply_cont {
+width: 480px;
+margin-top: 10px;
+margin-bottom: 30px;
+	
+font-size: 16px;
+	
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+
+.video_title {
+width: 480px;
+font-size: 14px;
+	
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+}
+
+.video_title_sub {
+font-size: 14px;
+margin-bottom: 20px;
+}
+
+.reply_regdate {
+	
+font-size: 12px;
+	
+}
+
+.video_img_box {
+/* float: right; */
+}
+
+.reply_box {
+margin-bottom: 30px;
+}
+
+.video_img {
+width: 170px;
+height: 100px;
+border-radius: 10px;
+}
+
 /* ======================= 미디어 쿼리 스타일 영역 ======================= */
+@media screen and (max-width: 1501px) {
+	.info_title p {font-size: 10px;}
+	.info_cont p {font-size: 10px;}
+}
 @media screen and (max-width: 1106px) {
 	#chanel_area {display: none;}
 	#content_area {margin-right: 30px;}

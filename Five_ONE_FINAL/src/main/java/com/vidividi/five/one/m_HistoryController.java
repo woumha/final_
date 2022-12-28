@@ -19,10 +19,10 @@ public class m_HistoryController {
     private MyPageDAO dao;
 	
 	@RequestMapping("history_list.do")
-	public String history_list(@RequestParam("channel_code") String code,
+	public String history_list(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 							@RequestParam(value="search",  required=false, defaultValue= "1") int search,
 							@RequestParam(value="keyword",  required=false, defaultValue= "none") String keyword, Model model) {
-		model.addAttribute("channel_code", code);
+
 		/* model.addAttribute("keyword", keyword); */
 		model.addAttribute("search", search);
 		return "myPage/history";
@@ -31,7 +31,7 @@ public class m_HistoryController {
 	
 	@ResponseBody
 	@RequestMapping(value = "history_new.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
+	public String getReplyList(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 								int page, HttpServletResponse response) {
 		
 		response.setContentType("text/html; charset=UTF-8");
@@ -67,7 +67,7 @@ public class m_HistoryController {
 	
 	@ResponseBody
 	@RequestMapping(value = "history_search.do" , produces = "application/text; charset=UTF-8")
-	public String history_search(@RequestParam(value="channel_code",  required=false, defaultValue="none") String code,
+	public String history_search(@SessionAttribute(name = "RepChannelCode", required = false) String code,
 								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								int page, HttpServletResponse response) {
 		response.setContentType("text/html; charset=UTF-8");
@@ -110,32 +110,28 @@ public class m_HistoryController {
 
 	@RequestMapping("history_one_delete.do")
 	public void delete_history(@RequestParam("video_code") String video,
-								@RequestParam("channel_code") String channel,
+			@SessionAttribute(name = "RepChannelCode", required = false) String channel,
 								@RequestParam("search") int search,
-								@RequestParam("keyword") String keyword,
+								@RequestParam(value="keyword",  required=false, defaultValue="none") String keyword,
 								HttpServletResponse response) throws IOException {
 		Map<String,Object>map = new HashMap<String,Object>();
 		map.put("video", video); map.put("channel", channel);
 		
-		// 선택된 history_num 가져오기
-		int history_num = this.dao.getHistory_num(map);
-		
 		// 선택된 history 데이터 지우기
-		int check = this.dao.history_search_one_delete(history_num);
+		int check = this.dao.history_search_one_delete(map);
 		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
 		if(check > 0) {
-			this.dao.updateSequence(history_num);
 			// search라면
 			if(search == 2) {
 				out.println("<script>");
-				out.println("location.href='history_list.do?channel_code="+channel+"&search=2&keyword="+keyword+"'");
+				out.println("location.href='history_list.do?search=2&keyword="+keyword+"'");
 				out.println("</script>");
 			} else if(search == 1) {
 				out.println("<script>");
-				out.println("location.href='history_list.do?channel_code="+channel+"&search=1&keyword="+keyword+"'");
+				out.println("location.href='history_list.do?search=1&keyword="+keyword+"'");
 				out.println("</script>");
 			}
 		}else {
@@ -147,13 +143,13 @@ public class m_HistoryController {
 	}
 	
 	@RequestMapping("delete_history.do")
-	public void delete_history(@RequestParam("channel_code") String code, HttpServletResponse response) throws IOException {
+	public void delete_history(@SessionAttribute(name = "RepChannelCode", required = false) String code, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		int check = this.dao.delete_history(code);
 		if(check > 0) {
 			out.println("<script>");
-			out.println("location.href='history_list.do?channel_code="+code+"'");
+			out.println("location.href='history_list.do'");
 			out.println("</script>");
 		}else {
 			out.println("<script>");
@@ -162,4 +158,43 @@ public class m_HistoryController {
 			out.println("</script>");
 		}
 	}
+	@RequestMapping("dont_save_history.do")
+	public void dont_save_history(@SessionAttribute(name = "MemberCode", required = false) String MemberCode,
+								@SessionAttribute(name = "RepChannelCode", required = false) String RepChannelCode,
+								HttpServletResponse response) throws IOException {
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		
+		System.out.println("MemberCode >>> " + MemberCode);
+		
+		// 시청기록 저장이 켜져있는지 확인 (0 : 꺼저 있음) (1 : 켜져 있음)
+		int historysave_check = this.dao.getHistory_save(RepChannelCode);
+		
+		int check = 0;
+		
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("code", MemberCode); 
+		
+		if(historysave_check == 1) {
+			map.put("save", 0);
+			check = this.dao.dont_save_history(map);
+		}else {
+			 map.put("save", 1);
+			 check = this.dao.dont_save_history(map);
+		}
+		
+		if(check > 0) {
+			out.println("<script>");
+			out.println("location.href='history_list.do'");
+			out.println("</script>");
+		}else {
+			out.println("<script>");
+			out.println("alert('전체 시청기록 삭제 중 오류 발생')");
+			out.println("history.back()");
+			out.println("</script>");
+		}
+	}
+	
+	
+	
 }

@@ -24,7 +24,6 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-let channel_code = "${channel_code}";
 let playlist_code = "${playlist_code}";
 let search = "${search}";
 let keyword = "none";
@@ -43,7 +42,6 @@ if(search == 1) {
 }
 
 console.log("=============== 페이지 시작시 확인용 코드 ========================");
-console.log("default channel_code >>> "+channel_code);
 console.log("default search >>> "+search);
 console.log("default loading_playlist >>> " + loading_playlist);
 console.log("default loading_search >>> " + loading_search);
@@ -52,13 +50,12 @@ console.log("===========================================================");
 
 
 
-function getPlaylist_new(channel_code, page_playlist, playlist_code){
+function getPlaylist_new(page_playlist, playlist_code){
 
 	$.ajax({
 
 		url : getContextPath() +"/playlist_new.do",
 		data : {
-			"channel_code" : channel_code,
 			"page" : page_playlist,
 			"playlist_code" : playlist_code
 		},
@@ -78,13 +75,16 @@ function getPlaylist_new(channel_code, page_playlist, playlist_code){
 				div += "<div class='video_boxs'>"
 				$(playlist).each(function(){
 					div += "<div class='video_box'>";
-					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>";
+					div += "<video class='test_video' src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
+					div += "</a>";
+					div += "<p class='video_channel_p'>";
+					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<i class='fa-solid fa-circle-chevron-down'></i><a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
+					div += "<i class='fa-solid fa-circle-chevron-down'></i><a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
 					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";
@@ -96,18 +96,17 @@ function getPlaylist_new(channel_code, page_playlist, playlist_code){
 			}
 		},
 		error : function(){
-			alert('재생목록_new 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 }
 
-function getPlaylist_search(channel_code, page_search, playlist_code, keyword) {
+function getPlaylist_search(page_search, playlist_code, keyword) {
 	search_keyword = keyword;
 	console.log("keyword >>> " + keyword);
     $.ajax({
   		url : getContextPath() +"/playlist_search.do",
   		data : {
-  			"channel_code" : channel_code,
 			"page" : page_search,
 			"keyword" : search_keyword,
 			"playlist_code" : playlist_code
@@ -131,13 +130,16 @@ function getPlaylist_search(channel_code, page_search, playlist_code, keyword) {
 				div += "<div class='video_boxs'>"
 				$(playlist_search).each(function(){
 					div += "<div class='video_box'>";
-					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>";
+					div += "<video class='test_video' src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
+					div += "</a>";
+					div += "<p class='video_channel_p'>";
+					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<i class='fa-solid fa-circle-chevron-down'></i><a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
+					div += "<i class='fa-solid fa-circle-chevron-down'></i><a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
 					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";
@@ -149,7 +151,7 @@ function getPlaylist_search(channel_code, page_search, playlist_code, keyword) {
 			}
 		},
 		error : function(){
-			alert('히스토리_search 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 };	
@@ -160,11 +162,11 @@ function getPlaylist_search(channel_code, page_search, playlist_code, keyword) {
 if(search == 1) {
 	page_playlist = 1;
 	page_search = 1;
-	getPlaylist_new(channel_code, page_playlist, playlist_code);	
+	getPlaylist_new(page_playlist, playlist_code);	
 } else if(search != 1){
 	page_playlist = 1;
 	page_search = 1;
-	getPlaylist_search(channel_code, page_search, playlist_code, keyword);
+	getPlaylist_search(page_search, playlist_code, keyword);
 };
 
 //검색 버튼을 클릭했을 때 #search_keyword
@@ -174,7 +176,7 @@ $(document).on("click", "#search_img", function(){
 	$(".video_boxs").remove();
 	page_playlist = 1;
 	page_search = 1;
-	getPlaylist_search(channel_code, page_search, playlist_code, keyword);
+	getPlaylist_search(page_search, playlist_code, keyword);
 });
 
 //무한 스크롤
@@ -188,10 +190,10 @@ $(window).scroll(function(){
 		
 		if(loading_playlist == true){
 			page_playlist++;
-			getPlaylist_new(channel_code, page_playlist, playlist_code);
+			getPlaylist_new(page_playlist, playlist_code);
 		} else if(loading_search == true){
 			page_search++;
-			getPlaylist_search(channel_code, page_search, playlist_code, keyword);
+			getPlaylist_search(page_search, playlist_code, keyword);
 		}
 	}
 }); //scroll end
@@ -239,7 +241,7 @@ $(window).scroll(function(){
 			
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="#playlist_stop"><i class="fa-solid fa-circle-stop"></i>&nbsp;&nbsp;시청 기록 일시정지</a></p>
+					<p><a class="btn" href="#playlist_modify"><i class="fa-solid fa-circle-stop"></i>&nbsp;&nbsp;재생목록 수정하기</a></p>
 				</div>
 			</div>
 		</div>
@@ -285,7 +287,7 @@ $(window).scroll(function(){
 	<br>
 	<button class="model_btn" onclick="location.href='delete_playlist.do?channel_code=${channel_code }&playlist_code=${playlist_code }'"><i class="fa-solid fa-square-check" style="font-size: 30px"></i></button>
 </div>
-<div id="playlist_stop" class="modal">
+<div id="playlist_modify" class="modal">
 	<p class="model_title">시청 기록을 중지할까요?</p>
 	<br>
 	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 기록 중지됩니다.(임시 내용입니다)</p>

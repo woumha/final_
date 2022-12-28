@@ -24,7 +24,24 @@ public class ReplyDTO {
 	private int reply_bad;
 	private String reply_group;
 	
+	// myPage 댓글에 사용할 내용
+	private String video_title;
+	private String video_img;
+	// video_play 테이블의 channel_code
+	private String video_owner;
 	
+	public String getVideo_title() {
+		return video_title;
+	}
+	public void setVideo_title(String video_title) {
+		this.video_title = video_title;
+	}
+	public String getVideo_img() {
+		return video_img;
+	}
+	public void setVideo_img(String video_img) {
+		this.video_img = video_img;
+	}
 	public String getVideo_code() {
 		return video_code;
 	}
@@ -108,6 +125,12 @@ public class ReplyDTO {
 	}
 	public void setReply_group(String reply_group) {
 		this.reply_group = reply_group;
+	}
+	public String getVideo_owner() {
+		return video_owner;
+	}
+	public void setVideo_owner(String video_owner) {
+		this.video_owner = video_owner;
 	}
 	
 	

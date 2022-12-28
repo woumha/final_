@@ -9,4 +9,5 @@ public class BundleDTO {
 	private String bundle_regedate;
 	private int playlist_open;
 	private String channel_code;
+	private int check;
 }

@@ -29,6 +29,14 @@ public class BundleDAOImpl implements BundleDAO {
 	
 	@Override
 	public int bundleDel(String bundleCode) {
-		return this.session.delete("bundleDel", bundleCode);
+		int check = this.session.delete("bundleDel", bundleCode);
+		int result = 0;
+		if(check > 0) {
+			result = this.session.update("bundleVideoDel", bundleCode);
+		} else {
+			result = 0;
+		}
+		
+		return result;
 	} // 재생목록 삭제
 }
