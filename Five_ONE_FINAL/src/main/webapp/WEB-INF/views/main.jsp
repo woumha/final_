@@ -189,9 +189,9 @@ function getContextPath(){
 										"src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>" +
 									 "</td>";		
 									 
-							table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-										"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-										+ '&nbsp;' + "<a class='vidi_ti'>" + this.video_title + "</a>" + "</td>";
+							table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" +
+										"<img class='channel_profile' src='" + getContextPath() + "/resources/img/channel_profile/" + this.channel_profil+ "'>"
+										+ '&nbsp;' + "<a class='vidi_ti' href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" + this.video_title + "</a>" + "</td>";
 
 							table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 										"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
@@ -280,11 +280,11 @@ function getMainVideoList_recent(page_rec){
 					table += "<td colspan='2'>" +
 								"<video class='test_video' width='320px' height='180px'" +
 								"src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>" +
-							 "</td>";		
-							 
-					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-								+ '&nbsp;' + "<a class='vidi_ti'>" + this.video_title + "</a>" + "</td>";
+							"</td>";		
+									 
+					table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" +
+								"<img class='channel_profile' src='" + getContextPath() + "/resources/img/channel_profile/" + this.channel_profil+ "'>"
+							+ '&nbsp;' + "<a class='vidi_ti' href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" + this.video_title + "</a>" + "</td>";
 
 					table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 								"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
@@ -431,15 +431,15 @@ function getMainVideoList_recent(page_rec){
 					
 						table += "<tr>";
 						
-						//비디오(비디오 포스터 경로+ 비디오 경로)
 						table += "<td colspan='2'>" +
 									"<video class='test_video' width='320px' height='180px'" +
 									"src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>" +
 								 "</td>";		
-								 
-						table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
-									"<img class='channel_profile' src='" + getContextPath() + "/resources/img/" + this.channel_profil+ "'>"
-									+ '&nbsp;' + this.video_title + "</td>";
+					 
+						table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" +
+									"<img class='channel_profile' src='" + getContextPath() + "/resources/img/channel_profile/" + this.channel_profil+ "'>"
+									+ '&nbsp;' + "<a class='vidi_ti' href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" + this.video_title + "</a>" + "</td>";
+
 
 						table += "<td class = 'video_channel'>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
 									"<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" + this.channel_name + "</td>";
