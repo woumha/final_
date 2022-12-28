@@ -9,4 +9,5 @@ public class PlaylistDTO {
 	private String playlist_code;
 	private String video_code;
 	private String playlist_regdate;
+	private String video_title;
 }

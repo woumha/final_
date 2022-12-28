@@ -52,14 +52,38 @@ function getReply_list(channel_code, page){
 				
 				div += "<div class='video_boxs'>";
 				
+				
+				
 				$(reply_div).each(function(){
+					
+					div += "<div class='reply_box'>";
+					div += "<div class='delete_reply'>";
+					div += "<form method='post' action='<%=request.getContextPath()%>/my_reply_delete.do'>";
+					div += "<input type='hidden' name='reply_code' value='"+this.reply_code+"'>";					
+					div += "<input type='hidden' name='reply_group' value='"+this.reply_group+"'>";					
+					div += "<input type='hidden' name='channel_code' value='"+channel_code+"'>";					
+					div += "<input type='image' class='video_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "</form>";
+					div += "</div>";
+					div += "<div class='reply_text_box'>";
+					div += "<div class='reply_cont'>"+this.reply_cont+"</div>";
+					div += "<a href='"+getContextPath()+"/watch.do?video_code="+this.video_code+"'>";
+					div += "<div class='video_title'>"+this.video_title+"</div>";
+					div += "</a>";
+					div += "<div class='video_title_sub'>에 남긴 댓글</div>";
+					div += "<div class='reply_regdate'>"+this.reply_regdate+"</div>";
+					div += "</div>";
+					div += "<div class='video_img_box'>";
+					div += "<img class='video_img' src='"+getContextPath()+"/resources/AllChannel/"+this.video_owner+"/thumbnail/"+this.video_img+"'>";
+					div += "</div>";
+					div += "</div>";
+					div += "<hr class='reply_line'>";
 					
 				});
 				
 				div += "</div>";
 				
 				loading = true;
-				
 				$("#ajax_area").append(div);
 			}
 		},
@@ -69,14 +93,17 @@ function getReply_list(channel_code, page){
 	});
 }
 
-function getReply_delete_list(channel_code, page){
-
+function getReply_delete_list(channel_code, page, code, group, comment){
+	console.log("code >>> " + code);
 	$.ajax({
 
 		url : getContextPath() +"/delete_one_my_reply.do",
 		data : {
 			"channel_code" : channel_code,
-			"page" : page
+			"page" : page,
+			"reply_code" : code,
+			"reply_group" : group,
+			"reply_comment" : comment
 		},
 		datatype : 'JSON',
 		contentType : "application/json; charset=UTF-8",
@@ -98,12 +125,29 @@ function getReply_delete_list(channel_code, page){
 				
 				$(reply_div).each(function(){
 					
+					div += "<div class='reply_box'>";
+					div += "<div class='delete_reply'>";
+					div += "<a href='"+getContextPath()+"/my_reply_delete.do?reply_code="+this.reply_code+"&channel_code="+channel_code+"'>";
+					div += "<img class='video_d_img' onclick='reply_delete("+"this.reply_code"+","+"this.reply_group"+","+this.reply_comment+")' src='"+getContextPath()+"/resources/img/x.png'>";
+					div += "</div>";
+					div += "<div class='reply_text_box'>";
+					div += "<div class='reply_cont'>"+this.reply_cont+"</div>";
+					div += "<a href='"+getContextPath()+"/watch.do?video_code="+this.video_code+"'>";
+					div += "<div class='video_title'>"+this.video_title+"</div>";
+					div += "</a>";
+					div += "<div class='video_title_sub'>에 남긴 댓글</div>";
+					div += "<div class='reply_regdate'>"+this.reply_regdate+"</div>";
+					div += "</div>";
+					div += "<div class='video_img_box'>";
+					div += "<img class='video_img' src='"+getContextPath()+"/resources/AllChannel/"+this.video_owner+"/thumbnail/"+this.video_img+"'>";
+					div += "</div>";
+					div += "</div>";
+					div += "<hr class='reply_line'>";
 				});
 				
 				div += "</div>";
 				
 				loading = true;
-				
 				$("#ajax_area").append(div);
 			}
 		},
@@ -113,6 +157,14 @@ function getReply_delete_list(channel_code, page){
 	}); 
 }
 
+
+function reply_delete(code, group, comment) {
+	page = 1;
+	console.log("삭제 함수 code >>> " + code);
+	console.log("삭제 함수 group >>> " + group);
+	console.log("삭제 함수 comment >>> " + comment);
+	getReply_delete_list(channel_code, page, code, group, comment);
+}
 
 // 기본 실행 함수
 getReply_list(channel_code, page);	
@@ -145,13 +197,15 @@ $(window).scroll(function(){
 	<!-- 작성한 댓글 영역 -->
 	<c:if test="${!empty channel_code }">
 	<div id="my_reply_title"><p><i class="fa-solid fa-comment"></i>&nbsp;&nbsp;댓글 목록</p></div>
-	
+<%-- 	
 	<div class='video_boxs'>
-		<div class="delete_reply">X</div>
+		<div class="delete_reply">
+			<img class='video_d_img' src='${pageContext.request.contextPath }/resources/img/x.png'>
+		</div>
 		<div class="reply_text_box">
-			<div class="reply_cont">댓글 내용 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+			<div class="reply_cont">댓글 내용 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~rthbrfhhrhtr~~~~~~</div>
 			<a href="#">
-				<div class="video_title">동영상 제목 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+				<div class="video_title">동영상 제목 ~~~~~~~~~~~~~~~~~~~~~~~~~~~vrggrehegwfguiwbgfuwbnufnbsweugubnub~~~~~~~ny~~</div>
 			</a>		
 			<div class="reply_regdate">댓글 작성일 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>		
 		</div>
@@ -159,10 +213,12 @@ $(window).scroll(function(){
 			<img class="video_img" src="${pageContext.request.contextPath}/resources/hochan_img/vidi.png">
 		</div>
 	</div>
-	
+--%>
 	
 	<div id="ajax_area"></div>
-
+	
+	<div id="reply_end">더 이상 표시할 콘텐츠가 없습니다.</div>
+	
 	</c:if>
 	<!-- 로그인 안했을 시 -->
 	<c:if test="${empty channel_code }">

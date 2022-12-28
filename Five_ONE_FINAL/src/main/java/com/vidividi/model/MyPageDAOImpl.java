@@ -57,14 +57,9 @@ public class MyPageDAOImpl implements MyPageDAO {
 	public List<VideoPlayDTO> getHistory_search(Map<String, Object> map) {
 		return this.sqlSession.selectList("history_search", map); }
 	@Override
-	public int getHistory_num(Map<String, Object> map) {
-		return this.sqlSession.selectOne("getHistory_num", map); }
-	@Override
-	public int history_search_one_delete(int num) {
-		return this.sqlSession.delete("history_search_one_delete", num); }
-	@Override
-	public int updateSequence(int num) {
-		return this.sqlSession.update("updateSeq", num); }
+	public int history_search_one_delete(Map<String, Object> map) {
+		return this.sqlSession.delete("history_search_one_delete", map); }
+
 	@Override
 	public int delete_history(String code) {
 		return this.sqlSession.delete("delete_history", code); }
@@ -157,11 +152,19 @@ public class MyPageDAOImpl implements MyPageDAO {
 		map.put("code", code); map.put("startNo", startNo); map.put("endNo", endNo);
 		return this.sqlSession.selectList("getMy_reply_list", map); }
 	@Override
-	public int delete_group_reply(Map<String, Object> map) {
-		return this.sqlSession.delete("delete_group_reply", map); }
+	public int delete_group_reply(String group) {
+		return this.sqlSession.delete("delete_group_reply", group); }
 	@Override
-	public int delete_one_reply(Map<String, Object> map) {
-		return this.sqlSession.delete("delete_one_reply", map); }
+	public int delete_one_reply(String code) {
+		return this.sqlSession.delete("delete_one_reply", code); }
+	@Override
+	public String getMy_reply_group(String code) {
+		return this.sqlSession.selectOne("getMy_reply_group", code);
+	}
+	@Override
+	public int getMy_reply_comment(String code) {
+		return this.sqlSession.selectOne("getMy_reply_comment", code);
+	}
 	
 	
 	
