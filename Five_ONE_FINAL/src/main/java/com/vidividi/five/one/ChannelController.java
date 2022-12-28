@@ -666,27 +666,13 @@ public class ChannelController {
 	}
 	
 	// 하나 채널 정보 수정하기(modify: json)
-	@ResponseBody
 	@RequestMapping(value="channelModify.do", produces = "application/text; charset=UTF-8")
-	public String channelModify(@RequestParam Map<String, Object> map, Model model) {
+	public String channelModify(@RequestParam Map<String, Object> map, Model model, HttpServletResponse response) {
 		String channelCode = (String)map.get("channelCode");
 		
 		ChannelDTO dto = this.dao.getChannelOwner(channelCode);
 		
-		JSONObject obj = new JSONObject();
-		
-		obj.put("channel_code", dto.getChannel_code());
-		obj.put("channel_name", dto.getChannel_name());
-		obj.put("channel_banner", dto.getChannel_banner());
-		obj.put("channel_profil", dto.getChannel_profil());
-		obj.put("channel_cont", dto.getChannel_cont());
-		obj.put("channel_like", dto.getChannel_like());
-		obj.put("channel_live", dto.getChannel_live());
-		obj.put("channel_date", dto.getChannel_date());
-		obj.put("channel_lastupload", dto.getChannel_lastupload());
-		obj.put("member_code", dto.getMember_code());
-		
-		model.addAttribute("jsonObj", obj);
+		model.addAttribute("channel", dto);
 		
 		return "channel/channel_modify";
 	}
