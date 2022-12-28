@@ -16,9 +16,11 @@ import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
 import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate.Param;
 import com.vidividi.service.FormatCnt;
+import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Repository
@@ -227,6 +229,7 @@ public class WatchDAOImpl implements WatchDAO {
 		map.put("feedback_good", feedback_good);
 		
 		this.sqlSession.insert("insertFeedback", map);
+		
 	}
 
 
@@ -266,7 +269,7 @@ public class WatchDAOImpl implements WatchDAO {
 		map.put("option", option);
 		map.put("video_code", video_code);
 		
-		this.sqlSession.update("miusVideoGood", map);
+		this.sqlSession.update("minusVideoGood", map);
 		
 		return (int) map.get("cnt");
 	}
@@ -287,7 +290,6 @@ public class WatchDAOImpl implements WatchDAO {
 	@Override
 	public void inputReply(String video_code, String reply_code, String reply_cont, int reply_comment, String reply_group,
 			String repChannelCode) {
-		System.out.println("넘어옴");
 		
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		map.put("video_code", video_code);
@@ -328,6 +330,77 @@ public class WatchDAOImpl implements WatchDAO {
 	public void updateReplyComment(String reply_code) {
 		
 		this.sqlSession.update("updateComment", reply_code);
+	}
+
+
+	@Override
+	public int plusReplyGood(String reply_code, String option) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("option", option);
+		map.put("reply_code", reply_code);
+		
+		this.sqlSession.update("plusReplyGood", map);
+		
+		return (int) map.get("cnt");
+	}
+
+
+	@Override
+	public int minusReplyGood(String reply_code, String option) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("option", option);
+		map.put("reply_code", reply_code);
+		
+		this.sqlSession.update("minusReplyGood", map);
+		
+		return (int) map.get("cnt");
+	}
+
+
+	@Override
+	public int changeReply(String reply_code, String option) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("reply_code", reply_code);
+		map.put("option", "reply_good");
+		
+		this.sqlSession.update(option, map);
+		
+		return  (int) map.get("cnt");
+	}
+
+
+	@Override
+	public void newPlaylist(String bundle_code, String playlist_title, int playlist_open, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("bundle_code", bundle_code);
+		map.put("playlist_title", playlist_title);
+		map.put("playlist_open", playlist_open);
+		map.put("repChannelCode", repChannelCode);
+		
+		this.sqlSession.insert("newPlaylist", map);
+	}
+
+
+	@Override
+	public List<BundleDTO> getBundleList(String repChannelCode) {
+		return this.sqlSession.selectList("getMyBundleList", repChannelCode);
+	}
+
+
+	@Override
+	public List<PlaylistDTO> getMyPlayList(String video_code, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("video_code", video_code);
+		map.put("repChannelCode", repChannelCode);
+		
+		return this.sqlSession.selectList("getMyPlaylist", map);
 	}
 
 
