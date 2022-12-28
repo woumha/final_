@@ -84,7 +84,7 @@ function getPlaylist_new(page_playlist, playlist_code){
 					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<i class='fa-solid fa-circle-chevron-down'></i><a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
+					div += "<a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
 					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";
@@ -139,7 +139,7 @@ function getPlaylist_search(page_search, playlist_code, keyword) {
 					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<i class='fa-solid fa-circle-chevron-down'></i><a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
+					div += "</i><a href='"+getContextPath()+"/playlist_one_delete.do?video_code="+this.video_code+"&search="+search+"&playlist_code="+this.playlist_code+"'>";
 					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";

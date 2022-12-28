@@ -157,7 +157,7 @@ margin-bottom: 10px;
 }
 
 .channel_hr { width: 90%; }
-.channel_profil {width: 20px;}
+.channel_profil {width: 20px; border-radius: 50%;}
 #profile_box { margin-bottom: 20px; }
 
 /* 로그인 안했을 시 */
@@ -344,6 +344,7 @@ font-size: 12px;
 
 .reply_box {
 margin-bottom: 30px;
+margin-left: 80;
 }
 
 .video_img {
