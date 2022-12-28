@@ -44,8 +44,8 @@ public class UploadFile {
 		System.out.println("uploadVideoPath: " + uploadVideoPath);
 		
 		// 들어오기 전부터 뭔가를 해야할듯...
-		String extMovieArr[] = { "mp4" };
-		String extImgArr[] = { "png" };
+		String extMovieArr[] = { "mp4",  };
+		String extImgArr[] = { "png", "jpg" };
 		
 		while(iterator.hasNext()) {
 			
@@ -94,12 +94,11 @@ public class UploadFile {
 			for(int i=0; i<extImgArr.length; i++) {
 				if(ext.equals(extImgArr[i])) {
 					// 실제 폴더를 만들어보자 
-					// .... \\resources\\upload\\2022-11-25
 					dateFolder = uploadVideoPath + lastChannelCode + "/thumbnail";
-					File path1 = new File(dateFolder); // 폴더 경로
+					File path2 = new File(dateFolder); // 폴더 경로
 					
-					if(!path1.exists()) {
-						path1.mkdirs();
+					if(!path2.exists()) {
+						path2.mkdirs();
 					}
 					
 					// 실제 저장되는 파일 이름

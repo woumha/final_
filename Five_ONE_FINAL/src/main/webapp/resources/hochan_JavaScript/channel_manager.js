@@ -363,7 +363,7 @@ function changeBtn() {
 
 function videoDelete(videoCode, channelCode, title) {
 	if(!(confirm('영상을 삭제하면 다시 불러올 수 없습니다. 그래도 삭제하시겠습니까?'))) {
-		location.reload();
+		
 	} else {
 		$.ajax({
 		url: getContextPath() + "/videoDelete.do",
@@ -436,24 +436,19 @@ function videoDelete(videoCode, channelCode, title) {
 }
 
 function managerModify(channelCode) {
+	
 	$.ajax({
 		url: getContextPath() + "/channelModify.do",
 		data: {
 			"channelCode": channelCode	
 		},
-		datatype: 'html',
+		datatype: "html",
 		success: function(data) {
-			const check = data;
-			
-			if(check == "[]") {
-				loading_playlist = false;
-			} else {
-				list = JSON.parse(data);
-				$(".video_detail_area").html(li);
-				
-				//li += '<form method="POST" action="'+ getContextPath() +'/channel_modify.do?ccode='+ list.channelCode +'">';
-				//li += ''
-			}
+			$(".video_detail_area").html(data);
+		},
+		error: function() {
+			alert('채널 수정 페이지 오류');
+			location.reload();
 		}
 	});
 }
