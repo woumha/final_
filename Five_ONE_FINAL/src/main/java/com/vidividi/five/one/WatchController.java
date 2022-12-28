@@ -48,6 +48,7 @@ import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
+import com.vidividi.variable.HistoryDTO;
 import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
@@ -107,6 +108,8 @@ public class WatchController{
 			Model model, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
 		
+		this.dao.plusViewCnt(video_code);
+		
 		// 재생목록 체크
 		if(playList_code == null || playList_code.equals("")) {
 		}else {
@@ -126,7 +129,31 @@ public class WatchController{
 			model.addAttribute("subscribe_dto", subscribe_dto);
 			model.addAttribute("good_dto", good_dto);
 			model.addAttribute("channel_dto", channel_dto);
+			
+			
+			
+			// history에 이미 시청기록이 있는지 부터 확인
+			HistoryDTO dto = null;
+			Map<String,Object>map = new HashMap<String,Object>();
+			map.put("channel_code", repChannelCode); map.put("video_code", video_code);
+			dto = this.dao.checkHistory(map);	
+	
+			// 해당 유저(channel_code)의 member_historysave가 1인지 확인 
+			int historysave_check = this.dao.getHistory_save(repChannelCode);	
+	
+			if(historysave_check == 1) {
+			if(dto == null) {
+			this.dao.insert_history(map);
+			}else if(dto != null) {
+			this.dao.update_history(map);
+			}
+			}
+			
+			
 		}
+		
+		
+		
 		
 		
 		
@@ -421,6 +448,8 @@ public class WatchController{
 	@RequestMapping("getBundleList.do")
 	public List<BundleDTO> getPlaylist(@RequestParam("video_code")String video_code, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode){
 		
+		System.out.println("실행");
+		
 		List<BundleDTO> myBundleList = this.dao.getBundleList(repChannelCode);
 		List<PlaylistDTO> myPlayList = this.dao.getMyPlayList(video_code, repChannelCode);
 		
@@ -430,16 +459,32 @@ public class WatchController{
 			
 				if(playlistDTO.getPlaylist_code().equals(bundleDTO.getBundle_code())) {
 					bundleDTO.setCheck(1);
-				}else {
-					bundleDTO.setCheck(0);
 				}
-			
+				
 			}
 		}
+		
+		
 		
 		return myBundleList;
 	}
 	
+	@ResponseBody
+	@RequestMapping("addPlaylist.do")
+	public void addPlaylist(@RequestParam("video_code")String video_code, @RequestParam("playlist_code")String playlist_code, @RequestParam("playlist_title")String playlist_title,
+			@SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+		
+		
+		this.dao.addPlaylist(video_code, playlist_code, playlist_title, repChannelCode);
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("deletePlaylist.do")
+	public void deletePlaylist(@RequestParam("video_code")String video_code, @RequestParam("playlist_code")String playlist_code, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+		this.dao.deletePlaylist(video_code, playlist_code, repChannelCode);
+		
+	}
 
 	
 	@RequestMapping("test.do")

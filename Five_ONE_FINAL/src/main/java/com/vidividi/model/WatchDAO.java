@@ -2,6 +2,7 @@ package com.vidividi.model;
 
 import java.security.PublicKey;
 import java.util.List;
+import java.util.Map;
 
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
@@ -9,10 +10,19 @@ import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
+import com.vidividi.variable.HistoryDTO;
 import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 public interface WatchDAO {
+	
+	public int getHistory_save(String repChannelCode);
+	
+	public HistoryDTO checkHistory(Map<String, Object> map);
+		
+	public int insert_history(Map<String, Object> map);
+	public int update_history(Map<String, Object> map);
+	
 
 	public VideoPlayDTO getVideo(String video_code);
 
@@ -87,6 +97,12 @@ public interface WatchDAO {
 	public List<BundleDTO> getBundleList(String repChannelCode);
 
 	public List<PlaylistDTO> getMyPlayList(String video_code, String repChannelCode2);
+
+	public void addPlaylist(String video_code, String playlist_code, String playlist_title, String repChannelCode);
+
+	public void deletePlaylist(String video_code, String playlist_code, String repChannelCode);
+
+	public void plusViewCnt(String video_code);
 
 	
 	
