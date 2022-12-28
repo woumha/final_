@@ -42,10 +42,17 @@
 			</div>
 			<div class="card left_card" style="width: 18rem;">
 				<div class="card-body">
-					<div class="channel_button_area">
-					  	<button type="button" onclick="managerModify('${channelOwner.channel_code}')" class="btn btn-success" id="listmake">채널 수정하기</button>
-					  							
-					  	<button type="button" onclick="newVideo()" class="btn btn-success" id="videoMake" data-toggle="modal" data-target="#videoUploadModal">영상 업로드하기</button>
+					<div class="row channel_button_area">
+						<div class="col-6">
+						  	<button type="button" onclick="managerModify('${channelOwner.channel_code}')" class="btn btn-success" id="listmake">채널 수정</button>						
+						</div>
+					  	<div class="col-6">
+						  	<button type="button" onclick="newVideo()" class="btn btn-success" id="videoMake" data-toggle="modal" data-target="#videoUploadModal">영상 업로드</button>					  	
+					  	</div>
+					  	<div class="col-6">
+						  	<button type="button" onclick="location.href='<%=request.getContextPath() %>/channel_manager.do?code=${channelOwner.channel_code }'" class="btn btn-success btn-sm" id="videoManager">영상 관리하기</button>				  	
+					  	</div>
+					  	
 					  	<!-- 비디오 업로드 모달 -->
 						<div class="modal fade" id="videoUploadModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						  <div class="modal-dialog modal-xl" role="document">
@@ -68,7 +75,7 @@
                      	<ul class="nav flex-column ms-3" id="bundleList">
                      	<c:forEach items="${bundle }" var="bundledto" varStatus="status">
                      		<li class="w-100 index">
-                             	<a class="nav-link px-3 bundle_text" style="display: inline-block;" onclick="bundleDetail('${bundledto.bundle_code }')">
+                             	<a href="javascript:void(0)" class="nav-link px-3 bundle_text" style="display: inline-block;" onclick="bundleDetail('${bundledto.bundle_code }')">
                              		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-note-list icon black" viewBox="0 0 16 16">
 									  <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z"/>
 									  <path fill-rule="evenodd" d="M12 3v10h-1V3h1z"/>
@@ -208,7 +215,8 @@
 	    	
 	    </div>
 	  </div>
-	</div>		
+	</div>
+	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel_modify.js"></script>
 	<script type="text/javascript" src="${path }/resources/hochan_JavaScript/channel_manager.js"></script>
 	<!-- member js -->
 	<script src="${path}/resources/member/member_js.js"></script>
