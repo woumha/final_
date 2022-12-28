@@ -22,11 +22,11 @@ public interface LoginService {
 	String generateChannelCode();
 	String generateVideoCode();
 	String generatePWD(int size);
-	String insertMember(MemberDTO dto, String via);
+	String insertMember(MemberDTO dto, String via, String socialPsa);
 	String generateBundleCode(); // 재생목록 코드
 	String generateSubscribe();
 	
-	ChannelDTO newChannel(String memberCode, String channelCode, String memberName);
+	ChannelDTO newChannel(String memberCode, String channelCode, String memberName, String socialPsa);
 	int getAge(String date);
   
 	String generateGoodCode();

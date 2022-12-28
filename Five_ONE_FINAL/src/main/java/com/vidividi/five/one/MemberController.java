@@ -161,7 +161,7 @@ public class MemberController {
 	@ResponseBody
 	@RequestMapping("joinOk.do")
 	public String joinMember(MemberDTO memberDTO) {
-		return service.insertMember(memberDTO, "joinForm");
+		return service.insertMember(memberDTO, "joinForm", "");
 	}
 	
 	
@@ -309,7 +309,7 @@ public class MemberController {
 		System.out.println(memberCode);
 		System.out.println(channelCode);
 		System.out.println(dto.getMember_name());
-		ChannelDTO channelDTO = service.newChannel(memberCode, channelCode, dto.getMember_name());
+		ChannelDTO channelDTO = service.newChannel(memberCode, channelCode, dto.getMember_name(), "");
 		int check = channelDAO.insertChannel(channelDTO);
 		
 		if (check > 0) {
@@ -439,7 +439,8 @@ public class MemberController {
 			mdto.setMember_email(gdto.getGoogle_email());
 			mdto.setMember_id("g-"+gdto.getGoogle_id());
 			 
-			service.insertMember(mdto, "google"); service.socialLogin(gdto, session);
+			service.insertMember(mdto, "google", gdto.getGoole_pictureURL()); 
+			service.socialLogin(gdto, session);
 						
 			return "joined";
 		}else if (check.equals("google")) { // 회원인데 구글 링크 된 경우
@@ -476,7 +477,7 @@ public class MemberController {
 			mdto.setMember_email(kdto.getKakao_email());
 			mdto.setMember_id("k-"+kdto.getKakao_id());
 			
-			service.insertMember(mdto, "kakao");
+			service.insertMember(mdto, "kakao", kdto.getKakao_profile());
 			service.socialLogin(kdto, session);
 			
 		}else if (check.equals("kakao")) { // 회원인데 카카오 링크 된 경우
@@ -510,7 +511,7 @@ public class MemberController {
 			mdto.setMember_phone(ndto.getNaver_phone());
 			mdto.setMember_birth(ndto.getNaver_birth());
 			
-			service.insertMember(mdto, "naver");
+			service.insertMember(mdto, "naver", ndto.getNaver_profile());
 			service.socialLogin(ndto, session);
 		}else if (check.equals("naver")) { // 회원인데 네이버 링크 된 경우
 			service.socialLogin(ndto, session);

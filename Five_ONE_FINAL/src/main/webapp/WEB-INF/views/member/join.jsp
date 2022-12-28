@@ -25,6 +25,8 @@
 <!-- bootstrap icon -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
 
 <style type="text/css">
 

@@ -60,8 +60,8 @@
  		insert into user_channel values(
  			#{channel_code},
  			#{channel_name},
- 			default,
- 			default,
+ 			#{channel_banner},
+ 			#{channel_profil},
  			'',
  			default,
  			'',

@@ -5,7 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
 <script type="text/javascript">
 
 function newChannel(code){

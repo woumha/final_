@@ -25,6 +25,9 @@
 <!-- 카카오 주소 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
+
 <script type="text/javascript">
 
 
