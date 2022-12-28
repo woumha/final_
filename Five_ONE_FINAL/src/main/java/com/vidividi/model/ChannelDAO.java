@@ -59,4 +59,7 @@ public interface ChannelDAO {
 	
 	// 구독 인, 아웃
 	public boolean inOutSubscribe(SubscribeDTO subdto);
+	
+	// 영상 삭제
+	public int videoDelete(String video_code);
 }

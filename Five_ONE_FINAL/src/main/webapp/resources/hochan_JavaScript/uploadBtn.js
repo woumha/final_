@@ -131,7 +131,7 @@ let hashText = [];
 
 // form 태그 보내는곳@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 $(function() {
-	$(".icon_change").on("click", function() {
+	$(".submit_video").on("click", function() {
 		$(".upload_input_file").click();
 	});
 	
@@ -142,21 +142,21 @@ $(function() {
 					$("#floatingTextarea3").val("null");
 				}
 				
+				let radioAgeId = $("input[name=flexRadioDefault_age]:checked").attr("id");
+				let radioAge = $("label[for='" + radioAgeId + "']").text();
+				
 				let radioOpenId = $('input[name=flexRadioDefault_openClose]:checked').attr("id");
 				let radioOpen = $("label[for='" + radioOpenId + "']").text();
 				
-				let radioAgeId = $("input[name=flexRadioDefault_age]:checked").attr("id");
-				let radioAge = $("label[for='" + radioAgeId + "']").text();
 				
 				$("#selectOpen").val(radioOpen);
 				$("#selectAge").val(radioAge);
 				
-				
 				let bundle = $("#bundleCheck option:selected").text();
-				let bundleTag = `<input type="hidden" name="bundleText" value=${bundle}>`;
-				$(".bundleDiv").append(bundleTag);
-				//$(".bundleDiv").html(bundleTag);
 				
+				let bundleTag = `<input type="hidden" name="bundleText" id="bundleText" value=${bundle}>`;
+				$(".bundleDiv").append(bundleTag);
+			
 				$("#send_form").submit();
 			} else {
 				alert("제목을 입력 안하셨어요 :)");
@@ -183,7 +183,6 @@ imgInputTag.addEventListener("change", function() {
 	file = this.files[0];
  	
  	let fileType = file.type;
- 	console.log(fileType);
  	//let vaildExtensions = ["video/quicktime", "video/mp4", "video/wmv", "video/avi", "video/avchd", "video/mpeg-2"]; // 모든 목록
  	
  	showFile2() // calling function 	

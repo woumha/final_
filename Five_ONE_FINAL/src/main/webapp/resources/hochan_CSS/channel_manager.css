@@ -55,6 +55,11 @@
 	background-color: #ECE9EF;
 }
 
+.channel_button_area {
+	display: flex;
+}
+
+
 .bundle_text:hover {
 	color: green;
 }
@@ -82,12 +87,12 @@
 
 #listmake {
 	font-size: 14px;
-	margin: 6px;
+	margin: 4px;
 }
 
 #videoMake {
 	font-size: 14px;
-	margin: 6px;
+	margin: 4px;
 }
 
 /* 영상 썸네일 이미지 */
@@ -113,3 +118,10 @@
 .arrow.upload_btn:hover {
 	color: #f78411;
 }
+
+#noVideoArea {
+	justify-content: center;
+	align-items:center;
+	padding-top: 10%;
+}
+

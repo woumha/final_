@@ -83,9 +83,7 @@
 	  </div>
 	   <c:if test="${empty current}">
 	    	<div class="col-lg-12 align-self-center div_upload_btn">
-	    		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle arrow upload_btn" viewBox="0 0 16 16">
-				  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
-				</svg>
+				<img alt="" class="style-scope ytcp-video-section-content" src="https://www.gstatic.com/youtube/img/creator/no_content_illustration_upload_video_v3.svg">	
 				<div class="arrow upload_font">시청자들에게 영상 보여주기</div>
 	    	</div>
 	    </c:if>
@@ -107,7 +105,7 @@
 			    <button class="nav-link" id="infor-tab" data-bs-toggle="tab" data-bs-target="#infor-tab-pane" type="button" role="tab" aria-controls="infor-tab-pane" aria-selected="false">정보</button>
 			  </li>
 			  <li class="nav-item" role="presentation">
-			    <yt-icon icon="yt-icons:search" class="style-scope ytd-expandable-tab-renderer">
+			    <yt-icon icon="yt-icons:search" class="style-scope ytd-expandable-tab-renderer search_icon_size">
 			    	<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;">
 			    		<g class="style-scope yt-icon">
 			    			<path d="M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z" class="style-scope yt-icon">

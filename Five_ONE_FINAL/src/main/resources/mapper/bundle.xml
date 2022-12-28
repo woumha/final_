@@ -10,7 +10,7 @@
 	</select>
 	
 	<insert id="bundleAdd" parameterType="bundleDTO">
-		insert into bundlelist values (#{bundle_code}, #{bundle_title}, CURRENT_DATE, 1, #{channel_code})
+		insert into bundlelist values (#{bundle_code}, #{bundle_title}, default, default, #{channel_code})
 	</insert>
 	
 	<delete id="bundleDel" parameterType="String">

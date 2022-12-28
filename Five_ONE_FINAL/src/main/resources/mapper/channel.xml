@@ -114,6 +114,13 @@
 		delete from subscribe where channel_code = #{channel_code} and member_code = #{member_code}
 	</delete>
 	
+	<delete id="videoPlayDel" parameterType="String">
+		delete from video_play where video_code = #{video_code}
+	</delete>
+	
+	<delete id="playlistDel" parameterType="String">
+		delete from playlist where video_code = #{video_code}
+	</delete>
  </mapper>
   
  
