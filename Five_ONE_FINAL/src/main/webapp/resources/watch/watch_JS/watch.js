@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 
-	$("link[rel=stylesheet][href*='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css']").remove();
+	//$("link[rel=stylesheet][href*='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css']").remove();
 
 	function getContextPath(){
 		
@@ -14,13 +14,11 @@ $(document).ready(function() {
 	let channel_code = $("#channel_code").val();
 	let category_code = $("#category_code").val();
 
-
-	let reply_group = 'a1a1a1';
 	let navOption = "all";
 	let reply_option = "most";
 
 	let page_reply = 1;
-	let page_comment = 1;
+	let page_comment;
 	let page_nav = 1;
 	
 	let loading_reply = true;
@@ -30,14 +28,10 @@ $(document).ready(function() {
 
 	let scroll_check = false;
 
-	
-	function repalceEnter(cont){
-		let replace_cont = cont.replaceAll(',', '\\n');
-		console.log('cont re>' +replace_cont);
-		return cont.replaceAll(',', '\\n');
-	}
 
-	function getReply(video_code, reply_option, channel_code, page_reply){
+
+	function getReply(video_code, reply_option, page_reply){
+
 
 		$.ajax({
 
@@ -45,7 +39,6 @@ $(document).ready(function() {
 			data : {
 				"video_code" : video_code,
 				"reply_option" : reply_option,
-				"channel_code" : channel_code,
 				"page" : page_reply 
 			},
 			datatype : 'JSON',
@@ -59,14 +52,19 @@ $(document).ready(function() {
 					return;
 				}else{
 					let reply = JSON.parse(data);
-					
-					let div = "";  
 
+					let div = "";
+
+					//div += myReply;
 
 					$(reply).each(function(){
+
+						let reply_cont = this.reply_cont.replaceAll("\\n","<br>");
+
 						div += "<div class='reply_box card_a' data-value='" +this.check_good+ "' data-code='" +this.check_code+ "'>";
 						
 						div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>";
+						div += "<input type='hidden' class='reply_group' name='reply_group' value='" +this.reply_group+ "'>";
 
 						div += "<div class='item_a'>";
 						div += "<div class='reply_wrap'>";
@@ -80,7 +78,7 @@ $(document).ready(function() {
 						div += "</div>";
 
 						div += "<div class='reply_cont_box'>";
-						div += "<div id='input_reply_cont'>" +this.reply_cont+ "</div>";
+						div += "<div id='input_reply_cont'>" +reply_cont+ "</div>";
 						//div += "<div id='input_reply_cont'>" +repalceEnter(this.reply_cont)+ "</div>";
 						div += "</div>";
 
@@ -93,7 +91,7 @@ $(document).ready(function() {
 						}else{
 							div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'>";
 						}
-						div += "<div>" +this.reply_good+ "</div></div></div>" //reply_goodbtn;
+						div += "<div class='good_cnt'>" +this.reply_good+ "</div></div></div>" //reply_goodbtn;
 
 						div += "<div class='reply_bad_btn'>";
 						if(this.check_good == 2){
@@ -145,7 +143,7 @@ $(document).ready(function() {
 	}	// getReply() end
 
 
-	function getComment(video_code, reply_group, page_comment){
+	function getComment(video_code, reply_group, page_comment, tag){
 
 		let div = "";
 
@@ -166,70 +164,80 @@ $(document).ready(function() {
 				let comment = JSON.parse(data);
 
 
-				$(comment).each(function(){
+				if(comment == "[]"){
+					div += data;
+				}else{
+					$(comment).each(function(){
+						
+						let reply_cont = this.reply_cont.replaceAll("\\n","<br>");
+
+						div += "<div class='comment_wrap card_a' data-value='" +this.check_good+ "' data-code='" +this.check_code+ "'>"; //card
+						div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>";
+						// commnet_wrap(item1)
+						div += "<div class='profile'>"; //.comment_wrap(item1)
+						div += "<img class='profile' src='" +getContextPath()+ "/resources/img/" +this.channel_profil+ "'>";
+						div += "</div>"; //.profile end
+						//comment_wrap(item2)
+						div += "<div class='comment_card card_c'>"; //card
+						// comment_card(item1)
+						div += "<div id='input_comment_writer' class='writer_info'>"; 
+						div += "<span class='reply_writer'>" +this.channel_name+ "</span>";
+						div += "<span class='reply_date'>" +this.reply_regdate+ "</span>";	
+						div += "</div>"; //#input_comment_writer end
+						// comment_card(item2)
+						div += "<div class='reply_cont_box'>"; 
+						div += "<div id='input_comment_cont'>" +reply_cont+ "</div>";
+						div += "</div>"; //.reply_cont_box end
+						// comment_card(item3)
+						div += "<div class='reply_action_box'>"; 
+						div += "<div class='toolbar_wrap card_a'>" //card
+						// toolbar(item1)
+						div += "<div class='comment_good_btn'><div class='card_b'>"; 
+						if(this.check_good == 1){
+							div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon_selected.svg'>";
+						}else{
+							div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'>";
+						}
+						div += "<div class='good_cnt'>" +this.reply_good+ "</div>";
+						div += "</div></div>"; //.reply_good_btn, .card_b
+						// toolbar(item2)
+						div += "<div class='comment_bad_btn'>"; 
+						if(this.check_good == 2){
+							div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon_selected.svg'>";
+						}else{
+							div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'>";
+						}
+						div += "</div>"; // .reply_bad_btn end
+						div += "</div>"; //.toolbar_wrap end
+						div += "</div>"; //.reply_action_box end
+
+						div += "</div>"; //.comment_card end
+
+						// comment_wrap(item3)
+						div += "<div class='render_box'>";
+						div += "<div class='render_wrap'>";
+						div += "<button class='render'><img class='render_icon' src='" +getContextPath()+ "/resources/watch/watch_img/render_icon.png'></button>";
+						div += "</div>"; // .render_wrap end
+						div += "</div>"; // .render_box end
+										
+						div += "</div>"; // .comment_wrap
+
+					});
+
+					if(comment.length == 3){
+
+						div += "<div class='comment_box'>";
+						div += "<div class='comment_menu card_c'><div class='comment_btn close'><button class='comment_toggle_more card_a' value='" +reply_group+ "'><img class='toggle open' src='" +getContextPath()+ "/resources/watch/watch_img/comment_open.png'>";
+						div += "<div class='comment_count'>답글 더보기</div>";
+						div += "</button></div>"
+						div += "</div>" // .comment_wrap
+						div += "<div class='input_comment'></div>";
+						div += "</div>"; //.comment_box
+					}
+
+						tag.append(div);
 					
-
-
-					div += "<div class='comment_wrap card_a' data-value='" +this.check_good+ "' data-code='" +this.check_code+ "'>"; //card
-					div += "<input type='hidden' class='reply_code' name='reply_code' value='" +this.reply_code+ "'>";
-					// commnet_wrap(item1)
-					div += "<div class='profile'>"; //.comment_wrap(item1)
-					div += "<img class='profile' src='" +getContextPath()+ "/resources/img/" +this.channel_profil+ "'>";
-					div += "</div>"; //.profile end
-					//comment_wrap(item2)
-					div += "<div class='comment_card card_c'>"; //card
-					// comment_card(item1)
-					div += "<div id='input_comment_writer' class='writer_info'>"; 
-					div += "<span class='reply_writer'>" +this.channel_name+ "</span>";
-					div += "<span class='reply_date'>" +this.reply_regdate+ "</span>";	
-					div += "</div>"; //#input_comment_writer end
-					// comment_card(item2)
-					div += "<div class='reply_cont_box'>"; 
-					div += "<div id='input_comment_cont'>" +this.reply_cont+ "</div>";
-					div += "</div>"; //.reply_cont_box end
-					// comment_card(item3)
-					div += "<div class='reply_action_box'>"; 
-					div += "<div class='toolbar_wrap card_a'>" //card
-					// toolbar(item1)
-					div += "<div class='comment_good_btn'><div class='card_b'>"; 
-					if(this.check_good == 1){
-						div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon_selected.svg'>";
-					}else{
-						div += "<img class='reply_good' src='" +getContextPath()+ "/resources/watch/watch_img/good_icon.svg'>";
-					}
-					div += "<div>" +this.reply_good+ "</div>";
-					div += "</div></div>"; //.reply_good_btn, .card_b
-					// toolbar(item2)
-					div += "<div class='comment_bad_btn'>"; 
-					if(this.check_good == 2){
-						div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon_selected.svg'>";
-					}else{
-						div += "<img class='reply_bad' src='" +getContextPath()+ "/resources/watch/watch_img/bad_icon.svg'>";
-					}
-					div += "</div>"; // .reply_bad_btn end
-					div += "</div>"; //.toolbar_wrap end
-					div += "</div>"; //.reply_action_box end
-
-					div += "</div>"; //.comment_card end
-
-					// comment_wrap(item3)
-					div += "<div class='render_box'>";
-					div += "<div class='render_wrap'>";
-					div += "<button class='render'><img class='render_icon' src='" +getContextPath()+ "/resources/watch/watch_img/render_icon.png'></button>";
-					div += "</div>"; // .render_wrap end
-					div += "</div>"; // .render_box end
-									
-					div += "</div>"; // .comment_wrap
-
-				});
-
-				if(comment.length == 10){
-					div += "<div class='comment_more'>";
-					div += "더보기ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ";
-
-					div += "</div>" //.comment_more
 				}
-
 				
 			},
 
@@ -273,8 +281,6 @@ $(document).ready(function() {
 		let startNo = ((page_nav * rowsize) - (rowsize - 1))-1;
 		let endNo = (page_nav * rowsize)-1;
 
-		console.log('nav > ' +nav_list.length);
-
 
 		let nav = "";
 		if(nav_list.length == 0){
@@ -312,7 +318,6 @@ $(document).ready(function() {
 
 					nav += "</div>"; // .video_list_box end
 
-					//console.log('nav>>> '+nav);
 				}
 				
 			}
@@ -329,7 +334,8 @@ $(document).ready(function() {
  	 	
 	 
 	//  기본 실행 함수
-	getReply(video_code, reply_option, channel_code, page_reply);
+	//let myReply = getMyreply(video_code, channel_code);
+	getReply(video_code, reply_option, page_reply);
 	getNavList(navOption, channel_code, category_code, page_nav);
 
 
@@ -338,39 +344,53 @@ $(document).ready(function() {
 
 
 
-
+	
 	
  	/* 대댓글 토글 버튼 */
 	$(document).on("click", ".comment_toggle", function(){
 		
 
+		page_comment = 1;
 		let toggle_img = $(this).find(".toggle");
 		let reply_group = $(this).val();
-		let ap = $(this).parents(".comment_menu").next();
+		let tag = $(this).parents(".comment_menu").next(); // .input_comment
 		
-		if(toggle_img.hasClass("open")){
+		if(toggle_img.hasClass("open")){ // 열린상태
 			toggle_img.attr("src", getContextPath() +"/resources/watch/watch_img/comment_close.png");
 			toggle_img.removeClass("open");
 			toggle_img.addClass("close");
 
-			let res = getComment(video_code, reply_group, page_comment);
-
-			if(ap.children().length == 0){
-				ap.append(res);
+			if(tag.children().length == 0){
+				getComment(video_code, reply_group, page_comment, tag);
 			}
 			
-			ap.addClass("show");
+			tag.addClass("show");
 
 
-		}else{
+		}else{	// 닫힌상태
 			toggle_img.attr("src", getContextPath() +"/resources/watch/watch_img/comment_open.png");
 			toggle_img.removeClass("close");
 			toggle_img.addClass("open");
 
-			ap.removeClass("show");
+			tag.removeClass("show");
 		}			 					
 	
-		});
+	});
+
+	// 대댓글 토글 more
+	$(document).on("click", ".comment_toggle_more", function(){
+
+		
+		let reply_group = $(this).val();
+		let tag = $(this).parents(".input_comment");
+
+		page_comment++;
+		getComment(video_code, reply_group, page_comment, tag);
+		$(this).remove();
+	});
+
+
+
 
 		// 스크롤 버튼 클릭
 		$(".scrollmenu_btn").on("click", function(){
@@ -384,7 +404,17 @@ $(document).ready(function() {
 
 		$(window).scroll(function(){			
 			scroll_check = true;
-		}); 
+		});
+
+		// 댓글 옵션 선택
+		$(".video_option").on("click", function(){
+
+			reply_option = $(this).attr("data-value");
+			page_reply = 1;
+			$("#input_reply_box").empty();
+			getReply(video_code, reply_option, page_reply);
+
+		});
 
 
 
@@ -399,8 +429,9 @@ $(document).ready(function() {
 				if($(window).scrollTop()>=$(document).height() - $(window).height()){
 					if(loading_reply){
 						page_reply++;						
-						getReply(video_code, reply_option, channel_code, page_reply);											
-					}	
+						getReply(video_code, reply_option, page_reply);											
+					}
+
 					if(loading_nav){
 						page_nav++;
 						getNavListSc(nav_list,navOption, page_nav);

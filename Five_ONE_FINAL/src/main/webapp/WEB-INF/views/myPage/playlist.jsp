@@ -78,9 +78,11 @@ function getPlaylist_new(channel_code, page_playlist, playlist_code){
 				div += "<div class='video_boxs'>"
 				$(playlist).each(function(){
 					div += "<div class='video_box'>";
-					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>";
+					div += "<video class='test_video' src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
+					div += "</a>";
 					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
@@ -131,9 +133,11 @@ function getPlaylist_search(channel_code, page_search, playlist_code, keyword) {
 				div += "<div class='video_boxs'>"
 				$(playlist_search).each(function(){
 					div += "<div class='video_box'>";
-					div += "<video class='test_video' src='https://blog.kakaocdn.net/dn/bzobdO/btrSnWRB7qk/LAZKJtMKBI4JPkLJwSKCKK/1234.mp4?attach=1&knm=tfile.mp4' controls></video>";
+					div += "<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>";
+					div += "<video class='test_video' src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>";
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
+					div += "</a>";
 					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
@@ -149,7 +153,7 @@ function getPlaylist_search(channel_code, page_search, playlist_code, keyword) {
 			}
 		},
 		error : function(){
-			alert('히스토리_search 불러오기 오류!!!!!!!!!');
+			alert('재생목록_search 불러오기 오류!!!!!!!!!');
 		}
 	}); 
 };	

@@ -1,6 +1,8 @@
 package com.vidividi.five.one;
 
+import java.io.Console;
 import java.io.IOException;
+import java.lang.invoke.CallSite;
 import java.security.PublicKey;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -42,9 +44,11 @@ import com.vidividi.service.FormatCnt;
 import com.vidividi.service.LoginService;
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
+import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -114,14 +118,14 @@ public class WatchController{
 		
 		// 로그인 체크
 		if(repChannelCode == null || repChannelCode.equals("")) {
-			System.out.println("로그인 null");
 		}else {
-			System.out.println("로그인 완료");
 			SubscribeDTO subscribe_dto = this.dao.getSubscribe(video_dto.getChannel_code() , repChannelCode);
 			GoodDTO good_dto = this.dao.getGood(video_code, repChannelCode);
+			ChannelDTO channel_dto = this.dao.getChannel(repChannelCode);
 			
 			model.addAttribute("subscribe_dto", subscribe_dto);
 			model.addAttribute("good_dto", good_dto);
+			model.addAttribute("channel_dto", channel_dto);
 		}
 		
 		
@@ -136,10 +140,24 @@ public class WatchController{
 		return "/watch/watch";
 	}
 	
+	@ResponseBody
+	@RequestMapping("getMyReply.do")
+	public String getMyReply(@RequestParam("video_code") String video_code,@RequestParam("reply_option") String reply_option, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode, HttpServletResponse response) {
+		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		JSONArray jArray = new JSONArray();
+		
+		List<ReplyDTO> list = this.dao.getMyReply(video_code,reply_option, repChannelCode);
+		jArray = setReplyArray(list, video_code, repChannelCode);
+		
+		return jArray.toString();
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "reply.do" , produces = "application/text; charset=UTF-8")
-	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("reply_option") String reply_option, @RequestParam(value="channel_code", required = false) String channel_code, int page, HttpServletResponse response, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+	public String getReplyList(@RequestParam("video_code") String video_code, @RequestParam("reply_option") String reply_option, @RequestParam("page") int page, HttpServletResponse response, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -149,48 +167,28 @@ public class WatchController{
 		
 		JSONArray jArray = new JSONArray();
 		
-		List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, channel_code, startNo, endNo);
-		
 		// 로그인 체크
 		if(repChannelCode == null || repChannelCode.equals("")) {
+			List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, startNo, endNo);
+			
 			jArray = setReplyArray(list, video_code);
 		}else {
-			jArray = setReplyArray(list, video_code, repChannelCode);
+			List<ReplyDTO> list = this.dao.getReply(video_code, reply_option, repChannelCode, startNo, endNo);
+			
+			if(page == 1) {
+				List<ReplyDTO> myList = this.dao.getMyReply(video_code, reply_option, repChannelCode);
+				myList.addAll(list);
+				
+				for(ReplyDTO dto : myList) {
+				}
+				
+				jArray = setReplyArray(myList, video_code, repChannelCode);
+			}else {
+				jArray = setReplyArray(list, video_code, repChannelCode);
+			}
+				
 		}
 		
-
-		
-//		for(ReplyDTO dto : list) {
-//			
-//			JSONObject json = new JSONObject();
-//			
-//			int comment_count = this.dao.getCommentCount(video_code, dto.getReply_group());
-//			
-//			json.put("channel_code", dto.getChannel_code());
-//			json.put("channel_name", dto.getChannel_name());
-//			json.put("channel_profil", dto.getChannel_profil());
-//			json.put("reply_code", dto.getreply_code());
-//			json.put("reply_cont", dto.getReply_cont());
-//			json.put("reply_comment", dto.getReply_comment());
-//			json.put("reply_regdate", dto.getReply_regdate());
-//			json.put("reply_update", dto.getReply_update());
-//			json.put("reply_good", dto.getReply_good());
-//			json.put("reply_bad", dto.getReply_bad());
-//			json.put("reply_group", dto.getReply_group());
-//			json.put("comment_count", comment_count);
-//			
-//			
-//			jArray.add(json);
-//		}
-			
-		
-		
-			
-//			for(int i=0; i<jArray.size(); i++) {
-//				result += jArray.toJSONString();
-//			}
-		
-			
 		return jArray.toString();
 	}
 	
@@ -200,7 +198,7 @@ public class WatchController{
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
-		int rowsize = 10;
+		int rowsize = 3;
 		int startNo = (page * rowsize) - (rowsize - 1);
 		int endNo = (page * rowsize);
 		
@@ -229,7 +227,7 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping("insertGood.do")
-	public String insertGood(@RequestParam("video_code") String video_code, @RequestParam("good_bad") int good_bad, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+	public Map<Object, Object> insertGood(@RequestParam("video_code") String video_code, @RequestParam("good_bad") int good_bad, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
 		String good_code = service.generateGoodCode();
 		String option = "";
@@ -242,15 +240,20 @@ public class WatchController{
 			option = "video_bad";
 		}
 		
-		this.dao.plusVideoGood(video_code, option);
+		String video_good = FormatCnt.format(this.dao.plusVideoGood(video_code, option));
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("getCode", good_code);
+		map.put("getGood", video_good);
 		
 		
-		return good_code;
+		return map;
 	}
 	
 	@ResponseBody
 	@RequestMapping("deleteGood.do")
-	public void deleteGood(@RequestParam("video_code")String video_code, @RequestParam("good_code") String good_code, @RequestParam("good_bad") int good_bad) {
+	public String deleteGood(@RequestParam("video_code")String video_code, @RequestParam("good_code") String good_code, @RequestParam("good_bad") int good_bad) {
 		
 		String option = "";
 		
@@ -262,12 +265,14 @@ public class WatchController{
 			option = "video_bad";
 		}
 		
-		this.dao.minusVideoGood(video_code, option);
+		String video_good = FormatCnt.format(this.dao.minusVideoGood(video_code, option));
+		
+		return video_good;
 	}
 	
 	@ResponseBody
 	@RequestMapping("updateGood.do")
-	public void updateGood(@RequestParam("video_code")String video_code, @RequestParam("good_code") String good_code, @RequestParam("good_bad") int good_bad) {
+	public String updateGood(@RequestParam("video_code")String video_code, @RequestParam("good_code") String good_code, @RequestParam("good_bad") int good_bad) {
 		
 		String option = "";
 		
@@ -278,8 +283,10 @@ public class WatchController{
 		}
 		
 		this.dao.updateGood(good_code, good_bad);
-		this.dao.changeGood(video_code, option);
+		String video_good = FormatCnt.format(this.dao.changeGood(video_code, option));
+	
 		
+		return video_good;
 	}
 	
 	@ResponseBody
@@ -308,45 +315,132 @@ public class WatchController{
 	
 	@ResponseBody
 	@RequestMapping("insertFeedback.do")
-	public String insertFeedback(@RequestParam("video_code") String video_code, @RequestParam("reply_code") String reply_code, @RequestParam("feedback_good") int feedback_good, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+	public Map<Object, Object> insertFeedback(@RequestParam("video_code") String video_code, @RequestParam("reply_code") String reply_code, @RequestParam("feedback_good") int feedback_good, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
 		String feedback_code = service.generateFeedbackCode();
 		
+		String option = "";
+		
 		this.dao.insertFeedback(feedback_code, video_code, reply_code, repChannelCode, feedback_good);
 		
-		return feedback_code;
+		if(feedback_good == 1) {
+			option = "reply_good";
+			
+		}else if(feedback_good ==2) {
+			option = "reply_bad";
+		}
+		
+		String good = FormatCnt.format(this.dao.plusReplyGood(reply_code, option));
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("getCode", feedback_code);
+		map.put("getGood", good);
+		
+		return map;
 	}
 	
 	@ResponseBody
 	@RequestMapping("deleteFeedback.do")
-	public void deleteFeedback(@RequestParam("feedback_code") String feedback_code) {
+	public String deleteFeedback(@RequestParam("reply_code")String reply_code, @RequestParam("feedback_code") String feedback_code, @RequestParam("feedback_good") int feedback_good) {
+		
 		this.dao.deleteFeedback(feedback_code);
+		
+		String option = "";
+		
+		if(feedback_good == 1) {
+			option = "reply_good";
+		}else if(feedback_good ==2) {
+			option = "reply_bad";
+		}
+		
+		String getGood = FormatCnt.format(this.dao.minusReplyGood(reply_code, option));
+		
+		System.out.println("getGood>" +getGood);
+		
+		return getGood;
 	}
 	
 	@ResponseBody
 	@RequestMapping("updateFeedback.do")
-	public void updateFeedback(@RequestParam("feedback_code") String feedback_code, @RequestParam("feedback_good") int feedback_good) {
+	public String updateFeedback(@RequestParam("reply_code")String reply_code, @RequestParam("feedback_code") String feedback_code, @RequestParam("feedback_good") int feedback_good) {
+		
 		this.dao.updateFeedback(feedback_code, feedback_good);
+		
+		String option = "";
+		
+		if(feedback_good == 1) {
+			option = "changeToGoodReply";
+		}else if(feedback_good ==2) {
+			option = "changeToBadReply";
+		}
+		
+		String getGood = FormatCnt.format(this.dao.changeReply(reply_code, option));
+		
+		return getGood;
 	}
 	
 	@ResponseBody
 	@RequestMapping("inputReply.do")
 	public ReplyDTO inputReply(@RequestParam("video_code") String video_code, @RequestParam("reply_cont") String reply_cont, @RequestParam("reply_comment") int reply_comment,
-			@SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+			@RequestParam(name="reply_group", required = false) String reply_group, @RequestParam(name="reply_code", required = false) String reply_code,  @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
 		
-		System.out.println("video_code>" +video_code);
-		System.out.println("reply_cont > " +reply_cont);
-		System.out.println("reply_comment>" +reply_comment);
 		
-		String reply_code = service.generateReplyCode();
-		String reply_group = service.generateReplyGroupCode();
+		String new_code = service.generateReplyCode();
 		
-		this.dao.inputReply(video_code, reply_code, reply_cont, reply_comment, reply_group, repChannelCode);
+		if(reply_group == null || reply_group.equals("")) {
+			reply_group = service.generateReplyGroupCode();
+		}
+		
+		this.dao.inputReply(video_code, new_code, reply_cont, reply_comment, reply_group, repChannelCode);
 
-		ReplyDTO dto = this.dao.getNewReply(reply_code);
+		ReplyDTO dto = this.dao.getNewReply(new_code);
+		
+		if(reply_comment == 2) {
+			this.dao.updateReplyComment(reply_code);
+
+		}
 		
 		return dto;
 	}
+	
+	@ResponseBody
+	@RequestMapping("newPlaylist.do")
+	public void newPlaylist(@RequestParam("playlist_title")String playlist_title, @RequestParam(name="playlist_open", required = false)int playlist_open,
+			@SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode) {
+		
+		System.out.println("open>" +playlist_open);
+		String bundle_code = service.generateBundleCode();
+		
+		this.dao.newPlaylist(bundle_code, playlist_title, playlist_open, repChannelCode);
+		
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("getBundleList.do")
+	public List<BundleDTO> getPlaylist(@RequestParam("video_code")String video_code, @SessionAttribute(name = "RepChannelCode", required = false) String repChannelCode){
+		
+		List<BundleDTO> myBundleList = this.dao.getBundleList(repChannelCode);
+		List<PlaylistDTO> myPlayList = this.dao.getMyPlayList(video_code, repChannelCode);
+		
+		for(PlaylistDTO playlistDTO : myPlayList) {
+			
+			for(BundleDTO bundleDTO : myBundleList) {
+			
+				if(playlistDTO.getPlaylist_code().equals(bundleDTO.getBundle_code())) {
+					bundleDTO.setCheck(1);
+				}else {
+					bundleDTO.setCheck(0);
+				}
+			
+			}
+		}
+		
+		return myBundleList;
+	}
+	
+
 	
 	@RequestMapping("test.do")
 	public String test() {
@@ -365,6 +459,8 @@ public class WatchController{
 		
 		return "/watch/test2";
 	}
+	
+
 	
 	public JSONArray setReplyArray(List<ReplyDTO> list, String video_code) {
 		
@@ -397,8 +493,6 @@ public class WatchController{
 	
 	public JSONArray setReplyArray(List<ReplyDTO> list, String video_code, String repChannelCode) {
 		
-		
-		
 		JSONArray jArray = new JSONArray();
 		
 		for(ReplyDTO dto : list) {
@@ -415,7 +509,7 @@ public class WatchController{
 			json.put("channel_name", dto.getChannel_name());
 			json.put("channel_profil", dto.getChannel_profil());
 			json.put("reply_code", dto.getReply_code());
-			json.put("reply_cont", dto.getReply_cont());
+			json.put("reply_cont", dto.getReply_cont());;
 			json.put("reply_comment", dto.getReply_comment());
 			json.put("reply_regdate", dto.getReply_regdate());
 			json.put("reply_update", dto.getReply_update());
@@ -434,9 +528,10 @@ public class WatchController{
 			json.put("check_good", check_good);
 			json.put("check_code", check_code);
 			
-			
 			jArray.add(json);
 		}
+		
+		
 		
 		return jArray;
 	}

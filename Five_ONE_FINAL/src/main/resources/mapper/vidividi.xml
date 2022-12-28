@@ -71,11 +71,19 @@
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++ 구분해요 ++++++++++++++++++++++++++++++++++++++++++++++ -->	
 	
 	<!-- 모달창용 해당 재생목록 띄우기 -->
-	<select id="p_list" parameterType="hashmap" resultType="playlistDTO">
-		<![CDATA[
-			select distinct playlist_title from playlist where channel_code='${play_code}'
+	<select id="p_list" parameterType="hashmap" resultType="SearchPlayListDTO">
+		<![CDATA[            
+            select distinct bundle_title, bundle_code from
+				(select distinct v.*, row_number() 
+				over(order by playlist_regdate desc) rnum
+           		from (select distinct * from playlist inner join bundlelist using (channel_code))v
+            where channel_code='${play_code}')
 		]]>
 	</select>
 	
+	<!-- 재생목록 등록하기 -->
+		<insert id="a_list" parameterType="hashmap">
+			<![CDATA[ insert into playlist values('${play_code}', '${play_bundle_title}', '${play_bundle_code}', '${play_video_code}', sysdate) ]]>
+		</insert>
 	
 </mapper>

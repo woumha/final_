@@ -8,14 +8,19 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.commons.io.output.ThresholdingOutputStream;
+import org.apache.ibatis.io.ResolverUtil.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.vidividi.variable.ReplyDTO;
 import com.vidividi.variable.SubscribeDTO;
+import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate.Param;
+import com.vidividi.service.FormatCnt;
+import com.vidividi.variable.BundleDTO;
 import com.vidividi.variable.ChannelDTO;
 import com.vidividi.variable.FeedbackDTO;
 import com.vidividi.variable.GoodDTO;
+import com.vidividi.variable.PlaylistDTO;
 import com.vidividi.variable.VideoPlayDTO;
 
 @Repository
@@ -36,6 +41,20 @@ public class WatchDAOImpl implements WatchDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public List<ReplyDTO> getReply(String video_code, String reply_option, int startNo, int endNo) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("video_code", video_code);
+		map.put("reply_option", reply_option);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		
+		List<ReplyDTO> list = this.sqlSession.selectList("getReply", map);
+		
+		return list;
+	}
 
 	@Override
 	public List<ReplyDTO> getReply(String video_code, String reply_option, String channel_code, int startNo, int endNo) {
@@ -48,7 +67,7 @@ public class WatchDAOImpl implements WatchDAO {
 		map.put("startNo", startNo);
 		map.put("endNo", endNo);
 		
-		List<ReplyDTO> list = this.sqlSession.selectList("getReply", map);
+		List<ReplyDTO> list = this.sqlSession.selectList("getReplyLogin", map);
 		
 		return list;
 	}
@@ -144,8 +163,6 @@ public class WatchDAOImpl implements WatchDAO {
 	public int insertGood(String video_code, String good_code, int good_bad, String repChannelCode) {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
-		System.out.println("good>" +good_code);
-		
 		map.put("video_code", video_code);
 		map.put("repChannelCode", repChannelCode);
 		map.put("good_code", good_code);
@@ -212,6 +229,7 @@ public class WatchDAOImpl implements WatchDAO {
 		map.put("feedback_good", feedback_good);
 		
 		this.sqlSession.insert("insertFeedback", map);
+		
 	}
 
 
@@ -232,45 +250,46 @@ public class WatchDAOImpl implements WatchDAO {
 
 
 	@Override
-	public void plusVideoGood(String video_code, String option) {
+	public int plusVideoGood(String video_code, String option) {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
 		map.put("option", option);
 		map.put("video_code", video_code);
-		
-		System.out.println("플러스 실행");
-		System.out.println("op>" +option);
-		System.out.println("co> " +video_code);
 		
 		this.sqlSession.update("plusVideoGood", map);
 		
+		return (int) map.get("cnt");
 	}
 
 
 	@Override
-	public void minusVideoGood(String video_code, String option) {
+	public int minusVideoGood(String video_code, String option) {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
 		map.put("option", option);
 		map.put("video_code", video_code);
 		
-		this.sqlSession.update("miusVideoGood", map);
+		this.sqlSession.update("minusVideoGood", map);
 		
+		return (int) map.get("cnt");
 	}
 
 
 	@Override
-	public void changeGood(String video_code, String option) {
+	public int changeGood(String video_code, String option) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("video_code", video_code);
+		map.put("option", "video_good");
 		
-		this.sqlSession.update(option, video_code);
+		this.sqlSession.update(option, map);
 		
+		return (int) map.get("cnt"); 
 	}
 
 
 	@Override
 	public void inputReply(String video_code, String reply_code, String reply_cont, int reply_comment, String reply_group,
 			String repChannelCode) {
-		System.out.println("넘어옴");
 		
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		map.put("video_code", video_code);
@@ -288,4 +307,102 @@ public class WatchDAOImpl implements WatchDAO {
 	public ReplyDTO getNewReply(String reply_code) {
 		return this.sqlSession.selectOne("getNewReply", reply_code);
 	}
+
+
+	@Override
+	public List<ReplyDTO> getMyReply(String video_code, String reply_option, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("video_code", video_code);
+		map.put("reply_option", reply_option);
+		map.put("repChannelCode", repChannelCode);
+		
+		return this.sqlSession.selectList("getMyReply", map);
+	}
+
+
+	@Override
+	public ChannelDTO getChannel(String repChannelCode) {
+		return this.sqlSession.selectOne("getChannel", repChannelCode);
+	}
+
+
+	@Override
+	public void updateReplyComment(String reply_code) {
+		
+		this.sqlSession.update("updateComment", reply_code);
+	}
+
+
+	@Override
+	public int plusReplyGood(String reply_code, String option) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("option", option);
+		map.put("reply_code", reply_code);
+		
+		this.sqlSession.update("plusReplyGood", map);
+		
+		return (int) map.get("cnt");
+	}
+
+
+	@Override
+	public int minusReplyGood(String reply_code, String option) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("option", option);
+		map.put("reply_code", reply_code);
+		
+		this.sqlSession.update("minusReplyGood", map);
+		
+		return (int) map.get("cnt");
+	}
+
+
+	@Override
+	public int changeReply(String reply_code, String option) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("reply_code", reply_code);
+		map.put("option", "reply_good");
+		
+		this.sqlSession.update(option, map);
+		
+		return  (int) map.get("cnt");
+	}
+
+
+	@Override
+	public void newPlaylist(String bundle_code, String playlist_title, int playlist_open, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("bundle_code", bundle_code);
+		map.put("playlist_title", playlist_title);
+		map.put("playlist_open", playlist_open);
+		map.put("repChannelCode", repChannelCode);
+		
+		this.sqlSession.insert("newPlaylist", map);
+	}
+
+
+	@Override
+	public List<BundleDTO> getBundleList(String repChannelCode) {
+		return this.sqlSession.selectList("getMyBundleList", repChannelCode);
+	}
+
+
+	@Override
+	public List<PlaylistDTO> getMyPlayList(String video_code, String repChannelCode) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("video_code", video_code);
+		map.put("repChannelCode", repChannelCode);
+		
+		return this.sqlSession.selectList("getMyPlaylist", map);
+	}
+
+
+
 }

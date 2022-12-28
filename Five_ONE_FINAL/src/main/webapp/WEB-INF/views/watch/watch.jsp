@@ -8,14 +8,15 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
 <link href="//vjs.zencdn.net/7.20.3/video-js.min.css" rel="stylesheet">
 
 <script type="text/javascript" src="${path }/resources/watch/watch_JS/watch.js"></script>
 <script type="text/javascript" src="${path }/resources/watch/watch_JS/watch_event.js"></script>
-
-
 <link rel="stylesheet" href="${path }/resources/watch/watch_CS/watch.css">
+
 
 </head>
 <body>
@@ -31,18 +32,15 @@
 	<input type="hidden" value="${video_dto.getCategory_code() }" id="category_code">
 	<input type="hidden" value="${good_dto.getGood_code()}" id ="good_code">
 	<input type="hidden" value="${subscribe_dto.getSubscribe_code() }" id="subscribe_code">
+	<input type="hidden" value="${channel_dto.getChannel_profil()}" id="profil">
 	
 	<jsp:include page="../include/top_include2.jsp"/>
 	<%-- <jsp:include page="../include/side_include.jsp"/> --%>
 <div class="all">
-	
 	<div class="watch_layer">
-		
 		<div class="container_L">
-			
 		</div>
 		<div class="watch_container">
-		
 			<div class="video_box">
 				<div class="video_wrap">
 					<video id="myPlayer" class="video-js vjs-default-skin vjs-16-9" autoplay="autoplay"></video>
@@ -70,7 +68,7 @@
 						<div class="card_a">
 							<div class="item_a">
 								<div id="input_profile">
-									<img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg">
+									<img class="profile" src="${pageContext.request.contextPath}/resources/img/${video_dto.getChannel_profil()}">
 								</div>
 							</div>
 							
@@ -112,7 +110,7 @@
 											<c:if test="${good_dto.getGood_bad() == 1}">
 												<img class="good" src="${pageContext.request.contextPath}/resources/watch/watch_img/good_icon_selected.svg">
 											</c:if>
-												<div id="good_cnt">${videoGood_count }</div>
+												<div class="good_cnt">${videoGood_count }</div>
 										</div>
 								</button>
 								<button class="watch_bad_btn" data-value="${good_dto.getGood_bad() }">
@@ -125,7 +123,7 @@
 											</c:if>
 										</div>
 								</button>
-							</div>
+							</div><!-- .btn_wrap -->
 							<div class="item_a btn_wrap">
 								<button class="watch_btn">
 									<div class="share">공유</div>
@@ -133,8 +131,8 @@
 							</div>
 							
 							<div class="item_a btn_wrap">
-								<button class="watch_btn">
-									<div class="save">오프라인 저장</div>
+								<button class="watch_btn savePlaylist_btn">
+									<div class="save">재생목록 추가</div>
 								</button>
 							</div>
 							
@@ -145,7 +143,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> <!-- watch_info end -->
 				
 				
 				<div class="cont_box">
@@ -175,10 +173,11 @@
 						</div>
 					</div>
 					
+					<c:if test="${!empty RepChannelCode }">
 					<div class="item_a">
 						<div>
 							<div class="card_a">
-								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"></div>
+								<div class="input_profile"><img class="profile" src="${pageContext.request.contextPath}/resources/img/${channel_dto.getChannel_profil()}"></div>
 								<div class="write_box">
 									<div class="item_a write_field">
 										<div id="reply_cont" class="reply_cont" contenteditable="true" placeholder="댓글 추가..."></div>
@@ -188,7 +187,7 @@
 										<div>이모티콘</div>
 										<div class="card_e">
 											<div class="item_reply btn_wrap">
-												<button class="watch_btn">
+												<button id="reply_cancle" class="watch_btn">
 													<div class="cancle_btn">취소</div>
 												</button>
 											</div>
@@ -203,6 +202,7 @@
 							</div>
 						</div>
 					</div>
+					</c:if>
 				</div>				
 			
 				
@@ -367,12 +367,83 @@
 				</div>
 			</div><!-- video_list_wrap end -->
 						
-		</div> <!-- side_box end -->
+		</div> <!-- side_container end -->
 		
 		<%-- <jsp:include page="../include/side_include.jsp"/> --%>
 	</div>
 </div>
+
+<div class="savePlaylist_container">
+	<div class="savePlaylist_wrap">
+		<div class="savePlaylist_top card_a">
+		<div class="savePlaylist_title">저장하기</div>
+		<div class="savePlaylist_close_btn">x</div>			
+		</div>
 	
+		<div class="savePlaylist_box">
+			<div class="list-group" id="input_bundleList">
+		<!-- 	  <label class="list-group-item">
+			    <input class="form-check-input me-1" type="checkbox" value="">
+			    First checkbox
+			  </label>
+			  <label class="list-group-item">
+			    <input class="form-check-input me-1" type="checkbox" value="">
+			    Second checkbox
+			  </label>
+			  <label class="list-group-item">
+			    <input class="form-check-input me-1" type="checkbox" value="">
+			    Third checkbox
+			  </label>
+			  <label class="list-group-item">
+			    <input class="form-check-input me-1" type="checkbox" value="">
+			    Fourth checkbox
+			  </label>
+			  <label class="list-group-item">
+			    <input class="form-check-input me-1" type="checkbox" value="">
+			    Fifth checkbox
+			  </label>
+			  <label class="list-group-item">
+			    <input class="form-check-input me-1" type="checkbox" value="">
+			    Fifth checkbox
+			  </label>
+			  <label class="list-group-item">
+			    <input class="form-check-input me-1" type="checkbox" value="">
+			    Fifth checkbox
+			  </label>			  --> 
+			</div>
+					
+		</div>	
+		
+		<div class="newPlaylist">
+			<button class="newPlaylist_btn">
+				새 재생목록 만들기
+			</button>
+		</div>
+		
+		<div class="newPlaylist_input_box">
+			<input class="input_playlist_title" id="playlist_title" placeholder="새 재생목록 제목">
+			<input type="hidden" id="playlist_open" value="">
+			
+			<div class="dropdown">
+			  <button class="btn btn-secondary dropdown-toggle playlist_dropdown" type="button" id="playlist_btn_text" data-bs-toggle="dropdown" aria-expanded="false">
+			    공개 여부
+			  </button>
+			  <ul class="dropdown-menu dropdown-menu-dark playlist_dropdown" aria-labelledby="dropdownMenuButton2">
+			    <li><a class="dropdown-item" href="#" onclick="return false;" data-value="0">공개</a></li>
+			    <li><a class="dropdown-item" href="#" onclick="return false;" data-value="1">비공개</a></li>
+			  </ul>
+			  
+			  <div id="complete_playlist" class="complete_playlist">
+			  	만들기
+			  </div>
+			</div>				
+
+		</div>		
+		
+		
+	</div>
+</div>
+
 
 
 
@@ -429,14 +500,6 @@ vi.css({
 
 </script>
 
-<style>
-
-
-
-
-
-
-</style>
 
 
 </html>
