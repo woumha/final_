@@ -35,9 +35,6 @@
 <!-- 자동완성 기능 라이브러리 -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<!-- member js -->
-<script src="${path}/resources/member/member_js.js"></script>
-
 <title>Insert title here</title>
 <style type="text/css">
 
@@ -347,4 +344,6 @@ $(window).on('load', function () {
 	
 	
 </script>
+<!-- member js -->
+<script src="${path}/resources/member/member_js.js"></script>
 </html>

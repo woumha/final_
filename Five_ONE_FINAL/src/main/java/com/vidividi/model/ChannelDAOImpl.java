@@ -131,4 +131,15 @@ public class ChannelDAOImpl implements ChannelDAO {
 		
 		return false;
 	}
+	
+	@Override
+	public int videoDelete(String video_code) {
+		int check = this.session.delete("videoPlayDel",video_code);
+		if(check > 0) {
+			check = this.session.delete("playlistDel", video_code);
+		} else {
+			check = 0;
+		}
+		return check;
+	}
 }

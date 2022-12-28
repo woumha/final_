@@ -38,9 +38,9 @@
 		    <div class="col-6">
 		     <div id="file_area">
 		     	<div>동 영 상</div>
-		      <video id="upload_file_btn" class="update_modal">
-		      	<source class="source_tag" src="${path }/resources/AllChannel/${playList.channel_code}/${playList.video_title}.mp4" type="video/mp4">
-		      </video>
+			      <video id="upload_file_btn" class="update_modal">
+			      	<source class="source_tag" src="${path }/resources/AllChannel/${playList.channel_code}/${playList.video_title}.mp4" type="video/mp4">
+			      </video>
 		     </div>
 		      <input id="video_name" class="video_field" name="video_name" type="text" value="${playList.video_title}" hidden readonly>
 		      <input id="input_file" type="file" hidden name="file_mv">

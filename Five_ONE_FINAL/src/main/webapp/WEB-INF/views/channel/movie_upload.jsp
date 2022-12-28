@@ -87,7 +87,9 @@
 			  	</div>
 			  	<div class="col-12 bundleDiv">
 			  		<c:if test="${empty bundleList }">
-			  			<a href="#" class="text-decoration-none" style="display: flex;">재생목록이 없어요. 재생목록을 추가해보세요!</a>
+			  			<select id="bundleCheck" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">
+						      <option value="0" selected>재생목록이 없어요.</option>
+						</select>
 			  		</c:if>
 			  		<c:if test="${!empty bundleList }">
 			  			<select id="bundleCheck" name="video_playList" class="form-select" size="3" aria-label="size 3 select example">

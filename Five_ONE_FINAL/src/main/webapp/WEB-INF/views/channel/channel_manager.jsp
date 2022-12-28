@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="${path }/resources/hochan_CSS/channel_manager.css" />
 	<link rel="stylesheet" href="${path }/resources/hochan_CSS/uploadBtn.css" />
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 <title>채널 관리 페이지</title>
 </head>
 <body>
@@ -29,7 +30,6 @@
 	    <div class="col-3 d-none d-xl-block" align="center">
 	      	<div class="card left_card" style="width: 18rem;">
 			  <img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" class="card-img-top left_img channel-backcolor" onload="changeBackColor('${channelOwner.getChannel_code()}')" alt="...">		   
-			  
 			  <div class="card-body">
 			    <h5 class="card-title">
 			    	${channelOwner.channel_name }
@@ -39,12 +39,11 @@
 			    	<div>${channelOwner.channel_date.substring(0, 10) }</div>
 			    </p>
 			  </div>
-			  
 			</div>
 			<div class="card left_card" style="width: 18rem;">
 				<div class="card-body">
-					<div align="left">
-					  	<button type="button" class="btn btn-success" id="listmake">채널 수정하기</button>
+					<div class="channel_button_area">
+					  	<button type="button" onclick="managerModify('${channelOwner.channel_code}')" class="btn btn-success" id="listmake">채널 수정하기</button>
 					  							
 					  	<button type="button" onclick="newVideo()" class="btn btn-success" id="videoMake" data-toggle="modal" data-target="#videoUploadModal">영상 업로드하기</button>
 					  	<!-- 비디오 업로드 모달 -->
@@ -58,13 +57,13 @@
 					</div>
 				  	
 				  	<hr color="green">
-				  	<%-- 재생목록 관리 --%>
 				  	<div align="left">
+				  	<c:if test="${empty bundle }">
+						<a href="#" class="text-decoration-none" style="display: flex;">재생목록이 없어요. 재생목록을 추가해보세요!</a>	
+					</c:if>
+					<c:if test="${!empty bundle }">
 						<div class="nav-link px-0 align-middle atag">
-                    		<i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline atag">내 재생목록</span>
-                    		<svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16" style="display: inline-block;">
-							  <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/>
-							</svg>
+                    		<i class="bi bi-bookmark-star"></i><span class="ms-1 d-none d-sm-inline atag">내 재생목록</span>
                     	</div>
                      	<ul class="nav flex-column ms-3" id="bundleList">
                      	<c:forEach items="${bundle }" var="bundledto" varStatus="status">
@@ -99,38 +98,41 @@
                     	<div>
                     		<a data-toggle="collapse" href="#Redirect" aria-expanded="false" class="nav-link px-0 bDel"> <span class="d-none d-sm-inline child_bundle">재생 목록 삭제하기</span></a>
                     	</div>
-				  	</div>
-				  	<%-- 재생목록 관리 끝 --%>		
+					</c:if>	
+				  	</div>			
 				</div>
 			</div>
 	    </div>
 	    <div class="col-12 col-xl-8">
-		    <div class="row">
+		    <div class="row video_detail_area">
+		    <form>
+		    	<table class="table">
+		    	<thead>
+				  <tr>
+				  	<th class="col-4">동영상</th>
+				  	<th class="col-3">제목</th>
+				  	<th class="col-1" style="font-size: 14px;">공개 상태</th>
+				  	<th class="col-1" style="font-size: 14px;">제한 사항</th>
+				  	<th class="col-1">날짜</th>
+				  	<th class="col-1">조회수</th>
+				  	<th class="col-1">좋아요</th>
+				  	<th class="col-1">&nbsp;&nbsp;관리</th>
+				  </tr>
+				</thead>
 			    <c:if test="${empty mvlist }">
-			    	<div class="col-lg-12 align-self-center div_upload_btn">
-			    		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle arrow upload_btn" viewBox="0 0 16 16">
-						  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
-						</svg>
-						<div class="arrow upload_font">시청자들에게 영상 보여주기</div>
-			    	</div>
+			    	<tr>
+			    		<td colspan="7" width="800px" height="800px" id="noVideoArea" onclick="changeBtn()">
+					    	<div class="col-12 align-self-center div_upload_btn" align="center">
+					    		<img alt="" class="style-scope ytcp-video-section-content" src="https://www.gstatic.com/youtube/img/creator/no_content_illustration_upload_video_v3.svg">
+								<div class="arrow upload_font">시청자들에게 영상 보여주기</div>
+					    	</div>
+			    		</td>
+			    	</tr>
 			    </c:if>
 			    <c:if test="${!empty mvlist }">
-			    <form>
-			    	<table class="table table-hover">
-			    	<thead>
-					  <tr>
-					  	<th class="col-4">동영상</th>
-					  	<th class="col-3">제목</th>
-					  	<th class="col-1" style="font-size: 14px;">공개 상태</th>
-					  	<th class="col-1" style="font-size: 14px;">제한 사항</th>
-					  	<th class="col-1">날짜</th>
-					  	<th class="col-1">조회수</th>
-					  	<th class="col-1">좋아요</th>
-					  </tr>
-					</thead>
 					<tbody class="manager_tbody">
 					  <c:forEach items="${mvlist }" var="mvdto">
-					  	<tr onclick="modal('${mvdto.video_code}')" data-toggle="modal" data-target="#MoaModal">
+					  	<tr>
 					  		<td>
 					  			<c:if test="${empty mvdto.video_img}">
 					   				<div><video class="show_file"><source src="${path }/resources/AllChannel/${channelOwner.channel_code}/${mvdto.video_title }.mp4"></video></div>
@@ -176,12 +178,25 @@
 						  			${answer }%
 					  			</c:if>
 					  		</td>
+					  		<td>
+					  			<!-- onclick="modal('${mvdto.video_code}', '${channelOwner.channel_code } ')" data-toggle="modal" data-target="#MoaModal" -->
+					  			<!-- videoDelete('${channelOwner.channel_code}') -->
+					  			<div class="dropdown">
+								  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								    <i class="bi bi-list-ul"></i>
+								  </button>
+								  <ul class="dropdown-menu">
+								    <li><a class="dropdown-item" onclick="modal('${mvdto.video_code}', '${channelOwner.channel_code } ')" data-toggle="modal" data-target="#MoaModal">수정</a></li>
+								    <li><a class="dropdown-item" onclick="videoDelete('${mvdto.video_code}', '${channelOwner.channel_code }', '${mvdto.video_title }')">삭제</a></li>
+								  </ul>
+								</div>
+					  		</td>
 					  	</tr>
 					  </c:forEach>
 					  </tbody>
+				    </c:if>
 					</table>
-					</form>
-			    </c:if>
+				</form>
 		    </div>
 	    </div>
 	  </div>
