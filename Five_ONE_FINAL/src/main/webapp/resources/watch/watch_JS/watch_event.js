@@ -23,9 +23,9 @@ function getSession(){
 		}
 
 	});
-	console.log('res > ' +res);
 	return res;
 }
+
  
 $(document).ready(function(){
 
@@ -38,7 +38,7 @@ $(document).ready(function(){
 	let profil = $("#profil").val();
 	let session;
 	let feedback_code;	
-	let resultGood
+	let resultGood;
 
 	function getContextPath(){
 		
@@ -47,14 +47,70 @@ $(document).ready(function(){
 		return location.href.substring(path, location.href.indexOf('/', path+1));
 	}
 
+	function getBundleList(video_code){
+
+		$.ajax({
+			url :  getContextPath() +"/getBundleList.do",
+			ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			data : {
+				"video_code": video_code
+			},
+			success : function(data){
+				let div = "";
+
+					$(data).each(function(){
+
+						div += "<label class='list-group-item'>";
+						if(this.check == 0){
+							div += "<input name='addPlaylist' class='form-check-input me-1' type='checkbox' value='"+this.bundle_code+"'>";
+						}else{
+							div += "<input name='addPlaylist' class='form-check-input me-1' type='checkbox' value='"+this.bundle_code+"' checked>";
+						}
+						div += this.bundle_title;
+						div += "</label>"					
+					});
+
+					$("#input_bundleList").append(div);
+				
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+
+		});		
+	}
+
+	function newPlaylist(playlist_title, playlist_open){
+
+
+		$.ajax({
+			url :  getContextPath() +"/newPlaylist.do",
+			ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			data : {
+				"playlist_title" : playlist_title,
+				"playlist_open" : playlist_open
+			},
+			success : function(){
+			},
+			error : function(request, status, error){
+				console.log("code: " + request.status);
+				console.log("message: " + request.responseText);
+				console.log("error: " + error);
+			}
+
+		});
+
+	};
 
 
 
-	function changeValue(tag, good_img, bad_img, name, video_good){
+
+	function changeValue(tag, good_img, bad_img, name, good){
 		
 		let check = tag.attr("data-value");
-		let good_cnt = tag.find("#good_cnt");	
-
+		let good_cnt = tag.find(".good_cnt");	
 
 		if(name == "good"){
 			if(check == 1){ // 좋아요 취소
@@ -83,8 +139,10 @@ $(document).ready(function(){
 				tag.attr("data-value", 2);
 			}
 		}
-
-		good_cnt.text(video_good);
+		if(video_code != '' || null || undefined || 0 || NaN){
+			good_cnt.text(good);
+		}
+		
 	}
 
 	function insertSubscribe(channel_code){
@@ -99,7 +157,6 @@ $(document).ready(function(){
 				"channel_code" : channel_code,
 			},
 			success : function(data){
-				console.log('구독성공');
 				res = data;
 			},
 			error : function(request, status, error){
@@ -123,7 +180,6 @@ $(document).ready(function(){
 				"subscribe_code" : subscribe_code,
 			},
 			success : function(data){
-				console.log('구독취소성공');
 			},
 			error : function(request, status, error){
 				console.log("code: " + request.status);
@@ -148,10 +204,6 @@ $(document).ready(function(){
 				"good_bad" : good_bad
 			},
 			success : function(data){
-				console.log('insert성공');
-				console.log('data> ' +data);
-				console.log('data-code>' +data.good_code);
-				console.log('data-cnt>', +data.video_good);
 				res = data;
 			},
 			error : function(request, status, error){
@@ -178,8 +230,6 @@ $(document).ready(function(){
 			},
 			async: false,
 			success : function(data){
-				console.log('delete성공');
-				console.log('data> '+data);
 				res = data;
 
 			},
@@ -207,8 +257,6 @@ $(document).ready(function(){
 			},
 			async: false,
 			success : function(data){
-				console.log('update성공');
-				console.log('data>'+data);
 				res = data;
 			},
 			error : function(request, status, error){
@@ -224,9 +272,6 @@ $(document).ready(function(){
 	function insertFeedback(video_code, reply_code, feedback_good){
 
 		let res;
-
-		console.log('v>' +video_code);
-		console.log("r>" +reply_code);
 
 		$.ajax({
 
@@ -251,20 +296,22 @@ $(document).ready(function(){
 		return res;
 	}
 
-	function deleteFeedback(feedback_code, feedback_good){
+	function deleteFeedback(reply_code, feedback_code, feedback_good){
 
-		console.log('c>' +feedback_code);
+		let res;
 
 		$.ajax({
 
 			url :  getContextPath() +"/deleteFeedback.do",
 			ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			async: false,
 			data : {
+				"reply_code" : reply_code,
 				"feedback_code" : feedback_code,
 				"feedback_good" : feedback_good
 			},
 			success : function(data){
-				console.log('feedback delete');
+				res = data;
 			},
 			error : function(request, status, error){
 				console.log("code: " + request.status);
@@ -274,19 +321,25 @@ $(document).ready(function(){
 
 		});
 
+		return res;
 	}
 
-	function updateFeedback(feedback_code, feedback_good){
+	function updateFeedback(reply_code, feedback_code, feedback_good){
+
+		let res;
+
 		$.ajax({
 
 			url :  getContextPath() +"/updateFeedback.do",
 			ContentType : "application/x-www-form-urlencoded;charset=UTF-8",
+			async: false,
 			data : {
+				"reply_code" :reply_code,
 				"feedback_code" : feedback_code,
 				"feedback_good" : feedback_good
 			},
 			success : function(data){
-				console.log('feedback update');
+				res = data;
 			},
 			error : function(request, status, error){
 				console.log("code: " + request.status);
@@ -295,6 +348,8 @@ $(document).ready(function(){
 			}
 
 		});
+
+		return res;
 	}
 
 
@@ -552,14 +607,11 @@ $(document).ready(function(){
 	 	// 드롭다운 메뉴 클릭
 		$(".dropdown_menu").on("click", function(){
 		
-		console.log('클릭')
 		let wrap = $("#dropdown_wrap");
 
 		if(wrap.hasClass("open_wrap")){
-			console.log('if');
 			wrap.removeClass("open_wrap");
 		}else{
-			console.log('else');
 			wrap.addClass("open_wrap");
 		}
 
@@ -635,18 +687,16 @@ $(document).ready(function(){
 					
 				if(check == 1){ // 좋아요 취소
 					video_good = deleteGood(video_code, good_code, good_bad);
-					console.log('취소 > '+video_good);
 					changeValue(tag, good_img, bad_img, check_good, video_good);
 
 				}else if(check == 2){ // 좋아요 수정
 					video_good = updateGood(video_code, good_code, good_bad);				
-					console.log('수정 > ' +video_good);
 					changeValue(tag, good_img, bad_img, check_good, video_good);
 
 				}else{ // 좋아요 추가
 					resultGood = insertGood(video_code, good_bad);
-					good_code = resultGood.good_code;
-					video_good =  resultGood.video_good;
+					good_code = resultGood.getCode;
+					video_good =  resultGood.getGood;
 					changeValue(tag, good_img, bad_img, check_good, video_good);
 				}	
 
@@ -673,12 +723,12 @@ $(document).ready(function(){
 					changeValue(tag, good_img, bad_img, check_good);
 
 				}else if(check == 1){ // 싫어요 수정
-					updateGood(video_code, good_code, good_bad);
-					changeValue(tag, good_img, bad_img, check_good);
+					video_good = updateGood(video_code, good_code, good_bad);
+					changeValue(tag, good_img, bad_img, check_good, video_good);
 
 				}else{ // 싫어요 추가
-					good_code = insertGood(video_code, good_bad);
-					console.log(good_code);
+					resultGood = insertGood(video_code, good_bad);
+					good_code = resultGood.getCode;
 					changeValue(tag, good_img, bad_img, check_good);
 
 				}	
@@ -696,7 +746,7 @@ $(document).ready(function(){
 
 			let reply_code = $(this).parents().closest(".reply_box").find(".reply_code").val();
 
-			let tag = $(this).parents().closest(".reply_box");
+			let tag = $(this).parents().closest(".reply_box"); //
 
 			let check = tag.attr("data-value");
 			
@@ -713,20 +763,18 @@ $(document).ready(function(){
 			if(session){ // 로그인 체크
 					
 				if(check == 1){ // 좋아요 취소
-					console.log('del');
-					deleteFeedback(reply_code, feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = deleteFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else if(check == 2){ // 좋아요 수정
-					console.log('up');
-					updateFeedback(feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = updateFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else{ // 좋아요 추가
-					console.log('in');
-					feedback_code = insertFeedback(video_code, reply_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
-
+					result_feedback = insertFeedback(video_code, reply_code, feedback_good);
+					feedback_code = result_feedback.getCode;
+					feedback_good = result_feedback.getGood;
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 				}	
 
 			}else{ // 로그인 x
@@ -759,16 +807,18 @@ $(document).ready(function(){
 			if(session){ // 로그인 체크
 					
 				if(check == 2){ // 싫어요 취소
-					deleteFeedback(reply_code, feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = deleteFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else if(check == 1){ // 싫어요 수정
-					updateFeedback(feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = updateFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else{ // 싫어요 추가
-					feedback_code = insertFeedback(video_code, reply_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					result_feedback = insertFeedback(video_code, reply_code, feedback_good);
+					feedback_code = result_feedback.getCode;
+					feedback_good = result_feedback.getGood;
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}	
 
@@ -784,8 +834,6 @@ $(document).ready(function(){
 
 			let reply_code = $(this).parents().closest(".comment_wrap").find(".reply_code").val();
 
-			console.log('댓글번호 >' +reply_code);
-
 			let tag = $(this).parents().closest(".comment_wrap");
 
 			let check = tag.attr("data-value");
@@ -800,23 +848,23 @@ $(document).ready(function(){
 			let bad_img = tag.find(".reply_bad");
 
 			let check_good = "good";
+
 			if(session){ // 로그인 체크
 					
 				if(check == 1){ // 좋아요 취소
-					console.log('del');
-					deleteFeedback(reply_code, feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = deleteFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else if(check == 2){ // 좋아요 수정
-					console.log('up');
-					updateFeedback(feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = updateFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else{ // 좋아요 추가
-					console.log('in');
-					feedback_code = insertFeedback(video_code, reply_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					result_feedback = insertFeedback(video_code, reply_code, feedback_good);
+					feedback_code = result_feedback.getCode;
+					feedback_good = result_feedback.getGood;
 
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 				}	
 
 			}else{ // 로그인 x
@@ -846,22 +894,22 @@ $(document).ready(function(){
 			let check_good = "bad";
 			let feedback_good = 2;
 
+			
 			if(session){ // 로그인 체크
 					
 				if(check == 2){ // 싫어요 취소
-					console.log('del');
-					deleteFeedback(reply_code, feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = deleteFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else if(check == 1){ // 싫어요 수정
-					console.log('up');
-					updateFeedback(feedback_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					feedback_good = updateFeedback(reply_code, feedback_code, feedback_good);
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}else{ // 싫어요 추가
-					console.log('in');
-					feedback_code = insertFeedback(video_code, reply_code, feedback_good);
-					changeValue(tag, good_img, bad_img, check_good);
+					result_feedback = insertFeedback(video_code, reply_code, feedback_good);
+					feedback_code = result_feedback.getCode;
+					feedback_good = result_feedback.getGood;
+					changeValue(tag, good_img, bad_img, check_good, feedback_good);
 
 				}	
 
@@ -881,14 +929,11 @@ $(document).ready(function(){
 			let reply_cont = document.getElementById("reply_cont").innerText.replaceAll("\n","\\n");
 
 			if(session){
-				console.log('if문 ')
-				console.log('내용>' +reply_cont);
 				let reply_comment = 0;
 				inputReply(video_code, reply_cont, reply_comment);
 				$("#reply_cont").empty();
 
 			}else{
-				console.log('else문')
 				alert('로그인 해주세요');
 			}
 
@@ -902,7 +947,6 @@ $(document).ready(function(){
 
 		//답글 버튼 클릭
 		$(document).on("click", ".reply_comment_btn", function(){
-			console.log('클릭');
 
 			let input_reply = $(this).parents(".input_reply");
 			
@@ -954,6 +998,8 @@ $(document).ready(function(){
 
 		});
 
+		
+
 		// 대댓글 입력
 		$(document).on("click", ".commnet_complete", function(){
 
@@ -963,14 +1009,13 @@ $(document).ready(function(){
 				let reply_comment = 2;
 				let reply_group = $(this).parents().closest(".reply_box").find(".reply_group").val();
 				let reply_code = $(this).parents().closest(".reply_box").find(".reply_code").val();
-				console.log('group > ' +reply_group);
 				let div = inputComment(video_code, reply_cont, reply_comment, reply_group, reply_code);
 
 				$(this).parents(".write_box").find(".reply_cont").empty();
 				$(this).parents().closest(".input_reply").append(div);
+				
 
 			}else{
-				console.log('else문')
 				alert('로그인 해주세요');
 			}
 
@@ -983,4 +1028,56 @@ $(document).ready(function(){
 			
 			cancle.empty();
 		});
+
+		// 재생목록에 추가 열기 버튼
+		$(".savePlaylist_btn").on("click", function(){
+			$(".savePlaylist_container").addClass("block");
+
+			getBundleList(video_code); // 재생목록 불러오는 함수
+		});
+
+		// 재생목록 추가 닫기 버튼
+		$(".savePlaylist_close_btn").on("click", function(){
+			$(".savePlaylist_container").removeClass("block");
+			$("#input_bundleList").empty();
+		});
+
+
+		// 새 재생목록 만들기 버튼
+		$(".newPlaylist_btn").on("click", function(){
+			$(this).css("display", "none");
+			$(".newPlaylist_input_box").css("display", "block");			
+		});
+
+		// 공개 비공개 선택
+		$(".dropdown-item").on("click", function(){
+			let text = $(this).text();
+			let playlist_open = $(this).attr("data-value");
+			console.log('값>' +playlist_open);
+		 	$("#playlist_open").val(playlist_open);
+			$("#playlist_btn_text").text(text);
+		 });
+
+		 // 재생목록 생성완료
+		 $("#complete_playlist").on("click", function(){
+			let playlist_title = $("#playlist_title").val();
+			let playlist_open = $("#playlist_open").val();
+			$(".savePlaylist_container").removeClass("block");
+			$(".newPlaylist_input_box").css("display", "none");	
+			$(".newPlaylist_btn").css("display", "block");	
+			$("#input_bundleList").empty();
+			newPlaylist(playlist_title, playlist_open);
+		 });
+
+
+		 // 재생목록 추가
+		 $(document).on("change", "input[name='addPlaylist']", function(){
+			
+			console.log('val > ' +$(this).val());
+
+
+		 });
+
+	
+
  });
