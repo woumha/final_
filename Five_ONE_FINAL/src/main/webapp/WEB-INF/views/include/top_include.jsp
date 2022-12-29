@@ -318,6 +318,5 @@ $(window).on('load', function () {
 	
 	
 </script>
-<!-- member js -->
-<script src="${path}/resources/member/member_js.js"></script>
+
 </html>

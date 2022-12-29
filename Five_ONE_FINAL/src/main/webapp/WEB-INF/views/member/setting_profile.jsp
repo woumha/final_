@@ -246,7 +246,6 @@ $(function(){
 	
 	if ('${MemberDTO.getMember_code()}' != ''){
 		let channelCode = '${MemberDTO.getMember_rep_channel()}';
-		changeBackColor(channelCode);
 	}
 	
 	if ('${MemberDTO.getMember_email()}' != ''){

@@ -30,7 +30,6 @@ $(function(){
 	if ('${MemberCode}' != ''){
 		let channelCode = '${MemberDTO.getMember_rep_channel()}';
 		let memberCode = '${MemberCode}';
-		changeBackColor(channelCode);
 		getChannelList(memberCode);
 	}
 	
