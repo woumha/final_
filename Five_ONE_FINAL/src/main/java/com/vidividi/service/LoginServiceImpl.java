@@ -224,7 +224,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public String insertMember(MemberDTO dto, String via, String socialPsa) {
+	public String insertMember(MemberDTO dto, String via) {
 		
 		String result = "";
 		
@@ -250,7 +250,7 @@ public class LoginServiceImpl implements LoginService {
 		int joinResult = dao.joinMember(dto);
 		System.out.println("회원 가입 결과 : " +joinResult);
 		
-		ChannelDTO channelDTO = newChannel(dto.getMember_code(), dto.getMember_rep_channel(), dto.getMember_name(), socialPsa);
+		ChannelDTO channelDTO = newChannel(dto.getMember_code(), dto.getMember_rep_channel(), dto.getMember_name());
 		channelDAO.insertChannel(channelDTO);
 		
 		if (joinResult != 0) {
@@ -334,7 +334,7 @@ public class LoginServiceImpl implements LoginService {
 	}	
 
 	@Override
-	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName, String socialPsa) {
+	public ChannelDTO newChannel(String memberCode, String channelCode, String memberName) {
 		
 		ChannelDTO channelDTO = new ChannelDTO();
 		
@@ -342,17 +342,11 @@ public class LoginServiceImpl implements LoginService {
 		channelDTO.setChannel_code(channelCode);
 		String random = String.valueOf((int)((Math.random()*9)+1));
 		channelDTO.setChannel_banner("default_channel_banner-"+random+".png");
+		channelDTO.setChannel_profil("default_channel_profile-"+random+".png");
 		
-		if (socialPsa.equals("")) {
-			channelDTO.setChannel_profil("default_channel_profile-"+random+".png");
-		}else {
-			channelDTO.setChannel_profil(socialPsa);
-		}
 		int countChannel = channelDAO.countMemberChannel(memberCode);
 		// 기본 재생목록 추가
 		defaultBundleAdd(channelCode);
-		
-		
 		
 		String channelName = memberName + "님의 "+(countChannel+1)+"번째 채널입니다.";
 		channelDTO.setChannel_name(channelName);
