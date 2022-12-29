@@ -121,6 +121,18 @@
 	<delete id="playlistDel" parameterType="String">
 		delete from playlist where video_code = #{video_code}
 	</delete>
+	
+	<update id="profilChange" parameterType="channeldto">
+		update user_channel set channel_profil = #{channel_profil} where channel_code = #{channel_code}
+	</update>
+	
+	<update id="bannerChange" parameterType="channeldto">
+		update user_channel set channel_banner = #{channel_banner} where channel_code = #{channel_code}
+	</update>
+	
+	<update id="channelMyPageName" parameterType="channeldto">
+		update user_channel set channl_name = #{channel_name} where channel_code = #{channel_code}
+	</update>
  </mapper>
   
  

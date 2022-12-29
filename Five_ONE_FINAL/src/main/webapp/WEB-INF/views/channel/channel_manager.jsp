@@ -29,7 +29,7 @@
 	  <div class="row justify-content-center">
 	    <div class="col-3 d-none d-xl-block" align="center">
 	      	<div class="card left_card" style="width: 18rem;">
-			  <img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" class="card-img-top left_img channel-backcolor" onload="changeBackColor('${channelOwner.getChannel_code()}')" alt="...">		   
+			  <img src="${path }/resources/img/channel_profile/${channelOwner.channel_profil }" class="card-img-top left_img channel-backcolor" alt="...">		   
 			  <div class="card-body">
 			    <h5 class="card-title">
 			    	${channelOwner.channel_name }

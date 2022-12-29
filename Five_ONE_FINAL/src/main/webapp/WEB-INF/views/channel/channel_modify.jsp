@@ -75,7 +75,7 @@
 		  <div class="row col-10">
 		  	<div class="col-7">
 			  	<div class="input-group mb-3">
-				  <input type="text" class="form-control nameAreaText" placeholder="${channelOwner.channel_name }" aria-label="Recipient's username" aria-describedby="button-addon2">
+				  <input type="text" class="form-control nameAreaText" id="areaText" placeholder="${channelOwner.channel_name }" aria-label="Recipient's username" aria-describedby="button-addon2">
 				  <button class="btn btn-outline-secondary btn-sm nameAreaBtn" type="button" id="button-addon2">수정</button>
 				</div>
 		  	</div>
