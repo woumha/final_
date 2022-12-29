@@ -63,7 +63,13 @@ public class MyPageDAOImpl implements MyPageDAO {
 	@Override
 	public int delete_history(String code) {
 		return this.sqlSession.delete("delete_history", code); }
-
+	@Override
+	public int dont_save_history(Map<String, Object> map) {
+		return this.sqlSession.update("dont_save_history", map); }
+	@Override
+	public int getHistory_save(String repChannelCode) {
+		return this.sqlSession.selectOne("getHistory_save", repChannelCode); }
+	
 	/* good 페이지 */
 	@Override
 	public List<VideoPlayDTO> getGoodList_date(String code, int startNo, int endNo) {
@@ -165,6 +171,7 @@ public class MyPageDAOImpl implements MyPageDAO {
 	public int getMy_reply_comment(String code) {
 		return this.sqlSession.selectOne("getMy_reply_comment", code);
 	}
+	
 	
 	
 	

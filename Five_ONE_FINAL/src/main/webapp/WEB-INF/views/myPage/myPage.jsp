@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<c:set var="c_info" value="${m_channel }" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,12 +31,12 @@ function getContextPath(){
 }
 
 /* 넘어온 기본 값 */
-let channel_code = "${channel_code}";
+let RepChannelCode = "${RepChannelCode}";
 let page = 1;
-let loading = false;
+let loading = true;
 
 /* 재생목록 ajax */
-function getPlaylist_list(channel_code, page){
+function getPlaylist_list(page){
 	
 	let channel_name = '${m_channel.getChannel_name() }';
 	console.log("channel_name >>> " + channel_name);
@@ -44,7 +44,6 @@ function getPlaylist_list(channel_code, page){
 	$.ajax({
 		url : getContextPath() +"/getPlaylist_list.do",
 		data : {
-			"channel_code" : channel_code,
 			"page" : page,
 		},
 		datatype : 'JSON',
@@ -67,7 +66,7 @@ function getPlaylist_list(channel_code, page){
 				$(playlist).each(function(){
 					div += "<div class='video_box'>";
 					div += "<div class='playlist_video_div'>";
-					div += "<a href='"+getContextPath()+"/playlist_list.do?channel_code="+channel_code+"&playlist_code="+this.playlist_code+"'>";					
+					div += "<a href='"+getContextPath()+"/playlist_list.do?playlist_code="+this.playlist_code+"'>";					
 					div += "<div class='playlist_lid'>";
 					
 					div += "<p class='p_playlist_lid'>재생목록 보기</p>";
@@ -92,20 +91,21 @@ function getPlaylist_list(channel_code, page){
 			
 			div +="<div>저장한 재생목록이 여기에 표시됩니다.</div>";
 			$("#playlist_area").append(div);
-			/* alert('getPlaylist_list 불러오기 오류!!!!!!!!!'); */
+			
 		}
 	}); 
 };
 
 // 기본 실행 함수
 console.log("기본 함수 진입!!!!");
-getPlaylist_list(channel_code, page);
+getPlaylist_list(page);
 
 // 재생목록 더보기 클릭시
 $(document).on("click", "#playlist_more", function(){
 	if(loading == true) {
+		page++;
 		console.log("재생목록 더보기 실행");
-		getPlaylist_list(channel_code, page);
+		getPlaylist_list(page);
 	}else if(loading == false) {
 		$("#playlist_more").css('display', 'none');
 	}
@@ -125,19 +125,23 @@ $(document).on("click", "#playlist_more", function(){
 	
 	
 
-	<c:if test="${!empty channel_code }">
+	<c:if test="${!empty RepChannelCode }">
 	<!-- 오른쪽 사이드 채널 정보 영역 -->
 	<div id="chanel_area">
 		<div id="profile_box">
-			<div id="profile_icon"> <img src="${pageContext.request.contextPath}/resources/img/unnamed.jpg"> </div>
-			<div id="profile_name"> ${c_info.getChannel_name() } </div>
+			<div id="profile_icon">
+				<a href="<%=request.getContextPath() %>/channel.do?mc=${m_channel.getChannel_code() }">
+					<img src="${pageContext.request.contextPath}/resources/img/channel_profile/${m_channel.getChannel_profil() }">
+				</a>
+			</div>
+			<div id="profile_name"> ${m_channel.getChannel_name() } </div>
 		</div>
 		
 		<div id="profile_info">
 			<hr class="channel_hr">
 			<div class="info_box">
 				<div class="info_title"> <p>구독</p> </div>
-				<div class="info_cont"> <p>${fn:length(channel_sub)}</p> </div>
+				<div class="info_cont"> <p>${channel_sub}</p> </div>
 			</div>
 			
 			<hr class="channel_hr">
@@ -150,8 +154,8 @@ $(document).on("click", "#playlist_more", function(){
 			<hr class="channel_hr">
 			
 			<div class="info_box">
-				<div class="info_title"> <p>좋아요</p> </div>
-				<div class="info_cont"> <p>${fn:length(g_list)}</p> </div>
+				<div class="info_title"> <p>채널 생성일</p> </div>
+				<div class="info_cont"> <p>${channel_regdate.substring(0,10)}</p> </div>
 			</div>
 		</div>
 	</div>
@@ -164,8 +168,8 @@ $(document).on("click", "#playlist_more", function(){
 		<div id="history_box" class="content_box">
 			<div class="content_title_box">
 				<img id="history_logo" src="${pageContext.request.contextPath}/resources/img/history.png">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">기록</a> [${fn:length(h_list)}]</p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/history_list.do">기록</a> [${fn:length(h_list)}]</p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/history_list.do">모두보기</a></p>
 			</div>
 			
 			<c:if test="${!empty history }">
@@ -175,7 +179,13 @@ $(document).on("click", "#playlist_more", function(){
 							<video class="test_video" src="<%=request.getContextPath() %>/resources/AllChannel/${h_dto.getChannel_code() }/${h_dto.getVideo_title() }.mp4" controls></video>
 							<p class="video_title_p_his">${h_dto.getVideo_title() }</p>
 						</a>
-						<p class="video_channel_p"><i class='fa-solid fa-circle-user' id='ch_img'></i>&nbsp;${h_dto.getChannel_name() }<p>
+						
+						<p class="video_channel_p">
+							<a href="<%=request.getContextPath() %>/channel.do?mc=${h_dto.getChannel_code() }">
+								<img class="channel_profil" src="${pageContext.request.contextPath}/resources/img/channel_profile/${h_dto.getChannel_profil() }">&nbsp;${h_dto.getChannel_name() }
+							</a>
+						</p>
+						
 						<p class="video_views_p">조회수 ${h_dto.getVideo_view_cnt() }회 <i class="fa-solid fa-carrot"></i> ${h_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
@@ -191,7 +201,7 @@ $(document).on("click", "#playlist_more", function(){
 		<div id="playlist_box" class="content_box">
 			<div class="content_title_box">
 				<img id="playlist_logo" src="${pageContext.request.contextPath}/resources/img/playlist_lid.png">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do?channel_code=${channel_code }">재생목록</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/playlist_list.do">재생목록</a></p>
 			</div>
 			
 			<c:set var="playlist" value="${p_list }" />
@@ -212,8 +222,8 @@ $(document).on("click", "#playlist_more", function(){
 		<div id="good_box" class="content_box">
 			<div class="content_title_box">
 				<img id="good_logo" src="${pageContext.request.contextPath}/resources/img/good.png">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/good_list.do?channel_code=${channel_code }">좋아요 동영상</a> [${fn:length(g_list)}]</p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/good_list.do?channel_code=${channel_code }">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/good_list.do">좋아요 동영상</a> [${fn:length(g_list)}]</p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/good_list.do">모두보기</a></p>
 			</div>
 			
 			<c:set var="good" value="${g_list }" />
@@ -224,7 +234,12 @@ $(document).on("click", "#playlist_more", function(){
 						<video class="test_video" src="<%=request.getContextPath() %>/resources/AllChannel/${g_dto.getChannel_code() }/${g_dto.getVideo_title() }.mp4" controls></video>
 						<p class="video_title_good">${g_dto.getVideo_title() }</p>
 					</a>
-						<p class="video_channel_p"><i class='fa-solid fa-circle-user' id='ch_img'></i>&nbsp;${g_dto.getChannel_name() }<p>
+					
+					<p class="video_channel_p">
+						<a href="<%=request.getContextPath() %>/channel.do?mc=${g_dto.getChannel_code() }">
+							<img class="channel_profil" src="${pageContext.request.contextPath}/resources/img/channel_profile/${g_dto.getChannel_profil() }">&nbsp;${g_dto.getChannel_name() }
+						</a>
+					</p>
 						<p class="video_views_p">조회수 ${g_dto.getVideo_view_cnt() }회 <i class="fa-solid fa-carrot"></i> ${g_dto.getVideo_regdate() }<p>
 					</div>
 				</c:forEach>
@@ -241,19 +256,36 @@ $(document).on("click", "#playlist_more", function(){
 		<div id="reply_box" class="content_box">
 			<div class="content_title_box">
 				<img id="reply_logo" src="${pageContext.request.contextPath}/resources/img/reply.png">
-				<p class="content_title1"><a href="<%=request.getContextPath() %>/my_reply.do?channel_code=${channel_code }">작성한 댓글</a> [${fn:length(reply_list)}]</p>
-				<p class="content_title2"><a href="<%=request.getContextPath() %>/my_reply.do?channel_code=${channel_code }">모두보기</a></p>
+				<p class="content_title1"><a href="<%=request.getContextPath() %>/my_reply.do">작성한 댓글</a> [${fn:length(reply_list)}]</p>
+				<p class="content_title2"><a href="<%=request.getContextPath() %>/my_reply.do">모두보기</a></p>
 			</div>
 			<c:set var="r_list" value="${reply_list }"  />
 			<c:if test="${!empty r_list }">
 				<c:forEach  var="r_dto" items="${r_list }" begin="0" end="4" step="1">
-					<div class="reply_list">				
+					<%-- <div class="reply_list">				
 						<p class="reply_list_writer">${c_info.getChannel_name() }</p>
 						<p class="reply_list_cont">${r_dto.getReply_cont() }</p>
 						<c:if test="${r_dto.getReply_regdate() ne null }">
 							<p class="reply_list_date">작성일 ${r_dto.getReply_regdate() }</p>
 						</c:if>
 					</div>
+					 --%>
+					<div class='reply_box'>
+						<div class='reply_text_box'>
+							<div class='reply_cont'>${r_dto.getReply_cont() }</div>
+							<a href='<%=request.getContextPath() %>/watch.do?video_code=${r_dto.getVideo_code() }'>
+								<div class='video_title'>${r_dto.getVideo_title() }</div>
+							</a>
+							<div class='video_title_sub'>에 남긴 댓글&nbsp;&nbsp;&nbsp;<span class="reply_regdate">${r_dto.getReply_regdate() }</span></div>
+						</div>
+						<div class='video_img_box'>
+							<img class='video_img' src='<%=request.getContextPath() %>/resources/AllChannel/${r_dto.getVideo_owner() }/thumbnail/${r_dto.getVideo_img() }'>
+						</div>
+					</div>
+					
+					<hr class='reply_line'>
+					
+					
 				</c:forEach>
 			</c:if>
 			<c:if test="${empty r_list }">
@@ -262,7 +294,7 @@ $(document).on("click", "#playlist_more", function(){
 		</div>
 	</div>
 	</c:if>
-	<c:if test="${empty channel_code }">
+	<c:if test="${empty RepChannelCode }">
 		<div id="page_none">
 			<img id="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
 			<p id="none_title">좋아하는 동영상을 감상해 보세요.</p>

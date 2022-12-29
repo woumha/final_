@@ -185,8 +185,10 @@ function getContextPath(){
 							table += "<tr>";
 							//비디오(비디오 포스터 경로+ 비디오 경로)
 							table += "<td colspan='2'>" +
+										"<a href='<%=request.getContextPath() %>/watch.do?video_code=" + this.video_code + "'>" +
 										"<video class='test_video' width='320px' height='180px'" +
 										"src='"+getContextPath()+"/resources/AllChannel/"+this.channel_code+"/"+this.video_title+".mp4' controls></video>" +
+										"</a>"
 									 "</td>";		
 									 
 							table += "<td class = 'video_title'>" + "<a href='<%=request.getContextPath() %>/channel.do?mc=" + this.channel_code + "'>" +

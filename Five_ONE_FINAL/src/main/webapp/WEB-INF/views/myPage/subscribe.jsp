@@ -20,16 +20,15 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-let member_code = "${member_code}";
+let RepChannelCode = "${RepChannelCode}";
 let loading = false;
 let page = 1;
-function getSubscribe_list(member_code, page){
+function getSubscribe_list(page){
 
 	$.ajax({
 
 		url : getContextPath() +"/getSubscribe_list.do",
 		data : {
-			"member_code" : member_code,
 			"page" : page
 		},
 		datatype : 'JSON',
@@ -49,7 +48,8 @@ function getSubscribe_list(member_code, page){
 				$(subscribe_div).each(function(){
 					div += "<div class='chanel_area'>";
 					div += "<div class='chanel_box'>";
-					div += "<div class='channel_icon'> <img src='"+getContextPath()+"/resources/img/"+this.channel_profil+"'> </div>";
+					div += "<div class='channel_icon'>";
+					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'> <img src='"+getContextPath()+"/resources/img/channel_profile/"+this.channel_profil+"'></a> </div>";
 					div += "<div class='channel_name'>"+this.channel_name+"</div>";
 					div += "</div>";
 					div += "<div class='channel_info'>";
@@ -59,7 +59,7 @@ function getSubscribe_list(member_code, page){
 					div += "</div>";
 					div += "</div>";
 					div += "</div>";
-					div += "<a href='"+getContextPath()+"/delete_one_subscribe.do?member_code="+member_code+"&channel_code="+this.channel_code+"'>";
+					div += "<a href='"+getContextPath()+"/delete_one_subscribe.do?channel_code="+this.channel_code+"'>";
 					div += "<button class='cancel_btn'>구독중</button>";
 					div += "</a>";
 					div += "</div>";
@@ -70,14 +70,14 @@ function getSubscribe_list(member_code, page){
 			}
 		},
 		error : function(){
-			alert('구독목록 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 }
 
 
 // 기본 실행 함수
-getSubscribe_list(member_code, page);	
+getSubscribe_list(page);	
 
 // 무한 스크롤
 $(window).scroll(function(){
@@ -85,7 +85,7 @@ $(window).scroll(function(){
 
 		if(loading == true){
 			page++;
-			getSubscribe_list(member_code, page);
+			getSubscribe_list(page);
 		}
 	}
 }); //scroll end
@@ -106,8 +106,7 @@ $(window).scroll(function(){
 <div class="">
 	<!-- 구독 한 리스트 영역 -->
 	
-	<c:set var="s_list" value="${subscribe_list }" />
-	<c:if test="${!empty member_code }">
+	<c:if test="${!empty RepChannelCode }">
 	<div id="subscribe_title"><p><i class="fa-solid fa-stamp"></i>&nbsp;&nbsp;구독 목록</p></div>
 	
 	<div id="ajax_area"></div>
@@ -123,7 +122,7 @@ $(window).scroll(function(){
 	</div>
 	</c:if>
 	<!-- 로그인 안했을 시 -->
-	<c:if test="${empty member_code }">
+	<c:if test="${empty RepChannelCode }">
 		<div id="page_none">
 			<img id="none_img" src="${pageContext.request.contextPath}/resources/img/subscribe.png">
 			<p id="none_title">마음에 드는 채널을 구독해 보세요.</p>

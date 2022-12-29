@@ -24,7 +24,7 @@ function getContextPath(){
 	return location.href.substring(path, location.href.indexOf('/', path+1));
 }
 
-let channel_code = "${channel_code}";
+let RepChannelCode = "${RepChannelCode}";
 let search = "${search}";
 let keyword = "none";
 
@@ -42,7 +42,7 @@ if(search == 1) {
 }
 
 console.log("=============== 페이지 시작시 확인용 코드 ========================");
-console.log("default channel_code >>> "+channel_code);
+console.log("default RepChannelCode >>> "+RepChannelCode);
 console.log("default search >>> "+search);
 console.log("default loading_history >>> " + loading_history);
 console.log("default loading_search >>> " + loading_search);
@@ -51,13 +51,12 @@ console.log("===========================================================");
 
 
 
-function getHistory_new(channel_code, page_history, video_loction){
+function getHistory_new(page_history){
 
 	$.ajax({
 
 		url : getContextPath() +"/history_new.do",
 		data : {
-			"channel_code" : channel_code,
 			"page" : page_history 
 		},
 		datatype : 'JSON',
@@ -81,10 +80,11 @@ function getHistory_new(channel_code, page_history, video_loction){
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
 					div += "</a>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>";
+					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&search="+search+"'>";
+					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&search="+search+"'>";
 					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";
@@ -96,17 +96,16 @@ function getHistory_new(channel_code, page_history, video_loction){
 			}
 		},
 		error : function(){
-			alert('히스토리_new 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 }
 
-function getHistory_search(channel_code, page_search, keyword) {
+function getHistory_search(page_search, keyword) {
 	search_keyword = keyword;
     $.ajax({
   		url : getContextPath() +"/history_search.do",
   		data : {
-  			"channel_code" : channel_code,
 			"page" : page_search,
 			"keyword" : keyword,
   		}, 
@@ -134,10 +133,11 @@ function getHistory_search(channel_code, page_search, keyword) {
 					div += "<div class='video_pbox'>";
 					div += "<p class='video_title_p'>"+this.video_title+"<p>";
 					div += "</a>";
-					div += "<p class='video_channel_p'>"+this.channel_name+" <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
+					div += "<p class='video_channel_p'>";
+					div += "<a href='"+getContextPath()+"/channel.do?mc="+this.channel_code+"'>"+this.channel_name+"</a> <i class='fa-solid fa-carrot'></i> 조회수 "+this.video_view_cnt+"회</p>";
 					div += "<p class='video_views_p'>"+this.video_cont+"<p>";
 					div += "</div>";
-					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&channel_code="+channel_code+"&keyword="+keyword+"&search="+search+"'>";
+					div += "<a href='"+getContextPath()+"/history_one_delete.do?video_code="+this.video_code+"&keyword="+keyword+"&search="+search+"'>";
 					div += "<img class='video_history_d_img' src='"+getContextPath()+"/resources/img/x.png'>";
 					div += "</a>";
 					div += "</div>";
@@ -149,7 +149,7 @@ function getHistory_search(channel_code, page_search, keyword) {
 			}
 		},
 		error : function(){
-			alert('히스토리_search 불러오기 오류!!!!!!!!!');
+			
 		}
 	}); 
 };	
@@ -158,9 +158,9 @@ function getHistory_search(channel_code, page_search, keyword) {
 
 //기본 실행 함수
 if(search == 1) {
-	getHistory_new(channel_code, page_history);	
+	getHistory_new(page_history);	
 } else if(search != 1){
-	getHistory_search(channel_code, page_search);
+	getHistory_search(page_search);
 };
 
 //검색 버튼을 클릭했을 때
@@ -170,7 +170,7 @@ $(document).on("click", "#search_img", function(){
 	$(".video_boxs").remove();
 	page_history = 1;
 	page_search = 1;
-	getHistory_search(channel_code, page_search, keyword);
+	getHistory_search(page_search, keyword);
 });
 
 //무한 스크롤
@@ -184,10 +184,10 @@ $(window).scroll(function(){
 		
 		if(loading_history == true){
 			page_history++;
-			getHistory_new(channel_code, page_history);
+			getHistory_new(page_history);
 		} else if(loading_search == true){
 			page_search++;
-			getHistory_search(channel_code, page_search, keyword);
+			getHistory_search(page_search, keyword);
 		}
 	}
 }); //scroll end
@@ -207,7 +207,6 @@ $(window).scroll(function(){
 	<div id="channel_area" class="area_style">
 		<div id="history_search_area">
 
-				<input type="hidden" name="channel_code" value="${channel_code }">
 				<input type="text" class="history_search" name="keyword" id="search_keyword" placeholder="시청 기록 검색" value="">
 				<input id="search_img" type="image" src="${pageContext.request.contextPath}/resources/img/search_img.jpg">
 
@@ -216,7 +215,7 @@ $(window).scroll(function(){
 		<div id="profile_info">
 			<div class="info_box">
 				<div class="info_title">
-					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do?channel_code=${channel_code }"><i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;내 보관함</a></p>
+					<p><a class="btn" href="<%=request.getContextPath() %>/myPage_go.do"><i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;내 보관함</a></p>
 				</div>
 			</div>
 			
@@ -240,13 +239,12 @@ $(window).scroll(function(){
 	
 	<!-- 중앙 메인컨텐츠 영역 -->
 	<div id="content_area" class="area_style">
-	<c:set var="code" value="${channel_code }" />
 		
 		<!-- [기록(시청한 동영상)] 박스 -->
 		<div id="watch_box" class="content_box">
-			<c:if test="${!empty code}">
+			<c:if test="${!empty RepChannelCode}">
 			<div class="test">
-				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/history_list.do?channel_code=${channel_code }'">
+				<p class="content_title1" onclick="location.href='<%=request.getContextPath() %>/history_list.do'">
 					<img id="history_logo" src="${pageContext.request.contextPath}/resources/img/history.png">&nbsp;시청 기록
 				</p>
 			</div>
@@ -255,7 +253,7 @@ $(window).scroll(function(){
 			</c:if>
 			
 			<!-- 로그인이 되어있지 않으면 출력하는 영역 -->
-			<c:if test="${empty code}">
+			<c:if test="${empty RepChannelCode}">
 			<div id="page_none">
 				<img id="none_img" src="${pageContext.request.contextPath}/resources/img/myPage_no.jpg">
 				<p id="none_title">좋아하는 동영상을 감상해 보세요.</p>
@@ -276,7 +274,7 @@ $(window).scroll(function(){
 	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 삭제됩니다.(임시 내용입니다)</p>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
-	<button class="model_btn" onclick="location.href='delete_history.do?channel_code=${channel_code }'"><i class="fa-solid fa-square-check" style="font-size: 30px"></i></button>
+	<button class="model_btn" onclick="location.href='delete_history.do'"><i class="fa-solid fa-square-check" style="font-size: 30px"></i></button>
 </div>
 <div id="history_stop" class="modal">
 	<p class="model_title">시청 기록을 중지할까요?</p>
@@ -284,7 +282,7 @@ $(window).scroll(function(){
 	<p>VIDIDI 시청 기록이 모든 기기의 모든 VIDIDI 앱에서 기록 중지됩니다.(임시 내용입니다)</p>
 	<p>맞춤 동영상이 재설정되지만 다른 제품에서의 활동으로부터 계속 영향을 받을 수 있습니다.</p>
 	<br>
-	<button class="model_btn" onclick="location.href='dont_save_history.do?member_code=VD00002'"><i class="fa-solid fa-square-check" style="font-size: 30px"></i></button>
+	<button class="model_btn" onclick="location.href='dont_save_history.do'"><i class="fa-solid fa-square-check" style="font-size: 30px"></i></button>
 </div>
 <!-- ====================================== 모달창 자바 스크립트 영역 ====================================== -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/myPage/myPage_JavaScript/history.js"></script>
