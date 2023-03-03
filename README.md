@@ -15,7 +15,7 @@
 
 ### 개발환경 : 
 
-사용언어 및 도구 : Html, CSS, JavaSript, JSP, Spring Framework
+사용언어 및 도구 : Html, CSS, JavaSript, Spring Framework
 
 개발툴 : STS
 
