@@ -42,6 +42,10 @@ DBMS: OracleDB
 ![1_1](https://user-images.githubusercontent.com/93087571/222824308-b9917bfe-5821-4905-b7f1-e60cc8eca2b8.png)
 ![1-2](https://user-images.githubusercontent.com/93087571/222824315-c81b2d3d-c4c9-4ba6-b939-564202caf9d9.png)
 
+<br/>
+<br/>
+<br/>
+<br/>
 
 - 각 항목의 세부 관리 페이지로해당 카테고리 별로 검색 및 조회가 가능하며,
   시청기록 세부 페이지에선 "시청기록 중지" 기능을 이용하여, 해당 계정의 시청한 동영상 기록을 하지 않게 할 수 있습니다.
@@ -49,13 +53,23 @@ DBMS: OracleDB
   
 ![2-1](https://user-images.githubusercontent.com/93087571/222824334-5662dd19-a532-422f-8d09-ee6ee7056039.png)
 ![2-2](https://user-images.githubusercontent.com/93087571/222824344-c1ce9fc4-dc38-4f90-aa71-c22c624399be.png)  
-  
+
+<br/>
+<br/>
+<br/>
+<br/>
+
 - 마찬가지로 작성한 댓글과 해당 동영상 정보, 사용자가 구독 버튼을 눌러 구독채널로 지정한
   구독채널 페이지를 조회할 수 있는 페이지 입니다.
   역시 무한 스크롤로 되어 있습니다.
   
 ![3-2](https://user-images.githubusercontent.com/93087571/222824355-d5518df4-8915-4a87-b96f-a8d1347cb00b.png)
 ![3-1](https://user-images.githubusercontent.com/93087571/222824360-8e86f553-d0e9-429f-8a0a-3eecf33efa17.png)
+
+<br/>
+<br/>
+<br/>
+<br/>
 
 -----------------------------------------------------------------------
 
